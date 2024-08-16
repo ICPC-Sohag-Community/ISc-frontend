@@ -9,3 +9,10 @@ export interface CollegesAnalisi {
   name: string;
   count: number;
 }
+
+export interface dashboardFeedbacks {
+  rate: number;
+  feedback: string;
+  photoUrl: any;
+  fullName: string;
+}

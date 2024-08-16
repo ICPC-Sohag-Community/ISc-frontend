@@ -1,15 +1,30 @@
-import { DatePipe } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule, DatePipe, NgClass, NgIf } from '@angular/common';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { ChartDashboardComponent } from '../../Components/chart-dashboard/chart-dashboard.component';
 import { DashboardService } from '../../services/dashboard.service';
 import { traineesAnalysis } from '../../model/dashboard';
+import Swiper from 'swiper';
+import { TestimonialComponent } from '../../Components/testimonial/testimonial.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [DatePipe, ChartDashboardComponent],
+  imports: [
+    DatePipe,
+    TestimonialComponent,
+    ChartDashboardComponent,
+    NgClass,
+    CommonModule,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DashboardComponent implements OnInit {
   dashboardService = inject(DashboardService);
@@ -18,12 +33,29 @@ export class DashboardComponent implements OnInit {
   malesCount: number = 0;
   femalesCount: number = 0;
   collegesAnalisis: { name: string; count: number }[] = [];
+  dashboardCamps: {
+    id: number;
+    name: string;
+    dueDate: string;
+    progress: number;
+  }[] = [];
+  percentageCountCollege: number = 0;
   todayName: string = '';
   todayDate!: Date;
 
   ngOnInit() {
     this.setDates();
     this.fetchTraineesAnalysis();
+    this.fetchDashboardCamps();
+
+    const swiper = new Swiper('.swiper', {
+      loop: true,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      // Add more Swiper options if needed
+    });
   }
 
   setDates(): void {
@@ -43,6 +75,23 @@ export class DashboardComponent implements OnInit {
           this.femalesCount = traineesAnalysisInfo.femalesCount;
           this.collegesAnalisis = traineesAnalysisInfo.collegesAnalisis;
 
+          this.isLoading.update((v) => (v = false));
+        } else {
+          this.isLoading.update((v) => (v = false));
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this.isLoading.update((v) => (v = false));
+      },
+    });
+  }
+  fetchDashboardCamps(): void {
+    this.isLoading.set(true);
+    this.dashboardService.dashboardCamps().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.dashboardCamps = data;
           this.isLoading.update((v) => (v = false));
         } else {
           this.isLoading.update((v) => (v = false));
