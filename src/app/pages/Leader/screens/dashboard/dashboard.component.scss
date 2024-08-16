@@ -1,0 +1,21 @@
+/* Scrollbar overall container */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px !important; /* Width of the scrollbar */
+}
+
+/* Scrollbar track (the background of the scrollbar) */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the scrollbar track */
+  border-radius: 10px; /* Rounded corners for the track */
+}
+
+/* Scrollbar handle (the draggable part) */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar handle */
+  border-radius: 10px; /* Rounded corners for the handle */
+}
+
+/* Scrollbar handle on hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Darker color on hover */
+}

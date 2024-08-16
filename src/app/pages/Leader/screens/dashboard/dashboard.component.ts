@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ChartDashboardComponent } from '../../Components/chart-dashboard/chart-dashboard.component';
 import { DashboardService } from '../../services/dashboard.service';
@@ -7,7 +7,7 @@ import { traineesAnalysis } from '../../model/dashboard';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [DatePipe, ChartDashboardComponent],
+  imports: [DatePipe, ChartDashboardComponent, NgClass],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
   malesCount: number = 0;
   femalesCount: number = 0;
   collegesAnalisis: { name: string; count: number }[] = [];
+  percentageCountCollege: number = 0;
   todayName: string = '';
   todayDate!: Date;
 

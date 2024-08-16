@@ -60,8 +60,8 @@
     </div>
   </div>
   <div class="flex flex-col flex-wrap gap-6 lg:flex-row">
-    <div class="basis-[48%]">
-      <div class="p-4 bg-white border rounded-xl">
+    <div class="basis-[48%] max-h-[340px]">
+      <div class="p-4 bg-white border-2 rounded-xl">
         <h2 class="mb-2 text-3xl font-bold ps-4">
           Number of trainees: {{ traineesCount }}
         </h2>
@@ -78,13 +78,43 @@
         </div>
       </div>
     </div>
-    <div class="basis-[48%]">
+    <div class="basis-[48%] max-h-[340px]">
+      <div class="p-4 bg-white border-2 pe-8 rounded-xl">
+        <h2 class="text-3xl font-bold ps-4">Colleges</h2>
+        <div
+          class="flex custom-scrollbar flex-col justify-center max-h-[245px] pt-28 overflow-y-scroll w-full mt-6 ps-4 pe-8"
+        >
+          @for (item of collegesAnalisis; track $index; let odd = $odd) {
+          <div class="relative">
+            <div class="flex items-center justify-between mb-2 text-xs">
+              <div class="text-lg text-black">
+                {{ item.name }}
+              </div>
+              <div
+                [ngClass]="odd ? 'text-[#E69C24]' : 'text-[#3D91C7]'"
+                class="text-sm font-medium"
+              >
+                {{ item.count }}/{{ traineesCount }}
+              </div>
+            </div>
+            <div
+              class="flex h-2 mb-4 overflow-hidden text-xs bg-gray-100 rounded"
+            >
+              <div
+                [ngClass]="odd ? 'bg-[#E69C24]' : 'bg-[#3D91C7]'"
+                [style.width.%]="(item.count / traineesCount) * 100"
+                class="bg-green-500"
+              ></div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="basis-[48%] max-h-[340px]">
       <div class="p-4 bg-white border rounded-xl">fff</div>
     </div>
-    <div class="basis-[48%]">
-      <div class="p-4 bg-white border rounded-xl">fff</div>
-    </div>
-    <div class="basis-[48%]">
+    <div class="basis-[48%] max-h-[340px]">
       <div class="p-4 bg-white border rounded-xl">fff</div>
     </div>
   </div>
