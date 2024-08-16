@@ -1,0 +1,162 @@
+<div class="relative grid h-screen place-items-center bGround">
+  <div class="items-center justify-center w-full md:flex">
+    <div class="hidden w-5/6 pt-20 pr-6 md:block lg:pr-28">
+      <div class="self-end w-full">
+        <!-- <img
+          src="./../../../../assets/imgs/login2.png"
+          class="w-full"
+          alt="login2"
+        /> -->
+      </div>
+    </div>
+    <main class="flex items-center justify-center w-full px-4 mx-auto sm:px-6">
+      <div class="w-full bg-white shadow-md lg:w-9/12 xl:w-7/12 rounded-xl">
+        <div class="relative text-center text-white h-[15rem]">
+          <!-- <img
+            src="./../../../../assets/imgs/login1.png"
+            alt="login1"
+            loading="lazy"
+            class="w-full h-full"
+          /> -->
+          <div
+            class="absolute flex flex-col items-center justify-center w-full -translate-x-1/2 -translate-y-1/2 gap-y-8 top-1/2 left-1/2"
+          >
+            <h2 class="text-2xl font-bold md:text-3xl">تسجيل الدخول</h2>
+
+            <!-- <a
+              routerLink="/"
+              class="grid bg-white rounded-full w-28 place-items-center"
+            >
+              <img
+                src="./../../../../assets/imgs/logo2.png"
+                class="w-11/12 p-2"
+                alt="logo"
+              />
+            </a> -->
+          </div>
+        </div>
+        <form
+          [formGroup]="loginForm"
+          class="flex flex-col items-center justify-center px-1 md:px-4"
+          (ngSubmit)="onLogin()"
+        >
+          <div class="w-11/12 mt-2">
+            <div class="relative">
+              <input
+                required
+                name="userName"
+                formControlName="userName"
+                placeholder="userName"
+                [ngClass]="
+                  loginForm.controls['userName'].errors && submitted
+                    ? 'border-red-400 placeholder:text-red-500'
+                    : 'border-gray-300 focus:border-primaryAdmin'
+                "
+                class="relative block w-full py-3 pr-6 my-2 text-black placeholder-black border-2 rounded-full appearance-none pl-14 placeholder:text-right bg-[#b7e4c7] focus:outline-none focus:ring-primaryAdmin"
+              />
+            </div>
+
+            @if (submitted && loginForm.controls['userName'].errors) {
+            <div>
+              @if (loginForm.controls['userName'].errors['required'] ) {
+              <p class="text-xs text-red-500 ps-3">هذا الحقل مطلوب</p>
+              }
+            </div>
+            }
+          </div>
+          <div class="w-11/12">
+            <div class="relative">
+              <input
+                autocomplete="new-password"
+                name="password"
+                formControlName="password"
+                type="password"
+                placeholder="Password"
+                [ngClass]="
+                  loginForm.controls['password'].errors && submitted
+                    ? 'border-red-400 placeholder:text-red-500'
+                    : 'border-gray-300 focus:border-primaryAdmin'
+                "
+                class="relative block w-full py-3 pr-6 my-2 text-black placeholder-black border-2 rounded-full appearance-none pl-14 placeholder:text-right bg-[#b7e4c7] focus:outline-none focus:ring-primaryAdmin"
+              />
+              <!-- <button
+                type="button"
+                class="absolute p-1.5 bg-white rounded-full top-2 left-3"
+                (click)="togglePasswordVisibility()"
+              >
+                @if (passwordFieldType === 'password' ) {
+
+                <fa-icon [icon]="eyeIcon" class="text-primaryAdmin"></fa-icon>
+                }@else {
+                <fa-icon
+                  [icon]="eyeSlashIcon"
+                  class="text-primaryAdmin"
+                ></fa-icon>
+
+                }
+              </button> -->
+            </div>
+
+            @if (submitted && loginForm.controls['password'].errors) {
+            <div>
+              @if (loginForm.controls['password'].errors['required'] ) {
+              <p class="text-xs text-red-500 ps-3">هذا الحقل مطلوب</p>
+              } @if (loginForm.controls['password'].errors['minlength']) {
+              <p class="text-xs text-red-500 ps-3">
+                لابد أن لا تقل كلمة المرور عن 6 أحرف
+              </p>
+              }
+            </div>
+            }
+          </div>
+          <div
+            class="flex items-center justify-between w-11/12 px-4 mt-2 text-sm"
+          >
+            <label for="remember">
+              <input type="checkbox" name="remember" id="remember" /> البقاء
+              مسجلا
+            </label>
+            <a href="/" class="transition-colors hover:text-secondaryAdmin">
+              هل نسيت كلمة السر؟
+            </a>
+          </div>
+
+          <button
+            type="submit"
+            class="flex justify-center w-3/5 py-3 mt-4 text-lg font-semibold text-white transition-colors bg-green-700 rounded-full hover:bg-orange-700 focus:outline-none"
+          >
+            @if (isLoading) {
+            <img
+              class="w-8 h-8 animate-spin text-purple-950"
+              src="https://www.svgrepo.com/show/474682/loading.svg"
+              alt="Loading icon"
+            />
+            } @else { دخول }
+          </button>
+        </form>
+        <div class="flex items-center justify-center w-full">
+          <!-- <app-sign-with-google /> -->
+        </div>
+        <p
+          class="flex items-center justify-center my-4 text-sm text-orange-500"
+        >
+          ليس لديك حساب؟
+          <a
+            routerLink="/register"
+            class="px-2 font-semibold text-green-700 cursor-pointe"
+          >
+            قم بالتسجيل الآن
+          </a>
+        </p>
+        <p class="flex items-center justify-center pb-2 mb-4">
+          <a
+            routerLink="/parent-register"
+            class="px-2 font-semibold cursor-pointe hover:text-secondaryAdmin text-primaryAdmin"
+          >
+            قم بالتسجيل كـ ولي أمر
+          </a>
+        </p>
+      </div>
+    </main>
+  </div>
+</div>
