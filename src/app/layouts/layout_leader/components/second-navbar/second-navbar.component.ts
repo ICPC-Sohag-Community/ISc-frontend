@@ -14,11 +14,6 @@ export class SecondNavbarComponent {
   authService = inject(AuthService);
 
   isShow: boolean = false;
-  menu_show_Profile = false;
-
-  onShow() {
-    this.isShow = !this.isShow;
-  }
 
   showRoles() {
     this.isShow = !this.isShow;
