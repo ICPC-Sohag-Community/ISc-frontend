@@ -7,9 +7,21 @@ import { environment } from '../../../../environments/environment.development';
 })
 export class DashboardService {
   http = inject(HttpClient);
+
+  //Dashboard Service
   traineesAnalysis(): Observable<any> {
     return this.http.get<any>(
       `${environment.BASE_URL}/api/Leader/dashboard/traineesAnalysis`
+    );
+  }
+  dashboardCamps(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.BASE_URL}/api/Leader/dashboard/camps`
+    );
+  }
+  dashboardFeedbacks(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.BASE_URL}/api/Leader/dashboard/feedbacks`
     );
   }
 }

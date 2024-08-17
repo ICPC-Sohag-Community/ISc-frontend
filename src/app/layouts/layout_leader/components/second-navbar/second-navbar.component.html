@@ -4,7 +4,7 @@
   <nav class="flex items-center w-full px-4 mx-auto sm:px-14 basis-full">
     <div class="me-5 lg:me-0 lg:hidden">
       <!-- Logo -->
-      <a
+      <!-- <a
         class="flex-none inline-block text-xl font-semibold rounded-md focus:outline-none focus:opacity-80"
         href="#"
         aria-label="Preline"
@@ -42,7 +42,7 @@
             fill="currentColor"
           />
         </svg>
-      </a>
+      </a> -->
       <!-- End Logo -->
     </div>
 
@@ -95,9 +95,7 @@
         </button>
 
         <!-- Dropdown -->
-        <div
-          class="hs-dropdown [--placement:bottom-right] relative inline-flex"
-        >
+        <div class="[--placement:bottom-right] relative inline-flex">
           <div class="flex items-center">
             <div class="relative">
               <img
@@ -122,7 +120,8 @@
                   <span>Leader</span>
 
                   <svg
-                    class="w-4 h-4 ml-2"
+                    [ngClass]="isShow ? 'rotate-180' : ''"
+                    class="w-4 h-4 ml-2 transition-transform"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -138,8 +137,8 @@
                 </button>
 
                 <div
-                  [ngClass]="isShow ? 'scale-100' : 'scale-0'"
-                  class="absolute z-50 mt-2 transition-all duration-500 bg-white border border-gray-200 rounded-md shadow-lg w-fit"
+                  [ngClass]="isShow ? 'block' : 'hidden'"
+                  class="absolute z-50 mt-2 transition-all duration-500 bg-white border border-gray-200 rounded-md shadow-lg top-6 right-2 w-fit"
                 >
                   <div
                     class="py-1 text-sm text-gray-700 w-fit"
@@ -152,7 +151,7 @@
 
                     <button
                       [ngClass]="last ? '' : 'border-b border-activeLink'"
-                      class="block w-full px-4 py-2 transition-colors hover:text-activeLink text-start"
+                      class="block w-full px-4 py-2 font-medium transition-colors hover:text-activeLink text-start"
                       role="menuitem"
                     >
                       {{ item }}
