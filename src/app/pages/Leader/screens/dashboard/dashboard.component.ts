@@ -9,19 +9,12 @@ import {
 import { ChartDashboardComponent } from '../../Components/chart-dashboard/chart-dashboard.component';
 import { DashboardService } from '../../services/dashboard.service';
 import { traineesAnalysis } from '../../model/dashboard';
-import Swiper from 'swiper';
 import { TestimonialComponent } from '../../Components/testimonial/testimonial.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    DatePipe,
-    TestimonialComponent,
-    ChartDashboardComponent,
-    NgClass,
-    CommonModule,
-  ],
+  imports: [DatePipe, TestimonialComponent, ChartDashboardComponent, NgClass],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -47,15 +40,6 @@ export class DashboardComponent implements OnInit {
     this.setDates();
     this.fetchTraineesAnalysis();
     this.fetchDashboardCamps();
-
-    const swiper = new Swiper('.swiper', {
-      loop: true,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      // Add more Swiper options if needed
-    });
   }
 
   setDates(): void {
