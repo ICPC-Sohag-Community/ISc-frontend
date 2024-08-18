@@ -4,6 +4,7 @@ import { rolesGuard } from './authentication/guard/roles.guard';
 import { LoginComponent } from './authentication/screens/login/login.component';
 import { LayoutLeaderComponent } from './layouts/layout_leader/layout-leader.component';
 import { DashboardComponent } from './pages/Leader/screens/dashboard/dashboard.component';
+import { AddUserComponent } from './pages/Leader/screens/add-user/add-user.component';
 
 export const routes: Routes = [
   // Auth Pages
@@ -17,13 +18,11 @@ export const routes: Routes = [
   //   path: 'register',
   //   component: RegisterComponent,
   //   canActivate: [authGuardLoggdIn],
-  //   title: 'التسجل | السالم',
   // },
   // {
   //   path: 'confirm-email',
   //   component: ConfirmEmailComponent,
   //   canActivate: [authGuardLoggdIn],
-  //   title: 'التأكد من الايميل | السالم',
   // },
 
   // Stutent Pages
@@ -36,28 +35,28 @@ export const routes: Routes = [
     children: [],
   },
 
-  // Admin Pages
+  // Leader Routes
   {
     path: 'leader',
     component: LayoutLeaderComponent,
     canActivate: [authGuard, rolesGuard],
+    title: 'Leader - ICPC',
     children: [
       {
         path: '',
         component: DashboardComponent,
+        title: 'Leader / Dashboard - ICPC',
+      },
+      {
+        path: 'add-user',
+        component: AddUserComponent,
+        title: 'Leader / add new user - ICPC',
       },
       {
         path: 'camps',
         component: DashboardComponent,
+        title: 'Leader / Camps - ICPC',
       },
     ],
-  },
-
-  // Teacher and Data Entry Pages
-  {
-    path: 'instructor',
-    // component: LayAdminComponent,
-    canActivate: [authGuard, rolesGuard],
-    children: [],
   },
 ];

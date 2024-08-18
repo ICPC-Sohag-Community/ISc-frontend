@@ -10,11 +10,18 @@ import { ChartDashboardComponent } from '../../Components/chart-dashboard/chart-
 import { DashboardService } from '../../services/dashboard.service';
 import { traineesAnalysis } from '../../model/dashboard';
 import { TestimonialComponent } from '../../Components/testimonial/testimonial.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [DatePipe, TestimonialComponent, ChartDashboardComponent, NgClass],
+  imports: [
+    DatePipe,
+    TestimonialComponent,
+    ChartDashboardComponent,
+    NgClass,
+    RouterLink,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
