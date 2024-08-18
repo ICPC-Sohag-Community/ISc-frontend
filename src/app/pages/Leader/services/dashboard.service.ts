@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
@@ -22,6 +22,27 @@ export class DashboardService {
   dashboardFeedbacks(): Observable<any> {
     return this.http.get<any>(
       `${environment.BASE_URL}/api/Leader/dashboard/feedbacks`
+    );
+  }
+
+  roles(): Observable<any> {
+    return this.http.get<any>(`${environment.BASE_URL}/api/Roles/roles`);
+  }
+
+  getAllCamps(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.BASE_URL}/api/Leader/camps/getAll`
+    );
+  }
+
+  createAccount(formData: any): Observable<any> {
+    const myHeaders = new HttpHeaders({
+      Accept: 'text/plain',
+    });
+    return this.http.post<any>(
+      `${environment.BASE_URL}/api/Leader/createAccount`,
+      formData,
+      { headers: myHeaders }
     );
   }
 }
