@@ -2,6 +2,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { DashboardService } from '../../services/dashboard.service';
 import { dashboardFeedbacks } from '../../model/dashboard';
 import { NgClass } from '@angular/common';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from '@angular/animations';
 
 @Component({
   selector: 'app-testimonial',

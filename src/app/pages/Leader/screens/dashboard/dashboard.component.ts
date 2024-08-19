@@ -9,8 +9,8 @@ import {
 import { ChartDashboardComponent } from '../../Components/chart-dashboard/chart-dashboard.component';
 import { DashboardService } from '../../services/dashboard.service';
 import { traineesAnalysis } from '../../model/dashboard';
-import Swiper from 'swiper';
 import { TestimonialComponent } from '../../Components/testimonial/testimonial.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +20,7 @@ import { TestimonialComponent } from '../../Components/testimonial/testimonial.c
     TestimonialComponent,
     ChartDashboardComponent,
     NgClass,
-    CommonModule,
+    RouterLink,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -47,15 +47,6 @@ export class DashboardComponent implements OnInit {
     this.setDates();
     this.fetchTraineesAnalysis();
     this.fetchDashboardCamps();
-
-    const swiper = new Swiper('.swiper', {
-      loop: true,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      // Add more Swiper options if needed
-    });
   }
 
   setDates(): void {

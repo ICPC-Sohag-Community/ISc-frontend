@@ -4,7 +4,7 @@
   <nav class="flex items-center w-full px-4 mx-auto sm:px-14 basis-full">
     <div class="me-5 lg:me-0 lg:hidden">
       <!-- Logo -->
-      <a
+      <!-- <a
         class="flex-none inline-block text-xl font-semibold rounded-md focus:outline-none focus:opacity-80"
         href="#"
         aria-label="Preline"
@@ -42,7 +42,7 @@
             fill="currentColor"
           />
         </svg>
-      </a>
+      </a> -->
       <!-- End Logo -->
     </div>
 
@@ -52,7 +52,7 @@
       <div class="flex flex-row items-center justify-end gap-1">
         <button
           type="button"
-          class="size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
+          class="size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100"
         >
           <svg
             class="shrink-0 size-4"
@@ -74,7 +74,7 @@
 
         <button
           type="button"
-          class="size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
+          class="size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -95,22 +95,24 @@
         </button>
 
         <!-- Dropdown -->
-        <div
-          class="hs-dropdown [--placement:bottom-right] relative inline-flex"
-        >
+        <div class="[--placement:bottom-right] relative inline-flex">
           <div class="flex items-center">
             <div class="relative">
               <img
                 class="object-cover w-10 h-10 rounded-full"
-                [src]="authService.currentUser().photoUrl"
+                [src]="
+                  currentUser.photoUrl
+                    ? currentUser.photoUrl
+                    : './../../../../../assets/img/user.png'
+                "
                 alt="Avatar"
               />
               <div class="absolute inset-0 rounded-full shadow-inner"></div>
             </div>
             <div class="ml-4">
               <h2 class="text-base font-medium text-sidebarColor">
-                {{ authService.currentUser().firstName }}
-                {{ authService.currentUser().middleName }}
+                {{ currentUser.firstName }}
+                {{ currentUser.middleName }}
               </h2>
               <!-- component -->
 
@@ -122,7 +124,8 @@
                   <span>Leader</span>
 
                   <svg
-                    class="w-4 h-4 ml-2"
+                    [ngClass]="isShow ? 'rotate-180' : ''"
+                    class="w-4 h-4 ml-2 transition-transform"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -138,8 +141,8 @@
                 </button>
 
                 <div
-                  [ngClass]="isShow ? 'scale-100' : 'scale-0'"
-                  class="absolute z-50 mt-2 transition-all duration-500 bg-white border border-gray-200 rounded-md shadow-lg w-fit"
+                  [ngClass]="isShow ? 'block' : 'hidden'"
+                  class="absolute z-50 mt-2 transition-all duration-500 bg-white border border-gray-200 rounded-md shadow-lg top-6 right-2 w-fit"
                 >
                   <div
                     class="py-1 text-sm text-gray-700 w-fit"
@@ -147,12 +150,13 @@
                     aria-orientation="vertical"
                     aria-labelledby="options-menu"
                   >
-                    @for (item of authService.currentUser().roles; track $index;
-                    let last = $last) {
+                    @for (item of currentUser.roles; track $index; let last =
+                    $last) {
 
                     <button
+                      (click)="goSpecificRole(item)"
                       [ngClass]="last ? '' : 'border-b border-activeLink'"
-                      class="block w-full px-4 py-2 transition-colors hover:text-activeLink text-start"
+                      class="block w-full px-4 py-2 font-medium transition-colors hover:text-activeLink text-start"
                       role="menuitem"
                     >
                       {{ item }}

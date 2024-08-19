@@ -1,3 +1,98 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
+
+.custom-scrollbar::-webkit-scrollbar,
+.scroll-host::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track,
+.scroll-host::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb,
+.scroll-host::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+.scroll-host::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.ng-select .ng-select-container {
+  border: none;
+}
+
+.ng-dropdown-panel.ng-select-bottom {
+  top: 128% !important;
+  border-radius: 10px !important;
+  background: #fff;
+  padding: 6px 0;
+  // border: 1;
+}
+
+.ng-value-label,
+.campName {
+  background-color: #3c8fc5;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.focus\:outline-none:focus {
+  outline: none;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
+  background-color: #3c8fc5 !important;
+  color: #fff !important;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option:not(:last-of-type) {
+  border-bottom: 1px solid #3c8fc5;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items {
+  max-height: 208px !important;
+}
+
+.ng-select span {
+  font-size: 14px !important;
+  padding-left: 12px;
+  font-weight: 500;
+}
+
+.ng-select .ng-arrow-wrapper .ng-arrow {
+  border: none;
+}
+
+.ng-select .ng-clear-wrapper {
+  display: none;
+}
+.ng-select {
+  height: 38px !important;
+}
+
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-value {
+  // font-size: 18px;
+  padding: 0px 0 0px 14px;
+}
+
+.ng-select .ng-select-container,
+.ng-select.ng-select-opened .ng-select-container {
+  background-color: transparent;
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-placeholder {
+  color: #000;
+}

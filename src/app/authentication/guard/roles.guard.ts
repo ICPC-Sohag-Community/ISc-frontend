@@ -10,33 +10,34 @@ export const rolesGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   /// اللي رايحله
   const { path } = routeConfig as Route;
+
+  const roles = userInfo.roles;
+
   if (path === '' && !authService.isAuth()) {
     return true;
   }
-  // if (path === '' && roleDto.roleName === 'طالب') {
-  //   return true;
-  // }
-  if (path === 'leader' && userInfo.roles[0] === 'Leader') {
+
+  if (path === 'leader' && roles.includes('Leader')) {
     return true;
   }
-  if (path === 'mentor' && userInfo.roles[0] === 'Mentor') {
+  if (path === 'mentor' && roles.includes('Mentor')) {
     return true;
   }
-  if (path === 'head_Of_Camp' && userInfo.roles[0] === 'Head_Of_Camp') {
+  if (path === 'head_Of_Camp' && roles.includes('Head_Of_Camp')) {
     return true;
   }
-  if (path === 'trainee' && userInfo.roles[0] === 'Trainee') {
+  if (path === 'trainee' && roles.includes('Trainee')) {
     return true;
   }
 
   router.navigateByUrl(
-    userInfo.roles[0] === 'Leader'
+    roles.includes('Leader')
       ? '/leader'
-      : userInfo.roles[0] === 'Mentor'
+      : roles.includes('Mentor')
       ? '/mentor'
-      : userInfo.roles[0] === 'Head_Of_Camp'
+      : roles.includes('Head_Of_Camp')
       ? '/head_Of_Camp'
-      : userInfo.roles[0] === 'Trainee'
+      : roles.includes('Trainee')
       ? '/trainee'
       : '/'
   );

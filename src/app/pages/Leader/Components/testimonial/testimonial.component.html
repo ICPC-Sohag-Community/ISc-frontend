@@ -26,18 +26,18 @@
       }
     </div>
     <p
-      class="w-10/12 h-24 text-lg leading-6 text-gray-500 transition-all duration-500 mb-9 group-hover:text-gray-800"
+      class="w-10/12 h-32 mb-8 overflow-y-auto text-lg leading-6 text-gray-500 transition-all duration-500 custom-scrollbar"
     >
       {{ item.feedback }}
     </p>
-    <div class="flex gap-x-32">
+    <div class="flex items-center justify-between">
       <div class="flex items-center gap-5">
         <img
-          class="rounded-full"
+          class="rounded-full size-12"
           [src]="
             item.photoUrl
               ? item.photoUrl
-              : 'https://pagedone.io/asset/uploads/1696229969.png'
+              : './../../../../../assets/img/user.jpeg'
           "
           alt="avatar"
         />
@@ -49,14 +49,14 @@
           </h5>
         </div>
       </div>
-      <div class="flex items-center justify-center gap-x-2">
+      <div class="flex items-center justify-center gap-x-2 pe-32">
         <button
           (click)="prevTestimonial()"
           [disabled]="currentPage === 0"
-          class="flex items-center justify-center w-12 h-12 transition-all duration-500 border border-solid rounded-lg disabled:cursor-not-allowed disabled:text-slate-500 disabled:border-slate-500 border-activeLink group"
+          class="flex items-center justify-center w-12 h-12 transition-all duration-500 border border-solid rounded-lg disabled:cursor-not-allowed disabled:text-[#b8d2e9] disabled:border-[#b8d2e9] border-activeLink"
         >
           <svg
-            class="w-6 h-6"
+            class="w-6 h-6 text-activeLink"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +73,7 @@
         <button
           (click)="nextTestimonial()"
           [disabled]="currentPage === dashboardFeedbacks.length - 1"
-          class="flex items-center justify-center w-12 h-12 transition-all duration-500 border border-solid rounded-lg disabled:cursor-not-allowed disabled:border-slate-500 disabled:text-slate-500 border-activeLink"
+          class="flex items-center justify-center w-12 h-12 transition-all duration-500 border border-solid rounded-lg disabled:cursor-not-allowed disabled:border-[#b8d2e9] disabled:text-[#b8d2e9] border-activeLink"
         >
           <svg
             class="w-6 h-6 text-activeLink"
