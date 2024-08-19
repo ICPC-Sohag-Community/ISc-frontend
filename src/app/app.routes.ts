@@ -4,6 +4,10 @@ import { rolesGuard } from './authentication/guard/roles.guard';
 import { LoginComponent } from './authentication/screens/login/login.component';
 import { LayoutLeaderComponent } from './layouts/layout_leader/layout-leader.component';
 import { DashboardComponent } from './pages/Leader/screens/dashboard/dashboard.component';
+
+import { HOCDashboardComponent } from './HOC/hocdashboard/hocdashboard.component';
+import { DashComponent } from './HOC/comp/dash/dash.component';
+
 import { AddUserComponent } from './pages/Leader/screens/add-user/add-user.component';
 
 export const routes: Routes = [
@@ -59,4 +63,27 @@ export const routes: Routes = [
       },
     ],
   },
+
+
+  // Teacher and Data Entry Pages
+  {
+    path: 'instructor',
+    // component: LayAdminComponent,
+    canActivate: [authGuard, rolesGuard],
+    children: [],
+  },
+  {
+    path: 'hoc',
+    component: HOCDashboardComponent,
+    canActivate: [],
+    title: 'HOC - Dashboard',
+    children: [
+      {
+        path: 'dash',
+        component: DashComponent,
+      }
+    ],
+  }
+  
+
 ];
