@@ -1,6 +1,6 @@
-<img src="../../../../assets/img/IcpcLogo.png" alt="" class="block mt-3 mb-14">
-<div class="flex flex-col gap-4">
-    <div class="flex gap-4 pl-4">
+<img src="../../../../assets/img/IcpcLogo.svg" alt="" class="block mt-3 mb-14">
+<div class="flex flex-col gap-4 ">
+    <div class="flex gap-4 pl-4 dash" style="color: #509CCD;">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M17 10H19C21 10 22 9 22 7V5C22 3 21 2 19 2H17C15 2 14 3 14 5V7C14 9 15 10 17 10Z" stroke="#3D91C7" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M5 22H7C9 22 10 21 10 19V17C10 15 9 14 7 14H5C3 14 2 15 2 17V19C2 21 3 22 5 22Z" stroke="#3D91C7" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
@@ -65,4 +65,27 @@
             
         Weekly filter        
     </div>
+    <div class="ps-3  absolute bottom-3" style="width: 14%;">
+        <button
+          (click)="authService.logout()"
+          class="flex items-center w-full border-t self-end py-6 gap-x-3.5 px-2.5 text-xl font-medium text-sidebarColor hover:text-activeLink transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+            />
+          </svg>
+  
+          Log out
+        </button>
+      </div>
 </div>

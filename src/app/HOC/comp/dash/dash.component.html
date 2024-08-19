@@ -1,81 +1,87 @@
-<div class="px-5 py-5 mx-5 my-5  flex bg-white rounded-lg">
-    <button class=" bg-blue-500 hover:bg-blue-600 font-bold text-white px-8 py-2 text-lg rounded-lg">
-        Dashboard
-      </button>
-      <button class="font-bold px-8 py-2 text-lg rounded-lg ">
-        Standing
-      </button>
-</div>
-<div class=" mx-5 my-5 grid-cols-12  gap-3 grid  text-center">
-    <div class=" bg-white col-span-5 rounded-lg px-5 py-5 flex justify-center gap-3">
-        <div class="w-1/2">
-            <h2 class="my-4 mb-7">Number of Trainees</h2>
-            <canvas id="doughnut" class="w-3/4 border-cyan-200 "></canvas>
-        </div>
-        <div class="w-1/2">
-            <h2 class="my-4 mb-7">Number of Mentors</h2>
-            <canvas id="mentor" class="w-3/4"></canvas>
-        </div>
+<div style="height: calc(100vh - 72px  );" class=" custom-scrollbar">
+    <div class="px-5 py-5 mx-5 my-5  flex bg-white rounded-lg">
+        <button class=" bg-blue-500 hover:bg-blue-600 font-bold text-white px-8 py-2 text-lg rounded-lg">
+            Dashboard
+          </button>
+          <button class="font-bold px-8 py-2 text-lg rounded-lg ">
+            Standing
+          </button>
     </div>
-    <div class=" bg-white col-span-4 rounded-lg px-5 py-5 flex justify-center gap-3">
-        <div class="w-full">
-            <h2 class="my-4 mb-7">Trainee collage</h2>
-            <div class="flex flex-col items-end">
-                <h4 class="text-blue-500 text-right pb-1 pr-1 ">50/100</h4>
-                <div class="w-full bg-white border-gray-200 border-2 rounded-full h-8 mb-1 dark:bg-gray-700">
-                    <div class="bg-blue-600 h-full rounded-full dark:bg-blue-500 flex items-center text-white text-sm pl-3" style="width: 45%"> Engineering</div>
-                  </div>
+    <div class=" mx-5 my-5 grid-cols-12  gap-1 grid  text-center">
+        <div class=" bg-white col-span-5 rounded-lg px-5 py-5 flex justify-center gap-1">
+            <div style="width: 55%;">
+                <h2 class="my-4 mb-7">Number of Trainees</h2>
+                <canvas id="doughnut" class=" border-cyan-200 "></canvas>
             </div>
-            <div class="flex flex-col items-end">
-                <h4 class=" text-right pb-1 pr-1 " style=" color: #F4B626;">80/100</h4>
-                <div class="w-full bg-white border-gray-200 border-2 rounded-full h-8 mb-1 dark:bg-gray-700" >
-                    <div class="h-full rounded-full  flex items-center text-white text-sm pl-3" style="width: 80%; background-color: #F4B626;"> Computer Science</div>
-                  </div>
-            </div>
-            <div class="flex flex-col items-end">
-                <h4 class=" text-right pb-1 pr-1 " style=" color: #F14C50;">50/100</h4>
-                <div class="w-full bg-white border-gray-200 border-2 rounded-full h-8 mb-1 dark:bg-gray-700">
-                    <div class=" h-full rounded-full  flex items-center text-white text-sm pl-3" style="width: 90%; background-color: #F14C50;"> Information Technology</div>
-                  </div>
-            </div>
-            <div class="flex flex-col items-end">
-                <h4 class=" text-right pb-1 pr-1 " style="color: #E855CF;">50/100</h4>
-                <div class="w-full bg-white border-gray-200 border-2 rounded-full h-8 mb-1 dark:bg-gray-700">
-                    <div class=" h-full rounded-full  flex items-center text-white text-sm pl-3" style="width: 45%; background-color: #E855CF;"> Medecine</div>
-                  </div>
-            </div>
-            <div class="flex flex-col items-end">
-                <h4 class="text-blue-500 text-right pb-1 pr-1 ">50/100</h4>
-                <div class="w-full bg-white border-gray-200 border-2 rounded-full h-8 mb-1 dark:bg-gray-700">
-                    <div class="bg-green-500 h-full rounded-full  flex items-center text-white text-sm pl-3" style="width: 75%"> Pharmacy</div>
-                  </div>
+            <div style="width: 55%;">
+                <h2 class="my-4 mb-7">Number of Mentors</h2>
+                <canvas id="mentor" class=""></canvas>
             </div>
         </div>
-    </div>
-    <div class=" bg-white col-span-3 rounded-lg px-5 py-5 flex justify-center gap-3">
-        <div class="w-5/6 relative">
-            <h2 class="my-4 mb-7">Number of Trainees</h2>
-            <canvas id="prog" class="w-full border-cyan-200 "></canvas>
+        <div class=" bg-white col-span-4 rounded-lg px-5 py-5 flex justify-center gap-3">
+            <div class="w-full">
+                <h2 class="my-4 mb-7">Trainees collage</h2>
+                <div class="flex flex-col items-end">
+                    <h4 class="text-blue-500 text-right pb-1 pr-1 ">50/100</h4>
+                    <div class="w-full bg-white border-gray-200 border-2 rounded-full h-8 mb-1 ">
+                        <div class="bg-blue-600 h-full rounded-full  flex items-center text-white text-sm pl-3" style="width: 45%"> Engineering</div>
+                      </div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <h4 class=" text-right pb-1 pr-1 " style=" color: #F4B626;">80/100</h4>
+                    <div class="w-full bg-white border-gray-200 border-2 rounded-full h-8 mb-1 " >
+                        <div class="h-full rounded-full  flex items-center text-white text-sm pl-3" style="width: 80%; background-color: #F4B626;"> Computer Science</div>
+                      </div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <h4 class=" text-right pb-1 pr-1 " style=" color: #F14C50;">50/100</h4>
+                    <div class="w-full bg-white border-gray-200 border-2 rounded-full h-8 mb-1 ">
+                        <div class=" h-full rounded-full  flex items-center text-white text-sm pl-3" style="width: 90%; background-color: #F14C50;"> Information Technology</div>
+                      </div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <h4 class=" text-right pb-1 pr-1 " style="color: #E855CF;">50/100</h4>
+                    <div class="w-full bg-white border-gray-200 border-2 rounded-full h-8 mb-1 ">
+                        <div class=" h-full rounded-full  flex items-center text-white text-sm pl-3" style="width: 45%; background-color: #E855CF;"> Medecine</div>
+                      </div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <h4 class="text-blue-500 text-right pb-1 pr-1 ">50/100</h4>
+                    <div class="w-full bg-white border-gray-200 border-2 rounded-full h-8 mb-1 ">
+                        <div class="bg-green-500 h-full rounded-full  flex items-center text-white text-sm pl-3" style="width: 75%"> Pharmacy</div>
+                      </div>
+                </div>
+            </div>
+        </div>
+        <div class=" bg-white col-span-3 rounded-lg px-5 py-5 flex justify-center gap-3">
+            <div class="w-5/6 relative">
+                <h2 class="my-4 mb-7">Camp Progress</h2>
+                <canvas id="prog" class="w-full border-cyan-200 "></canvas>
+                <h4 class="text-slate-700 mt-4 mb-1 text-left text-sm pl-1">Deadline: </h4>
+                <div class="w-full bg-white border-gray-200 border-2 rounded-full h-3  ">
+                    <div class="bg-green-600 h-full rounded-full flex items-center text-white text-sm pl-3" style="width: 45%"></div>
+                  </div>
+                  <h4 class="mb-1 text-left text-sm pl-1">20 days left</h4>
+            </div>
+            
             
         </div>
-        
-        
-    </div>
-    <div class=" bg-white col-span-12 rounded-lg px-5 py-5 flex justify-center gap-3">
-        <div class="w-5/6 relative">
-            <h2 class="my-4 mb-7">Number of Trainees</h2>
-            <canvas id="sheet" class="w-full border-cyan-200 "></canvas>
+        <div class=" bg-white col-span-12 rounded-lg px-5 py-5 flex justify-center gap-3">
+            <div class="w-5/6 relative">
+                <h2 class="my-4 mb-7">Average solution per sheet</h2>
+                <canvas id="sheet" class="w-full border-cyan-200 "></canvas>
+                
+            </div>
             
         </div>
-        
-    </div>
-    <div class=" bg-white col-span-12 rounded-lg px-5 py-5 flex justify-center gap-3">
-        <div class="w-5/6 relative">
-            <h2 class="my-4 mb-7">Number of Trainees</h2>
-            <canvas id="avg" class="w-full border-cyan-200 "></canvas>
+        <div class=" bg-white col-span-12 rounded-lg px-5 py-5 mb-7 flex justify-center gap-3">
+            <div class="w-5/6 relative">
+                <h2 class="my-4 mb-7">Average Solution per Sheet</h2>
+                <canvas id="avg" class="w-full border-cyan-200 "></canvas>
+                
+            </div>
             
         </div>
-        
     </div>
 </div>
 

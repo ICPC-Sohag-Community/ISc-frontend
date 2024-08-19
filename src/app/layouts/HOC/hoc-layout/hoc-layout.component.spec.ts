@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HocnavComponent } from './hocnav.component';
+import { HocLayoutComponent } from './hoc-layout.component';
 
-describe('HocnavComponent', () => {
-  let component: HocnavComponent;
-  let fixture: ComponentFixture<HocnavComponent>;
+describe('HocLayoutComponent', () => {
+  let component: HocLayoutComponent;
+  let fixture: ComponentFixture<HocLayoutComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HocnavComponent]
+      imports: [HocLayoutComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(HocnavComponent);
+    fixture = TestBed.createComponent(HocLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

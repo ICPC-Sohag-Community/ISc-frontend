@@ -1,5 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { Chart, registerables, Plugin } from 'chart.js';
+import { Chart, registerables, Plugin, ChartDataset } from 'chart.js';
+import { AuthService } from '../../../authentication/services/auth.service';
 
 @Component({
   selector: 'app-dash',
@@ -8,7 +9,7 @@ import { Chart, registerables, Plugin } from 'chart.js';
   styleUrls: ['./dash.component.scss']
 })
 export class DashComponent implements AfterViewInit {
-
+  
   ngAfterViewInit() {
     // Register the Chart.js components and custom plugin globally
     Chart.register(...registerables, this.createCenterTextPlugin());
@@ -18,6 +19,8 @@ export class DashComponent implements AfterViewInit {
     this.hor();
     this.sheet();
     this.avg();
+    
+
   }
 
   createCenterTextPlugin(
@@ -28,8 +31,7 @@ export class DashComponent implements AfterViewInit {
     return {
       id: 'centerTextPlugin',
       beforeDraw: (chart) => {
-        // Check if the chart is the one that should have the center text
-        if (chart.canvas.id !== 'prog') return; // Replace 'prog' with the ID of the chart you want to target
+        if (chart.canvas.id !== 'prog') return;
 
         const { ctx, chartArea } = chart;
         const { top, bottom, left, right } = chartArea;
@@ -48,15 +50,27 @@ export class DashComponent implements AfterViewInit {
       },
     };
   }
-
+ legendMargin = {
+  id: "legendMargin",
+  afterInit(chart:any, args:any, options:any){
+    let originalFit = chart.legend.fit;
+    chart.legend.fit = function fit(){
+      console.log( chart.legend.fit);
+      if(originalFit){
+        originalFit.call(this)
+      }
+      return this.height-=0;
+    }
+  }
+ };
   trainee() {
-    const ctx = (document.getElementById('mentor') as HTMLCanvasElement)?.getContext('2d');
-
+    const ctx = (document.getElementById('doughnut') as HTMLCanvasElement)?.getContext('2d');
+  
     if (ctx) {
       new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: ['Female', 'Male'],
+          labels: ['Female : 20', 'Male : 80'],
           datasets: [{
             data: [20, 80],
             backgroundColor: ['#EA5CD2', '#3D91C7'],
@@ -65,10 +79,22 @@ export class DashComponent implements AfterViewInit {
         },
         options: {
           responsive: true,
-          spacing: -10,
+          spacing:-8,
           plugins: {
             legend: {
               position: 'bottom',
+              fullSize:true,
+              maxWidth : 90,
+              align:"center",
+              labels: {
+                boxWidth:80,
+                padding:10,
+                textAlign:"left",
+                usePointStyle:true,
+                pointStyle:"rectRounded",
+                pointStyleWidth:40,
+                
+              }
             },
             tooltip: {
               callbacks: {
@@ -80,37 +106,56 @@ export class DashComponent implements AfterViewInit {
           },
           elements: {
             arc: {
-              borderRadius: 10, // Optional: Set border radius if needed
+              borderRadius: 10,
             }
           },
-          cutout: '80%'
-        }
+          cutout: '80%',
+          layout: {
+            padding: {
+              bottom: 0,
+              left: 0
+            }
+          }
+        },
+        plugins:[this.legendMargin]
       });
     } else {
       console.error('Failed to get canvas context');
     }
   }
-
+  
   mentor() {
-    const ctx = (document.getElementById('doughnut') as HTMLCanvasElement)?.getContext('2d');
-
+    const ctx = (document.getElementById('mentor') as HTMLCanvasElement)?.getContext('2d');
+  
     if (ctx) {
       new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: ['Female', 'Male'],
+          labels: ['Female : 20', 'Male : 80'],
           datasets: [{
             data: [20, 80],
             backgroundColor: ['#EA5CD2', '#3D91C7'],
-            borderColor: "transparent",
+            borderColor: "transparent"
           }]
         },
         options: {
           responsive: true,
-          spacing: -10,
+          spacing:-8,
           plugins: {
             legend: {
               position: 'bottom',
+              fullSize:true,
+              maxWidth : 90,
+              align:"center",
+              labels: {
+                boxWidth:80,
+                padding:10,
+                textAlign:"left",
+                usePointStyle:true,
+                pointStyle:"rectRounded",
+                pointStyleWidth:40,
+                
+              }
             },
             tooltip: {
               callbacks: {
@@ -122,16 +167,22 @@ export class DashComponent implements AfterViewInit {
           },
           elements: {
             arc: {
-              borderRadius: 10, // Optional: Set border radius if needed
+              borderRadius: 10,
             }
           },
-          cutout: '80%'
+          cutout: '80%',
+          layout: {
+            padding: {
+              bottom: 0,
+              left: 0
+            }
+          }
         }
       });
     } else {
       console.error('Failed to get canvas context');
     }
-  }
+  } 
 
   hor() {
     const ctx = (document.getElementById('prog') as HTMLCanvasElement)?.getContext('2d');
@@ -149,8 +200,8 @@ export class DashComponent implements AfterViewInit {
         },
         options: {
           responsive: true,
-          spacing: -10,
-          rotation:180,
+          spacing:-8,
+          rotation: 180,
           plugins: {
             legend: {
               display: false
@@ -165,17 +216,17 @@ export class DashComponent implements AfterViewInit {
           },
           elements: {
             arc: {
-              borderRadius: 10, // Optional: Set border radius if needed
-              
+              borderRadius: 15,
             }
           },
-          cutout: '80%'
+          cutout: '70%'
         }
       });
     } else {
       console.error('Failed to get canvas context');
     }
   }
+
   sheet() {
     const ctx = (document.getElementById('sheet') as HTMLCanvasElement)?.getContext('2d');
 
@@ -188,15 +239,25 @@ export class DashComponent implements AfterViewInit {
             data: [20, 80,12,50,60,35,12,17,88,95,100,30],
             backgroundColor: '#3D91C7',
             borderColor: "#3D91C7",
-            borderRadius:6
+            borderRadius: 6
           }]
         },
         options: {
           responsive: true,
-          
+          scales: {
+            y: {
+              min: 0, 
+              max: 100,
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          },
           plugins: {
             legend: {
-              display:false
+              display: false
             },
             tooltip: {
               callbacks: {
@@ -208,16 +269,16 @@ export class DashComponent implements AfterViewInit {
           },
           elements: {
             arc: {
-              borderRadius: 15, // Optional: Set border radius if needed
+              borderRadius: 15,
             }
           },
-         
         }
       });
     } else {
       console.error('Failed to get canvas context');
     }
   }
+
   avg() {
     const ctx = (document.getElementById('avg') as HTMLCanvasElement)?.getContext('2d');
 
@@ -230,7 +291,6 @@ export class DashComponent implements AfterViewInit {
             data: [,20, 80,60,50,30],
             backgroundColor: '#3D91C7',
             borderColor: "#3D91C7",
-            
           }]
         },
         options: {
@@ -238,11 +298,17 @@ export class DashComponent implements AfterViewInit {
           scales: {
             y: {
               min: 0, 
+              max: 100,
+            },
+            x: {
+              grid: {
+                display: false
+              }
             }
           },
           plugins: {
             legend: {
-              display:false
+              display: false
             },
             tooltip: {
               callbacks: {
@@ -254,10 +320,9 @@ export class DashComponent implements AfterViewInit {
           },
           elements: {
             arc: {
-              borderRadius: 15, // Optional: Set border radius if needed
+              borderRadius: 15,
             }
           },
-         
         }
       });
     } else {

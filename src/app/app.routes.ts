@@ -9,6 +9,7 @@ import { HOCDashboardComponent } from './HOC/hocdashboard/hocdashboard.component
 import { DashComponent } from './HOC/comp/dash/dash.component';
 
 import { AddUserComponent } from './pages/Leader/screens/add-user/add-user.component';
+import { HocLayoutComponent } from './layouts/HOC/hoc-layout/hoc-layout.component';
 
 export const routes: Routes = [
   // Auth Pages
@@ -73,15 +74,17 @@ export const routes: Routes = [
     children: [],
   },
   {
-    path: 'hoc',
-    component: HOCDashboardComponent,
-    canActivate: [],
+    path: 'head-of-camp',
+    component: HocLayoutComponent,
+    canActivate: [authGuard],
     title: 'HOC - Dashboard',
     children: [
       {
-        path: 'dash',
+        path: '',
         component: DashComponent,
+        title: 'Leader / Camps - ICPC',
       }
+     
     ],
   }
   
