@@ -4,7 +4,8 @@ import { rolesGuard } from './authentication/guard/roles.guard';
 import { LoginComponent } from './authentication/screens/login/login.component';
 import { LayoutLeaderComponent } from './layouts/layout_leader/layout-leader.component';
 import { DashboardComponent } from './pages/Leader/screens/dashboard/dashboard.component';
-
+import { HOCDashboardComponent } from './HOC/hocdashboard/hocdashboard.component';
+import { DashComponent } from './HOC/comp/dash/dash.component';
 export const routes: Routes = [
   // Auth Pages
   {
@@ -60,4 +61,17 @@ export const routes: Routes = [
     canActivate: [authGuard, rolesGuard],
     children: [],
   },
+  {
+    path: 'hoc',
+    component: HOCDashboardComponent,
+    canActivate: [],
+    title: 'HOC - Dashboard',
+    children: [
+      {
+        path: 'dash',
+        component: DashComponent,
+      }
+    ],
+  }
+  
 ];
