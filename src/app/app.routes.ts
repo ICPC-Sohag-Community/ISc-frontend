@@ -4,6 +4,8 @@ import { rolesGuard } from './authentication/guard/roles.guard';
 import { LoginComponent } from './authentication/screens/login/login.component';
 import { LayoutLeaderComponent } from './layouts/layout_leader/layout-leader.component';
 import { DashboardComponent } from './pages/Leader/screens/dashboard/dashboard.component';
+import { LayoutTraineeComponent } from './layouts/layout_trainee/layout-trainee.component';
+import { HomeTraineeComponent } from './pages/Trainee/screens/home-trainee/home-trainee.component';
 
 export const routes: Routes = [
   // Auth Pages
@@ -28,12 +30,17 @@ export const routes: Routes = [
 
   // Stutent Pages
   {
-    path: '',
+    path: 'trainee',
     title: 'ICPC',
     canActivate: [rolesGuard],
-    // component: LayStudentComponent,
+    component: LayoutTraineeComponent,
 
-    children: [],
+    children: [
+      {
+        path:'home',
+        component:HomeTraineeComponent
+      }
+    ],
   },
 
   // Admin Pages
