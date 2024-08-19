@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
@@ -43,6 +43,18 @@ export class DashboardService {
       `${environment.BASE_URL}/api/Leader/createAccount`,
       formData,
       { headers: myHeaders }
+    );
+  }
+
+  getAllWithPagination(currentPage: number, pageSize: number): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const params = new HttpParams()
+      .set('PageNumber', currentPage)
+      .set('PageSize', pageSize);
+    return this.http.get<any>(
+      `${environment.BASE_URL}/api/Leader/camps/getAllWithPagination`,
+
+      { headers: headers, params: params }
     );
   }
 }

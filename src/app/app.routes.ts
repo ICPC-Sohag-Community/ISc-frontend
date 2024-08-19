@@ -5,6 +5,7 @@ import { LoginComponent } from './authentication/screens/login/login.component';
 import { LayoutLeaderComponent } from './layouts/layout_leader/layout-leader.component';
 import { DashboardComponent } from './pages/Leader/screens/dashboard/dashboard.component';
 import { AddUserComponent } from './pages/Leader/screens/add-user/add-user.component';
+import { CampsLeaderComponent } from './pages/Leader/screens/camps-leader/camps-leader.component';
 
 export const routes: Routes = [
   // Auth Pages
@@ -54,7 +55,7 @@ export const routes: Routes = [
       },
       {
         path: 'camps',
-        component: DashboardComponent,
+        component: CampsLeaderComponent,
         title: 'Leader / Camps - ICPC',
       },
     ],
