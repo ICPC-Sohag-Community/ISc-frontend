@@ -1,0 +1,19 @@
+// Custom styles for the navigation underline effect
+.nav-link {
+  position: relative;
+
+  &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      height: 2px;
+      width: 0;
+      background-color: #E69C24; // Yellow underline color
+      transition: width 0.3s ease-in-out;
+  }
+
+  &:hover::after {
+      width: 100%;
+  }
+}

@@ -1,0 +1,106 @@
+<div class="mt-28 mb-10">
+  <div class="relative w-fit mr-auto">
+    <div>
+      <button (click)="toggleDropdown()" type="button" class="relative flex rounded-full text-sm" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+        <span class="absolute -inset-1.5"></span>
+        <div class=" flex justify-between items-center gap-4">
+          <img src="assets/img_trainee/arrow_down.svg" alt="">
+          <a *ngIf="todoShow" class="flex items-center gap-2 px-4 py-2 uppercase cursor-pointer bg-[#979797] text-white p-2 rounded-[10px] font-bold w-full " role="menuitem" tabindex="-1" id="user-menu-item-0"><img src="assets/img_trainee/circle.svg"><span>to do</span></a>
+          <a *ngIf="progressShow" class="flex items-center gap-2 px-4 py-2 uppercase cursor-pointer bg-[#2D91C7] text-white p-2 rounded-[10px] font-bold w-full" role="menuitem" tabindex="-1" id="user-menu-item-1"><img src="assets/img_trainee/progress.svg"><span>in progress</span></a>
+          <a *ngIf="doneShow" class="flex items-center gap-2 px-4 py-2 uppercase cursor-pointer bg-[#52B788] text-white p-2 rounded-[10px] font-bold w-full" role="menuitem" tabindex="-1" id="user-menu-item-2"><img src="assets/img_trainee/done.svg"><span>done</span></a>
+        </div>
+      </button>
+    </div>
+    <div class="absolute drobdown right-0 z-10 mt-2 w-48 origin-top-right py-1 outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+      <a (click)="clickedShow('todo')" class="flex items-center gap-2 px-4 py-2 uppercase cursor-pointer bg-[#979797] text-white p-2 rounded-t-[10px] font-bold w-full " role="menuitem" tabindex="-1" id="user-menu-item-0"><img src="assets/img_trainee/circle.svg"><span>to do</span></a>
+      <a (click)="clickedShow('progress')" class="flex items-center gap-2 px-4 py-2 uppercase cursor-pointer bg-[#2D91C7] text-white p-2 font-bold w-full" role="menuitem" tabindex="-1" id="user-menu-item-1"><img src="assets/img_trainee/progress.svg"><span>in progress</span></a>
+      <a (click)="clickedShow('done')" class="flex items-center gap-2 px-4 py-2 uppercase cursor-pointer bg-[#52B788] text-white p-2 rounded-b-[10px] font-bold w-full" role="menuitem" tabindex="-1" id="user-menu-item-2"><img src="assets/img_trainee/done.svg"><span>done</span></a>
+    </div>
+  </div>
+  <div class="content ml-9 mt-4">
+<div class="relative overflow-x-auto">
+  <table class="w-full text-sm text-left ">
+      <thead class="text-xs">
+          <tr>
+              <th scope="col" class="px-1 py-3 border-b border-[#D9D9D9] text-xl font-medium w-full text-[#777575]">
+                Name
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+          <tr class="border-b border-[#D9D9D9]">
+              <th scope="row" class="p-4 font-medium text-base capitalize flex items-center gap-4">
+                     <div class="size-5 rounded-full border border-[#979797]"></div> <span>to do</span>
+              </th>
+          </tr>
+      </tbody>
+  </table>
+</div>
+
+  </div>
+</div>
