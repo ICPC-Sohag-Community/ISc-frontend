@@ -41,7 +41,7 @@ export class AddUserComponent implements OnInit {
       birthDate: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       nationalId: ['', [Validators.required]],
-      phoneNumber: [null],
+      phoneNumber: ['', [Validators.required]],
       college: [null, [Validators.required]],
       grade: ['', [Validators.required]],
       gender: ['', [Validators.required]],
@@ -79,16 +79,16 @@ export class AddUserComponent implements OnInit {
     formdata.append('FirstName', this.addUserForm.value.firstName);
     formdata.append('MiddleName', this.addUserForm.value.middleName);
     formdata.append('LastName', this.addUserForm.value.lastName);
-    formdata.append('Email', this.addUserForm.value.email);
-    formdata.append('NationalId', this.addUserForm.value.nationalId);
+    formdata.append('Email', this.addUserForm.value.email); ///
+    formdata.append('NationalId', this.addUserForm.value.nationalId); //
     formdata.append('BirthDate', this.addUserForm.value.birthDate);
     formdata.append('PhoneNumber', this.addUserForm.value.phoneNumber);
     formdata.append('College', this.addUserForm.value.college);
-    formdata.append('CodeForceHandle', this.addUserForm.value.codeForceHandle);
+    formdata.append('CodeForceHandle', this.addUserForm.value.codeForceHandle); ///
     formdata.append('Grade', this.addUserForm.value.grade);
     formdata.append('Gender', this.addUserForm.value.gender);
     formdata.append('ProfileImage', this.imgFile);
-    formdata.append('VjudgeHandle', this.addUserForm.value.vjudgeHandle);
+    formdata.append('VjudgeHandle', this.addUserForm.value.vjudgeHandle); ///
     formdata.append('CampId', this.addUserForm.value.campId);
     formdata.append('Role', this.addUserForm.value.role);
 
@@ -97,6 +97,7 @@ export class AddUserComponent implements OnInit {
         if (statusCode === 200) {
           // this.toastr.success(msg);
           alert('done');
+          this.addUserForm.reset();
           this.isLoading = false;
           // this.router.navigateByUrl('/admin/tutorial');
         } else if (errors) {

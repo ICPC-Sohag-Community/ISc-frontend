@@ -10,6 +10,7 @@ import { DashComponent } from './HOC/comp/dash/dash.component';
 
 import { AddUserComponent } from './pages/Leader/screens/add-user/add-user.component';
 import { CampsLeaderComponent } from './pages/Leader/screens/camps-leader/camps-leader.component';
+import { ActiosCampComponent } from './pages/Leader/screens/actios-camp/actios-camp.component';
 
 export const routes: Routes = [
   // Auth Pages
@@ -30,7 +31,7 @@ export const routes: Routes = [
   //   canActivate: [authGuardLoggdIn],
   // },
 
-  // Stutent Pages
+  // Trainee Pages
   {
     path: '',
     title: 'ICPC',
@@ -62,29 +63,29 @@ export const routes: Routes = [
         component: CampsLeaderComponent,
         title: 'Leader / Camps - ICPC',
       },
+      {
+        path: 'camps',
+        children: [
+          {
+            path: 'action-camp/:id',
+            component: ActiosCampComponent,
+            title: 'Leader / Camps / add - ICPC',
+          },
+        ],
+      },
     ],
   },
 
-
-  // Teacher and Data Entry Pages
   {
-    path: 'instructor',
-    // component: LayAdminComponent,
-    canActivate: [authGuard, rolesGuard],
-    children: [],
-  },
-  {
-    path: 'hoc',
+    path: 'head_of_camp',
     component: HOCDashboardComponent,
-    canActivate: [],
+    canActivate: [authGuard, rolesGuard],
     title: 'HOC - Dashboard',
     children: [
       {
         path: 'dash',
         component: DashComponent,
-      }
+      },
     ],
-  }
-  
-
+  },
 ];
