@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
+@import "swiper/css/bundle";
 
 .custom-scrollbar::-webkit-scrollbar,
 .scroll-host::-webkit-scrollbar {
