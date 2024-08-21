@@ -8,7 +8,10 @@
 .scroll-host::-webkit-scrollbar {
   width: 8px !important;
 }
-
+*{
+  font-family: "Inter", sans-serif;
+  
+}
 .custom-scrollbar::-webkit-scrollbar-track,
 .scroll-host::-webkit-scrollbar-track {
   background: #f1f1f1;
