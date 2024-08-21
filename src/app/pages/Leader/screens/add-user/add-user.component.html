@@ -10,6 +10,7 @@
           <input
             type="text"
             id="firstName"
+            #formControl
             name="firstName"
             formControlName="firstName"
             [ngClass]="
@@ -46,6 +47,7 @@
             type="text"
             id="lastName"
             name="lastName"
+            #formControl
             formControlName="lastName"
             [ngClass]="
               addUserForm.controls['lastName'].errors && submitted
@@ -66,6 +68,7 @@
             type="date"
             id="birthDate"
             name="birthDate"
+            #formControl
             formControlName="birthDate"
             [ngClass]="
               addUserForm.controls['birthDate'].errors && submitted
@@ -83,6 +86,7 @@
             type="text"
             id="nationalId"
             name="nationalId"
+            #formControl
             formControlName="nationalId"
             [ngClass]="
               addUserForm.controls['nationalId'].errors && submitted
@@ -148,7 +152,6 @@
                   stroke-linejoin="round"
                 />
               </svg>
-
               <span class="text-xs">Choose File</span>
             </label>
           </div>
@@ -174,6 +177,7 @@
                 id="male"
                 name="gender"
                 value="0"
+                #formControl
                 [ngClass]="
                   addUserForm.controls['gender'].errors && submitted
                     ? 'border-rose-600 '
@@ -207,6 +211,7 @@
             id="email"
             name="email"
             formControlName="email"
+            #formControl
             [ngClass]="
               addUserForm.controls['email'].errors && submitted
                 ? 'border-rose-600 '
@@ -224,6 +229,7 @@
             id="phoneNumber"
             name="phoneNumber"
             formControlName="phoneNumber"
+            #formControl
             [ngClass]="
               addUserForm.controls['phoneNumber'].errors && submitted
                 ? 'border-rose-600'
@@ -250,8 +256,9 @@
               bindLabel="name"
               bindValue="id"
               formControlName="college"
-              (focus)="focusCollegaFun()"
-              (blur)="blurCollegaFun()"
+              #formControl
+              (open)="handleClose()"
+              (close)="handleOpen()"
               [ngClass]="
                 addUserForm.controls['college'].errors && submitted
                   ? 'border-rose-600 '
@@ -297,6 +304,7 @@
                 type="radio"
                 id="1"
                 name="grade"
+                #formControl
                 value="1"
                 formControlName="grade"
               />
@@ -306,6 +314,7 @@
               <input
                 type="radio"
                 id="2"
+                #formControl
                 name="grade"
                 value="2"
                 formControlName="grade"
@@ -317,6 +326,7 @@
                 type="radio"
                 id="3"
                 name="grade"
+                #formControl
                 value="3"
                 formControlName="grade"
               />
@@ -349,7 +359,7 @@
     </div>
     <div class="flex flex-col mt-6 gap-y-4">
       <h2 class="text-2xl font-bold">Professional Information</h2>
-      <div class="flex items-center justify-between w-11/12 ps-4">
+      <div class="flex items-center w-11/12 ps-4">
         <div class="flex flex-col basis-2/3">
           <label for="role">Role <span class="text-red-600">*</span></label>
           <div class="flex items-center gap-x-4">
@@ -361,6 +371,7 @@
                 bindLabel="name"
                 bindValue="name"
                 formControlName="role"
+                #formControl
                 (change)="getRole($event)"
                 (focus)="showCampsWhenFocus()"
                 (blur)="hideCampsWhenblur($event)"
@@ -397,7 +408,7 @@
             }
           </div>
         </div>
-        <div class="relative basis-1/3 top-8 right-64">
+        <div class="relative top-8 w-72 right-96">
           <div
             [ngClass]="isShow ? 'block' : 'hidden'"
             class="absolute z-50 mt-2 overflow-y-auto text-black transition-all duration-500 bg-white border border-gray-200 rounded-lg shadow-lg max-h-52 custom-scrollbar w-fit"
@@ -427,7 +438,6 @@
             </div>
           </div>
         </div>
-        <div class="basis-1/3"></div>
       </div>
     </div>
     <div class="flex flex-col mt-6 gap-y-4">
