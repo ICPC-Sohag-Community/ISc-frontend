@@ -9,6 +9,10 @@ module.exports = {
       colors: {
         activeLink: "#3D91C7",
         sidebarColor: "#686666",
+        mainGreen: "#41b253",
+        mainRed: "#e44449",
+        mainYellow: "#cca827",
+        mainblue: "#3D91C7",
       },
       animation: {
         pop: "popBtn 1s  infinite",

@@ -5,6 +5,33 @@
 @import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
 @import "swiper/css/bundle";
 
+html,
+body {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar,
+.scroll-host::-webkit-scrollbar {
+  width: 12px !important;
+}
+
+::-webkit-scrollbar-track,
+.scroll-host::-webkit-scrollbar-track {
+  background: #abd0e7;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb,
+.scroll-host::-webkit-scrollbar-thumb {
+  background: #3d91c7;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover,
+.scroll-host::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .custom-scrollbar::-webkit-scrollbar,
 .scroll-host::-webkit-scrollbar {
   width: 8px !important;
@@ -27,9 +54,46 @@
   background: #555;
 }
 
-.ng-select .ng-select-container {
-  border: none;
-}
+/* Hide the default arrow */
+// .ng-select {
+//   .ng-select-container {
+//     position: relative;
+//   }
+
+//   .ng-arrow {
+//     // text-align: center;
+//     transform: rotate(0deg);
+//     transform-origin: center;
+//     transition: transform 0.2s ease;
+//     &:before {
+//       content: "";
+//       position: absolute;
+
+//       bottom: -6px;
+//       right: 15px;
+//       transform: translateY(-50%, -50%);
+//       width: 24px; /* Set your desired width */
+//       height: 24px; /* Set your desired height */
+//       background-image: url("./assets/img/arrow-down.svg"); /* Replace with the path to your SVG */
+//       background-size: contain;
+//       background-repeat: no-repeat;
+//     }
+//   }
+
+//   &.ng-select-opened {
+//     .ng-arrow {
+//       transform: rotate(180deg);
+//       &:before {
+//         content: "";
+//         position: absolute;
+
+//         bottom: -15px;
+//         right: -25px;
+//         transform: translateY(-50%, -50%);
+//       }
+//     }
+//   }
+// }
 
 .ng-dropdown-panel.ng-select-bottom {
   top: 128% !important;
@@ -95,5 +159,7 @@
 }
 
 .ng-select .ng-select-container .ng-value-container .ng-placeholder {
-  color: #000;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
 }
