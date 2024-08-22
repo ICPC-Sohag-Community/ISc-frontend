@@ -1,73 +1,71 @@
 
 <div class="header-content flex justify-between items-center sm:flex-wrap md:flex-nowrap mt-44 gap-5">
-
-  <div class="header-card sm:w-full rounded-[12px] xl:w-[610px] h-[22rem] shadow-[0px_1px_50px_0px_#00000014] ">
+  <div class="header-card sm:w-full rounded-[12px] xl:w-[610px] h-[22rem] shadow-[0px_1px_50px_0px_#00000014] cursor-pointer" (click)="openLink(currentSheet.sheetLink)">
     <a class="flex flex-col items-baseline justify-between  w-full h-full px-6 py-3 rounded-lg shadow">
       <div class="top-card mt-12">
       <p class="text-2xl">Current Sheet</p>
-      <h5 class=" mt-8">Name Sheet</h5>
+      <h5 class=" mt-8 text-[1.75rem]">{{currentSheet ? currentSheet.name :'No Sheet For Now'}}</h5>
       </div>
       <div class="card-footer w-full flex justify-between px-4 items-center">
       <div class="footer-text flex flex-col justify-between">
         <span class=" flex items-center mb-4">
           <i class="fa-regular fa-clock mr-2"></i>
-          <small>Starts in April 23,2025</small>
+          <small>Starts in {{currentSheet ? convertDate(currentSheet.startDate) : ''}}</small>
         </span>
         <span class="flex items-center mb-4">
           <i class="fa-solid fa-clock-rotate-left mr-2"></i>
-          <small>Ended May 1,2025</small>
+          <small>Ended in {{currentSheet ? convertDate(currentSheet.endDate) :''}}</small>
         </span>
       </div>
       <div class=" bg-white rounded-full size-20 flex justify-center items-center">
-        <span class="text-[#93518D]">20/25</span>
+        <span class="text-[#93518D]">{{currentSheet ? currentSheet.problemSolvedCount : '0'}}/{{currentSheet ? currentSheet.problemCount :'0'}}</span>
       </div>
       </div>
     </a>
   </div>
-  <div class="header-card sm:w-full rounded-[12px] xl:w-[610px] h-[22rem] shadow-[0px_1px_50px_0px_#00000014] ">
+  <div class="header-card sm:w-full rounded-[12px] xl:w-[610px] h-[22rem] shadow-[0px_1px_50px_0px_#00000014] cursor-pointer" (click)="openLink(nextSession.locationLink)">
     <a class="flex flex-col items-baseline justify-between  w-full h-full px-6 py-3 rounded-lg shadow">
       <div class="top-card mt-12">
       <p class=" text-xl">Next Session</p>
-      <h5 class=" mt-8">Name Session</h5>
+      <h5 class=" mt-8 text-[1.75rem]">{{nextSession ? nextSession.topic : 'No Sessions Coming'}}</h5>
       </div>
       <div class="card-footer w-full flex justify-between pl-4 items-center">
         <div class="footer-text flex flex-col justify-between">
           <span class=" flex items-center mb-2">
             <i class="fa-regular fa-clock mr-2"></i>
-            <small>Sunday 2/9/2024 Starting from 9 AM to 1:30 PM</small>
+            <small>{{formatEventDates(nextSession.startDate,nextSession.endDate)}}</small>
           </span>
           <span class="flex items-center mb-2">
             <i class="fa-regular fa-user mr-2"></i>
-            <small>Instructor : Maria Aldabea Anis</small>
+            <small>Instructor : {{nextSession.instructorName}}</small>
           </span>
           <span class="flex items-center mb-2">
             <i class="fa-solid fa-book-open mr-2"></i>
-            <small>Topic : If Condition</small>
+            <small>Topic : {{nextSession.topic}}</small>
           </span>
           <span class="flex items-center mb-2">
             <i class="fa-solid fa-location-dot mr-2"></i>
-            <small>Location : Sohag University</small>
+            <small>Location : {{nextSession.locationName}}</small>
           </span>
         </div>
       </div>
       </a>
   </div>
-  <div class="header-card sm:w-full rounded-[12px] xl:w-[610px] h-[22rem] shadow-[0px_1px_50px_0px_#00000014] ">
+  <div class="header-card sm:w-full rounded-[12px] xl:w-[610px] h-[22rem] shadow-[0px_1px_50px_0px_#00000014] cursor-pointer" (click)="openLink(inComingContest.link)">
     <a class="flex flex-col items-baseline justify-between  w-full h-full px-6 py-3 rounded-lg shadow">
       <div class="top-card mt-12">
       <p class="text-2xl">Next Contest</p>
-      <h5 class=" mt-8">Dynamic Programming
-        Advanced topic</h5>
+      <h5 class=" mt-8" [ngClass]="inComingContest.name.split(' ').length > 2 ? 'text-[2.1rem]' : 'text-[1.75rem]'">{{inComingContest ? inComingContest.name : 'No Contest In Coming'}}</h5>
       </div>
       <div class="card-footer w-full pl-1">
         <div class="footer-text">
           <span class="flex items-center justify-around mb-2">
             <span class="text-2xl">Before Start</span>
-            <span class="text-4xl font-bold">30</span>
+            <span class="text-4xl font-bold">{{inComingContest ? inComingContest.remainTime.hours : '0' }}</span>
             <span class="text-2xl font-normal">h</span>
-            <span class="text-4xl font-bold">10</span>
+            <span class="text-4xl font-bold">{{inComingContest ? inComingContest.remainTime.minutes : '0'}}</span>
             <span class="text-2xl font-normal">min</span>
-            <span class="text-4xl font-bold">54</span>
+            <span class="text-4xl font-bold">{{inComingContest ? inComingContest.remainTime.seconds : '0'}}</span>
             <span class="text-2xl font-normal">sec</span>
           </span>
         </div>

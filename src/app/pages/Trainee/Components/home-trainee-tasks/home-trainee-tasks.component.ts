@@ -10,33 +10,24 @@ declare var $: any;
 })
 export class HomeTraineeTasksComponent {
 
-  isOpen = false;
-  doneShow:boolean=false
-  progressShow:boolean=false
-  todoShow:boolean=true
 
-  ngOnInit(): void {
-    this.toggleDropdown()
-  }
-  toggleDropdown() {
-    $('.drobdown').slideToggle(200)
-  }
-  clickedShow(name:String):void{
-    $('.drobdown').slideToggle()
-    if (name=='done') {
-      this.doneShow=true
-      this.progressShow=false
-      this.todoShow=false
+
+
+  
+  toggleTables(tableClosed:any) {
+
+    if(tableClosed=='todo'){
+      $('.todo-table').slideToggle(500)
     }
-    else if(name=='progress'){
-      this.doneShow=false
-      this.progressShow=true
-      this.todoShow=false
+    else if(tableClosed=='progress')
+    {
+      $('.progress-table').slideToggle(500)
     }
-    else{
-      this.doneShow=false
-      this.progressShow=false
-      this.todoShow=true
+    else
+    {
+      $('.done-table').slideToggle(500)
     }
+
+
   }
 }

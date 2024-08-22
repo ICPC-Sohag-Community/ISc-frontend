@@ -48,9 +48,15 @@ export const routes: Routes = [
 
     children: [
       {
-        path: 'home',
+        path: '',
         component: HomeTraineeComponent,
+        title: 'Trainee / Home - ICPC',
       },
+      {
+        path:'home',
+        component:HomeTraineeComponent,
+        title: 'Trainee / Home - ICPC'
+      }
     ],
   },
 
@@ -104,28 +110,26 @@ export const routes: Routes = [
     ],
   },
 
-  {
+  // {
 
-    path: 'head-of-camp',
-    component: HocLayoutComponent,
-    canActivate: [authGuard],
+  //   path: 'head-of-camp',
+  //   component: HocLayoutComponent,
+  //   canActivate: [authGuard],
 
-    path: 'head_of_camp',
-    component: HOCDashboardComponent,
-    canActivate: [authGuard, rolesGuard],
+  //   path: 'head_of_camp',
+  //   component: HOCDashboardComponent,
+  //   canActivate: [authGuard, rolesGuard],
 
-    title: 'HOC - Dashboard',
-    children: [
-      {
-        path: '',
-        component: DashComponent,
+  //   title: 'HOC - Dashboard',
+  //   children: [
+  //     {
+  //       path: '',
+  //       component: DashComponent,
 
-        title: 'HOC / Dashboard - ICPC',
-      }
-     
+  //       title: 'HOC / Dashboard - ICPC',
+  //     }
 
-      },
 
-    ],
-  },
-];
+  //   ]
+  // }
+]

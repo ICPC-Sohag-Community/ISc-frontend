@@ -3,48 +3,101 @@
   <div class="container mx-auto w-11/12 flex justify-between items-center">
       <!-- Logo Section -->
       <div class="flex items-center xl:w-1/3 ">
-          <img src="assets/img/IcpcLogo.png" alt="Logo" class="h-10 w-auto mr-4" />
+          <img src="../../../../../assets/img/IcpcLogo.svg" alt="IcpcLogo"
+          loading="lazy"
+          width="130"
+          height="50" />
       </div>
 
       <!-- Navigation Links -->
       <ul class="flex space-x-8 xl:w-1/3 justify-center">
           <li>
-              <a routerLink="/trainee/home" class="text-gray-800 hover:text-yellow-500 relative nav-link">Home</a>
+              <a routerLink="/trainee/home" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }" class=" hover:active-link  relative nav-link">Home</a>
           </li>
           <li>
-              <a routerLink="/trainee/home" class="text-gray-800 hover:text-yellow-500 relative nav-link">Sheets</a>
+              <a routerLink="" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }" class="hover:active-link  relative nav-link">Sheets</a>
           </li>
           <li>
-              <a routerLink="/trainee/home" class="text-gray-800 hover:text-yellow-500 relative nav-link">Contests</a>
+              <a routerLink="" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }" class=" hover:active-link relative nav-link">Contests</a>
           </li>
           <li>
-              <a routerLink="/trainee/home" class="text-gray-800 hover:text-yellow-500 relative nav-link">Standing</a>
+              <a routerLink="" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }" class=" hover:active-link relative nav-link">Standing</a>
           </li>
       </ul>
-
-      <!-- User Profile and Icons -->
+      <!-- User Profile -->
       <div class="flex xl:w-1/3 justify-end items-center">
-        <div class="flex flex-col">
-          <span class="text-gray-600 self-end">Welcome</span>
-          <div class="relative">
-            <div>
-              <button (click)="toggleDropdown()" type="button" class="relative flex rounded-full text-sm" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                <span class="absolute -inset-1.5"></span>
-                <div class=" flex justify-between items-center">
-                  <i class="fa-solid fa-chevron-down mr-1"></i> <strong class="text-gray-600">Maria Aldabea</strong>
+        <div class="[--placement:bottom-right] relative inline-flex">
+          <div class="flex items-center">
+            <div class="mr-2">
+              <h2 class="text-base font-medium text-sidebarColor">
+                {{ currentUser.firstName }}
+                {{ currentUser.middleName }}
+              </h2>
+              <!-- component -->
+
+              <div class="relative inline-block text-left w-fit">
+                <button
+                  (click)="showRoles()"
+                  class="inline-flex items-center gap-2 w-full py-1 font-medium text-black pe-6"
+                >
+                <svg
+                    [ngClass]="isShow ? 'rotate-180' : ''"
+                    class="w-4 h-4 ml-2 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                  <span>Trainee</span>
+                </button>
+                <div
+                  [ngClass]="isShow ? 'block' : 'hidden'"
+                  class="absolute z-50 mt-2 transition-all duration-500 bg-white border border-gray-200 rounded-md shadow-lg top-6 right-2 w-fit"
+                >
+                  <div
+                    class="py-1 text-sm text-gray-700 w-fit"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="options-menu"
+                  >
+                    @for (item of currentUser.roles; track $index; let last =
+                    $last) {
+
+                    <button
+                      (click)="goSpecificRole(item)"
+                      [ngClass]="last ? '' : 'border-b border-activeLink'"
+                      class="block w-full px-4 py-2 font-medium transition-colors hover:text-activeLink text-start"
+                      role="menuitem"
+                    >
+                      {{ item }}
+                    </button>
+                    }
+                  </div>
                 </div>
-              </button>
+              </div>
             </div>
-            <div *ngIf="isOpen" class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+            <div class="relative">
+              <img
+                class="object-cover w-10 h-10 rounded-full"
+                [src]="
+                  currentUser.photoUrl
+                    ? currentUser.photoUrl
+                    : './../../../../../assets/img/user.png'
+                "
+                alt="Avatar"
+              />
+              <div class="absolute inset-0 rounded-full shadow-inner"></div>
             </div>
           </div>
         </div>
-        <div class="profile-img p-0 mx-3 relative flex rounded-full focus:outline-none focus:ring-2 focus:ring-white">
-          <img src="assets/img_trainee/profile-photo.png" alt="Profile Picture" class="h-10 w-10 rounded-full object-cover" />
-        </div>
+        <!-- icons -->
         <div class="flex space-x-2 ml-4 items-center justify-between w-1/3 ">
             <a href="#" class="text-gray-600 hover:text-gray-800"><img src="assets/img_trainee/bi_qr-code.png" alt=""></a>
             <div class="relative">
@@ -61,6 +114,7 @@
       </div>
   </div>
 </nav>
+
 
 
 
