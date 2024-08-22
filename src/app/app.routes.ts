@@ -42,8 +42,14 @@ export const routes: Routes = [
 
     children: [
       {
+        path: '',
+        component: HomeTraineeComponent,
+        title: 'Trainee / Home - ICPC',
+      },
+      {
         path:'home',
-        component:HomeTraineeComponent
+        component:HomeTraineeComponent,
+        title: 'Trainee / Home - ICPC'
       }
     ],
   },
