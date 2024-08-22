@@ -20,9 +20,23 @@ export class CampLeaderService {
       params
     );
   }
+
   deleteCamp(id: number): Observable<ResponseHeader> {
     return this.http.delete<any>(
       `${environment.BASE_URL}/api/Leader/camps/${id}`
     );
+  }
+
+  emptyCamp(id: number): Observable<ResponseHeader> {
+    return this.http.delete<any>(
+      `${environment.BASE_URL}/api/Leader/camps/Emtpy/${id}`
+    );
+  }
+
+  standingCamp(campId: number): Observable<ResponseHeader> {
+    const params = new HttpParams().set('campId', campId);
+    return this.http.get<any>(`${environment.BASE_URL}/api/Leader/standing`, {
+      params,
+    });
   }
 }

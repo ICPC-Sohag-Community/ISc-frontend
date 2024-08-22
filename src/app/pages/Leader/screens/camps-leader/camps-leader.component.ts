@@ -1,15 +1,15 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CampInfo } from '../../model/dashboard';
-import { NgClass } from '@angular/common';
 import { CasheService } from '../../../../shared/services/cashe.service';
 import { Router } from '@angular/router';
 import { ConfirmCampComponent } from '../../Components/confirm-camp/confirm-camp.component';
 import { CampLeaderService } from '../../services/camp-leader.service';
+import { EmptyCampComponent } from '../../Components/empty-camp/empty-camp.component';
+import { CampInfo } from '../../model/camp';
 
 @Component({
   selector: 'app-camps-leader',
   standalone: true,
-  imports: [NgClass, ConfirmCampComponent],
+  imports: [ConfirmCampComponent, EmptyCampComponent],
   templateUrl: './camps-leader.component.html',
   styleUrl: './camps-leader.component.scss',
 })
@@ -19,7 +19,9 @@ export class CampsLeaderComponent implements OnInit {
   router = inject(Router);
   allCampsInfo!: CampInfo;
   showModal: boolean = false;
+  showEmptyModal: boolean = false;
   selectedItemId: number | null = null;
+  selectedEmptyId: number | null = null;
   isLoading = signal<boolean>(false);
   ngOnInit() {
     this.fetchAllWithPagination(1, 10);
@@ -60,6 +62,16 @@ export class CampsLeaderComponent implements OnInit {
     this.showModal = false;
   }
 
+  //Empty
+  showConfirmEmpty(id: number) {
+    this.selectedEmptyId = id;
+    this.showEmptyModal = true;
+  }
+
+  handleCloseEmpty(confirmed: boolean) {
+    this.showEmptyModal = false;
+  }
+
   nextPage() {
     if (this.allCampsInfo.hasNextPage) {
       this.fetchAllWithPagination(this.allCampsInfo.currentPage + 1, 10);
@@ -73,7 +85,10 @@ export class CampsLeaderComponent implements OnInit {
   }
 
   goToActionCamp(id: number): void {
-    console.log(id);
     this.router.navigate(['leader/camps/action-camp/', id]);
+  }
+
+  goToStandingCamp(id: number): void {
+    this.router.navigate(['leader/camps/standing/', id]);
   }
 }

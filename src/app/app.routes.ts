@@ -11,8 +11,14 @@ import { HOCDashboardComponent } from './HOC/hocdashboard/hocdashboard.component
 import { DashComponent } from './HOC/comp/dash/dash.component';
 
 import { AddUserComponent } from './pages/Leader/screens/add-user/add-user.component';
+
+import { HocLayoutComponent } from './layouts/HOC/hoc-layout/hoc-layout.component';
+
 import { CampsLeaderComponent } from './pages/Leader/screens/camps-leader/camps-leader.component';
 import { ActiosCampComponent } from './pages/Leader/screens/actios-camp/actios-camp.component';
+import { StandingCampComponent } from './pages/Leader/screens/standing-camp/standing-camp.component';
+import { StaffLeaderComponent } from './pages/Leader/screens/staff-leader/staff-leader.component';
+
 
 export const routes: Routes = [
   // Auth Pages
@@ -82,23 +88,48 @@ export const routes: Routes = [
           {
             path: 'action-camp/:id',
             component: ActiosCampComponent,
-            title: 'Leader / Camps / add - ICPC',
+            title: 'Leader / Camps / action-camp - ICPC',
           },
         ],
+      },
+      {
+        path: 'camps',
+        children: [
+          {
+            path: 'standing/:id',
+            component: StandingCampComponent,
+            title: 'Leader / Camps / standing - ICPC',
+          },
+        ],
+      },
+      {
+        path: 'staff',
+        component: StaffLeaderComponent,
+        title: 'Leader / staff - ICPC',
       },
     ],
   },
 
-  {
-    path: 'head_of_camp',
-    component: HOCDashboardComponent,
-    canActivate: [authGuard, rolesGuard],
-    title: 'HOC - Dashboard',
-    children: [
-      {
-        path: 'dash',
-        component: DashComponent,
-      },
-    ],
-  },
-];
+  // {
+
+  //   path: 'head-of-camp',
+  //   component: HocLayoutComponent,
+  //   canActivate: [authGuard],
+
+  //   path: 'head_of_camp',
+  //   component: HOCDashboardComponent,
+  //   canActivate: [authGuard, rolesGuard],
+
+  //   title: 'HOC - Dashboard',
+  //   children: [
+  //     {
+  //       path: '',
+  //       component: DashComponent,
+
+  //       title: 'HOC / Dashboard - ICPC',
+  //     }
+
+
+  //   ]
+  // }
+]
