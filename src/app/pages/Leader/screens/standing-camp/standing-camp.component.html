@@ -1,0 +1,63 @@
+<div class="relative w-full p-4 space-y-4 sm:p-6 sm:ps-4 sm:space-y-6">
+  <div
+    class="flex items-center justify-center py-4 bg-white border-2 border-mainblue rounded-xl"
+  >
+    <h2 class="text-3xl font-bold text-mainblue">
+      @if (!isLoading()) { HALL OF FAME {{ achiverCamp.campName }}
+      }
+    </h2>
+  </div>
+
+  @if( isLoading()) {
+  <div class="fixed z-50 top-[40%] lg:left-[50%] left-[40%] bg-opacity-60">
+    <div class="flex items-center">
+      <div
+        class="w-16 h-16 border-8 border-blue-600 border-dashed rounded-full animate-spin"
+      ></div>
+    </div>
+  </div>
+  } @else {
+  <table class="min-w-full text-center">
+    <thead>
+      <tr class="bg-transparent text-[#6B7088] text-2xl">
+        <th class="px-4 py-2">Achievers</th>
+        <th class="px-4 py-2">Handle</th>
+        <th class="px-4 py-2">Mentor</th>
+        <th class="px-4 py-2">Solve</th>
+        <th class="px-4 py-2">Points</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (item of achiverCamp.achivers; track $index) {
+      <tr
+        [ngClass]="
+          (item.solvedProblems / achiverCamp.totalProblems) * 100 <= 50
+            ? 'bg-mainRed'
+            : (item.solvedProblems / achiverCamp.totalProblems) * 100 > 50 &&
+              (item.solvedProblems / achiverCamp.totalProblems) * 100 <= 80
+            ? 'bg-mainYellow'
+            : 'bg-mainGreen'
+        "
+        class="my-6 text-xl font-medium text-center text-white rounded-lg"
+      >
+        <td class="p-4 rounded-s-xl">
+          {{ item.firstName }} {{ item.middleName }} {{ item.lastName }}
+        </td>
+        <td class="p-4 border-b">{{ item.codeForceHandle }}</td>
+        <td class="p-4">{{ item.mentorName }}</td>
+        <td class="p-4">
+          {{ item.solvedProblems }}/{{ achiverCamp.totalProblems }}
+        </td>
+        <td class="p-4 rounded-e-xl">{{ item.points }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  @if (!isLoading() && achiverCamp.achivers.length === 0) {
+  <div class="flex items-center justify-center py-4">
+    <h2 class="text-2xl font-medium text-mainRed">No Standing</h2>
+  </div>
+
+  } }
+</div>

@@ -4,12 +4,21 @@ import { rolesGuard } from './authentication/guard/roles.guard';
 import { LoginComponent } from './authentication/screens/login/login.component';
 import { LayoutLeaderComponent } from './layouts/layout_leader/layout-leader.component';
 import { DashboardComponent } from './pages/Leader/screens/dashboard/dashboard.component';
+import { LayoutTraineeComponent } from './layouts/layout_trainee/layout-trainee.component';
+import { HomeTraineeComponent } from './pages/Trainee/screens/home-trainee/home-trainee.component';
 
 import { HOCDashboardComponent } from './HOC/hocdashboard/hocdashboard.component';
 import { DashComponent } from './HOC/comp/dash/dash.component';
 
 import { AddUserComponent } from './pages/Leader/screens/add-user/add-user.component';
+
 import { HocLayoutComponent } from './layouts/HOC/hoc-layout/hoc-layout.component';
+
+import { CampsLeaderComponent } from './pages/Leader/screens/camps-leader/camps-leader.component';
+import { ActiosCampComponent } from './pages/Leader/screens/actios-camp/actios-camp.component';
+import { StandingCampComponent } from './pages/Leader/screens/standing-camp/standing-camp.component';
+import { StaffLeaderComponent } from './pages/Leader/screens/staff-leader/staff-leader.component';
+
 
 export const routes: Routes = [
   // Auth Pages
@@ -30,14 +39,19 @@ export const routes: Routes = [
   //   canActivate: [authGuardLoggdIn],
   // },
 
-  // Stutent Pages
+  // Trainee Pages
   {
-    path: '',
+    path: 'trainee',
     title: 'ICPC',
     canActivate: [rolesGuard],
-    // component: LayStudentComponent,
+    component: LayoutTraineeComponent,
 
-    children: [],
+    children: [
+      {
+        path: 'home',
+        component: HomeTraineeComponent,
+      },
+    ],
   },
 
   // Leader Routes
@@ -59,34 +73,59 @@ export const routes: Routes = [
       },
       {
         path: 'camps',
-        component: DashboardComponent,
+        component: CampsLeaderComponent,
         title: 'Leader / Camps - ICPC',
+      },
+      {
+        path: 'camps',
+        children: [
+          {
+            path: 'action-camp/:id',
+            component: ActiosCampComponent,
+            title: 'Leader / Camps / action-camp - ICPC',
+          },
+        ],
+      },
+      {
+        path: 'camps',
+        children: [
+          {
+            path: 'standing/:id',
+            component: StandingCampComponent,
+            title: 'Leader / Camps / standing - ICPC',
+          },
+        ],
+      },
+      {
+        path: 'staff',
+        component: StaffLeaderComponent,
+        title: 'Leader / staff - ICPC',
       },
     ],
   },
 
+  {
 
-  // Teacher and Data Entry Pages
-  {
-    path: 'instructor',
-    // component: LayAdminComponent,
-    canActivate: [authGuard, rolesGuard],
-    children: [],
-  },
-  {
     path: 'head-of-camp',
     component: HocLayoutComponent,
     canActivate: [authGuard],
+
+    path: 'head_of_camp',
+    component: HOCDashboardComponent,
+    canActivate: [authGuard, rolesGuard],
+
     title: 'HOC - Dashboard',
     children: [
       {
         path: '',
         component: DashComponent,
-        title: 'Leader / Camps - ICPC',
+
+        title: 'HOC / Dashboard - ICPC',
       }
      
-    ],
-  }
-  
 
+      },
+
+    ],
+  },
 ];

@@ -1,7 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
+  FormGroupDirective,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -25,6 +34,7 @@ export class AddUserComponent implements OnInit {
   error: any = [];
   selectedRole: string = '';
   selectedCamp: string = '';
+  selectedCollega: string = '';
   uploadedFileName: string = '';
   isShow: boolean = false;
   foucsCollega: boolean = false;
@@ -33,6 +43,9 @@ export class AddUserComponent implements OnInit {
   isLoading: boolean = false;
   imgFile!: File;
   addUserForm!: FormGroup;
+  @ViewChild('formControl') formControls!: QueryList<ElementRef>;
+  @ViewChild(FormGroupDirective) formDir!: FormGroupDirective;
+
   ngOnInit(): void {
     this.addUserForm = this.fb.group({
       firstName: ['', [Validators.required]],
@@ -41,13 +54,13 @@ export class AddUserComponent implements OnInit {
       birthDate: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       nationalId: ['', [Validators.required]],
-      phoneNumber: [null],
+      phoneNumber: ['', [Validators.required]],
       college: [null, [Validators.required]],
       grade: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       profileImage: [null],
       codeForceHandle: ['', [Validators.required]],
-      vjudgeHandle: [null],
+      vjudgeHandle: [''],
       campId: [''],
       role: [null, [Validators.required]],
     });
@@ -64,49 +77,71 @@ export class AddUserComponent implements OnInit {
     ];
   }
 
+  focusInvalidControl() {
+    if (this.formControls) {
+      const invalidControls = this.formControls
+        .toArray()
+        .filter(
+          (control) =>
+            control.nativeElement &&
+            control.nativeElement.classList.contains('ng-invalid')
+        );
+      console.log(invalidControls);
+      if (invalidControls.length > 0) {
+        const firstInvalidControl = invalidControls[0].nativeElement;
+        firstInvalidControl.focus();
+        firstInvalidControl.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
+    }
+  }
+
   craeteUser() {
     this.submitted = true;
     if (this.addUserForm.invalid) {
-      console.log(this.addUserForm.errors);
-      console.log('error');
+      this.focusInvalidControl();
       return;
     }
     this.isLoading = true;
-
-    console.log(this.addUserForm.value);
 
     const formdata = new FormData();
     formdata.append('FirstName', this.addUserForm.value.firstName);
     formdata.append('MiddleName', this.addUserForm.value.middleName);
     formdata.append('LastName', this.addUserForm.value.lastName);
-    formdata.append('Email', this.addUserForm.value.email);
-    formdata.append('NationalId', this.addUserForm.value.nationalId);
+    formdata.append('Email', this.addUserForm.value.email); ///
+    formdata.append('NationalId', this.addUserForm.value.nationalId); //
     formdata.append('BirthDate', this.addUserForm.value.birthDate);
     formdata.append('PhoneNumber', this.addUserForm.value.phoneNumber);
     formdata.append('College', this.addUserForm.value.college);
-    formdata.append('CodeForceHandle', this.addUserForm.value.codeForceHandle);
+    formdata.append('CodeForceHandle', this.addUserForm.value.codeForceHandle); ///
     formdata.append('Grade', this.addUserForm.value.grade);
     formdata.append('Gender', this.addUserForm.value.gender);
     formdata.append('ProfileImage', this.imgFile);
-    formdata.append('VjudgeHandle', this.addUserForm.value.vjudgeHandle);
+    if (this.addUserForm.value.vjudgeHandle !== null) {
+      formdata.append('VjudgeHandle', this.addUserForm.value.vjudgeHandle); ///
+    }
     formdata.append('CampId', this.addUserForm.value.campId);
     formdata.append('Role', this.addUserForm.value.role);
+
+    console.log(this.addUserForm.value);
 
     this.dashboardService.createAccount(formdata).subscribe({
       next: ({ statusCode, message, errors }) => {
         if (statusCode === 200) {
-          // this.toastr.success(msg);
+          debugger;
           alert('done');
+          this.formDir.resetForm();
           this.isLoading = false;
-          // this.router.navigateByUrl('/admin/tutorial');
         } else if (errors) {
           this.error = errors;
+          this.isLoading = false;
+
           console.log(errors);
           alert(errors);
         } else {
           alert(message);
-          // this.toastr.error(msg);
-
           this.isLoading = false;
         }
       },
@@ -130,13 +165,10 @@ export class AddUserComponent implements OnInit {
       this.selectedRole === 'Head_Of_Camp'
     ) {
       this.isShow = true;
-      // this.addUserForm.get('campId')?.setValidators([Validators.required]);
     } else {
       this.isShow = false;
       this.selectedCamp = '';
       this.addUserForm.get('campId')?.setValue('');
-      // this.addUserForm.get('campId')?.removeValidators([Validators.required]);
-      // this.addUserForm.updateValueAndValidity();
     }
   }
 
@@ -150,8 +182,6 @@ export class AddUserComponent implements OnInit {
       this.isShow = false;
 
       this.addUserForm.get('campId')?.setValue(null);
-      // this.addUserForm.get('campId')?.removeValidators([Validators.required]);
-      // this.addUserForm.updateValueAndValidity();
     }
     this.foucsRole = true;
   }
@@ -168,11 +198,20 @@ export class AddUserComponent implements OnInit {
     }
     this.foucsRole = false;
   }
-  focusCollegaFun(): void {
-    this.foucsCollega = true;
+
+  handleSelectCollega(item: any) {
+    this.selectedCollega = item.id;
+    if (item.id) {
+      this.foucsCollega = false;
+    }
   }
-  blurCollegaFun(): void {
+
+  handleOpen() {
     this.foucsCollega = false;
+  }
+
+  handleClose(): void {
+    this.foucsCollega = true;
   }
 
   getCampId(camp: any): void {

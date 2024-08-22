@@ -8,11 +8,9 @@ export const rolesGuard: CanActivateFn = (route, state) => {
   const userInfo = JSON.parse(localStorage.getItem('CURRENT_USER') || '{}');
   const { routeConfig } = route;
   const authService = inject(AuthService);
-  /// اللي رايحله
   const { path } = routeConfig as Route;
 
   const roles = userInfo.roles;
-
   if (path === '' && !authService.isAuth()) {
     return true;
   }
@@ -20,12 +18,13 @@ export const rolesGuard: CanActivateFn = (route, state) => {
   if (path === 'leader' && roles.includes('Leader')) {
     return true;
   }
+  if (path === 'head_of_camp' && roles.includes('Head_Of_Camp')) {
+    return true;
+  }
   if (path === 'mentor' && roles.includes('Mentor')) {
     return true;
   }
-  if (path === 'head_Of_Camp' && roles.includes('Head_Of_Camp')) {
-    return true;
-  }
+
   if (path === 'trainee' && roles.includes('Trainee')) {
     return true;
   }
@@ -36,7 +35,7 @@ export const rolesGuard: CanActivateFn = (route, state) => {
       : roles.includes('Mentor')
       ? '/mentor'
       : roles.includes('Head_Of_Camp')
-      ? '/head_Of_Camp'
+      ? '/head_of_camp'
       : roles.includes('Trainee')
       ? '/trainee'
       : '/'
