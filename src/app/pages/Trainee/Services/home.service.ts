@@ -23,6 +23,21 @@ export class HomeService {
   MentorInfo():Observable<any>{
     return this._HttpClient.get( environment.BASE_URL + `/api/Trainee/mentorInfo` )
   }
+  QRCode():Observable<any>{
+    return this._HttpClient.get( environment.BASE_URL + `/api/Trainee/qrCode` )
+  }
+  nextPractice():Observable<any>{
+    return this._HttpClient.get( environment.BASE_URL + `/api/Trainee/getNextPractice` )
+  }
+  HeadsInfo():Observable<any>{
+    return this._HttpClient.get( environment.BASE_URL + `/api/Trainee/headsInfo` )
+  }
+  TraineeTasks():Observable<any>{
+    return this._HttpClient.get( environment.BASE_URL + `/api/Trainee/tasks` )
+  }
+  UpdateTraineeTask(model:any):Observable<any>{
+    return this._HttpClient.put( environment.BASE_URL + `/api/Trainee/updatetaskStatus`,model )
+  }
 
 
 
