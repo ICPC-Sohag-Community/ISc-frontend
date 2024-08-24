@@ -46,6 +46,31 @@ export interface Mentor {
   codeForceHandle: string
   vjudgeHandle: string
 }
+export interface HeadsInfo {
+  id: string
+  firstName: string
+  middleName: string
+  lastName: string
+  email: string
+  college: string
+  photoUrl: string
+  codeForceHandle: string
+}
+export interface task {
+  id: string
+  title: string
+  deadLine: string
+}
+export interface NextPractice {
+  id: number
+  title: string
+  meetingLink: string
+  note: string
+  time: string
+}
+
+
+
 
 
 

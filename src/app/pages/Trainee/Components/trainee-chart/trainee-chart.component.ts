@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, AfterViewInit } from '@angular/core';
 import {
   Chart,
   DoughnutController,
@@ -8,6 +8,9 @@ import {
   Plugin,
   registerables,
 } from 'chart.js';
+import { HomeService } from '../../Services/home.service';
+import { NextPractice } from '../../model/trinee-data';
+import { DatePipe } from '@angular/common';
 
 Chart.register(...registerables);
 
@@ -16,88 +19,38 @@ Chart.register(...registerables);
   standalone: true,
   imports: [],
   templateUrl: './trainee-chart.component.html',
-  styleUrl: './trainee-chart.component.scss'
-})
-export class TraineeChartComponent {
- ngAfterViewInit(): void {
+  styleUrl: './trainee-chart.component.scss',
+  providers: [DatePipe] // Provide DatePipe here
 
-    this.renderChart();
+})
+export class TraineeChartComponent implements OnInit, AfterViewInit {
+
+  // Inject HomeService to interact with backend
+  private _homeService = inject(HomeService);
+  private _DatePipe = inject(DatePipe);
+  nextPractice:NextPractice={}as NextPractice
+
+  // Lifecycle hook for initialization
+  ngOnInit(): void {
+    this.loadNextPracticeData(); // Load data when component initializes
   }
 
+  // Lifecycle hook that runs after view initialization
+  ngAfterViewInit(): void {
+    this.renderChart(); // Render the chart after view initialization
+  }
 
-
-  // createChart() {
-  //   const ctx = (document.getElementById('doughnutChart') as HTMLCanvasElement).getContext('2d');
-  //   const gradient = ctx!.createLinearGradient(0, 0, 0, 400);
-  //   gradient.addColorStop(0, '#471B54'); // Start color
-  //   gradient.addColorStop(1, '#FFFFFF'); // End color
-  //   const data:any = {
-  //     datasets: [
-  //       {
-  //         label: 'Full',
-  //         data: [100, 0], // 100% and the rest is empty space
-  //         backgroundColor: ['#E5E5E5', 'transparent'],
-  //         borderWidth: 0,
-  //         borderRadius: 20, // Radius at the end of each segment
-
-  //       },
-  //       {
-  //         label: 'Minimum Problem',
-  //         data: [80, 20], // 80% and the rest is empty space
-  //         backgroundColor: ['#EF4A50', 'transparent'],
-  //         borderWidth: 0,
-  //         borderRadius: 20, // Radius at the end of each segment
-
-  //       },
-  //       {
-  //         label: 'Actual Problem Solved',
-  //         data: [60, 40], // 60% and the rest is empty space
-  //         backgroundColor: [gradient, 'transparent'],
-  //         borderWidth: 0,
-  //         borderRadius: 20, // Radius at the end of each segment
-  //       }
-
-  //     ]
-  //   };
-
-  //   const option:any = {
-  //     responsive: true,
-  //     cutout:"30%",
-  //     plugins: {
-  //       legend: {
-  //         display: false,
-  //       },
-  //       tooltip: {
-  //         callbacks: {
-  //           label: function (tooltipItem: { dataset: { label: string; }; raw: string; }) {
-  //             return tooltipItem.dataset.label + ': ' + tooltipItem.raw + '%';
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  //   // plugins: [
-
-  //   // ]
-  //   ;
-
-  //   new Chart(ctx!, {
-  //     type: 'doughnut',
-  //     data: data,
-  //     options: option
-  //   });
-  // }
+  // Function to create and render the doughnut chart
   renderChart(): void {
     const myChart = new Chart('chart', {
       type: 'doughnut',
       data: {
-        labels: ['lables'],
-
+        labels: ['Labels'], // Data labels
         datasets: [
           {
-            data: [100],
+            data: [100], // Data values
             label: 'All Problems',
-            backgroundColor: ['#E5E5E5'],
+            backgroundColor: ['#E5E5E5'], // Segment colors
             borderColor: 'transparent',
             borderWidth: 0,
             borderRadius: 12,
@@ -105,47 +58,47 @@ export class TraineeChartComponent {
         ],
       },
       options: {
-        cutout: '85%',
+        cutout: '85%', // Cutout percentage for doughnut
         responsive: true,
         maintainAspectRatio: false,
         hover: {
-          mode: null,
+          mode: null, // Disable hover mode
         },
         plugins: {
           legend: {
-            display: false,
+            display: false, // Hide legend
           },
           tooltip: {
             callbacks: {
-              title: () => '',
+              title: () => '', // Hide tooltip title
             },
           },
           title: {
-            display: false,
+            display: false, // Hide chart title
           },
         },
       } as any,
 
       plugins: [
-        this.createDoughnutBackgroundPlugin('#fff'),
+        this.createDoughnutBackgroundPlugin('#fff'), // Custom plugin for background
       ],
     });
   }
-  ctx = document.getElementById('chart') as HTMLCanvasElement;
 
+  // Method to create a custom plugin for doughnut chart background
   createDoughnutBackgroundPlugin(backgroundColor: string): Plugin {
     return {
       id: 'doughnutBackgroundPlugin',
-      beforeDraw: (Chart) => {
-        const { ctx, chartArea } = Chart;
+      beforeDraw: (chart) => {
+        const { ctx, chartArea } = chart;
         const { top, bottom, left, right } = chartArea;
         const width = right - left;
         const height = bottom - top;
         const centerX = left + width / 2;
         const centerY = top + height / 2;
 
-        const meta = Chart.getDatasetMeta(0).data[0] as any;
-        const cutout = (Chart.config.options as any).cutout || '85%';
+        const meta = chart.getDatasetMeta(0).data[0] as any;
+        const cutout = (chart.config.options as any).cutout || '85%';
         const cutoutRadius = (meta.outerRadius * parseFloat(cutout)) / 85;
 
         ctx.save();
@@ -159,12 +112,39 @@ export class TraineeChartComponent {
     };
   }
 
+  // Text to be copied to clipboard
+  text: string = 'meet.google.com/lklkjfsjhdsjfdkjfhdskf';
 
-  text:string ='meet.google.com/lklkjfsjhdsjfdkjfhdskf'
-  copyText(link:string) {
+  // Function to copy text to clipboard
+  copyText(link: string): void {
+    navigator.clipboard.writeText(link); // Copy link to clipboard
+  }
 
-    /* Copy text into clipboard */
-    navigator.clipboard.writeText
-        (link);
-}
+  formatDateTime(dateTimeString: string): string {
+    if (!dateTimeString) return '';
+
+    // Parse the ISO string into a Date object
+    const date = new Date(dateTimeString);
+
+    // Format the date and time
+    const dayOfWeek = this._DatePipe.transform(date, 'EEEE'); // Sunday
+    const day = this._DatePipe.transform(date, 'd');          // 2
+    const month = this._DatePipe.transform(date, 'M');         // 9
+    const year = this._DatePipe.transform(date, 'yyyy');       // 2024
+    const time = this._DatePipe.transform(date, 'h:mm a');     // 9 AM
+
+    // Construct and return the formatted string
+    return `${dayOfWeek} ${day}/${month}/${year} Starts at ${time}`;
+  }
+
+  // Function to load data for next practice
+  loadNextPracticeData(): void {
+    this._homeService.nextPractice().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.nextPractice= data // assign data
+        }
+      }
+    });
+  }
 }
