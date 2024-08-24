@@ -10,6 +10,10 @@ import { DashComponent } from './HOC/comp/dash/dash.component';
 
 import { AddUserComponent } from './pages/Leader/screens/add-user/add-user.component';
 import { HocLayoutComponent } from './layouts/HOC/hoc-layout/hoc-layout.component';
+import { MentornavComponent } from './layouts/mentor/mentornav/mentornav.component';
+import { MentorLayoutComponent } from './layouts/mentor/mentor-layout/mentor-layout.component';
+import { TraineesComponent } from './pages/mentor/trainees/trainees.component';
+import { AttendanceComponent } from './pages/mentor/attendance/attendance.component';
 
 export const routes: Routes = [
   // Auth Pages
@@ -76,13 +80,32 @@ export const routes: Routes = [
   {
     path: 'head-of-camp',
     component: HocLayoutComponent,
-    canActivate: [authGuard],
+    canActivate: [authGuard,rolesGuard],
     title: 'HOC - Dashboard',
     children: [
       {
         path: '',
         component: DashComponent,
-        title: 'Leader / Camps - ICPC',
+        title: 'head of camp - Dashboard',
+      }
+     
+    ],
+  },
+  {
+    path: 'mentor',
+    component: MentorLayoutComponent,
+    canActivate: [authGuard,rolesGuard],
+    title: 'Mentor',
+    children: [
+      {
+        path: '',
+        component: TraineesComponent,
+        title: 'mentor / Trainees - ICPC',
+      },
+      {
+        path: 'attendance',
+        component: AttendanceComponent,
+        title: 'mentor / Attendance - ICPC',
       }
      
     ],
