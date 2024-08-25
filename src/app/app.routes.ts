@@ -18,6 +18,7 @@ import { CampsLeaderComponent } from './pages/Leader/screens/camps-leader/camps-
 import { ActiosCampComponent } from './pages/Leader/screens/actios-camp/actios-camp.component';
 import { StandingCampComponent } from './pages/Leader/screens/standing-camp/standing-camp.component';
 import { StaffLeaderComponent } from './pages/Leader/screens/staff-leader/staff-leader.component';
+import { SheetsTraineeComponent } from './pages/Trainee/screens/sheets-trainee/sheets-trainee.component';
 
 
 export const routes: Routes = [
@@ -56,6 +57,11 @@ export const routes: Routes = [
         path:'home',
         component:HomeTraineeComponent,
         title: 'Trainee / Home - ICPC'
+      },
+      {
+        path:'sheets',
+        component:SheetsTraineeComponent,
+        title:'Trainee / Sheets - ICPC'
       }
     ],
   },

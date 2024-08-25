@@ -34,10 +34,9 @@ export class TopBarComponent {
       this.isShow = false;
     }
     if(clickedInside && !$('.dialog-container').hasClass('hidden')){
+
       this.toggleDialog()
     }
-
-
   }
   toggleDropdown() {
     this.isOpen = !this.isOpen;
@@ -49,16 +48,7 @@ export class TopBarComponent {
     this.router.navigate(['/', role.toLowerCase()]);
   }
   toggleDialog():void{
-    $('.dialog-container').fadeToggle(150, function(){
-      if($('.dialog-container').hasClass('hidden'))
-      {
-        $('.dialog-container').removeClass('hidden')
-      }
-      else
-      {
-        $('.dialog-container').addClass('hidden')
-      }
-    })
+    $('.dialog-container').fadeToggle(150)
   }
   getQrCode():void{
     this._homeService.QRCode().subscribe({
