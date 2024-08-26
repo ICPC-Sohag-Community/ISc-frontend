@@ -1,5 +1,5 @@
 <app-mentor-header></app-mentor-header>
-<div class="w-[90vw] h-[calc(100vh-200px)] m-auto  border-collapse border rounded-xl border-gray-300 overflow-y-auto overflow-x-auto custom-scrollbar">
+<div *ngIf="atten != null" class="w-[90vw] h-[calc(100vh-200px)] m-auto  border-collapse border rounded-xl border-gray-300 overflow-y-auto overflow-x-auto custom-scrollbar">
     <table class="hover-table max-h-full border-collapse border rounded-xl border-gray-300  ">
         <thead>
           <tr>
@@ -31,16 +31,7 @@
             </td>
             
           </tr>
-          <tr>
-            <td>Witchy Woman</td>
-            <td>The Eagles</td>
-            <td>1972</td>
-          </tr>
-          <tr>
-            <td>Shining Star</td>
-            <td>Earth, Wind, and Fire</td>
-            <td>1975</td>
-          </tr>
+          
         </tbody>
       </table>
 </div>

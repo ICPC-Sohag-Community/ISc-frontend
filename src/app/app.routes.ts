@@ -14,6 +14,8 @@ import { MentornavComponent } from './layouts/mentor/mentornav/mentornav.compone
 import { MentorLayoutComponent } from './layouts/mentor/mentor-layout/mentor-layout.component';
 import { TraineesComponent } from './pages/mentor/trainees/trainees.component';
 import { AttendanceComponent } from './pages/mentor/attendance/attendance.component';
+import { StandingsComponent } from './pages/mentor/standings/standings.component';
+import { TrackingComponent } from './pages/mentor/tracking/tracking.component';
 
 export const routes: Routes = [
   // Auth Pages
@@ -106,6 +108,16 @@ export const routes: Routes = [
         path: 'attendance',
         component: AttendanceComponent,
         title: 'mentor / Attendance - ICPC',
+      },
+      {
+        path: 'standings',
+        component: StandingsComponent,
+        title: 'mentor / Standings - ICPC',
+      },
+      {
+        path: 'tracking',
+        component: TrackingComponent,
+        title: 'mentor / Tracking - ICPC',
       }
      
     ],

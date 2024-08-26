@@ -42,9 +42,9 @@
     height: 9999px; /* Extend to cover the whole column */
     
     
-    background-color: rgba($color: #cbd5e0, $alpha: 0.2); /* Tailwind's bg-gray-300 */
+    background-color: rgba($color: #cbd5e0, $alpha: 1); /* Tailwind's bg-gray-300 */
     z-index: 2;
-    opacity: 0.2;
+    opacity: 0.4;
   }
   
   /* Ensure the row and column both remain highlighted when hovering over the cell */

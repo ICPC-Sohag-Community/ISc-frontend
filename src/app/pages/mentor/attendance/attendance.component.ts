@@ -13,7 +13,10 @@ import { MentorHeaderComponent } from '../../../layouts/mentor/mentor-header/men
 })
 export class AttendanceComponent {
 constructor(private serv :AttendanceService){
-this.att(localStorage.getItem("camp"));
+  if(localStorage.getItem("camp")){
+    this.att(localStorage.getItem("camp"));
+  }
+
 }
 atten:any = null;
 att(id:any){
