@@ -51,7 +51,6 @@ export class LoginComponent {
       return;
     }
     this.isLoading = true;
-    debugger;
     this.authService.loginUser(this.loginForm.value).subscribe({
       next: ({ statusCode, data, msg }) => {
         if (statusCode === 200) {

@@ -18,11 +18,11 @@ Chart.register(...registerables);
   styleUrl: './chart-dashboard.component.scss',
 })
 export class ChartDashboardComponent implements OnInit {
-  @Input() traineesCount: number = 0;
-  @Input() malesCount: number = 0;
-  @Input() femalesCount: number = 0;
-  percentageMales: number = 0;
-  percentagefemales: number = 0;
+  @Input() traineesCount: number = 50;
+  @Input() malesCount: number = 50;
+  @Input() femalesCount: number = 50;
+  percentageMales: number = 50;
+  percentagefemales: number =50;
   ngOnInit() {
     console.log(this.traineesCount);
     this.percentageMales = Math.round(
