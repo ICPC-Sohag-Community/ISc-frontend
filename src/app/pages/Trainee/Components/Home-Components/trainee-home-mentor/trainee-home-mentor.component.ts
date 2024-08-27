@@ -25,16 +25,9 @@ export class TraineeHomeMentorComponent implements OnInit {
 
   // Private method to load mentor information from the service
   private loadMentorInfo(): void {
-    this._homeService.MentorInfo().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
-          // Update mentorData with the received data
-          this.mentorData = data;
-        }
-      },
-      error: (error) => {
-        // Handle error case (optional)
-        console.error('Error loading mentor info:', error);
+    this._homeService.mentor.subscribe({
+      next: (response) => {
+         this.mentorData = response;// Update mentorData with the received data
       }
     });
   }

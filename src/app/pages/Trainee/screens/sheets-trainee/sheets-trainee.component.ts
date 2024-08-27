@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { SheetsComponent } from '../../Components/Sheets-Components/sheets/sheets.component';
 
 @Component({
@@ -14,6 +14,6 @@ export class SheetsTraineeComponent {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.isLoading = false;
-    }, 350);
+    }, 700);
   }
 }

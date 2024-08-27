@@ -17,12 +17,12 @@
           <!-- Start Date -->
           <span class="flex items-center mb-4">
             <i class="fa-regular fa-clock mr-2"></i>
-            <small>Starts in {{currentSheet ? convertDate(currentSheet.startDate) : ''}}</small>
+            <small>Starts in {{ currentSheet.startDate | formatDate }}</small>
           </span>
           <!-- End Date -->
           <span class="flex items-center mb-4">
             <i class="fa-solid fa-clock-rotate-left mr-2"></i>
-            <small>Ended in {{currentSheet ? convertDate(currentSheet.endDate) : ''}}</small>
+            <small>Ended in {{currentSheet.endDate | formatDate}}</small>
           </span>
         </div>
         <!-- Problem Count -->
@@ -81,7 +81,7 @@
       <!-- Card Top Section -->
       <div class="top-card mt-12">
         <p class="text-2xl">Next Contest</p>
-        <h5 class="mt-8" [ngClass]="inComingContest.name.split(' ').length > 2 ? 'text-[2.1rem]' : 'text-[1.75rem]'">
+        <h5 class="mt-8 text-[2rem]">
           {{inComingContest.name ? inComingContest.name : 'No Contest Coming'}}
         </h5>
       </div>
@@ -91,14 +91,22 @@
           <!-- Remaining Time -->
           <span class="flex items-center justify-around mb-2">
             <span class="text-2xl">Before Start</span>
-            <span class="text-4xl font-bold">{{days}}</span>
-            <span class="text-2xl font-normal">D</span>
-            <span class="text-4xl font-bold">{{hours}}</span>
-            <span class="text-2xl font-normal">H</span>
-            <span class="text-4xl font-bold">{{min}}</span>
-            <span class="text-2xl font-normal">M</span>
-            <span class="text-4xl font-bold">{{second}}</span>
-            <span class="text-2xl font-normal">sec</span>
+            @if(days>0){
+              <span class="text-4xl font-bold">{{days}}</span>
+              <span class="text-2xl font-normal">D</span>
+            }
+            @if(hours>0){
+              <span class="text-4xl font-bold">{{hours}}</span>
+              <span class="text-2xl font-normal">H</span>
+            }
+            @if(min>0){
+              <span class="text-4xl font-bold">{{min}}</span>
+              <span class="text-2xl font-normal">M</span>
+            }
+            @if(second>0){
+              <span class="text-4xl font-bold">{{second}}</span>
+              <span class="text-2xl font-normal">sec</span>
+            }
           </span>
         </div>
       </div>

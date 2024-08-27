@@ -2,9 +2,11 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { TraineeCardsComponent } from "../../Components/Home-Components/trainee-cards/trainee-cards.component";
 import { TraineeHomeMentorComponent } from "../../Components/Home-Components/trainee-home-mentor/trainee-home-mentor.component";
 import { HeadsCarouselComponent } from '../../Components/Home-Components/heads-carousel/heads-carousel.component';
-import { HomeTraineeTasksComponent } from '../../Components/Home-Components/home-trainee-tasks/home-trainee-tasks.component';
+import { HomeTasksToDoComponent } from '../../Components/Home-Components/home-tasks-todo/home-tasks-todo.component';
 import { TraineeChartComponent } from '../../Components/Home-Components/trainee-chart/trainee-chart.component';
 import { CommonModule } from '@angular/common';
+import { HomeTasksInProgressComponent } from '../../Components/Home-Components/home-tasks-in-progress/home-tasks-in-progress.component';
+import { HomeTasksDoneComponent } from '../../Components/Home-Components/home-tasks-done/home-tasks-done.component';
 
 @Component({
   selector: 'app-home-trainee',
@@ -13,8 +15,10 @@ import { CommonModule } from '@angular/common';
     TraineeCardsComponent,
     TraineeHomeMentorComponent,
     HeadsCarouselComponent,
-    HomeTraineeTasksComponent,
+    HomeTasksToDoComponent,
+    HomeTasksDoneComponent,
     TraineeChartComponent,
+    HomeTasksInProgressComponent,
     CommonModule
   ],
   templateUrl: './home-trainee.component.html',

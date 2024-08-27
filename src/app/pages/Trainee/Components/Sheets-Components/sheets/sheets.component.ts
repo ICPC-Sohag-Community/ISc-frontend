@@ -2,11 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { SheetsService } from '../../../Services/sheets.service';
 import { Matrial, Sheet } from '../../../model/trinee-sheets';
 import { CommonModule, DatePipe } from '@angular/common';
+import { FormatDatePipe } from '../../../Pipes/formatte-Date.pipe';
 
 @Component({
   selector: 'app-sheets',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,FormatDatePipe],
   templateUrl: './sheets.component.html',
   styleUrls: ['./sheets.component.scss'],
   providers: [DatePipe]
@@ -29,20 +30,17 @@ export class SheetsComponent implements OnInit {
 
   // Fetches all sheets from the service
   loadSheets(): void {
-    this._sheetService.getAllSheets().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
+    this._sheetService.allsheets.subscribe({
+      next: (data) => {
           this.sheets = data; // Update sheets array with fetched data
-        }
-      },
-      error: (err) => console.error('Error loading sheets:', err) // Handle errors
+      }
     });
   }
 
   // Fetches material data for a specific sheet by ID and sets the material name
   updateMatrial(id: any, matrialName: string): void {
     this.matrialName = matrialName; // Set the name of the selected material
-    this._sheetService.getMatrialInSheet(id).subscribe({
+    this._sheetService.getMaterialsInSheet(id).subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.sheetMatrial = data; // Update sheetMatrial array with fetched data
@@ -50,12 +48,6 @@ export class SheetsComponent implements OnInit {
       },
       error: (err) => console.error('Error loading material:', err) // Handle errors
     });
-  }
-
-  // Converts a date string into a readable format
-  // Example: "2024-08-22T10:00:00" -> "August 22, 2024"
-  public convertDate(dateString: string): string {
-    return this.datePipe.transform(dateString, 'MMMM d, y') || ''; // Transform date or return an empty string if transformation fails
   }
 
   // Opens a material link in a new tab
