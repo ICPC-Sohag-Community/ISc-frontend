@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { CasheService } from '../../../shared/services/cashe.service';
 import { environment } from '../../../../environments/environment.development';
@@ -8,11 +8,11 @@ import { ResponseHeader } from '../../../shared/model/responseHeader';
 @Injectable({
   providedIn: 'root',
 })
-export class StaffLeaderService {
+export class TraineesLeaderService {
   http = inject(HttpClient);
   casheService = inject(CasheService);
 
-  staffWithPagination(
+  traineesWithPagination(
     currentPage: number,
     pageSize: number,
     KeyWord?: string,
@@ -33,12 +33,14 @@ export class StaffLeaderService {
     }
 
     return this.casheService.get<any>(
-      `${environment.BASE_URL}/api/Leader/staffWithPagination`,
+      `${environment.BASE_URL}/api/Leader/trainees`,
       params
     );
   }
 
-  getStaffById(id: string): Observable<ResponseHeader> {
-    return this.http.get<any>(`${environment.BASE_URL}/api/Leader/staff/${id}`);
+  getTraineeById(id: string): Observable<ResponseHeader> {
+    return this.http.get<any>(
+      `${environment.BASE_URL}/api/Leader/trainees/${id}`
+    );
   }
 }

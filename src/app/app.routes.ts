@@ -18,6 +18,8 @@ import { CampsLeaderComponent } from './pages/Leader/screens/camps-leader/camps-
 import { ActiosCampComponent } from './pages/Leader/screens/actios-camp/actios-camp.component';
 import { StandingCampComponent } from './pages/Leader/screens/standing-camp/standing-camp.component';
 import { StaffLeaderComponent } from './pages/Leader/screens/staff-leader/staff-leader.component';
+import { TraineesLeaderComponent } from './pages/Leader/screens/trainees-leader/trainees-leader.component';
+import { ArchiveLeaderComponent } from './pages/Leader/screens/archive-leader/archive-leader.component';
 import { SheetsTraineeComponent } from './pages/Trainee/screens/sheets-trainee/sheets-trainee.component';
 import { ContestTraineeComponent } from './pages/Trainee/screens/contest-trainee/contest-trainee.component';
 
@@ -119,9 +121,33 @@ export const routes: Routes = [
         component: StaffLeaderComponent,
         title: 'Leader / staff - ICPC',
       },
+      {
+        path: 'trainees',
+        component: TraineesLeaderComponent,
+        title: 'Leader / Trainees - ICPC',
+      },
+      {
+        path: 'archive',
+        component: ArchiveLeaderComponent,
+        title: 'Leader / Archive / Trainee - ICPC',
+      },
+      {
+        path: 'archive/staff',
+        component: ArchiveLeaderComponent,
+        title: 'Leader / Archive / Staff - ICPC',
+      },
     ],
   },
 
+  {
+    path: 'head-of-camp',
+    component: HocLayoutComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'head_of_camp',
+    component: HOCDashboardComponent,
+    canActivate: [authGuard, rolesGuard],
   // {
 
   //   path: 'head-of-camp',
@@ -138,6 +164,11 @@ export const routes: Routes = [
   //       path: '',
   //       component: DashComponent,
 
+        title: 'HOC / Dashboard - ICPC',
+      },
+    ],
+  },
+];
   //       title: 'HOC / Dashboard - ICPC',
   //     }
 

@@ -1,15 +1,15 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CasheService } from '../../../../shared/services/cashe.service';
-import { StaffLeaderService } from '../../services/staff-leader.service';
-import { OnStaffInfo, StaffInfo } from '../../model/staff';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { DropdownRolesComponent } from '../../Components/dropdown-roles/dropdown-roles.component';
+import { TraineesLeaderService } from '../../services/trainees-leader.service';
+import { OnTraineeInfo, TraineeInfo } from '../../model/trainees-leader';
 import { RolesService } from '../../services/roles.service';
 
 @Component({
-  selector: 'app-staff-leader',
+  selector: 'app-trainees-leader',
   standalone: true,
   imports: [
     DropdownRolesComponent,
@@ -17,18 +17,18 @@ import { RolesService } from '../../services/roles.service';
     ReactiveFormsModule,
     NgClass,
   ],
-  templateUrl: './staff-leader.component.html',
-  styleUrl: './staff-leader.component.scss',
+  templateUrl: './trainees-leader.component.html',
+  styleUrl: './trainees-leader.component.scss',
 })
-export class StaffLeaderComponent implements OnInit {
-  staffLeaderService = inject(StaffLeaderService);
+export class TraineesLeaderComponent implements OnInit {
+  traineesLeaderService = inject(TraineesLeaderService);
   rolesService = inject(RolesService);
   casheService = inject(CasheService);
-  allStaffInfo!: StaffInfo;
-  staffInfo!: OnStaffInfo;
+  allTraineesInfo!: TraineeInfo;
+  TraineeInfo!: OnTraineeInfo;
   showSideInfo: boolean = false;
   hideSideInfo: boolean = true;
-  selectedStaffId: string = '';
+  selectedTraineeId: string = '';
   isLoading = signal<boolean>(false);
   isLoadingForSide: boolean = false;
   isDeleted: boolean = false;
@@ -44,23 +44,22 @@ export class StaffLeaderComponent implements OnInit {
       sortNumber: new FormControl(null),
     });
 
-    this.staffWithPagination(1, 10, this.keywordSearch, this.sortbyNum);
-    // this.getStaffById('0b645888-170b-49d5-80c4-653fd4612377');
+    this.traineesWithPagination(1, 10, this.keywordSearch, this.sortbyNum);
   }
 
-  staffWithPagination(
+  traineesWithPagination(
     currentPage: number,
     pageSize: number,
     KeyWord?: string,
     SortBy?: number
   ): void {
     this.isLoading.set(true);
-    this.staffLeaderService
-      .staffWithPagination(currentPage, pageSize, KeyWord, SortBy)
+    this.traineesLeaderService
+      .traineesWithPagination(currentPage, pageSize, KeyWord, SortBy)
       .subscribe({
         next: (res) => {
           if (res.statusCode === 200) {
-            this.allStaffInfo = res;
+            this.allTraineesInfo = res;
             this.isLoading.update((v) => (v = false));
           } else {
             this.isLoading.update((v) => (v = false));
@@ -77,35 +76,34 @@ export class StaffLeaderComponent implements OnInit {
     const searchTerm = (event.target as HTMLInputElement).value;
     this.keywordSearch = searchTerm;
     this.casheService.clearCache();
-    this.staffWithPagination(1, 10, searchTerm, this.sortbyNum);
+    this.traineesWithPagination(1, 10, searchTerm, this.sortbyNum);
   }
 
   sortStaff(item: any): void {
     this.sortbyNum = item;
-    console.log(this.sortbyNum);
-    this.staffWithPagination(1, 10, this.keywordSearch, this.sortbyNum);
+    this.traineesWithPagination(1, 10, this.keywordSearch, this.sortbyNum);
     this.casheService.clearCache();
   }
 
   showSideBar(id: string) {
     this.deletedRoles = [];
-    this.selectedStaffId = id;
+    this.selectedTraineeId = id;
     this.showSideInfo = true;
     this.hideSideInfo = false;
-    this.getStaffById(id);
+    this.getTraineeById(id);
   }
   handleClose() {
     this.showSideInfo = false;
     setTimeout(() => (this.hideSideInfo = true), 700);
   }
 
-  getStaffById(id: string) {
+  getTraineeById(id: string) {
     this.isLoadingForSide = true;
-    this.staffLeaderService.getStaffById(id).subscribe({
+    this.traineesLeaderService.getTraineeById(id).subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.deletedRoles = [];
-          this.staffInfo = data;
+          this.TraineeInfo = data;
           this.isLoadingForSide = false;
         } else {
           this.isLoadingForSide = false;
@@ -119,21 +117,21 @@ export class StaffLeaderComponent implements OnInit {
   }
 
   onStaffRequested(id: string) {
-    this.getStaffById(id);
+    this.getTraineeById(id);
   }
 
   deleteRole(index: number) {
-    const deletedRole = this.staffInfo.userRoles.splice(index, 1)[0];
+    const deletedRole = this.TraineeInfo.userRoles.splice(index, 1)[0];
     delete deletedRole.campName;
     this.deletedRoles.push(deletedRole);
     this.roleInfo = {
-      userId: this.selectedStaffId,
+      userId: this.selectedTraineeId,
       roleInfos: this.deletedRoles,
     };
   }
   restoreRole(index: number) {
     const restoredRole = this.deletedRoles.splice(index, 1)[0];
-    this.staffInfo.userRoles.push(restoredRole);
+    this.TraineeInfo.userRoles.push(restoredRole);
   }
 
   saveDeleteRoles(): void {
@@ -141,7 +139,7 @@ export class StaffLeaderComponent implements OnInit {
     this.rolesService.unAssignToRole(this.roleInfo).subscribe({
       next: ({ statusCode }) => {
         if (statusCode === 200) {
-          this.getStaffById(this.selectedStaffId);
+          this.getTraineeById(this.selectedTraineeId);
           this.isDeleted = false;
         } else {
           this.isDeleted = false;
@@ -155,9 +153,9 @@ export class StaffLeaderComponent implements OnInit {
   }
 
   nextPage() {
-    if (this.allStaffInfo.hasNextPage) {
-      this.staffWithPagination(
-        this.allStaffInfo.currentPage + 1,
+    if (this.allTraineesInfo.hasNextPage) {
+      this.traineesWithPagination(
+        this.allTraineesInfo.currentPage + 1,
         10,
         this.keywordSearch,
         this.sortbyNum
@@ -166,9 +164,9 @@ export class StaffLeaderComponent implements OnInit {
   }
 
   previousPage() {
-    if (this.allStaffInfo.hasPreviousPage) {
-      this.staffWithPagination(
-        this.allStaffInfo.currentPage - 1,
+    if (this.allTraineesInfo.hasPreviousPage) {
+      this.traineesWithPagination(
+        this.allTraineesInfo.currentPage - 1,
         10,
         this.keywordSearch,
         this.sortbyNum
