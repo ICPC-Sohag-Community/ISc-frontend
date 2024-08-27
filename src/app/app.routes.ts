@@ -19,6 +19,7 @@ import { ActiosCampComponent } from './pages/Leader/screens/actios-camp/actios-c
 import { StandingCampComponent } from './pages/Leader/screens/standing-camp/standing-camp.component';
 import { StaffLeaderComponent } from './pages/Leader/screens/staff-leader/staff-leader.component';
 import { SheetsTraineeComponent } from './pages/Trainee/screens/sheets-trainee/sheets-trainee.component';
+import { ContestTraineeComponent } from './pages/Trainee/screens/contest-trainee/contest-trainee.component';
 
 
 export const routes: Routes = [
@@ -62,6 +63,11 @@ export const routes: Routes = [
         path:'sheets',
         component:SheetsTraineeComponent,
         title:'Trainee / Sheets - ICPC'
+      },
+      {
+        path:'contests',
+        component:ContestTraineeComponent,
+        title:'Trainee / contests - ICPC'
       }
     ],
   },

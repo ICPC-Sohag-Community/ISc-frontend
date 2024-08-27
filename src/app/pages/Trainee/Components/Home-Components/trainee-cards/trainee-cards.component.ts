@@ -2,11 +2,12 @@ import { Component, inject } from '@angular/core';
 import { HomeService } from '../../../Services/home.service';
 import { CurrentSheet, InComingContest, NextSession } from '../../../model/trinee-data';
 import { CommonModule, DatePipe } from '@angular/common';
+import { FormatDatePipe } from '../../../Pipes/formatte-Date.pipe';
 
 @Component({
   selector: 'app-trainee-cards',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,FormatDatePipe],
   templateUrl: './trainee-cards.component.html',
   styleUrl: './trainee-cards.component.scss',
   providers: [DatePipe]
@@ -68,46 +69,34 @@ export class TraineeCardsComponent {
 
   // Fetches the current sheet data from the service
   private loadSheetData(): void {
-    this.homeService.TraineeCurrentSheet().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
-          this.currentSheet = data; // Update the state with fetched data
-        }
+    this.homeService.currentSheet.subscribe({
+      next: ( response ) => {
+          this.currentSheet = response; // Update the state with fetched data
       }
     });
   }
 
   // Fetches the incoming contest data from the service
   private loadContestData(): void {
-    this.homeService.TraineeIncomingContest().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
-          this.inComingContest = data; // Update the state with fetched data
-          this.days=data.remainTime.days
-          this.hours=data.remainTime.hours
-          this.min=data.remainTime.minutes
-          this.hours=data.remainTime.seconds
-          this.startCountdown()
-        }
+    this.homeService.inComingContest.subscribe({
+      next: (response) => {
+        this.inComingContest = response; // Update the state with fetched response
+        this.days=response.remainTime.days
+        this.hours=response.remainTime.hours
+        this.min=response.remainTime.minutes
+        this.second=response.remainTime.seconds
+        this.startCountdown()
       }
     });
   }
 
   // Fetches the next session data from the service
   private loadSessionData(): void {
-    this.homeService.TraineeNextSession().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
-          this.nextSession = data; // Update the state with fetched data
-        }
+    this.homeService.nextSession.subscribe({
+      next: ( response ) => {
+          this.nextSession = response ; // Update the state with fetched data
       }
     });
-  }
-
-  // Converts a date string into a readable format
-  // Example: "2024-08-22T10:00:00" -> "August 22, 2024"
-  public convertDate(dateString: string): string {
-    return this.datePipe.transform(dateString, 'MMMM d, y') || '';
   }
 
   // Formats event start and end dates into a human-readable string
