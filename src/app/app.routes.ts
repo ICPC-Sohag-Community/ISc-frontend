@@ -29,7 +29,6 @@ import { ArchiveLeaderComponent } from './pages/Leader/screens/archive-leader/ar
 import { SheetsTraineeComponent } from './pages/Trainee/screens/sheets-trainee/sheets-trainee.component';
 import { ContestTraineeComponent } from './pages/Trainee/screens/contest-trainee/contest-trainee.component';
 
-
 export const routes: Routes = [
   // Auth Pages
   {
@@ -63,20 +62,20 @@ export const routes: Routes = [
         title: 'Trainee / Home - ICPC',
       },
       {
-        path:'home',
-        component:HomeTraineeComponent,
-        title: 'Trainee / Home - ICPC'
+        path: 'home',
+        component: HomeTraineeComponent,
+        title: 'Trainee / Home - ICPC',
       },
       {
-        path:'sheets',
-        component:SheetsTraineeComponent,
-        title:'Trainee / Sheets - ICPC'
+        path: 'sheets',
+        component: SheetsTraineeComponent,
+        title: 'Trainee / Sheets - ICPC',
       },
       {
-        path:'contests',
-        component:ContestTraineeComponent,
-        title:'Trainee / contests - ICPC'
-      }
+        path: 'contests',
+        component: ContestTraineeComponent,
+        title: 'Trainee / contests - ICPC',
+      },
     ],
   },
 
@@ -135,12 +134,7 @@ export const routes: Routes = [
       {
         path: 'archive',
         component: ArchiveLeaderComponent,
-        title: 'Leader / Archive / Trainee - ICPC',
-      },
-      {
-        path: 'archive/staff',
-        component: ArchiveLeaderComponent,
-        title: 'Leader / Archive / Staff - ICPC',
+        title: 'Leader / Archive - ICPC',
       },
     ],
   },
@@ -148,21 +142,22 @@ export const routes: Routes = [
   {
     path: 'head-of-camp',
     component: HocLayoutComponent,
-    canActivate: [authGuard,rolesGuard],
+    canActivate: [authGuard, rolesGuard],
     title: 'HOC - Dashboard',
     children: [
       {
         path: '',
         component: DashComponent,
         title: 'head of camp - Dashboard',
-      }
-     
+      },
     ],
   },
+
+  // mentor Page
   {
     path: 'mentor',
     component: MentorLayoutComponent,
-    canActivate: [authGuard,rolesGuard],
+    canActivate: [authGuard, rolesGuard],
     title: 'Mentor',
     children: [
       {
@@ -184,43 +179,7 @@ export const routes: Routes = [
         path: 'tracking',
         component: TrackingComponent,
         title: 'mentor / Tracking - ICPC',
-      }
-     
-    ],
-  }
-  
-
-    canActivate: [authGuard],
-  },
-  {
-    path: 'head_of_camp',
-    component: HOCDashboardComponent,
-    canActivate: [authGuard, rolesGuard],
-  // {
-
-  //   path: 'head-of-camp',
-  //   component: HocLayoutComponent,
-  //   canActivate: [authGuard],
-
-  //   path: 'head_of_camp',
-  //   component: HOCDashboardComponent,
-  //   canActivate: [authGuard, rolesGuard],
-
-  //   title: 'HOC - Dashboard',
-  //   children: [
-  //     {
-  //       path: '',
-  //       component: DashComponent,
-
-        title: 'HOC / Dashboard - ICPC',
       },
     ],
   },
 ];
-  //       title: 'HOC / Dashboard - ICPC',
-  //     }
-
-
-  //   ]
-  // }
-]
