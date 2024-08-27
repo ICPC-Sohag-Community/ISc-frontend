@@ -1,6 +1,6 @@
 <div class="relative w-full p-4 space-y-4 sm:p-6 sm:ps-4 sm:space-y-6">
   <div class="flex flex-col px-12 py-8 bg-white rounded-xl">
-    <h2 class="pb-6 text-3xl font-bold border-b-2 ps-8">Staff Members</h2>
+    <h2 class="pb-6 text-3xl font-bold border-b-2 ps-8">Trainees</h2>
 
     <form
       [formGroup]="searchForm"
@@ -8,12 +8,12 @@
     >
       <div class="relative w-full">
         <input
-          class="w-[350px] px-3 py-2.5 pl-10 leading-tight text-gray-800 transition-colors ring-1 ring-gray-300 rounded-lg appearance-none hover:ring-gray-400 focus:outline-none focus:ring-mainblue focus:border-mainblue focus:shadow-outline"
+          class="w-[350px] px-3 py-2.5 pl-10 leading-tight text-gray-800 transition-colors ring-1 ring-gray-300 rounded-lg appearance-none hover:ring-gray-200 focus:outline-none focus:ring-mainblue focus:border-mainblue focus:shadow-outline"
           id="searchInput"
           formControlName="searchInput"
           type="text"
           (keyup)="onSearchInput($event)"
-          placeholder="Search for staff"
+          placeholder="Search for trainees"
         />
 
         <div class="absolute inset-y-0 left-0 flex items-center">
@@ -41,7 +41,7 @@
           formControlName="sortNumber"
           (change)="sortStaff($event)"
           placeholder="Sort By"
-          class="relative block w-40 h-10 my-2 !text-white appearance-none rounded-xl !placeholder:text-white bg-mainblue cursor-none focus:outline-none"
+          class="relative block w-40 h-10 my-2 !text-white appearance-none rounded-xl placeholder:text-white bg-mainblue cursor-none focus:outline-none"
         >
           <ng-option [value]="0">Faculty</ng-option>
           <ng-option [value]="1">Grade</ng-option>
@@ -82,10 +82,8 @@
     <thead>
       <tr class="bg-transparent text-[#6B7088] text-lg">
         <th class="px-4 py-2">Name</th>
-
         <th class="px-4 py-2">E-mail</th>
-        <th class="px-4 py-2">Faculty</th>
-        <th class="px-4 py-2">Year</th>
+        <th class="px-4 py-2">Phone</th>
         <th class="px-4 py-2">Codeforces</th>
         <th class="flex items-center justify-center px-4 py-2">
           <svg
@@ -117,7 +115,7 @@
     </thead>
 
     <tbody>
-      @for (item of allStaffInfo.data; track $index) {
+      @for (item of allTraineesInfo.data; track $index) {
       <tr
         class="my-6 text-base font-medium text-center text-black bg-white rounded-lg"
       >
@@ -125,8 +123,7 @@
           {{ item.firstName }} {{ item.middleName }} {{ item.lastName }}
         </td>
         <td class="px-4 py-2">{{ item.email }}</td>
-        <td class="px-4 py-2">{{ item.college }}</td>
-        <td class="px-4 py-2">{{ item.grade }}</td>
+        <td class="px-4 py-2">{{ item.phoneNumber }}</td>
         <td class="px-4 py-2">{{ item.codeForceHandle }}</td>
         <td
           (click)="showSideBar(item.id)"
@@ -161,12 +158,6 @@
     </tbody>
   </table>
   }
-
-  <!-- sideBar Info -->
-  <!-- [ngClass]="{
-      'z-[150] bg-black bg-opacity-50': showSideInfo,
-      '-z-10': hideSideInfo && !showSideInfo
-    }" -->
   <div
     (click)="handleOverlayClick($event)"
     [ngClass]="{
@@ -184,7 +175,7 @@
         class="absolute text-3xl font-semibold text-white transition-colors cursor-pointer top-3 right-8 hover:text-red-500"
         >_</span
       >
-      @if (selectedStaffId) { @if (isLoadingForSide) {
+      @if (selectedTraineeId) { @if (isLoadingForSide) {
       <div class="bg-opacity-60">
         <div class="flex items-center justify-center h-screen">
           <div
@@ -197,17 +188,17 @@
         <div>
           <img
             [src]="
-              staffInfo.photoUrl
-                ? staffInfo.photoUrl
+              TraineeInfo.photoUrl
+                ? TraineeInfo.photoUrl
                 : './../../../../../assets/img/user.jpeg'
             "
-            [alt]="staffInfo.firstName + staffInfo.middleName"
+            [alt]="TraineeInfo.firstName + TraineeInfo.middleName"
             class="size-36 rounded-2xl"
           />
         </div>
         <h2 class="text-xl font-semibold text-white">
-          {{ staffInfo.firstName }} {{ staffInfo.middleName }}
-          {{ staffInfo.lastName }}
+          {{ TraineeInfo.firstName }} {{ TraineeInfo.middleName }}
+          {{ TraineeInfo.lastName }}
         </h2>
       </div>
       <div
@@ -230,7 +221,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Email:</span>
-          <span>{{ staffInfo.email }}</span>
+          <span>{{ TraineeInfo.email }}</span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -249,7 +240,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Phone:</span>
-          <span>{{ staffInfo.phoneNumber }}</span>
+          <span>{{ TraineeInfo.phoneNumber }}</span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -265,7 +256,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Gender:</span>
-          <span> @if (staffInfo.gender === 0) { Male }@else { Female } </span>
+          <span> @if (TraineeInfo.gender === 0) { Male }@else { Female } </span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -281,7 +272,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Collage:</span>
-          @switch (staffInfo.college ) { @case (0) {
+          @switch (TraineeInfo.college ) { @case (0) {
           <span>Computer and Ai</span>
           } @case (1) {
           <span>EELU</span>
@@ -314,7 +305,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Year:</span>
-          <span>{{ staffInfo.grade }}</span>
+          <span>{{ TraineeInfo.grade }}</span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -330,7 +321,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Codeforces:</span>
-          <span>{{ staffInfo.codeForceHandle }}</span>
+          <span>{{ TraineeInfo.codeForceHandle }}</span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -346,7 +337,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Vjudge:</span>
-          <span>{{ staffInfo.vjudgeHandle || "" }}</span>
+          <span>{{ TraineeInfo.vjudgeHandle || "" }}</span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -369,7 +360,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">National ID:</span>
-          <span>{{ staffInfo.nationalId }}</span>
+          <span>{{ TraineeInfo.nationalId }}</span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -387,10 +378,10 @@
           <span class="text-[#EEEEEE]">Roles:</span>
           <app-dropdown-roles
             (staffRequested)="onStaffRequested($event)"
-            [selectedStaffId]="selectedStaffId"
+            [selectedStaffId]="selectedTraineeId"
           />
         </div>
-        @for (item of staffInfo.userRoles; track item.role; let i = $index) {
+        @for (item of TraineeInfo.userRoles; track item.role; let i = $index) {
         <div
           class="flex items-center justify-between w-full mb-4 pe-6 ps-4 gap-x-2"
         >
@@ -412,7 +403,7 @@
 
             <span>{{ item.role }}</span>
             @if (item.campName) {
-            <span> - {{ item.campName }}</span>
+            <span class="w-full traucate"> - {{ item.campName }}</span>
             }
           </div>
           <button (click)="deleteRole(i)">
@@ -514,36 +505,36 @@
 @if (!isLoading()) {
 <div class="relative bottom-0 flex justify-center items-center py-1.5 bg-white">
   <div class="flex items-center justify-center">
-    @if (allStaffInfo.totalPages !== 0) {
+    @if (allTraineesInfo.totalPages !== 0) {
     <button
       type="button"
       class="py-2 text-lg font-semibold pe-4 disabled:cursor-not-allowed text-activeLink"
       (click)="previousPage()"
-      [disabled]="!allStaffInfo.hasPreviousPage"
+      [disabled]="!allTraineesInfo.hasPreviousPage"
     >
       Previous
     </button>
     }
     <div class="flex items-center space-x-2">
-      @for (page of [].constructor(allStaffInfo.totalPages); track page; let i =
-      $index) {
+      @for (page of [].constructor(allTraineesInfo.totalPages); track page; let
+      i = $index) {
       <button
         class="px-3 py-1 font-bold rounded-tr-lg rounded-bl-lg rounded-br-lg text-activeLink"
-        (click)="staffWithPagination(i + 1, 10, keywordSearch, sortbyNum)"
-        [class.bg-blue-500]="allStaffInfo.currentPage === i + 1"
-        [class.text-white]="allStaffInfo.currentPage === i + 1"
+        (click)="traineesWithPagination(i + 1, 10, keywordSearch, sortbyNum)"
+        [class.bg-blue-500]="allTraineesInfo.currentPage === i + 1"
+        [class.text-white]="allTraineesInfo.currentPage === i + 1"
       >
         {{ i + 1 }}
       </button>
       }
     </div>
-    @if (allStaffInfo.totalPages !== 0) {
+    @if (allTraineesInfo.totalPages !== 0) {
 
     <button
       type="button"
       class="p-2 text-lg font-semibold text-activeLink"
       (click)="nextPage()"
-      [disabled]="!allStaffInfo.hasNextPage"
+      [disabled]="!allTraineesInfo.hasNextPage"
     >
       Next
     </button>
