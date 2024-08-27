@@ -20,6 +20,9 @@ import { StandingCampComponent } from './pages/Leader/screens/standing-camp/stan
 import { StaffLeaderComponent } from './pages/Leader/screens/staff-leader/staff-leader.component';
 import { TraineesLeaderComponent } from './pages/Leader/screens/trainees-leader/trainees-leader.component';
 import { ArchiveLeaderComponent } from './pages/Leader/screens/archive-leader/archive-leader.component';
+import { SheetsTraineeComponent } from './pages/Trainee/screens/sheets-trainee/sheets-trainee.component';
+import { ContestTraineeComponent } from './pages/Trainee/screens/contest-trainee/contest-trainee.component';
+
 
 export const routes: Routes = [
   // Auth Pages
@@ -49,9 +52,25 @@ export const routes: Routes = [
 
     children: [
       {
-        path: 'home',
+        path: '',
         component: HomeTraineeComponent,
+        title: 'Trainee / Home - ICPC',
       },
+      {
+        path:'home',
+        component:HomeTraineeComponent,
+        title: 'Trainee / Home - ICPC'
+      },
+      {
+        path:'sheets',
+        component:SheetsTraineeComponent,
+        title:'Trainee / Sheets - ICPC'
+      },
+      {
+        path:'contests',
+        component:ContestTraineeComponent,
+        title:'Trainee / contests - ICPC'
+      }
     ],
   },
 
@@ -129,15 +148,31 @@ export const routes: Routes = [
     path: 'head_of_camp',
     component: HOCDashboardComponent,
     canActivate: [authGuard, rolesGuard],
+  // {
 
-    title: 'HOC - Dashboard',
-    children: [
-      {
-        path: '',
-        component: DashComponent,
+  //   path: 'head-of-camp',
+  //   component: HocLayoutComponent,
+  //   canActivate: [authGuard],
+
+  //   path: 'head_of_camp',
+  //   component: HOCDashboardComponent,
+  //   canActivate: [authGuard, rolesGuard],
+
+  //   title: 'HOC - Dashboard',
+  //   children: [
+  //     {
+  //       path: '',
+  //       component: DashComponent,
 
         title: 'HOC / Dashboard - ICPC',
       },
     ],
   },
 ];
+  //       title: 'HOC / Dashboard - ICPC',
+  //     }
+
+
+  //   ]
+  // }
+]
