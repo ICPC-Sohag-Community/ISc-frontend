@@ -77,6 +77,7 @@ export class DashboardComponent implements OnInit {
       },
     });
   }
+
   fetchDashboardCamps(): void {
     this.isLoading.set(true);
     this.dashboardService.dashboardCamps().subscribe({
