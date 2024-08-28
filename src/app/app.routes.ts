@@ -28,6 +28,7 @@ import { TraineesLeaderComponent } from './pages/Leader/screens/trainees-leader/
 import { ArchiveLeaderComponent } from './pages/Leader/screens/archive-leader/archive-leader.component';
 import { SheetsTraineeComponent } from './pages/Trainee/screens/sheets-trainee/sheets-trainee.component';
 import { ContestTraineeComponent } from './pages/Trainee/screens/contest-trainee/contest-trainee.component';
+import { StandingTraineeComponent } from './pages/Trainee/screens/standing-trainee/standing-trainee.component';
 
 export const routes: Routes = [
   // Auth Pages
@@ -75,6 +76,11 @@ export const routes: Routes = [
         path: 'contests',
         component: ContestTraineeComponent,
         title: 'Trainee / contests - ICPC',
+      },
+      {
+        path: 'standing',
+        component: StandingTraineeComponent,
+        title: 'Trainee / standing - ICPC',
       },
     ],
   },
