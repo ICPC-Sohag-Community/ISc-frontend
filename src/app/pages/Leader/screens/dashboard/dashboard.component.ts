@@ -78,62 +78,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  data = [
-    {
-      id: 28,
-      name: 'ICP17asasas',
-      dueDate: '2025-05-27',
-      progress: 20,
-    },
-    {
-      id: 28,
-      name: 'ICP17',
-      dueDate: '2025-05-27',
-      progress: 70,
-    },
-    {
-      id: 28,
-      name: 'ICP17',
-      dueDate: '2025-05-27',
-      progress: 50,
-    },
-    {
-      id: 28,
-      name: 'ICP17',
-      dueDate: '2025-05-27',
-      progress: 0,
-    },
-    {
-      id: 28,
-      name: 'ICP17',
-      dueDate: '2025-05-27',
-      progress: 0,
-    },
-    {
-      id: 28,
-      name: 'ICP17',
-      dueDate: '2025-05-27',
-      progress: 0,
-    },
-    {
-      id: 28,
-      name: 'ICP17',
-      dueDate: '2025-05-27',
-      progress: 0,
-    },
-    {
-      id: 28,
-      name: 'ICP17',
-      dueDate: '2025-05-27',
-      progress: 0,
-    },
-    {
-      id: 28,
-      name: 'ICP17',
-      dueDate: '2025-05-27',
-      progress: 0,
-    },
-  ];
   fetchDashboardCamps(): void {
     this.isLoading.set(true);
     this.dashboardService.dashboardCamps().subscribe({

@@ -1,28 +1,42 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { SideInfoComponent } from '../../Components/side-info/side-info.component';
 import { CasheService } from '../../../../shared/services/cashe.service';
 import { StaffLeaderService } from '../../services/staff-leader.service';
 import { OnStaffInfo, StaffInfo } from '../../model/staff';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
+import { DropdownRolesComponent } from '../../Components/dropdown-roles/dropdown-roles.component';
+import { RolesService } from '../../services/roles.service';
 
 @Component({
   selector: 'app-staff-leader',
   standalone: true,
-  imports: [SideInfoComponent, NgSelectModule, ReactiveFormsModule, NgClass],
+  imports: [
+    DropdownRolesComponent,
+    NgSelectModule,
+    ReactiveFormsModule,
+    NgClass,
+  ],
   templateUrl: './staff-leader.component.html',
   styleUrl: './staff-leader.component.scss',
 })
 export class StaffLeaderComponent implements OnInit {
   staffLeaderService = inject(StaffLeaderService);
+  rolesService = inject(RolesService);
   casheService = inject(CasheService);
   allStaffInfo!: StaffInfo;
   staffInfo!: OnStaffInfo;
   showSideInfo: boolean = false;
-  selectedStaffId: string | null = null;
+  hideSideInfo: boolean = true;
+  selectedStaffId: string = '';
   isLoading = signal<boolean>(false);
   isLoadingForSide: boolean = false;
+  isDeleted: boolean = false;
+  roleInfo: any;
+  keywordSearch: string = '';
+  sortbyNum: number = 0 | 1 | 2;
+  deletedRoles: any[] = [];
+
   searchForm!: FormGroup;
   ngOnInit() {
     this.searchForm = new FormGroup({
@@ -30,7 +44,7 @@ export class StaffLeaderComponent implements OnInit {
       sortNumber: new FormControl(null),
     });
 
-    this.staffWithPagination(1, 10);
+    this.staffWithPagination(1, 10, this.keywordSearch, this.sortbyNum);
     // this.getStaffById('0b645888-170b-49d5-80c4-653fd4612377');
   }
 
@@ -61,32 +75,37 @@ export class StaffLeaderComponent implements OnInit {
 
   onSearchInput(event: Event) {
     const searchTerm = (event.target as HTMLInputElement).value;
+    this.keywordSearch = searchTerm;
     this.casheService.clearCache();
-    this.staffWithPagination(1, 10, searchTerm);
+    this.staffWithPagination(1, 10, searchTerm, this.sortbyNum);
   }
 
   sortStaff(item: any): void {
+    this.sortbyNum = item;
+    console.log(this.sortbyNum);
+    this.staffWithPagination(1, 10, this.keywordSearch, this.sortbyNum);
     this.casheService.clearCache();
-    this.staffWithPagination(1, 10, '', item);
   }
 
   showSideBar(id: string) {
+    this.deletedRoles = [];
     this.selectedStaffId = id;
     this.showSideInfo = true;
+    this.hideSideInfo = false;
     this.getStaffById(id);
   }
   handleClose() {
     this.showSideInfo = false;
+    setTimeout(() => (this.hideSideInfo = true), 700);
   }
 
   getStaffById(id: string) {
-    console.log(id);
     this.isLoadingForSide = true;
     this.staffLeaderService.getStaffById(id).subscribe({
-      next: ({ message, statusCode, data }) => {
+      next: ({ statusCode, data }) => {
         if (statusCode === 200) {
+          this.deletedRoles = [];
           this.staffInfo = data;
-          console.log(this.staffInfo);
           this.isLoadingForSide = false;
         } else {
           this.isLoadingForSide = false;
@@ -99,21 +118,67 @@ export class StaffLeaderComponent implements OnInit {
     });
   }
 
+  onStaffRequested(id: string) {
+    this.getStaffById(id);
+  }
+
+  deleteRole(index: number) {
+    const deletedRole = this.staffInfo.userRoles.splice(index, 1)[0];
+    delete deletedRole.campName;
+    this.deletedRoles.push(deletedRole);
+    this.roleInfo = {
+      userId: this.selectedStaffId,
+      roleInfos: this.deletedRoles,
+    };
+  }
+  restoreRole(index: number) {
+    const restoredRole = this.deletedRoles.splice(index, 1)[0];
+    this.staffInfo.userRoles.push(restoredRole);
+  }
+
+  saveDeleteRoles(): void {
+    this.isDeleted = true;
+    this.rolesService.unAssignToRole(this.roleInfo).subscribe({
+      next: ({ statusCode }) => {
+        if (statusCode === 200) {
+          this.getStaffById(this.selectedStaffId);
+          this.isDeleted = false;
+        } else {
+          this.isDeleted = false;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this.isDeleted = false;
+      },
+    });
+  }
+
   nextPage() {
     if (this.allStaffInfo.hasNextPage) {
-      this.staffWithPagination(this.allStaffInfo.currentPage + 1, 10);
+      this.staffWithPagination(
+        this.allStaffInfo.currentPage + 1,
+        10,
+        this.keywordSearch,
+        this.sortbyNum
+      );
     }
   }
 
   previousPage() {
     if (this.allStaffInfo.hasPreviousPage) {
-      this.staffWithPagination(this.allStaffInfo.currentPage - 1, 10);
+      this.staffWithPagination(
+        this.allStaffInfo.currentPage - 1,
+        10,
+        this.keywordSearch,
+        this.sortbyNum
+      );
     }
   }
 
   handleOverlayClick(event: MouseEvent) {
     if ((event.target as HTMLElement).classList.contains('fixed')) {
-      this.handleClose(); // Close modal when clicking outside content
+      this.handleClose();
     }
   }
 }

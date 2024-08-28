@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { CasheService } from '../../../shared/services/cashe.service';
 import { environment } from '../../../../environments/environment.development';
@@ -16,14 +16,22 @@ export class StaffLeaderService {
     currentPage: number,
     pageSize: number,
     KeyWord?: string,
-    SortBy?: number
+    SortBy?: any
   ): Observable<any> {
-    console.log(KeyWord);
-    const params = new HttpParams()
-      .set('PageNumber', currentPage)
-      .set('PageSize', pageSize)
-      .set('KeyWord', KeyWord ? KeyWord : '')
-      .set('SortBy', SortBy ? SortBy : '');
+    let params;
+    if (SortBy !== 0 && SortBy !== 1 && SortBy !== 2) {
+      params = new HttpParams()
+        .set('PageNumber', currentPage)
+        .set('PageSize', pageSize)
+        .set('KeyWord', KeyWord ? KeyWord : '');
+    } else {
+      params = new HttpParams()
+        .set('PageNumber', currentPage)
+        .set('PageSize', pageSize)
+        .set('KeyWord', KeyWord ? KeyWord : '')
+        .set('SortBy', SortBy);
+    }
+
     return this.casheService.get<any>(
       `${environment.BASE_URL}/api/Leader/staffWithPagination`,
       params

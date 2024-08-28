@@ -8,7 +8,7 @@
     >
       <div class="relative w-full">
         <input
-          class="w-[350px] px-3 py-2.5 pl-10 leading-tight text-gray-800 transition-colors border-2 border-gray-600 rounded-lg appearance-none hover:border-gray-400 focus:outline-none focus:ring-mainblue focus:border-mainblue focus:shadow-outline"
+          class="w-[350px] px-3 py-2.5 pl-10 leading-tight text-gray-800 transition-colors ring-1 ring-gray-300 rounded-lg appearance-none hover:ring-gray-400 focus:outline-none focus:ring-mainblue focus:border-mainblue focus:shadow-outline"
           id="searchInput"
           formControlName="searchInput"
           type="text"
@@ -35,14 +35,13 @@
       </div>
       <div class="relative">
         <ng-select
-          id="sortNumber"
           [closeOnSelect]="true"
           bindLabel="name"
           bindValue="id"
           formControlName="sortNumber"
           (change)="sortStaff($event)"
           placeholder="Sort By"
-          class="relative block w-40 h-10 my-2 text-white border-2 appearance-none rounded-xl placeholder:text-white bg-mainblue cursor-none focus:outline-none"
+          class="relative block w-40 h-10 my-2 !text-white appearance-none rounded-xl !placeholder:text-white bg-mainblue cursor-none focus:outline-none"
         >
           <ng-option [value]="0">Faculty</ng-option>
           <ng-option [value]="1">Grade</ng-option>
@@ -79,7 +78,7 @@
     </div>
   </div>
   } @else {
-  <table class="min-w-full text-center">
+  <table class="relative min-w-full text-center">
     <thead>
       <tr class="bg-transparent text-[#6B7088] text-lg">
         <th class="px-4 py-2">Name</th>
@@ -164,30 +163,37 @@
   }
 
   <!-- sideBar Info -->
+  <!-- [ngClass]="{
+      'z-[150] bg-black bg-opacity-50': showSideInfo,
+      '-z-10': hideSideInfo && !showSideInfo
+    }" -->
   <div
     (click)="handleOverlayClick($event)"
-    [ngClass]="showSideInfo ? ' z-[150] bg-black bg-opacity-50' : '-z-10'"
-    class="flex items-center fixed justify-end inset-0 !m-0"
+    [ngClass]="{
+      ' bg-black bg-opacity-50 visible': showSideInfo,
+      'invisible cursor-default': !showSideInfo && hideSideInfo
+    }"
+    class="flex z-[150] items-center fixed justify-end inset-0 !m-0"
   >
     <div
       [ngClass]="showSideInfo ? 'translate-x-0' : 'translate-x-full'"
-      class="relative flex flex-col bg-[#323232] items-center w-full h-screen max-w-[420px] p-6 transition-transform duration-700 ease-in-out shadow-lg rounded-tl-lg rounded-bl-lg"
+      class="relative flex flex-col bg-[#323232] items-center h-screen w-[450px] p-6 transition-transform duration-700 ease-in-out shadow-lg rounded-tl-lg rounded-bl-lg"
     >
       <span
         (click)="handleClose()"
         class="absolute text-3xl font-semibold text-white transition-colors cursor-pointer top-3 right-8 hover:text-red-500"
         >_</span
       >
-      @if (isLoadingForSide) {
+      @if (selectedStaffId) { @if (isLoadingForSide) {
       <div class="bg-opacity-60">
-        <div class="flex items-center">
+        <div class="flex items-center justify-center h-screen">
           <div
-            class="w-16 h-16 border-8 border-blue-600 border-dashed rounded-full animate-spin"
+            class="w-16 h-16 border-8 border-dashed rounded-full border-mainYellow animate-spin"
           ></div>
         </div>
       </div>
-      }@if(!isLoadingForSide && !isLoading()) {
-      <div class="flex flex-col items-center mt-6 gap-y-6">
+      } @else {
+      <div class="flex flex-col items-center mt-2 gap-y-4">
         <div>
           <img
             [src]="
@@ -204,7 +210,9 @@
           {{ staffInfo.lastName }}
         </h2>
       </div>
-      <div class="self-start mt-4 text-white">
+      <div
+        class="self-start w-full mt-4 overflow-y-scroll text-white custom-scrollbar-side"
+      >
         <div class="flex items-center mb-4 gap-x-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -257,7 +265,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Gender:</span>
-          <span>{{ staffInfo.gender }}</span>
+          <span> @if (staffInfo.gender === 0) { Male }@else { Female } </span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -273,7 +281,21 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Collage:</span>
-          <span>{{ staffInfo.college }}</span>
+          @switch (staffInfo.college ) { @case (0) {
+          <span>Computer and Ai</span>
+          } @case (1) {
+          <span>EELU</span>
+          } @case (2) {
+          <span>Science</span>
+          } @case (3) {
+          <span>Engineering</span>
+          } @case (4) {
+          <span>Commerce</span>
+          } @case (5) {
+          <span>Law</span>
+          } @case (6) {
+          <span>Others</span>
+          } }
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -363,37 +385,136 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Roles:</span>
-          <span>{{ staffInfo.nationalId }}</span>
+          <app-dropdown-roles
+            (staffRequested)="onStaffRequested($event)"
+            [selectedStaffId]="selectedStaffId"
+          />
         </div>
-        @for (item of staffInfo.userRoles; track $index) {
-        <div class="flex items-center mb-4 ps-8 gap-x-2">
-          <svg
-            class="size-4"
-            viewBox="0 0 18 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M5 9L8 12L13 6M1 13.8V4.2C1 3.08 1 2.52 1.218 2.092C1.41 1.715 1.715 1.41 2.092 1.218C2.52 1 3.08 1 4.2 1H13.8C14.92 1 15.48 1 15.907 1.218C16.284 1.41 16.59 1.715 16.782 2.092C17 2.519 17 3.079 17 4.197V13.804C17 14.922 17 15.481 16.782 15.908C16.5899 16.2844 16.2836 16.5903 15.907 16.782C15.48 17 14.921 17 13.803 17H4.197C3.079 17 2.519 17 2.092 16.782C1.71569 16.5903 1.40974 16.2843 1.218 15.908C1 15.48 1 14.92 1 13.8Z"
-              stroke="white"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+        @for (item of staffInfo.userRoles; track item.role; let i = $index) {
+        <div
+          class="flex items-center justify-between w-full mb-4 pe-6 ps-4 gap-x-2"
+        >
+          <div class="flex items-center gap-x-2">
+            <svg
+              class="size-4"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 9L8 12L13 6M1 13.8V4.2C1 3.08 1 2.52 1.218 2.092C1.41 1.715 1.715 1.41 2.092 1.218C2.52 1 3.08 1 4.2 1H13.8C14.92 1 15.48 1 15.907 1.218C16.284 1.41 16.59 1.715 16.782 2.092C17 2.519 17 3.079 17 4.197V13.804C17 14.922 17 15.481 16.782 15.908C16.5899 16.2844 16.2836 16.5903 15.907 16.782C15.48 17 14.921 17 13.803 17H4.197C3.079 17 2.519 17 2.092 16.782C1.71569 16.5903 1.40974 16.2843 1.218 15.908C1 15.48 1 14.92 1 13.8Z"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
 
-          <span>{{ item.role }}</span>
-          <span>{{ item.campName }}</span>
+            <span>{{ item.role }}</span>
+            @if (item.campName) {
+            <span> - {{ item.campName }}</span>
+            }
+          </div>
+          <button (click)="deleteRole(i)">
+            <svg
+              class="flex justify-center w-full hover:fill-red-500 size-5 fill-white"
+              viewBox="0 0 28 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11.0526 4.55V4.9H16.9474V4.55C16.9474 3.80739 16.6368 3.0952 16.0841 2.5701C15.5314 2.045 14.7817 1.75 14 1.75C13.2183 1.75 12.4686 2.045 11.9159 2.5701C11.3632 3.0952 11.0526 3.80739 11.0526 4.55ZM9.21053 4.9V4.55C9.21053 3.34326 9.71513 2.18595 10.6133 1.33266C11.5115 0.479373 12.7298 0 14 0C15.2702 0 16.4885 0.479373 17.3867 1.33266C18.2849 2.18595 18.7895 3.34326 18.7895 4.55V4.9H27.0789C27.3232 4.9 27.5575 4.99219 27.7302 5.15628C27.903 5.32038 28 5.54294 28 5.775C28 6.00706 27.903 6.22962 27.7302 6.39372C27.5575 6.55781 27.3232 6.65 27.0789 6.65H24.9296L23.4559 23.3492C23.3439 24.6173 22.7345 25.7992 21.7485 26.6606C20.7625 27.522 19.4718 28.0001 18.1322 28H9.86779C8.52835 27.9999 7.23783 27.5218 6.25196 26.6604C5.26608 25.799 4.6568 24.6172 4.54484 23.3492L3.07116 6.65H0.921053C0.676774 6.65 0.442501 6.55781 0.26977 6.39372C0.0970392 6.22962 0 6.00706 0 5.775C0 5.54294 0.0970392 5.32038 0.26977 5.15628C0.442501 4.99219 0.676774 4.9 0.921053 4.9H9.21053ZM6.38032 23.2029C6.45366 24.0337 6.85285 24.808 7.49877 25.3723C8.1447 25.9367 8.99022 26.2499 9.86779 26.25H18.1322C19.0099 26.2501 19.8556 25.9369 20.5017 25.3726C21.1478 24.8082 21.5471 24.0338 21.6204 23.2029L23.0808 6.65H4.91916L6.38032 23.2029ZM12.1579 11.375C12.1579 11.2601 12.1341 11.1463 12.0878 11.0402C12.0415 10.934 11.9737 10.8375 11.8881 10.7563C11.8026 10.675 11.7011 10.6106 11.5893 10.5666C11.4776 10.5226 11.3578 10.5 11.2368 10.5C11.1159 10.5 10.9961 10.5226 10.8844 10.5666C10.7726 10.6106 10.6711 10.675 10.5856 10.7563C10.5 10.8375 10.4322 10.934 10.3859 11.0402C10.3396 11.1463 10.3158 11.2601 10.3158 11.375V21.525C10.3158 21.6399 10.3396 21.7537 10.3859 21.8598C10.4322 21.966 10.5 22.0625 10.5856 22.1437C10.6711 22.225 10.7726 22.2894 10.8844 22.3334C10.9961 22.3774 11.1159 22.4 11.2368 22.4C11.3578 22.4 11.4776 22.3774 11.5893 22.3334C11.7011 22.2894 11.8026 22.225 11.8881 22.1437C11.9737 22.0625 12.0415 21.966 12.0878 21.8598C12.1341 21.7537 12.1579 21.6399 12.1579 21.525V11.375ZM16.7632 10.5C17.2716 10.5 17.6842 10.892 17.6842 11.375V21.525C17.6842 21.7571 17.5872 21.9796 17.4144 22.1437C17.2417 22.3078 17.0074 22.4 16.7632 22.4C16.5189 22.4 16.2846 22.3078 16.1119 22.1437C15.9391 21.9796 15.8421 21.7571 15.8421 21.525V11.375C15.8421 10.892 16.2547 10.5 16.7632 10.5Z"
+              />
+            </svg>
+          </button>
+        </div>
+        } @for (item of deletedRoles; track item.role; let i = $index) {
+        <div
+          class="flex items-center justify-between w-full mb-4 pe-6 ps-4 gap-x-2"
+        >
+          <div class="flex items-center gap-x-2">
+            <svg
+              class="size-4"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 9L8 12L13 6M1 13.8V4.2C1 3.08 1 2.52 1.218 2.092C1.41 1.715 1.715 1.41 2.092 1.218C2.52 1 3.08 1 4.2 1H13.8C14.92 1 15.48 1 15.907 1.218C16.284 1.41 16.59 1.715 16.782 2.092C17 2.519 17 3.079 17 4.197V13.804C17 14.922 17 15.481 16.782 15.908C16.5899 16.2844 16.2836 16.5903 15.907 16.782C15.48 17 14.921 17 13.803 17H4.197C3.079 17 2.519 17 2.092 16.782C1.71569 16.5903 1.40974 16.2843 1.218 15.908C1 15.48 1 14.92 1 13.8Z"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+
+            <span>{{ item.role }}</span>
+            @if (item.campName) {
+            <span> - {{ item.campName }}</span>
+            }
+          </div>
+          <button (click)="restoreRole(i)">
+            <svg
+              class="flex justify-center w-full hover:text-green-500 size-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.10812 5.08039C9.97812 4.82039 10.9381 4.65039 11.9981 4.65039C16.7881 4.65039 20.6681 8.53039 20.6681 13.3204C20.6681 18.1104 16.7881 21.9904 11.9981 21.9904C7.20813 21.9904 3.32812 18.1104 3.32812 13.3204C3.32812 11.5404 3.86813 9.88039 4.78813 8.50039"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M7.87109 5.32L10.7611 2"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M7.87109 5.32031L11.2411 7.78031"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+        } @if (deletedRoles.length > 0 ) {
+
+        <div class="flex items-center justify-end mt-3 mb-2 pe-6">
+          @if (isDeleted) {
+          <div class="bg-opacity-60">
+            <div class="flex items-center">
+              <div
+                class="border-4 border-blue-600 border-dashed rounded-full w-7 h-7 animate-spin"
+              ></div>
+            </div>
+          </div>
+          }@else {
+
+          <button
+            (click)="saveDeleteRoles()"
+            class="bg-[#52B788] px-6 rounded-md py-1.5"
+          >
+            Save
+          </button>
+          }
         </div>
         }
       </div>
-      }
+      } }
     </div>
   </div>
 </div>
 @if (!isLoading()) {
 <div class="relative bottom-0 flex justify-center items-center py-1.5 bg-white">
   <div class="flex items-center justify-center">
+    @if (allStaffInfo.totalPages !== 0) {
     <button
       type="button"
       class="py-2 text-lg font-semibold pe-4 disabled:cursor-not-allowed text-activeLink"
@@ -402,12 +523,13 @@
     >
       Previous
     </button>
+    }
     <div class="flex items-center space-x-2">
       @for (page of [].constructor(allStaffInfo.totalPages); track page; let i =
       $index) {
       <button
         class="px-3 py-1 font-bold rounded-tr-lg rounded-bl-lg rounded-br-lg text-activeLink"
-        (click)="staffWithPagination(i + 1, 10)"
+        (click)="staffWithPagination(i + 1, 10, keywordSearch, sortbyNum)"
         [class.bg-blue-500]="allStaffInfo.currentPage === i + 1"
         [class.text-white]="allStaffInfo.currentPage === i + 1"
       >
@@ -415,6 +537,7 @@
       </button>
       }
     </div>
+    @if (allStaffInfo.totalPages !== 0) {
 
     <button
       type="button"
@@ -424,6 +547,7 @@
     >
       Next
     </button>
+    }
   </div>
 </div>
 }
