@@ -12,11 +12,11 @@ import { EndedCarouselComponent } from '../../Components/Contests-Components/end
   styleUrl: './contest-trainee.component.scss'
 })
 export class ContestTraineeComponent {
-  // isLoading = true; // Initially show the loader
+  isLoading = true; // Initially show the loader
 
-  // ngAfterViewInit(): void {
-  //   setTimeout(() => {
-  //     this.isLoading = false;
-  //   }, 700);
-  // }
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 700);
+  }
 }
