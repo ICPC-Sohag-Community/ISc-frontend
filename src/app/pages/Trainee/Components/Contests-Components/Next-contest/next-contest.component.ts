@@ -21,6 +21,7 @@ export class NextContestComponent implements OnInit {
 
   // Lifecycle hook for component initialization
   ngOnInit(): void {
+    this._contestService.assignContests()
     this.loadContestData(); // Load contest data on initialization
   }
 
