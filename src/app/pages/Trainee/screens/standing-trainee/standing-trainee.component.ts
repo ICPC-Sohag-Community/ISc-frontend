@@ -9,11 +9,5 @@ import { StandingComponent } from '../../Components/Standing-Components/standing
   styleUrl: './standing-trainee.component.scss'
 })
 export class StandingTraineeComponent {
-  isLoading = true; // Initially show the loader
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 700);
-  }
 }

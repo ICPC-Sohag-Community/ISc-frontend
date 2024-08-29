@@ -10,13 +10,11 @@ import { FormatDatePipe } from '../../../Pipes/formatte-Date.pipe';
   imports: [CommonModule,FormatDatePipe],
   templateUrl: './trainee-cards.component.html',
   styleUrl: './trainee-cards.component.scss',
-  providers: [DatePipe]
 })
 export class TraineeCardsComponent {
 
   // Injected services
   private homeService = inject(HomeService);
-  private datePipe = inject(DatePipe);
 
   // Component state variables
   public currentSheet: CurrentSheet = {
@@ -87,8 +85,10 @@ export class TraineeCardsComponent {
         this.hours=data.remainTime.hours
         this.min=data.remainTime.minutes
         this.second=data.remainTime.seconds
-        this.startCountdown()
-        }
+          if(this.days==0){
+            this.startCountdown()
+          }
+      }
       }
     });
   }

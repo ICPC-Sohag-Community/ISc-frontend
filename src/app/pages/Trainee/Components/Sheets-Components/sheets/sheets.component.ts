@@ -21,6 +21,8 @@ export class SheetsComponent implements OnInit {
   sheetMatrial: Matrial[] = [];
   sheets: Sheet[] = [];
   matrialName: string = '';
+  isLoading:boolean=true
+  loadingSheet:boolean=false
 
   // Lifecycle hook that runs after the component initializes
   ngOnInit(): void {
@@ -32,6 +34,7 @@ export class SheetsComponent implements OnInit {
     this._sheetService.getAllSheets().subscribe({
       next: ({statusCode,data}) => {
         if(statusCode===200){
+          this.isLoading=false
         this.sheets = data; // Update sheets array with fetched data
       }
       }
@@ -40,12 +43,14 @@ export class SheetsComponent implements OnInit {
 
   // Fetches material data for a specific sheet by ID and sets the material name
   updateMatrial(id: any, matrialName: string): void {
+    this.loadingSheet=true
     this.addActiveCard(id)
     this.matrialName = matrialName; // Set the name of the selected material
     this._sheetService.getMaterialsInSheet(id).subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.sheetMatrial = data; // Update sheetMatrial array with fetched data
+          this.loadingSheet=false
         }
       },
       error: (err) => console.error('Error loading material:', err) // Handle errors
@@ -61,5 +66,8 @@ export class SheetsComponent implements OnInit {
     $(`button`).removeClass('border-btn');
     $(`#${id} .card-bg-img`).addClass('border-card');
     $(`#${id} button`).addClass('border-btn');
+  }
+  openLink(url:string):void{
+    window.open(url,'_blank')
   }
 }

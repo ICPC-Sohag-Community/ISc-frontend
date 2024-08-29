@@ -11,12 +11,14 @@ export class ContestService {
   inComingContest:BehaviorSubject<any>=new BehaviorSubject('')
   nextContest:BehaviorSubject<any>=new BehaviorSubject('')
   oldContest:BehaviorSubject<any>=new BehaviorSubject('')
+  isLoading:boolean=true
   constructor() {}
 
   assignContests():void{
     this.getAllTraineeContest().subscribe({
       next:({statusCode,data})=>{
         if(statusCode===200){
+          this.isLoading=false
           this.inComingContest.next(data.inComingContests)
           this.nextContest.next(data.nextContest)
           this.oldContest.next(data.oldContests)

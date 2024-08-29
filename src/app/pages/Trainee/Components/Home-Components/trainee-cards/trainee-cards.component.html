@@ -73,7 +73,6 @@
       </div>
     </a>
   </div>
-
   <!-- Card for Next Contest -->
   <div class="header-card sm:w-full rounded-[12px] xl:w-[610px] h-[22rem] shadow-[0px_1px_50px_0px_#00000014] cursor-pointer"
        (click)="openLink(inComingContest.link)">
@@ -89,25 +88,30 @@
       <div class="card-footer w-full pl-1">
         <div class="footer-text">
           <!-- Remaining Time -->
-          <span class="flex items-center justify-around mb-2">
-            <span class="text-2xl">Before Start</span>
+          <div>
             @if(days>0){
-              <span class="text-4xl font-bold">{{days}}</span>
-              <span class="text-2xl font-normal">D</span>
+              <div class="flex items-center justify-around mb-2">
+                <span class="text-2xl">Before Start</span>
+                <span class="text-4xl font-bold">{{days}}</span>
+                <span class="text-2xl font-normal">D</span>
+                <span class="text-4xl font-bold">{{hours}}</span>
+                <span class="text-2xl font-normal">H</span>
+                <span class="text-4xl font-bold">{{min}}</span>
+                <span class="text-2xl font-normal">M</span>
+              </div>
             }
-            @if(hours>0){
-              <span class="text-4xl font-bold">{{hours}}</span>
-              <span class="text-2xl font-normal">H</span>
+            @else{
+              <div class="flex items-center justify-around mb-2">
+                <span class="text-2xl">Before Start</span>
+                <span class="text-4xl font-bold">{{hours}}</span>
+                <span class="text-2xl font-normal">H</span>
+                <span class="text-4xl font-bold">{{min}}</span>
+                <span class="text-2xl font-normal">M</span>
+                <span class="text-4xl font-bold">{{second}}</span>
+                <span class="text-2xl font-normal">sec</span>
+              </div>
             }
-            @if(min>0){
-              <span class="text-4xl font-bold">{{min}}</span>
-              <span class="text-2xl font-normal">M</span>
-            }
-            @if(second>0){
-              <span class="text-4xl font-bold">{{second}}</span>
-              <span class="text-2xl font-normal">sec</span>
-            }
-          </span>
+          </div>
         </div>
       </div>
     </a>
