@@ -2,32 +2,59 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormatDatePipe } from '../../../Pipes/formatte-Date.pipe';
 import { StandingService } from '../../../Services/standing.service';
-declare var $: any;
+import { Achiver } from '../../../model/trinee-standing';
 
 @Component({
   selector: 'app-standing',
   standalone: true,
-  imports: [CommonModule,FormatDatePipe],
+  imports: [CommonModule, FormatDatePipe],
   templateUrl: './standing.component.html',
   styleUrls: ['./standing.component.scss'],
 })
 export class StandingComponent implements OnInit {
 
-  // Inject services and dependencies
-  _StandingsService = inject(StandingService)
-  // Lifecycle hook that runs after the component initializes
+  private standingService = inject(StandingService);
+
+  greenZone: Achiver[] = [];
+  yellowZone: Achiver[] = [];
+  redZone: Achiver[] = [];
+  isLoading = true;
+  currentUser: any;
+
   ngOnInit(): void {
-    this.getAllStanding()
+    this.fetchStandings();
+    this.loadCurrentUser();
   }
 
-  getAllStanding():void{
-    this._StandingsService.getStanding().subscribe({
-      next:({statusCode,data})=>{
-        if(statusCode===200){
-          console.log(data);
-
+  private fetchStandings(): void {
+    this.standingService.getStanding().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.isLoading = false;
+          this.categorizeTrainees(data.achivers, data.totalProblems);
         }
       }
-    })
+    });
+  }
+
+  private categorizeTrainees(trainees: Achiver[], totalProblems: number): void {
+    const calculatePercentage = (solvedProblems: number) => (solvedProblems / totalProblems) * 100;
+
+    this.greenZone = trainees.filter(t => calculatePercentage(t.solvedProblems) >= 80);
+    this.yellowZone = trainees.filter(t => calculatePercentage(t.solvedProblems) < 80 && calculatePercentage(t.solvedProblems) > 50);
+    this.redZone = trainees.filter(t => calculatePercentage(t.solvedProblems) <= 50);
+
+    [this.greenZone, this.yellowZone, this.redZone].forEach(zone => this.sortBySolvedProblems(zone));
+  }
+
+  private sortBySolvedProblems(zone: Achiver[]): void {
+    zone.sort((a, b) => b.solvedProblems - a.solvedProblems);
+  }
+
+  private loadCurrentUser(): void {
+    const userJson = localStorage.getItem('CURRENT_USER');
+    if (userJson) {
+      this.currentUser = JSON.parse(userJson);
+    }
   }
 }
