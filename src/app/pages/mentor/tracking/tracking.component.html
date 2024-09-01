@@ -1,5 +1,5 @@
 <app-mentor-header></app-mentor-header>
-<div class="p-4">
+<div class="p-4" >
     <div class="flex mb-12 mt-[-30px] ml-6 gap-3">
       <button (click)="she()" id="she" class="border text-[#3591C9] border-[#3591C9] text-[20px] px-4 py-2 rounded-[12px]">Sheets</button>
       <button (click)="cont()" id="cont" class="bg-[#3591C9] text-[20px] text-white px-4 py-2 rounded-[12px]">Contests</button>
@@ -47,7 +47,7 @@
         </tbody>
       </table>
     </div> -->
-    <div id="contest" class="hidden overflow-auto custom-scrollbar w-[96vw] m-auto bg-white rounded-[20px]">
+    <div *ngIf="id != null" id="contest" class="h-[calc(100vh-200px)] hidden overflow-auto custom-scrollbar w-[96vw] m-auto bg-white rounded-[20px]">
         <table class="hover-table overflow-x-auto custom-scrollbar ">
           <thead>
             <tr>
@@ -68,7 +68,7 @@
           </tbody>
         </table>
       </div>
-      <div id="sheet" class=" h-[calc(100vh-200px)] overflow-auto custom-scrollbar w-[96vw] m-auto bg-white rounded-[20px]">
+      <div *ngIf="id != null" id="sheet" class=" h-[calc(100vh-200px)] overflow-auto custom-scrollbar w-[96vw] m-auto bg-white rounded-[20px]">
         <table class="hover-table overflow-x-auto custom-scrollbar ">
           <thead>
             <tr>

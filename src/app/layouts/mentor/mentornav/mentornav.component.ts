@@ -1,5 +1,6 @@
 
 import { NgClass } from '@angular/common';
+
 import {
   Component,
   ElementRef,
@@ -7,12 +8,13 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../authentication/services/auth.service';
 @Component({
   selector: 'app-mentornav',
   standalone: true,
-  imports: [NgClass],
+  imports: [NgClass,RouterLink,RouterLinkActive],
   templateUrl: './mentornav.component.html',
   styleUrl: './mentornav.component.scss'
 })

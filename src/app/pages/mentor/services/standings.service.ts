@@ -13,6 +13,6 @@ export class StandingsService {
     return this.http.get<ResponseHeader>("https://icpc.runasp.net/api/Mentor/standing/" + id)
   }
   updateData(data: any): Observable<any> {
-    return this.http.put<any>("https://icpc.runasp.net/api/Mentor/updateTraineePoints", data); // PUT request to update data
+    return this.http.put<any>("https://icpc.runasp.net/api/Mentor/updateTraineePoints", data); 
   }
 }

@@ -4,7 +4,6 @@ import { rolesGuard } from './authentication/guard/roles.guard';
 import { LoginComponent } from './authentication/screens/login/login.component';
 import { LayoutLeaderComponent } from './layouts/layout_leader/layout-leader.component';
 import { DashboardComponent } from './pages/Leader/screens/dashboard/dashboard.component';
-
 import { HOCDashboardComponent } from './HOC/hocdashboard/hocdashboard.component';
 import { DashComponent } from './HOC/comp/dash/dash.component';
 
@@ -16,6 +15,8 @@ import { TraineesComponent } from './pages/mentor/trainees/trainees.component';
 import { AttendanceComponent } from './pages/mentor/attendance/attendance.component';
 import { StandingsComponent } from './pages/mentor/standings/standings.component';
 import { TrackingComponent } from './pages/mentor/tracking/tracking.component';
+import { TasksComponent } from './pages/mentor/tasks/tasks.component';
+import { PracticeComponent } from './pages/mentor/practice/practice.component';
 
 export const routes: Routes = [
   // Auth Pages
@@ -118,6 +119,16 @@ export const routes: Routes = [
         path: 'tracking',
         component: TrackingComponent,
         title: 'mentor / Tracking - ICPC',
+      },
+      {
+        path: 'tasks',
+        component: TasksComponent,
+        title: 'mentor / Tasks - ICPC',
+      },
+      {
+        path: 'practice',
+        component: PracticeComponent,
+        title: 'mentor / Practice - ICPC',
       }
      
     ],
