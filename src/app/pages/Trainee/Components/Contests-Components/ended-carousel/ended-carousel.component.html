@@ -1,0 +1,72 @@
+<!-- Main container with flexible layout and spacing -->
+<div class="flex flex-col gap-14 my-24 w-11/12 mx-auto">
+
+  <!-- Section title -->
+  <h1 class="head">Ended</h1>
+
+  <!-- Container for the swiper and navigation buttons -->
+  <div class="relative">
+
+    <!-- Navigation buttons for the swiper -->
+    <div class="custom-buttons mb-14 w-full min-h-[16rem] flex items-center justify-between absolute inset-0 z-10">
+
+      <!-- Button to navigate to the previous slide -->
+      <button (click)="prevSlide()" class="prev flex items-center justify-center bg-white bg-opacity-55 h-full p-5 rounded-tr-[10px] rounded-br-[10px]">
+        <img src="assets/img_trainee/left_arrow.svg" alt="Previous">
+      </button>
+
+      <!-- Button to navigate to the next slide -->
+      <button (click)="nextSlide()" class="next flex items-center justify-center bg-white bg-opacity-55 h-full p-5 rounded-tl-[10px] rounded-bl-[10px]">
+        <img src="assets/img_trainee/right_arrow.svg" alt="Next">
+      </button>
+    </div>
+
+    <!-- Swiper component with configuration and event binding -->
+    <swiper [config]="config1" (swiper)="onSwiper($event)">
+
+      <!-- Loop through oldContests and create a slide for each contest -->
+      @for (contest of oldContests; track $index) {
+      <ng-template swiperSlide>
+
+        <!-- Card for each contest -->
+        <div class="card w-[350px] h-fit min-h-[16rem] cursor-pointer">
+
+          <!-- Background image container -->
+          <div class="relative bg-img rounded-[20px] w-[350px] min-h-[16rem]">
+
+            <!-- Overlay for text and information -->
+            <div class="absolute text-white inset-0 rounded-[20px] w-full h-full flex items-center justify-center bg-black bg-opacity-55">
+
+              <!-- Container for the contest details -->
+              <div class="flex flex-col items-baseline justify-between p-5 text-white py-7 min-h-[16rem]">
+
+                <!-- Contest name -->
+                <div class="flex flex-col items-baseline">
+                  <h1 class="text-[2rem] font-bold">{{contest.name}}</h1>
+                </div>
+
+                <!-- Contest status and solved count -->
+                <div class="flex items-center justify-between min-w-full">
+
+                  <!-- Time remaining -->
+                  <span class="flex items-center gap-3 text-[1.5rem]">
+                    <i class="fa-regular fa-clock"></i>
+                    <small>Ended In {{contest.endTime | formatDate}}</small>
+                  </span>
+
+                  <!-- Solved problems count -->
+                  <div class="bg-white rounded-full size-14 flex justify-center items-center">
+                    <span class="text-[#E69C24]">
+                      {{contest ? contest.solvedCount : '0'}}/{{contest ? contest.problemCount : '0'}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      }
+    </swiper>
+  </div>
+</div>

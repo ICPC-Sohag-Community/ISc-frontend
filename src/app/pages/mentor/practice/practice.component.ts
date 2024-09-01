@@ -37,10 +37,10 @@ item.state = this.stand[ind].state;
 }
 console.log(i);
 this.serv.upd(i).subscribe((d:ResponseHeader)=>{
-  if(this.stand[ind].state == 1){
+  if(this.stand[ind].state == 1 || this.stand[ind].state == 0){
     this.stand[ind].state = this.stand[ind].state + 1;
   }
-  else{
+  else if(this.stand[ind].state == 2){
     this.stand[ind].state = this.stand[ind].state - 1;
   }
 })
@@ -116,7 +116,7 @@ edi(id:any){
   }
   stat:number = 1
   status(){
-    if(this.stat == 1){
+    if(this.stat == 1 || this.stat == 0){
       this.stat++ ;
     }
     else{
@@ -124,7 +124,7 @@ edi(id:any){
     }
   }
   statEd(){
-    if(this.statusEd == 1){
+    if(this.statusEd == 1 || this.statusEd == 0){
       this.statusEd++ ;
     }
     else{
@@ -168,6 +168,7 @@ edi(id:any){
         this.notes = '';
          this.error = false;
          this.success = true;
+         this.get(localStorage.getItem("camp"));
        }
      })
     }
