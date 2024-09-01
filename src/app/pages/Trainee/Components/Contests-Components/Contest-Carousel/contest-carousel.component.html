@@ -23,10 +23,12 @@
           <!-- Card with background image -->
           <div class="relative bg-img rounded-[20px] w-[350px] min-h-[16rem]">
             <!-- Overlay with lock icon -->
-            <div class="absolute text-white inset-0 rounded-[20px] w-full h-full flex items-center justify-center bg-white bg-opacity-[.30]">
+            <div class="absolute text-white inset-0 rounded-[20px] w-full h-full flex items-center justify-center bg-white bg-opacity-35 z-10">
               <img src="assets/img_trainee/lock.svg">
             </div>
             <!-- Contest Information -->
+            <div class="absolute text-white inset-0 rounded-[20px] w-full h-full flex flex-col items-center justify-around bg-black bg-opacity-40">
+
             <div class="flex flex-col items-baseline justify-between p-5 text-white py-7 min-h-[16rem]">
               <!-- Contest Name -->
               <div class="flex flex-col items-baseline">
@@ -39,6 +41,7 @@
                   <small>Starts In {{contest.startTime | formatDate}}</small>
                 </span>
               </h5>
+            </div>
             </div>
           </div>
         </div>

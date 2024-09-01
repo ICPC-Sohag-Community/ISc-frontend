@@ -36,7 +36,7 @@ export class HomeTraineeComponent implements OnInit, AfterViewInit {
     // Set isLoading to false to hide the loader
     setTimeout(() => {
       this.isLoading = false;
-    }, 350); // Example timeout, replace with real data loading logic
+    }, 700); // Example timeout, replace with real data loading logic
   }
 }
 

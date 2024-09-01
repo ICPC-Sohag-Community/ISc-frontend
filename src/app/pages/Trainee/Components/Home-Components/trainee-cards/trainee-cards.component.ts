@@ -10,14 +10,11 @@ import { FormatDatePipe } from '../../../Pipes/formatte-Date.pipe';
   imports: [CommonModule,FormatDatePipe],
   templateUrl: './trainee-cards.component.html',
   styleUrl: './trainee-cards.component.scss',
-  providers: [DatePipe]
-
 })
 export class TraineeCardsComponent {
 
   // Injected services
   private homeService = inject(HomeService);
-  private datePipe = inject(DatePipe);
 
   // Component state variables
   public currentSheet: CurrentSheet = {
@@ -69,32 +66,40 @@ export class TraineeCardsComponent {
 
   // Fetches the current sheet data from the service
   private loadSheetData(): void {
-    this.homeService.currentSheet.subscribe({
-      next: ( response ) => {
-          this.currentSheet = response; // Update the state with fetched data
+    this.homeService.TraineeCurrentSheet().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.currentSheet = data; // Update the state with fetched data
+        }
       }
     });
   }
 
   // Fetches the incoming contest data from the service
   private loadContestData(): void {
-    this.homeService.inComingContest.subscribe({
-      next: (response) => {
-        this.inComingContest = response; // Update the state with fetched response
-        this.days=response.remainTime.days
-        this.hours=response.remainTime.hours
-        this.min=response.remainTime.minutes
-        this.second=response.remainTime.seconds
-        this.startCountdown()
+    this.homeService.TraineeIncomingContest().subscribe({
+      next: ({statusCode,data}) => {
+        if(statusCode===200){
+        this.inComingContest = data; // Update the state with fetched data
+        this.days=data.remainTime.days
+        this.hours=data.remainTime.hours
+        this.min=data.remainTime.minutes
+        this.second=data.remainTime.seconds
+          if(this.days==0){
+            this.startCountdown()
+          }
+      }
       }
     });
   }
 
   // Fetches the next session data from the service
   private loadSessionData(): void {
-    this.homeService.nextSession.subscribe({
-      next: ( response ) => {
-          this.nextSession = response ; // Update the state with fetched data
+    this.homeService.TraineeNextSession().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.nextSession = data; // Update the state with fetched data
+        }
       }
     });
   }

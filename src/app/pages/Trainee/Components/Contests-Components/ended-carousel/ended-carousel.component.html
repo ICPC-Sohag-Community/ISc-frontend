@@ -8,19 +8,18 @@
   <div class="relative">
 
     <!-- Navigation buttons for the swiper -->
-    <div class="custom-buttons mb-14 w-full min-h-[16rem] flex items-center justify-between absolute inset-0 z-10">
+    <div class="custom-buttons mb-14 relative">
 
       <!-- Button to navigate to the previous slide -->
-      <button (click)="prevSlide()" class="prev flex items-center justify-center bg-white bg-opacity-55 h-full p-5 rounded-tr-[10px] rounded-br-[10px]">
+      <button (click)="prevSlide()" class=" absolute left-0 top-full transform translate-y-[22%] z-10 prev flex items-center justify-center bg-white bg-opacity-55 h-[16rem] p-5 rounded-tr-[10px] rounded-br-[10px]">
         <img src="assets/img_trainee/left_arrow.svg" alt="Previous">
       </button>
 
-      <!-- Button to navigate to the next slide -->
-      <button (click)="nextSlide()" class="next flex items-center justify-center bg-white bg-opacity-55 h-full p-5 rounded-tl-[10px] rounded-bl-[10px]">
+      <!-- Button to navigate to the next slide  -->
+       <button (click)="nextSlide()" class="absolute right-0 top-full transform translate-y-[22%] z-10 h-[16rem] next flex items-center justify-center bg-white bg-opacity-55 h-full p-5 rounded-tl-[10px] rounded-bl-[10px]">
         <img src="assets/img_trainee/right_arrow.svg" alt="Next">
       </button>
     </div>
-
     <!-- Swiper component with configuration and event binding -->
     <swiper [config]="config1" (swiper)="onSwiper($event)">
 
@@ -29,7 +28,7 @@
       <ng-template swiperSlide>
 
         <!-- Card for each contest -->
-        <div class="card w-[350px] h-fit min-h-[16rem] cursor-pointer">
+        <div class="card w-[350px] h-fit min-h-[16rem] cursor-pointer" (click)="openLink(contest.link)">
 
           <!-- Background image container -->
           <div class="relative bg-img rounded-[20px] w-[350px] min-h-[16rem]">
