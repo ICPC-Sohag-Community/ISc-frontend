@@ -1,0 +1,109 @@
+<div class="w-full p-4 space-y-4 sm:p-6 sm:ps-4 sm:space-y-6">
+  <form
+    [formGroup]="addUserForm"
+    (ngSubmit)="craeteUser()"
+    class="w-full py-8 bg-white px-14 rounded-xl"
+  >
+    <div class="flex flex-col gap-y-4">
+      <h2 class="w-full pb-6 text-3xl font-bold border-b-2">
+        @if (id === 0) { Add Camp }@else { Edit Camp }
+      </h2>
+      <div class="flex items-center justify-between w-10/12 ps-4">
+        <div class="flex flex-col basis-1/2">
+          <label for="college"
+            >college <span class="text-red-600">*</span></label
+          >
+          <div class="relative">
+            <ng-select
+              id="college"
+              [items]="allCollega"
+              [closeOnSelect]="true"
+              bindLabel="name"
+              bindValue="id"
+              formControlName="college"
+              [ngClass]="
+                addUserForm.controls['college'].errors && submitted
+                  ? 'border-rose-600 '
+                  : ''
+              "
+              class="relative block w-[450px] my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
+            >
+            </ng-select>
+            <svg
+              width="24"
+              height="24"
+              [ngClass]="foucsCollega ? 'rotate-180' : ''"
+              class="absolute top-[14px] left-52 transition-transform"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
+                stroke="#A8A8A8"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div class="flex flex-col basis-1/2">
+          <label for="college"
+            >college <span class="text-red-600">*</span></label
+          >
+          <div class="relative">
+            <ng-select
+              id="college"
+              [items]="allCollega"
+              [closeOnSelect]="true"
+              bindLabel="name"
+              bindValue="id"
+              formControlName="college"
+              [ngClass]="
+                addUserForm.controls['college'].errors && submitted
+                  ? 'border-rose-600 '
+                  : ''
+              "
+              class="relative block w-[450px] py-4 my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
+            >
+            </ng-select>
+            <svg
+              width="24"
+              height="24"
+              [ngClass]="foucsCollega ? 'rotate-180' : ''"
+              class="absolute top-[14px] left-52 transition-transform"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
+                stroke="#A8A8A8"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end w-11/12 mt-7">
+      <button
+        type="submit"
+        class="px-6 py-1 text-2xl text-white rounded-lg w-fit bg-activeLink"
+      >
+        @if (isLoading) {
+        <div
+          class="w-8 h-8 border-8 border-purple-800 border-dashed rounded-full animate-spin border-t-transparent"
+        ></div>
+        }@else { Save }
+      </button>
+    </div>
+  </form>
+</div>

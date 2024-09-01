@@ -1,0 +1,274 @@
+<div class="flex justify-between items-center pr-10"   >
+    <app-mentor-header></app-mentor-header>
+    <button (click)="show('add')" class="bg-[#3D91C7] hover:bg-blue-600 text-white font-semibold h-[48px] px-4 rounded-[24px]">
+        Add Task
+      </button>
+</div>
+<div *ngIf="id!= null" class="flex justify-around px-8 space-x-4">
+    <!-- To Do Column -->
+    <div class="w-1/3 bg-white rounded-lg shadow p-4" style="border: 0.5px solid #3D91C7">
+      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">To do</h2>
+      <!-- Task Card -->
+      <div *ngIf="tasks[0]">
+        <div id="{{item.taskId}}" *ngFor="let item of tasks[0].trainees ; let i = index" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+        <!-- Avatar and Name -->
+         
+        <div class="flex items-center mb-2 justify-between">
+          <!-- Replace with an img tag for the avatar -->
+          <div class="flex items-center mb-2">
+            <img alt=" " class="w-8 h-8 bg-gray-300 rounded-full mr-2" src="{{item.photoUrl?item.photoUrl : '../../../../../../assets/img/user.jpeg'}}">
+          <span class="font-semibold">{{item.firstName}} {{item.middleName}} {{item.lastName}}  </span>
+          </div>
+          <div class="relative inline-block text-left">
+            <div class="self-start">
+                <button (click)="show('to'+i)" class="self-start"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 10C3.9 10 3 10.9 3 12C3 13.1 3.9 14 5 14C6.1 14 7 13.1 7 12C7 10.9 6.1 10 5 10Z" stroke="#878787" stroke-width="1.5"/>
+                    <path d="M19 10C17.9 10 17 10.9 17 12C17 13.1 17.9 14 19 14C20.1 14 21 13.1 21 12C21 10.9 20.1 10 19 10Z" stroke="#878787" stroke-width="1.5"/>
+                    <path d="M12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" stroke="#878787" stroke-width="1.5"/>
+                    </svg>
+                    </button>
+            </div>
+          
+            <!-- Dropdown Menu -->
+            <div  id="{{'to'+i}}" class="hidden origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div class="py-1">
+               
+                <button (click)="edit(item)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
+                  Edit
+                </button>
+                
+                <button (click)="del(item.taskId)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+          
+            
+        </div>
+        <p class="text-sm">• {{item.title}}</p>
+        <p class="text-sm text-gray-500 text-right">Deadline: {{item.deadLine | utcToLocal}}</p>
+      </div>
+      </div>
+      <!-- Repeat the task card structure for more tasks -->
+    </div>
+  
+    <!-- In Progress Column -->
+    <div class="w-1/3 bg-white rounded-lg shadow p-4"  style="border: 0.5px solid #3D91C7">
+      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">In progress</h2>
+      <!-- Task Card -->
+       <div *ngIf="tasks[1]">
+        <div id="{{item.taskId}}" *ngFor="let item of tasks[1].trainees ; let i = index" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+          <!-- Avatar and Name -->
+          
+          <div class="flex items-center mb-2 justify-between">
+            <!-- Replace with an img tag for the avatar -->
+            <div class="flex items-center mb-2">
+              <img alt=" " class="w-8 h-8 bg-gray-300 rounded-full mr-2" src="{{item.photoUrl?item.photoUrl : '../../../../../../assets/img/user.jpeg'}}">
+            <span class="font-semibold">{{item.firstName}} {{item.middleName}} {{item.lastName}}  </span>
+            </div>
+            <div class="relative inline-block text-left">
+              <div class="self-start">
+                  <button (click)="show('in'+i)" class="self-start"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 10C3.9 10 3 10.9 3 12C3 13.1 3.9 14 5 14C6.1 14 7 13.1 7 12C7 10.9 6.1 10 5 10Z" stroke="#878787" stroke-width="1.5"/>
+                      <path d="M19 10C17.9 10 17 10.9 17 12C17 13.1 17.9 14 19 14C20.1 14 21 13.1 21 12C21 10.9 20.1 10 19 10Z" stroke="#878787" stroke-width="1.5"/>
+                      <path d="M12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" stroke="#878787" stroke-width="1.5"/>
+                      </svg>
+                      </button>
+              </div>
+            
+              <!-- Dropdown Menu -->
+              <div id="{{'in'+i}}" class="hidden origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div class="py-1">
+                
+                  <button (click)="edit(item)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
+                    Edit
+                  </button>
+                  
+                  <button (click)="del(item.taskId)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+              
+          </div>
+          <p class="text-sm">• {{item.title}}</p>
+          <p class="text-sm text-gray-500 text-right">Deadline: {{item.deadLine | utcToLocal}}</p>
+        </div>
+      <!-- Repeat the task card structure for more tasks -->
+        </div>
+    </div>
+  
+    <!-- Done Column -->
+    <div class="w-1/3 bg-white rounded-lg shadow p-4" style="border: 0.5px solid #3D91C7">
+      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Done</h2>
+      <!-- Task Card -->
+       <div *ngIf="tasks[2]">
+      <div id="{{item.taskId}}" *ngFor="let item of tasks[2].trainees ; let i = index" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+        <!-- Avatar and Name -->
+         
+        <div class="flex items-center mb-2 justify-between">
+          <!-- Replace with an img tag for the avatar -->
+          <div class="flex items-center mb-2">
+            <img alt=" " class="w-8 h-8 bg-gray-300 rounded-full mr-2" src="{{item.photoUrl?item.photoUrl : '../../../../../../assets/img/user.jpeg'}}">
+          <span class="font-semibold">{{item.firstName}} {{item.middleName}} {{item.lastName}}  </span>
+          </div>
+          <div class="relative inline-block text-left">
+            <div class="self-start">
+                <button (click)="show('done'+i)" class="self-start"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 10C3.9 10 3 10.9 3 12C3 13.1 3.9 14 5 14C6.1 14 7 13.1 7 12C7 10.9 6.1 10 5 10Z" stroke="#878787" stroke-width="1.5"/>
+                    <path d="M19 10C17.9 10 17 10.9 17 12C17 13.1 17.9 14 19 14C20.1 14 21 13.1 21 12C21 10.9 20.1 10 19 10Z" stroke="#878787" stroke-width="1.5"/>
+                    <path d="M12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" stroke="#878787" stroke-width="1.5"/>
+                    </svg>
+                    </button>
+            </div>
+          
+            <!-- Dropdown Menu -->
+            <div id="{{'done'+i}}" class="hidden origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div class="py-1">
+               
+                <button (click)="edit(item)"   class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
+                  Edit
+                </button>
+                
+                <button (click)="del(item.taskId)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+          
+            
+        </div>
+        <p class="text-sm">• {{item.title}}</p>
+        <p class="text-sm text-gray-500 text-right">Deadline: {{item.deadLine | utcToLocal}}</p>
+      </div>
+    </div>
+      <!-- Repeat the task card structure for more tasks -->
+    </div>
+  </div>
+  <!-- Modal Container -->
+   <div (click)="show('add')" id="add" class="hidden flex items-center justify-center bg-[#D9D9D9B2] h-[calc(100vh-72px)] w-full fixed top-[72px]">
+        <div (click)="handleClick($event)" class="bg-[#F3F3F3] rounded-lg shadow-lg p-6 min-w-[600px]    ">
+            <!-- Assigned to -->
+            <div class="mb-4">
+                
+                <div class="relative mt-2 rounded-[8px] ">
+                    
+                    <div class="flex ">
+                      <button (click)="show('names')" class="w-[160px] ml-2 flex gap-6 items-center border border-[#97979780] rounded-md px-2 py-1">
+                        Assigned to  
+                          <svg [ngClass]="isShow ? 'rotate-180' : ''" class="duration-200" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M2.7193 10.0332L7.06596 5.68654C7.5793 5.1732 8.4193 5.1732 8.93263 5.68654L13.2793 10.0332" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+
+                        </button>
+                        <div  *ngFor="let item of chars ; let i = index" class="text-center" >
+                          <div *ngIf="i<6" class="min-w-[35px] ml-1 py-1 text-white font-bold flex justify-center items-center pr-1 rounded-full bg-[#0D99FF]">{{item}}</div>
+                          <div *ngIf="i==6" class="min-w-[35px] ml-1 py-1 text-white font-bold flex justify-center items-center pr-1 rounded-full bg-[#0D99FF]">...</div>
+                        </div>
+                    </div>
+                    <div id="names" class="hidden origin-top-right absolute left-0 mt-2   rounded-md shadow-lg bg-[#F3F3F3] ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div class="py-1 overflow-auto custom-scrollbar h-60">
+                        <div (click)="gen()"   class="flex cursor-pointer hover:bg-[#0D99FF]  justify-between px-4 py-2 text-sm text-gray-700 ">
+                          General
+                          <div class="w-[18px] hidden" id="gen">
+                            <svg class="ml-1" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M6.00065 14.6673H10.0007C13.334 14.6673 14.6673 13.334 14.6673 10.0007V6.00065C14.6673 2.66732 13.334 1.33398 10.0007 1.33398H6.00065C2.66732 1.33398 1.33398 2.66732 1.33398 6.00065V10.0007C1.33398 13.334 2.66732 14.6673 6.00065 14.6673Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                              <path d="M5.16602 7.99995L7.05268 9.88661L10.8327 6.11328" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                          </div>
+                      </div>
+                        <div (click)="add('n' + item.id , item.id ,item.lastName ,item.firstName )" *ngFor="let item of assign ; let i = index"  class="flex cursor-pointer hover:bg-[#0D99FF]  justify-between px-4 py-2 text-sm text-gray-700 ">
+                          {{item.firstName}} {{item.middleName}} {{item.lastName}}
+                          <div class="w-[18px] hidden" id="n{{item.id}}">
+                            <svg class="ml-1" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M6.00065 14.6673H10.0007C13.334 14.6673 14.6673 13.334 14.6673 10.0007V6.00065C14.6673 2.66732 13.334 1.33398 10.0007 1.33398H6.00065C2.66732 1.33398 1.33398 2.66732 1.33398 6.00065V10.0007C1.33398 13.334 2.66732 14.6673 6.00065 14.6673Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                              <path d="M5.16602 7.99995L7.05268 9.88661L10.8327 6.11328" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                          </div>
+                      </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Due to -->
+            <div class="mb-4 flex gap-6 items-center">
+                <label class="flex items-center block text-sm font-medium ">Due to</label>
+                <input #date type="date" class="mt-2 w-[170px] px-4 py-2 border rounded-lg text-[#979797] focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            </div>
+
+            <!-- Tasks' agenda -->
+            <div class="mb-4">
+                <label class="block text-[20px] font-medium text-[#979797]">Tasks' agenda</label>
+               <div class="border rounded-lg mt-2">
+                <input type="text" disabled placeholder="Tasks" class=" text-black placeholder-black w-full px-4 py-2    ">
+                <div id="tasks" class="max-h-[200px] overflow-auto custom-scrollbar">
+                  <div *ngFor="let i of this.taskNo , let ind = index"  >
+                    <div *ngIf="i!=null" class=" w-full flex justify-between  px-4 py-2 border">
+                      <input type="text" #val name="" id="{{'en'+ind}}" value="{{i}}" (keydown)="en($event, ind , this.val)" disabled>
+                    <p class="flex gap-3 items-center">
+                    <svg (click)="enable('en'+ ind)" class="cursor-pointer" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2.33297 13.6676C2.8863 14.2209 3.77964 14.2209 4.33297 13.6676L12.9996 5.00094C13.553 4.4476 13.553 3.55427 12.9996 3.00094C12.4463 2.4476 11.553 2.4476 10.9996 3.00094L2.33297 11.6676C1.77964 12.2209 1.77964 13.1143 2.33297 13.6676Z" stroke="#52B788" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M12.0068 5.99414L10.0068 3.99414" stroke="#52B788" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M5.66699 1.62732L6.66699 1.33398L6.37366 2.33398L6.66699 3.33398L5.66699 3.04065L4.66699 3.33398L4.96033 2.33398L4.66699 1.33398L5.66699 1.62732Z" stroke="#52B788" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M3 5.62732L4 5.33398L3.70667 6.33398L4 7.33398L3 7.04065L2 7.33398L2.29333 6.33398L2 5.33398L3 5.62732Z" stroke="#52B788" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M13 8.95935L14 8.66602L13.7067 9.66602L14 10.666L13 10.3727L12 10.666L12.2933 9.66602L12 8.66602L13 8.95935Z" stroke="#52B788" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <svg class="cursor-pointer" (click)="removeGrandparent('x' + ind , ind)" id="{{'x' +ind}}" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 3.98763C11.78 3.76763 9.54667 3.6543 7.32 3.6543C6 3.6543 4.68 3.72096 3.36 3.8543L2 3.98763" stroke="#EF4A50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M5.66699 3.31398L5.81366 2.44065C5.92033 1.80732 6.00033 1.33398 7.12699 1.33398H8.87366C10.0003 1.33398 10.087 1.83398 10.187 2.44732L10.3337 3.31398" stroke="#EF4A50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12.5669 6.09375L12.1336 12.8071C12.0603 13.8537 12.0003 14.6671 10.1403 14.6671H5.86026C4.00026 14.6671 3.94026 13.8537 3.86693 12.8071L3.43359 6.09375" stroke="#EF4A50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6.88672 11H9.10672" stroke="#EF4A50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6.33301 8.33398H9.66634" stroke="#EF4A50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>                        
+                    </p>
+                    </div>
+                      
+                      
+                  </div>
+                </div>
+                <input (keydown)="onKeydown($event, this.task)" #task type="text" placeholder="+ Add text " class=" w-full  px-4 py-2 border-t focus:outline-none ">
+               </div>
+            </div>
+
+            <!-- Create Button -->
+            <div class="flex justify-end">
+                <button (click)="create(this.task, this.date)" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    Create
+                </button>
+            </div>
+        </div>
+    </div>
+    <div (click)="show('edit')" id="edit" class="hidden flex items-center justify-center bg-[#D9D9D9B2] h-[calc(100vh-72px)] w-full fixed top-[72px]">
+      <div (click)="handleClick($event)" class="bg-white rounded-lg shadow-lg w-[500px] p-6 relative">
+        <!-- Modal Content -->
+        <div class="flex items-center mb-4">
+            <img src="{{this.ed.photoUrl?? './../../../../../assets/img/user.jpeg'}}" alt="User Image" class="w-10 h-10 rounded-full mr-3">
+            <div>
+                <p class="text-lg font-semibold">{{this.ed.firstName}} {{this.ed.middleName}} {{this.ed.lastName}}</p>
+                <!-- <p class="text-gray-500 text-sm">Deadline: {{this.ed.deadLine | utcToLocal}}</p> -->
+               <label class="text-gray-500 text-sm" for="dateEdit">Deadline: </label>  <input #edDate id="dateEdit" type="date" [value]="formatDate(ed.deadLine)">
+            </div>
+        </div>
+
+        <!-- Task Input -->
+        <input 
+  [value]="ed.title"  
+   #taskEd
+  class="w-full border rounded p-2 mb-16" 
+  >
+
+
+
+        <!-- Action Buttons -->
+        <div class="flex justify-center space-x-2">
+            <button (click)="show('edit')" class="bg-red-500 text-white px-6 py-1 rounded hover:bg-red-600">Cancel</button>
+            <button (click)="updateTitle(this.taskEd, this.edDate)" class="bg-blue-500 text-white px-6 py-1 rounded hover:bg-blue-600">Save</button>
+        </div>
+    </div>
+  </div>
+  
