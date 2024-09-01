@@ -1,14 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { DashboardService } from '../../services/dashboard.service';
 import { dashboardFeedbacks } from '../../model/dashboard';
 import { NgClass } from '@angular/common';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-} from '@angular/animations';
 
 @Component({
   selector: 'app-testimonial',
@@ -17,28 +10,11 @@ import {
   templateUrl: './testimonial.component.html',
   styleUrl: './testimonial.component.scss',
 })
-export class TestimonialComponent implements OnInit {
+export class TestimonialComponent {
+  @Input() inReport: boolean = false;
+  @Input() dashboardFeedbacks: dashboardFeedbacks[] = [];
   dashboardService = inject(DashboardService);
   currentPage: number = 0;
-  dashboardFeedbacks: dashboardFeedbacks[] = [];
-  ngOnInit() {
-    this.fetchDashboardFeedbacks();
-    console.log(this.getStarsArray(4));
-  }
-
-  fetchDashboardFeedbacks(): void {
-    this.dashboardService.dashboardFeedbacks().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
-          this.dashboardFeedbacks = data;
-        } else {
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
-  }
 
   prevTestimonial(): void {
     if (this.currentPage > 0) {

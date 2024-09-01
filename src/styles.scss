@@ -111,7 +111,7 @@
   .ng-select-container
   .ng-value-container
   .ng-value {
-  // font-size: 18px;
+  font-size: 18px;
   padding: 0px 0 0px 14px;
   border: none;
 }
@@ -119,6 +119,7 @@
 .ng-select .ng-select-container,
 .ng-select.ng-select-opened .ng-select-container {
   background-color: transparent;
+  border: none;
 }
 
 .ng-select .ng-select-container .ng-value-container .ng-placeholder {
