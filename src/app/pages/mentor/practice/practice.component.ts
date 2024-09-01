@@ -33,16 +33,17 @@ item.state = this.stand[ind].state;
   "meetingLink": item.meetingLink,
   "note": item.note,
   "time": item.time  ,
-  "state": item.state
+  "state": item.state == 1? 2 : 1
 }
 console.log(i);
 this.serv.upd(i).subscribe((d:ResponseHeader)=>{
-  if(this.stand[ind].state == 1 || this.stand[ind].state == 0){
+  if(this.stand[ind].state == 1){
     this.stand[ind].state = this.stand[ind].state + 1;
   }
-  else if(this.stand[ind].state == 2){
+  else{
     this.stand[ind].state = this.stand[ind].state - 1;
   }
+  console.log(d);
 })
 }
 del(id: any) {
@@ -116,7 +117,7 @@ edi(id:any){
   }
   stat:number = 1
   status(){
-    if(this.stat == 1 || this.stat == 0){
+    if(this.stat == 1){
       this.stat++ ;
     }
     else{
@@ -124,7 +125,7 @@ edi(id:any){
     }
   }
   statEd(){
-    if(this.statusEd == 1 || this.statusEd == 0){
+    if(this.statusEd == 1){
       this.statusEd++ ;
     }
     else{
