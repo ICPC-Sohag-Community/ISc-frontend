@@ -155,7 +155,10 @@
     <div class="basis-[48%] w-60 max-h-[340px]">
       <div class="p-4 bg-transparent border rounded-xl">
         <h2 class="text-3xl font-bold ps-4">Feedback</h2>
-        <app-testimonial />
+        <app-testimonial
+          [inReport]="false"
+          [dashboardFeedbacks]="dashboardFeedbacks"
+        />
       </div>
     </div>
   </div>
