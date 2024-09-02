@@ -12,6 +12,10 @@ export class HomeService {
   inProgress:BehaviorSubject<any>= new BehaviorSubject('')
   done:BehaviorSubject<any>= new BehaviorSubject('')
   toDo:BehaviorSubject<any>= new BehaviorSubject('')
+  nextSession:BehaviorSubject<any>= new BehaviorSubject('')
+  inComingContest:BehaviorSubject<any>= new BehaviorSubject('')
+  currentSheet:BehaviorSubject<any>= new BehaviorSubject('')
+  isLoading:boolean=true
 
   constructor() {}
 
@@ -25,6 +29,12 @@ export class HomeService {
   }
   TraineeNextSession():Observable<any>{
     return this._HttpClient.get( environment.BASE_URL + `/api/Trainee/getNextSession` )
+  }
+  TraineeCanAddFeedBack():Observable<any>{
+    return this._HttpClient.get( environment.BASE_URL + `/api/Trainee/canAddFeedback` )
+  }
+  TraineeFeedBack(model:any):Observable<any>{
+    return this._HttpClient.post( environment.BASE_URL + `/api/Trainee/feedback`,model )
   }
   MentorInfo():Observable<any>{
     return this._HttpClient.get( environment.BASE_URL + `/api/Trainee/mentorInfo` )
@@ -55,6 +65,40 @@ export class HomeService {
         }
       }
     });
+  }
+
+  assignTraineeNextSessionCard():void{
+    this.TraineeNextSession().subscribe({
+      next:({statusCode,data})=>{
+        if(statusCode===200){
+          this.nextSession.next(data)
+        }
+      }
+    })
+  }
+  assignTraineeIncomingContestCard():void{
+    this.isLoading=true
+    this.TraineeIncomingContest().subscribe({
+      next:({statusCode,data})=>{
+        if(statusCode===200){
+          this.inComingContest.next(data)
+          this.isLoading=false
+
+        }
+      },
+      error:(err)=>{
+        this.isLoading=false
+      }
+    })
+  }
+  assignTraineeCurrentSheetCard():void{
+    this.TraineeCurrentSheet().subscribe({
+      next:({statusCode,data})=>{
+        if(statusCode===200){
+          this.currentSheet.next(data)
+        }
+      }
+    })
   }
   getTasksByStatus(data: any, status: number): task[] {
     const statusData = data.find((item: { status: number }) => item.status === status);
