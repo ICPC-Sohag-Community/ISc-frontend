@@ -15,6 +15,7 @@ export class ContestService {
   constructor() {}
 
   assignContests():void{
+    this.isLoading=true
     this.getAllTraineeContest().subscribe({
       next:({statusCode,data})=>{
         if(statusCode===200){

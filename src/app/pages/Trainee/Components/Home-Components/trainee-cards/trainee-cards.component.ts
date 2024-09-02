@@ -66,40 +66,35 @@ export class TraineeCardsComponent {
 
   // Fetches the current sheet data from the service
   private loadSheetData(): void {
-    this.homeService.TraineeCurrentSheet().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
+    this.homeService.currentSheet.subscribe({
+      next: (data) => {
           this.currentSheet = data; // Update the state with fetched data
-        }
       }
     });
   }
 
   // Fetches the incoming contest data from the service
   private loadContestData(): void {
-    this.homeService.TraineeIncomingContest().subscribe({
-      next: ({statusCode,data}) => {
-        if(statusCode===200){
+    this.homeService.inComingContest.subscribe({
+      next: (data) => {
         this.inComingContest = data; // Update the state with fetched data
         this.days=data.remainTime.days
         this.hours=data.remainTime.hours
         this.min=data.remainTime.minutes
         this.second=data.remainTime.seconds
-          if(this.days==0){
-            this.startCountdown()
-          }
-      }
+        this.startCountdown()
+
+
       }
     });
   }
 
   // Fetches the next session data from the service
   private loadSessionData(): void {
-    this.homeService.TraineeNextSession().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
+    this.homeService.nextSession.subscribe({
+      next: (data) => {
           this.nextSession = data; // Update the state with fetched data
-        }
+        
       }
     });
   }
