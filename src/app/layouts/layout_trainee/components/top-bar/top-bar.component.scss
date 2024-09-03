@@ -19,6 +19,9 @@
       width: 100%;
   }
 }
+ul{
+  list-style: none;
+}
 .linkActive {
   color: #E69C24;
   font-weight: 600;
@@ -33,4 +36,11 @@
     transition: width 0.3s ease-in-out;
 }
 }
-
+canvas{
+  min-width: 100%;
+}
+@media screen and (max-width:640px){
+  li{
+    margin: 0!important;
+  }
+}

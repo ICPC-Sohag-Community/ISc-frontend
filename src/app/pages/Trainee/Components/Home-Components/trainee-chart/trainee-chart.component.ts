@@ -28,11 +28,17 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
   // Inject HomeService to interact with backend
   private _homeService = inject(HomeService);
   private _DatePipe = inject(DatePipe);
-  nextPractice:NextPractice={}as NextPractice
+  nextPractice:NextPractice={
+    title:'Practice name',
+    note:' note note note note note note note note notenot e n o te vnotenotenoteno tenotenotenot enotenot enotenotenote note note note',
+    time:'2024-09-03T16:50:36.516Z',
+    meetingLink: "https://icpc.runasp.net/swagger/index.html",
+
+  }as NextPractice
 
   // Lifecycle hook for initialization
   ngOnInit(): void {
-    this.loadNextPracticeData(); // Load data when component initializes
+    // this.loadNextPracticeData(); // Load data when component initializes
   }
 
   // Lifecycle hook that runs after view initialization
@@ -135,13 +141,13 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
   }
 
   // Function to load data for next practice
-  loadNextPracticeData(): void {
-    this._homeService.nextPractice().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
-          this.nextPractice= data // assign data
-        }
-      }
-    });
-  }
+  // loadNextPracticeData(): void {
+  //   this._homeService.nextPractice().subscribe({
+  //     next: ({ statusCode, data }) => {
+  //       if (statusCode === 200) {
+  //         this.nextPractice= data // assign data
+  //       }
+  //     }
+  //   });
+  // }
 }
