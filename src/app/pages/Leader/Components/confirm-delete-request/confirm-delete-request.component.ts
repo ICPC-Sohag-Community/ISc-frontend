@@ -6,19 +6,19 @@ import {
   Output,
   signal,
 } from '@angular/core';
-import { CampLeaderService } from '../../services/camp-leader.service';
+import { RequestsLeaderService } from '../../services/requests-leader.service';
 
 @Component({
-  selector: 'app-confirm-camp',
+  selector: 'app-confirm-delete-request',
   standalone: true,
   imports: [],
-  templateUrl: './confirm-camp.component.html',
-  styleUrl: './confirm-camp.component.scss',
+  templateUrl: './confirm-delete-request.component.html',
+  styleUrl: './confirm-delete-request.component.scss',
 })
-export class ConfirmCampComponent {
-  campLeaderService = inject(CampLeaderService);
-  @Input() itemId: number | null = null;
+export class ConfirmDeleteRequestComponent {
+  @Input() selectedIds: number[] | null = null;
   @Output() closeModal = new EventEmitter<boolean>();
+  requestsLeaderService = inject(RequestsLeaderService);
   isLoading = signal<boolean>(false);
   isDeleted: boolean = false;
 
@@ -31,16 +31,16 @@ export class ConfirmCampComponent {
     }
   }
   confirm() {
-    if (this.itemId !== null) {
-      this.deleteItem(this.itemId);
+    if (this.selectedIds?.length !== 0) {
+      this.deleteItem(this.selectedIds);
     }
   }
-  deleteItem(id: number) {
+
+  deleteItem(ids: any) {
     this.isLoading.set(true);
-    this.campLeaderService.deleteCamp(id).subscribe({
-      next: ({ message, statusCode }) => {
+    this.requestsLeaderService.deleteRequests(ids).subscribe({
+      next: ({ statusCode }) => {
         if (statusCode === 200) {
-          console.log(message);
           this.isLoading.update((v) => (v = false));
           this.isDeleted = true;
         } else {
@@ -51,7 +51,6 @@ export class ConfirmCampComponent {
       error: (err) => {
         console.log(err);
         this.isDeleted = false;
-
         this.isLoading.update((v) => (v = false));
       },
     });

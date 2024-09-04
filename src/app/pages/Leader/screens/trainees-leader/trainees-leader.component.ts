@@ -25,7 +25,7 @@ export class TraineesLeaderComponent implements OnInit {
   rolesService = inject(RolesService);
   casheService = inject(CasheService);
   allTraineesInfo!: TraineeInfo;
-  TraineeInfo!: OnTraineeInfo;
+  traineeInfo!: OnTraineeInfo;
   showSideInfo: boolean = false;
   hideSideInfo: boolean = true;
   selectedTraineeId: string = '';
@@ -36,6 +36,8 @@ export class TraineesLeaderComponent implements OnInit {
   keywordSearch: string = '';
   sortbyNum: number = 0 | 1 | 2;
   deletedRoles: any[] = [];
+  startPageIndex: number = 0;
+  maxVisiblePages: number = 4;
 
   searchForm!: FormGroup;
   ngOnInit() {
@@ -103,7 +105,7 @@ export class TraineesLeaderComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.deletedRoles = [];
-          this.TraineeInfo = data;
+          this.traineeInfo = data;
           this.isLoadingForSide = false;
         } else {
           this.isLoadingForSide = false;
@@ -121,9 +123,9 @@ export class TraineesLeaderComponent implements OnInit {
   }
 
   deleteRole(index: number) {
-    const deletedRole = this.TraineeInfo.userRoles.splice(index, 1)[0];
-    delete deletedRole.campName;
+    const deletedRole = this.traineeInfo.userRoles.splice(index, 1)[0];
     this.deletedRoles.push(deletedRole);
+    // delete deletedRole.campName;
     this.roleInfo = {
       userId: this.selectedTraineeId,
       roleInfos: this.deletedRoles,
@@ -131,7 +133,7 @@ export class TraineesLeaderComponent implements OnInit {
   }
   restoreRole(index: number) {
     const restoredRole = this.deletedRoles.splice(index, 1)[0];
-    this.TraineeInfo.userRoles.push(restoredRole);
+    this.traineeInfo.userRoles.push(restoredRole);
   }
 
   saveDeleteRoles(): void {
@@ -139,7 +141,11 @@ export class TraineesLeaderComponent implements OnInit {
     this.rolesService.unAssignToRole(this.roleInfo).subscribe({
       next: ({ statusCode }) => {
         if (statusCode === 200) {
-          this.getTraineeById(this.selectedTraineeId);
+          if (this.traineeInfo.userRoles.length === 0) {
+            window.location.reload();
+          } else {
+            this.getTraineeById(this.selectedTraineeId);
+          }
           this.isDeleted = false;
         } else {
           this.isDeleted = false;
@@ -172,6 +178,38 @@ export class TraineesLeaderComponent implements OnInit {
         this.sortbyNum
       );
     }
+  }
+
+  getPageRange(): number[] {
+    const totalPages = this.allTraineesInfo.totalPages;
+    const currentPage = this.allTraineesInfo.currentPage;
+    const visiblePages = [];
+
+    if (currentPage > this.startPageIndex + this.maxVisiblePages) {
+      this.startPageIndex = currentPage - this.maxVisiblePages;
+    } else if (currentPage <= this.startPageIndex) {
+      this.startPageIndex = currentPage - 1;
+    }
+
+    const endPage = Math.min(
+      this.startPageIndex + this.maxVisiblePages,
+      totalPages
+    );
+
+    for (let i = this.startPageIndex + 1; i <= endPage; i++) {
+      visiblePages.push(i);
+    }
+
+    return visiblePages;
+  }
+
+  gotoPage(pageNum: number): void {
+    this.traineesWithPagination(
+      pageNum,
+      10,
+      this.keywordSearch,
+      this.sortbyNum
+    );
   }
 
   handleOverlayClick(event: MouseEvent) {

@@ -30,6 +30,7 @@ import { SheetsTraineeComponent } from './pages/Trainee/screens/sheets-trainee/s
 import { ContestTraineeComponent } from './pages/Trainee/screens/contest-trainee/contest-trainee.component';
 
 import { ReportsLeaderComponent } from './pages/Leader/screens/reports-leader/reports-leader.component';
+import { RequestsLeaderComponent } from './pages/Leader/screens/requests-leader/requests-leader.component';
 
 import { StandingTraineeComponent } from './pages/Trainee/screens/standing-trainee/standing-trainee.component';
 
@@ -141,15 +142,21 @@ export const routes: Routes = [
         component: TraineesLeaderComponent,
         title: 'Leader / Trainees - ICPC',
       },
-      {
-        path: 'archive',
-        component: ArchiveLeaderComponent,
-        title: 'Leader / Archive - ICPC',
-      },
+
       {
         path: 'reports',
         component: ReportsLeaderComponent,
         title: 'Leader / reports - ICPC',
+      },
+      {
+        path: 'requests',
+        component: RequestsLeaderComponent,
+        title: 'Leader / requests - ICPC',
+      },
+      {
+        path: 'archive',
+        component: ArchiveLeaderComponent,
+        title: 'Leader / Archive - ICPC',
       },
     ],
   },

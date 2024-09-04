@@ -36,6 +36,8 @@ export class StaffLeaderComponent implements OnInit {
   keywordSearch: string = '';
   sortbyNum: number = 0 | 1 | 2;
   deletedRoles: any[] = [];
+  startPageIndex: number = 0;
+  maxVisiblePages: number = 4;
 
   searchForm!: FormGroup;
   ngOnInit() {
@@ -124,7 +126,7 @@ export class StaffLeaderComponent implements OnInit {
 
   deleteRole(index: number) {
     const deletedRole = this.staffInfo.userRoles.splice(index, 1)[0];
-    delete deletedRole.campName;
+    // delete deletedRole.campName;
     this.deletedRoles.push(deletedRole);
     this.roleInfo = {
       userId: this.selectedStaffId,
@@ -141,7 +143,11 @@ export class StaffLeaderComponent implements OnInit {
     this.rolesService.unAssignToRole(this.roleInfo).subscribe({
       next: ({ statusCode }) => {
         if (statusCode === 200) {
-          this.getStaffById(this.selectedStaffId);
+          if (this.staffInfo.userRoles.length === 0) {
+            window.location.reload();
+          } else {
+            this.getStaffById(this.selectedStaffId);
+          }
           this.isDeleted = false;
         } else {
           this.isDeleted = false;
@@ -174,6 +180,33 @@ export class StaffLeaderComponent implements OnInit {
         this.sortbyNum
       );
     }
+  }
+
+  getPageRange(): number[] {
+    const totalPages = this.allStaffInfo.totalPages;
+    const currentPage = this.allStaffInfo.currentPage;
+    const visiblePages = [];
+
+    if (currentPage > this.startPageIndex + this.maxVisiblePages) {
+      this.startPageIndex = currentPage - this.maxVisiblePages;
+    } else if (currentPage <= this.startPageIndex) {
+      this.startPageIndex = currentPage - 1;
+    }
+
+    const endPage = Math.min(
+      this.startPageIndex + this.maxVisiblePages,
+      totalPages
+    );
+
+    for (let i = this.startPageIndex + 1; i <= endPage; i++) {
+      visiblePages.push(i);
+    }
+
+    return visiblePages;
+  }
+
+  gotoPage(pageNum: number): void {
+    this.staffWithPagination(pageNum, 10, this.keywordSearch, this.sortbyNum);
   }
 
   handleOverlayClick(event: MouseEvent) {

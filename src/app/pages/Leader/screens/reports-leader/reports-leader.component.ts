@@ -60,9 +60,6 @@ export class ReportsLeaderComponent implements OnInit {
           this.baseDataReport = res;
           console.log(this.baseDataReport);
           this.dataReport.push(this.baseDataReport);
-
-          // this.dataReport = [...this.dataReport, this.baseDataReport];
-
           this.isLoading.update((v) => (v = false));
         } else {
           this.isLoading.update((v) => (v = false));
