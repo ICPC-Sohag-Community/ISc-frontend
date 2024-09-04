@@ -10,9 +10,7 @@
       </h2>
       <div class="flex items-center justify-between w-10/12 ps-4">
         <div class="flex flex-col basis-1/2">
-          <label for="college"
-            >college <span class="text-red-600">*</span></label
-          >
+          <label for="college">Camp name</label>
           <div class="relative">
             <ng-select
               id="college"
@@ -21,12 +19,13 @@
               bindLabel="name"
               bindValue="id"
               formControlName="college"
+              [placeholder]="'Name'"
               [ngClass]="
                 addUserForm.controls['college'].errors && submitted
                   ? 'border-rose-600 '
                   : ''
               "
-              class="relative block w-[450px] my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
+              class="relative block w-[450px] placeholder:text-gray-500 my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
             >
             </ng-select>
             <svg
@@ -51,9 +50,7 @@
         </div>
 
         <div class="flex flex-col basis-1/2">
-          <label for="college"
-            >college <span class="text-red-600">*</span></label
-          >
+          <label for="college">college </label>
           <div class="relative">
             <ng-select
               id="college"

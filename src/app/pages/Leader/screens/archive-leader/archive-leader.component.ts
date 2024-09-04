@@ -32,6 +32,8 @@ export class ArchiveLeaderComponent implements OnInit {
   sortbyNum: number = 0 | 1 | 2;
   searchForm!: FormGroup;
   activeTab: string = 'tab1';
+  startPageIndex: number = 0;
+  maxVisiblePages: number = 4;
 
   ngOnInit() {
     this.searchForm = new FormGroup({
@@ -192,6 +194,70 @@ export class ArchiveLeaderComponent implements OnInit {
     }
   }
 
+  getPageRange(): number[] {
+    if (this.activeTab === 'tab1') {
+      const totalPages = this.traineeArchiveInfo.totalPages;
+      const currentPage = this.traineeArchiveInfo.currentPage;
+      const visiblePages = [];
+
+      if (currentPage > this.startPageIndex + this.maxVisiblePages) {
+        this.startPageIndex = currentPage - this.maxVisiblePages;
+      } else if (currentPage <= this.startPageIndex) {
+        this.startPageIndex = currentPage - 1;
+      }
+
+      const endPage = Math.min(
+        this.startPageIndex + this.maxVisiblePages,
+        totalPages
+      );
+
+      for (let i = this.startPageIndex + 1; i <= endPage; i++) {
+        visiblePages.push(i);
+      }
+
+      return visiblePages;
+    } else {
+      const totalPages = this.staffArchiveInfo.totalPages;
+      const currentPage = this.staffArchiveInfo.currentPage;
+      const visiblePages = [];
+
+      if (currentPage > this.startPageIndex + this.maxVisiblePages) {
+        this.startPageIndex = currentPage - this.maxVisiblePages;
+      } else if (currentPage <= this.startPageIndex) {
+        this.startPageIndex = currentPage - 1;
+      }
+
+      const endPage = Math.min(
+        this.startPageIndex + this.maxVisiblePages,
+        totalPages
+      );
+
+      for (let i = this.startPageIndex + 1; i <= endPage; i++) {
+        visiblePages.push(i);
+      }
+
+      return visiblePages;
+    }
+  }
+
+  gotoPage(pageNum: number): void {
+    if (this.activeTab === 'tab1') {
+      this.traineesWithPagination(
+        pageNum,
+        10,
+        this.keywordSearch,
+        this.sortbyNum
+      );
+    } else {
+      this.staffArchiveWithPagination(
+        pageNum,
+        10,
+        this.keywordSearch,
+        this.sortbyNum
+      );
+    }
+  }
+
   previousPage() {
     if (this.activeTab === 'tab1') {
       if (this.traineeArchiveInfo.hasPreviousPage) {
@@ -213,10 +279,11 @@ export class ArchiveLeaderComponent implements OnInit {
       }
     }
   }
-
+  closeSort() {}
   handleOverlayClick(event: MouseEvent) {
     if ((event.target as HTMLElement).classList.contains('fixed')) {
       this.handleClose();
+      this.closeSort();
     }
   }
 
