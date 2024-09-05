@@ -1,0 +1,36 @@
+<div class="flex flex-col items-center justify-center min-h-screen px-4 bg-gray-50">
+    <!-- Logo Section -->
+    <img src="./../../../../assets/img/IcpcLogo.svg" alt="Logo" class="block w-[300px] " />
+    <div class="bg-[#337CAA] rounded-[12px] px-3 py-2 my-4">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M34.9672 7.4332L18.3339 13.6999C14.5005 15.1332 11.3672 19.6665 11.3672 23.7332V48.4999C11.3672 52.4332 13.9672 57.5999 17.1339 59.9665L31.4672 70.6665C36.1672 74.1999 43.9005 74.1999 48.6005 70.6665L62.9339 59.9665C66.1005 57.5999 68.7005 52.4332 68.7005 48.4999V23.7332C68.7005 19.6332 65.5672 15.0999 61.7339 13.6665L45.1005 7.4332C42.2672 6.39987 37.7339 6.39987 34.9672 7.4332Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            
+    </div>       
+        
+    <!-- Title Section -->
+    <h2 class="text-xl font-semibold mb-2">Enter your code</h2>
+    <p class="text-gray-600 mb-6">
+      OTP has been sent to <span class="font-semibold text-black">ggg&#64;gmail.com</span>
+    </p>
+  
+    <!-- OTP Input Section -->
+    <div class="flex space-x-2 mb-4">
+      <input type="text" #a maxlength="1" class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <input type="text" #b maxlength="1" class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <input type="text" #c maxlength="1" class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <input type="text" #d maxlength="1" class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+    </div>
+    <div *ngIf="check" class="text-[#DC3545] text-center text-sm mt-3">
+      incorrect OTP
+  </div>
+    <button (click)="get(email , a.value + b.value + c.value +d.value)" class="block px-6 py-2 text-center rounded-xl mt-5 bg-gradient-to-r from-[#3D91C7] via-[#3591C9] to-[#63ABFD]">
+    Send OTP
+  </button>
+    <!-- Resend Section -->
+    <p class="text-gray-600">
+      Don’t receive the email? 
+      <a href="#" class=" font-bold underline">Resend</a>
+    </p>
+  </div>
+  

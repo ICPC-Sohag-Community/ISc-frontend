@@ -19,6 +19,8 @@ import { TraineesComponent } from './pages/mentor/trainees/trainees.component';
 import { AttendanceComponent } from './pages/mentor/attendance/attendance.component';
 import { StandingsComponent } from './pages/mentor/standings/standings.component';
 import { TrackingComponent } from './pages/mentor/tracking/tracking.component';
+import { TasksComponent } from './pages/mentor/tasks/tasks.component';
+import { PracticeComponent } from './pages/mentor/practice/practice.component';
 
 import { CampsLeaderComponent } from './pages/Leader/screens/camps-leader/camps-leader.component';
 import { ActiosCampComponent } from './pages/Leader/screens/actios-camp/actios-camp.component';
@@ -28,6 +30,11 @@ import { TraineesLeaderComponent } from './pages/Leader/screens/trainees-leader/
 import { ArchiveLeaderComponent } from './pages/Leader/screens/archive-leader/archive-leader.component';
 import { SheetsTraineeComponent } from './pages/Trainee/screens/sheets-trainee/sheets-trainee.component';
 import { ContestTraineeComponent } from './pages/Trainee/screens/contest-trainee/contest-trainee.component';
+import { LoginLayoutComponent } from './layouts/login/login-layout/login-layout.component';
+import { LogComponent } from './pages/login/log/log.component';
+import { ForgetComponent } from './pages/login/forget/forget.component';
+import { OtpComponent } from './pages/login/otp/otp.component';
+import { SetpassComponent } from './pages/login/setpass/setpass.component';
 
 import { ReportsLeaderComponent } from './pages/Leader/screens/reports-leader/reports-leader.component';
 import { RequestsLeaderComponent } from './pages/Leader/screens/requests-leader/requests-leader.component';
@@ -37,12 +44,12 @@ import { StandingTraineeComponent } from './pages/Trainee/screens/standing-train
 
 export const routes: Routes = [
   // Auth Pages
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [authGuardLoggdIn],
-    title: 'Login - ICPC',
-  },
+  // {
+  //   path: 'login',
+  //   component: LoginComponent,
+  //   canActivate: [authGuardLoggdIn],
+  //   title: 'Login - ICPC',
+  // },
   // {
   //   path: 'register',
   //   component: RegisterComponent,
@@ -202,6 +209,79 @@ export const routes: Routes = [
         component: TrackingComponent,
         title: 'mentor / Tracking - ICPC',
       },
+      {
+        path: 'tasks',
+        component: TasksComponent,
+        title: 'mentor / Tasks - ICPC',
+      },
+      {
+        path: 'practice',
+        component: PracticeComponent,
+        title: 'mentor / Practice - ICPC',
+      }
+     
+    ],
+  }
+  
+
+    
+  // {
+
+  //   path: 'head-of-camp',
+  //   component: HocLayoutComponent,
+  //   canActivate: [authGuard],
+
+  //   path: 'head_of_camp',
+  //   component: HOCDashboardComponent,
+  //   canActivate: [authGuard, rolesGuard],
+
+  //   title: 'HOC - Dashboard',
+  //   children: [
+  //     {
+  //       path: '',
+  //       component: DashComponent,
+
+      
+  //       title: 'HOC / Dashboard - ICPC',
+  //     }
+
+
+  //   ]
+  // }
+  ,{
+    path: 'login',
+    component: LoginLayoutComponent,
+    canActivate: [authGuardLoggdIn],
+    title: 'Login',
+    children: [
+      {
+        path: '',
+        component: LogComponent,
+        title: 'Login',
+      },
+      {
+        path: 'forget',
+        component: ForgetComponent,
+        title: 'Forget Password',
+      },
+      {
+        path: 'set/:token/:email',
+        component: SetpassComponent,
+        title: 'Reset Password',
+      }
+     
+    ],
+  },
+  {
+    path: 'otp/:email',
+    component: OtpComponent,
+    canActivate: [authGuardLoggdIn],
+    title: 'OTP',
+    children: [
+      
+    ],
+  }
+]
     ],
   },
 ];

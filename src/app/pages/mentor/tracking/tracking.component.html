@@ -1,9 +1,12 @@
-<app-mentor-header></app-mentor-header>
-<div class="p-4">
-    <div class="flex mb-12 mt-[-30px] ml-6 gap-3">
-      <button (click)="she()" id="she" class="border text-[#3591C9] border-[#3591C9] text-[20px] px-4 py-2 rounded-[12px]">Sheets</button>
-      <button (click)="cont()" id="cont" class="bg-[#3591C9] text-[20px] text-white px-4 py-2 rounded-[12px]">Contests</button>
-    </div>
+<div class="flex px-12 justify-between pb-4">
+  <div class="flex gap-3 items-end">
+    <button (click)="she()" id="she" class=" h-[60px] border text-[#3591C9] border-[#3591C9] text-[20px] px-8  rounded-[12px]">Sheets</button>
+    <button (click)="cont()" id="cont" class="bg-[#3591C9] h-[60px]  text-[20px] text-white px-8  rounded-[12px]">Contests</button>
+  </div>
+  <app-mentor-header></app-mentor-header>
+</div>
+<div class="p-4" >
+    
     <!-- <div class="overflow-x-auto custom-scrollbar w-[] bg-white rounded-[20px]">
       <table class="min-w-full hover-table ">
         <thead>
@@ -47,7 +50,7 @@
         </tbody>
       </table>
     </div> -->
-    <div id="contest" class="hidden overflow-auto custom-scrollbar w-[96vw] m-auto bg-white rounded-[20px]">
+    <div *ngIf="id != null" id="contest" class="h-[calc(100vh-200px)] hidden overflow-auto custom-scrollbar w-[96vw] m-auto bg-white rounded-[20px]">
         <table class="hover-table overflow-x-auto custom-scrollbar ">
           <thead>
             <tr>
@@ -59,7 +62,7 @@
           <tbody>
             <tr *ngFor="let shee of this.sheet.sheets , let i = index">
               <td  class="border-t border-r border-b border-gray-300 px-4 py-4 text-center">{{shee.name}}</td>
-              <td *ngFor="let track of this.sheet.trainees" class="border-t border-b border-gray-300 px-4 py-4 text-center">{{track.tracking != null ? track.tracking[i].solvedProblems : "false"}}/{{shee.problemCount}}</td>
+              <td *ngFor="let track of this.sheet.trainees" class="border-t border-b border-l border-gray-300 px-4 py-4 text-center">{{track.tracking != null ? track.tracking[i].solvedProblems : "false"}}/{{shee.problemCount}}</td>
               
             </tr>
             <!-- Repeat rows for each contest -->
@@ -68,7 +71,7 @@
           </tbody>
         </table>
       </div>
-      <div id="sheet" class=" h-[calc(100vh-200px)] overflow-auto custom-scrollbar w-[96vw] m-auto bg-white rounded-[20px]">
+      <div *ngIf="id != null" id="sheet" class=" h-[calc(100vh-200px)] overflow-auto custom-scrollbar w-[96vw] m-auto bg-white rounded-[20px]">
         <table class="hover-table overflow-x-auto custom-scrollbar ">
           <thead>
             <tr>
@@ -80,7 +83,7 @@
           <tbody>
             <tr *ngFor="let shee of this.contest.contests , let i = index">
               <td  class="border-t border-r border-b border-gray-300 px-4 py-4 text-center">{{shee.name}}</td>
-              <td *ngFor="let track of this.contest.trainees" class="border-t border-b border-gray-300 px-4 py-4 text-center">{{track.tracking[i].solvedProblems}}/{{shee.problemCount}}</td>
+              <td *ngFor="let track of this.contest.trainees" class="border-t border-b border-l border-gray-300 px-4 py-4 text-center">{{track.tracking[i].solvedProblems}}/{{shee.problemCount}}</td>
               
             </tr>
             <!-- Repeat rows for each contest -->

@@ -15,7 +15,7 @@ export class MentorHeaderComponent {
 change(id:any , name:any) {
   this.campid = id;
 this.campName = name;
-this.train(this.campid , this.campName);
+// this.train(this.campid , this.campName);
 
 }
   camps: any;
@@ -54,8 +54,10 @@ this.train(this.campid , this.campName);
           localStorage.setItem("camp" , this.campid);
           
           localStorage.setItem("cName" , this.campName);
+          this.campName = localStorage.getItem("cName")?localStorage.getItem("cName"): 'Select Camp';
+          this.get();
+          
           window.location.reload();
-
         } else {
           this.trainees =  null;
           console.error('Error:', response.message);

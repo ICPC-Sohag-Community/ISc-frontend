@@ -18,7 +18,7 @@
       [ngClass]="isShow ? 'block' : 'hidden'"
       class="absolute border rounded-xl bg-[#EEEEEE] z-50  w-[200px] text-[20px]  mt-2 transition-all duration-500 py-3 "
     >
-      <button *ngFor="let camp of camps; let i = index" (click)="change(camp.id , camp.name)" class="block w-full pl-[32px] text-left hover:bg-[#3591C9] hover:text-white">{{camp.name}} </button> <hr>
+      <button *ngFor="let camp of camps; let i = index" (click)="train(camp.id , camp.name)" class="block w-full pl-[32px] text-left hover:bg-[#3591C9] hover:text-white">{{camp.name}} </button> <hr>
 
     </div>
   </div>

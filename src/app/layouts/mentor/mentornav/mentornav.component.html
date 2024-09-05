@@ -1,11 +1,11 @@
-<nav class="h-[72px] flex justify-between items-center  bg-[#E7E7E9]" style="box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.25);">
+<nav class="h-[72px] z-50 flex justify-between items-center  bg-[#E7E7E9]" style="box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.25);">
 <div class="flex gap-[30px] pl-[30px] h-[72px] items-center text-[20px] sections">
-    <a  href="#" class="text-[#3591C9]">Trainees</a>
-    <a href="#" >Attendance</a>
-    <a href="#" >Standing</a>
-    <a href="#" >Tracking</a>
-    <a href="#" >Tasks</a>
-    <a href="#" >Practice</a>
+    <a  routerLink="/mentor/" routerLinkActive="text-[#3591C9]" [routerLinkActiveOptions]="{ exact: true }">Trainees</a>
+    <a routerLink="/mentor/attendance" routerLinkActive="text-[#3591C9]">Attendance</a>
+    <a routerLink="/mentor/standings" routerLinkActive="text-[#3591C9]" >Standing</a>
+    <a routerLink="/mentor/tracking" routerLinkActive="text-[#3591C9]" >Tracking</a>
+    <a routerLink="/mentor/tasks" routerLinkActive="text-[#3591C9]" >Tasks</a>
+    <a routerLink="/mentor/practice" routerLinkActive="text-[#3591C9]" >Practice</a>
 </div>
 <div class="flex h-[72px] items-center gap-3 mr-[25px]">
   <button>
