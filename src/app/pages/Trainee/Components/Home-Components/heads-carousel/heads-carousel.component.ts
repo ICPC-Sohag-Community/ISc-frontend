@@ -32,9 +32,11 @@ export class HeadsCarouselComponent implements OnInit {
 
   // Method to load mentor data from service
   loadHeadsData(): void {
-    this._homeService.heads.subscribe({
-      next: (response) => {
-          this.mentors = response; // Set mentors data on successful response
+    this._homeService.HeadsInfo().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.mentors = data; // Set mentors data on successful response
+        }
       }
     });
   }

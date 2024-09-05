@@ -153,15 +153,14 @@
       Previous
     </button>
     <div class="flex items-center space-x-2">
-      @for (page of [].constructor(allCampsInfo.totalPages); track page; let i =
-      $index) {
+      @for (page of getPageRange(); track page; let i = $index) {
       <button
         class="px-3 py-1 font-bold rounded-tr-lg rounded-bl-lg rounded-br-lg text-activeLink"
-        (click)="fetchAllWithPagination(i + 1, 10)"
-        [class.bg-blue-500]="allCampsInfo.currentPage === i + 1"
-        [class.text-white]="allCampsInfo.currentPage === i + 1"
+        (click)="gotoPage(page)"
+        [class.bg-blue-500]="page === allCampsInfo.currentPage"
+        [class.text-white]="page === allCampsInfo.currentPage"
       >
-        {{ i + 1 }}
+        {{ page }}
       </button>
       }
     </div>

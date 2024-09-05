@@ -4,17 +4,18 @@
   background-position: center;
   background-repeat: no-repeat;
   color: #fff;
-  small{
-    font-size: 14px;
-    color: #fff;
-    font-weight: 500;
-    line-height: 30.26px;
-  }
+
   h5{
     font-weight: 700;
     line-height: 45.1px;
-    text-align: left;
+    // text-align: left;
   }
+}
+small{
+  font-size: 14px;
+  color: #fff;
+  font-weight: 500;
+  line-height: 30.26px;
 }
 @media screen and (max-width:640px) {
   .header-content{
@@ -24,6 +25,10 @@
     width: 95%;
     margin: 0 auto;
     margin-bottom: 15px;
+  }
+  small{
+    font-size: 12px;
+    text-wrap: nowrap;
   }
 }
 

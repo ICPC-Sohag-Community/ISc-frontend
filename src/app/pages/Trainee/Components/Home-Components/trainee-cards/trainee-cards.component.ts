@@ -10,14 +10,11 @@ import { FormatDatePipe } from '../../../Pipes/formatte-Date.pipe';
   imports: [CommonModule,FormatDatePipe],
   templateUrl: './trainee-cards.component.html',
   styleUrl: './trainee-cards.component.scss',
-  providers: [DatePipe]
-
 })
 export class TraineeCardsComponent {
 
   // Injected services
   private homeService = inject(HomeService);
-  private datePipe = inject(DatePipe);
 
   // Component state variables
   public currentSheet: CurrentSheet = {
@@ -70,8 +67,8 @@ export class TraineeCardsComponent {
   // Fetches the current sheet data from the service
   private loadSheetData(): void {
     this.homeService.currentSheet.subscribe({
-      next: ( response ) => {
-          this.currentSheet = response; // Update the state with fetched data
+      next: (data) => {
+          this.currentSheet = data; // Update the state with fetched data
       }
     });
   }
@@ -79,13 +76,15 @@ export class TraineeCardsComponent {
   // Fetches the incoming contest data from the service
   private loadContestData(): void {
     this.homeService.inComingContest.subscribe({
-      next: (response) => {
-        this.inComingContest = response; // Update the state with fetched response
-        this.days=response.remainTime.days
-        this.hours=response.remainTime.hours
-        this.min=response.remainTime.minutes
-        this.second=response.remainTime.seconds
+      next: (data) => {
+        this.inComingContest = data; // Update the state with fetched data
+        this.days=data.remainTime.days
+        this.hours=data.remainTime.hours
+        this.min=data.remainTime.minutes
+        this.second=data.remainTime.seconds
         this.startCountdown()
+
+
       }
     });
   }
@@ -93,46 +92,51 @@ export class TraineeCardsComponent {
   // Fetches the next session data from the service
   private loadSessionData(): void {
     this.homeService.nextSession.subscribe({
-      next: ( response ) => {
-          this.nextSession = response ; // Update the state with fetched data
+      next: (data) => {
+          this.nextSession = data; // Update the state with fetched data
+
       }
     });
   }
 
   // Formats event start and end dates into a human-readable string
   // Example: (startDate, endDate) -> "Thursday 22/08 Starting from 10:00 AM to 04:00 PM"
-  public formatEventDates(startDate: string, endDate: string): string {
-    if(startDate && endDate){
-      const start = new Date(startDate);
-    const end = new Date(endDate);
+  public formatEventDates(startDate: string, endDate: string, detailed: boolean): string {
+    if (startDate && endDate) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
 
-    // Extract day of the week
-    const day = start.toLocaleString('en-US', { weekday: 'long' });
+        // Extract day of the week
+        const day = start.toLocaleString('en-US', { weekday: 'long' });
 
-    // Format the date to "dd/mm" without the year
-    const datePart = start.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' });
+        // Format the date to "dd/mm/yyyy" without the year for detailed view
+        const datePart = start.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-    // Format the start time in 12-hour format with AM/PM
-    const startTime = start.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    });
+        // Format start and end time
+        const startTime = start.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+        });
+        const endTime = end.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+        });
 
-    // Format the end time in 12-hour format with AM/PM
-    const endTime = end.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    });
-
-    // Combine all parts into the final string
-    return `${day} ${datePart} Starting from ${startTime} to ${endTime}`;
+        if (detailed) {
+            // Detailed format
+            return `${day} ${datePart} Starting from ${startTime} to ${endTime}`;
+        } else {
+            // Simple format
+            const simpleDatePart = start.toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric', year: 'numeric' });
+            return `${day} ${simpleDatePart}, ${startTime} to ${endTime}`;
+        }
+    } else {
+        return 'No Date';
     }
-    else{
-      return 'No Date'
-    }
-  }
+}
+
 
   //counter
   public startCountdown(): void {

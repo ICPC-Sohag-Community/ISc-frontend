@@ -65,7 +65,7 @@
 
 .focus\:outline-none:focus {
   outline: none;
-  border: none;
+  // border: none;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
@@ -96,8 +96,6 @@
 }
 .ng-select,
 .ng-select:focus {
-  height: 38px;
-  border: none;
   outline: none;
   cursor: none;
 }
@@ -111,7 +109,7 @@
   .ng-select-container
   .ng-value-container
   .ng-value {
-  // font-size: 18px;
+  font-size: 18px;
   padding: 0px 0 0px 14px;
   border: none;
 }
@@ -122,8 +120,11 @@
 }
 
 .ng-select .ng-select-container .ng-value-container .ng-placeholder {
-  color: #fff;
   font-size: 18px;
   font-weight: 500;
+}
+
+.ng-select .ng-select-container {
+  height: 100% !important;
 }
 @import "../node_modules/@ng-select/ng-select/themes/default.theme.css";

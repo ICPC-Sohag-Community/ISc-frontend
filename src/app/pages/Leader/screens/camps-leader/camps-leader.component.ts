@@ -23,6 +23,8 @@ export class CampsLeaderComponent implements OnInit {
   selectedItemId: number | null = null;
   selectedEmptyId: number | null = null;
   isLoading = signal<boolean>(false);
+  startPageIndex: number = 0;
+  maxVisiblePages: number = 4;
   ngOnInit() {
     this.fetchAllWithPagination(1, 10);
   }
@@ -82,6 +84,33 @@ export class CampsLeaderComponent implements OnInit {
     if (this.allCampsInfo.hasPreviousPage) {
       this.fetchAllWithPagination(this.allCampsInfo.currentPage - 1, 10);
     }
+  }
+
+  getPageRange(): number[] {
+    const totalPages = this.allCampsInfo.totalPages;
+    const currentPage = this.allCampsInfo.currentPage;
+    const visiblePages = [];
+
+    if (currentPage > this.startPageIndex + this.maxVisiblePages) {
+      this.startPageIndex = currentPage - this.maxVisiblePages;
+    } else if (currentPage <= this.startPageIndex) {
+      this.startPageIndex = currentPage - 1;
+    }
+
+    const endPage = Math.min(
+      this.startPageIndex + this.maxVisiblePages,
+      totalPages
+    );
+
+    for (let i = this.startPageIndex + 1; i <= endPage; i++) {
+      visiblePages.push(i);
+    }
+
+    return visiblePages;
+  }
+
+  gotoPage(pageNum: number): void {
+    this.fetchAllWithPagination(pageNum, 10);
   }
 
   goToActionCamp(id: number): void {

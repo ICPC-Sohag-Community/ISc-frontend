@@ -9,11 +9,5 @@ import { SheetsComponent } from '../../Components/Sheets-Components/sheets/sheet
   styleUrl: './sheets-trainee.component.scss'
 })
 export class SheetsTraineeComponent {
-  isLoading = true; // Initially show the loader
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 700);
-  }
 }

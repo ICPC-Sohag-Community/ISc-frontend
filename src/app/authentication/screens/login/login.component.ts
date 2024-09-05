@@ -44,8 +44,6 @@ export class LoginComponent {
 
   onLogin() {
     this.submitted = true;
-    console.log(this.loginForm.value);
-
     if (this.loginForm.invalid) {
       alert('تأكد من إدخال البيانات');
       return;
