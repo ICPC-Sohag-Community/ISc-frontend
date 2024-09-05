@@ -1,5 +1,9 @@
 <div
-  [ngClass]="showFilterModel ? '' : 'space-y-4 sm:p-6 sm:ps-4 sm:space-y-6'"
+  [ngClass]="
+    showFilterModel
+      ? 'space-y-4 sm:p-6 sm:ps-4 sm:space-y-6'
+      : 'space-y-4 sm:p-6 sm:ps-4 sm:space-y-6'
+  "
   class="relative w-full p-4"
 >
   <div class="flex items-center justify-between ps-2 pe-8">
@@ -122,7 +126,7 @@
             <th class="p-4">
               <input
                 type="checkbox"
-                class="w-5 h-5 text-blue-600 form-checkbox"
+                class="w-5 h-5 text-blue-600"
                 (change)="toggleAll($event)"
                 [checked]="areAllItemsSelected()"
               />
@@ -160,16 +164,16 @@
             <td class="px-4 py-2 text-left rounded-s-lg whitespace-nowrap">
               {{ item.firstName }} {{ item.middleName }} {{ item.lastName }}
             </td>
-            <!-- <td class="p-4">{{ item.email }}</td> -->
-            <!-- <td class="p-4">{{ item.phone }}</td> -->
+            <td class="p-4">{{ item.email }}</td>
+            <td class="p-4">{{ item.phone }}</td>
             <td class="p-4">{{ item.codeForceHandle }}</td>
-            <!-- <td class="p-4 whitespace-nowrap">{{ item.vjudge }}</td> -->
-            <!-- <td class="p-4">{{ item.facebookLink }}</td> -->
-            <td class="p-4">{{ item.hasLaptop }}</td>
+            <td class="p-4 whitespace-nowrap">{{ item.vjudge }}</td>
+            <td class="p-4">{{ item.facebookLink }}</td>
+            <td class="p-4">@if (item.hasLaptop) { Yes }@else { NO }</td>
             <td class="p-4 whitespace-nowrap">{{ item.college }}</td>
             <td class="p-4">{{ item.grade }}</td>
-            <!-- <td class="p-4 whitespace-nowrap">{{ item.nationalId }}</td> -->
-            <!-- <td class="p-4 whitespace-nowrap">{{ item.birthDate }}</td> -->
+            <td class="p-4 whitespace-nowrap">{{ item.nationalId }}</td>
+            <td class="p-4 whitespace-nowrap">{{ item.birthDate }}</td>
             <td class="p-4">
               @if (item.gender === 0) { Male }@else { Female }
             </td>
@@ -197,6 +201,7 @@
         <app-system-filter
           (saveFilter)="handleSaveFilter($event)"
           (closeModal)="closeConfirmFilter()"
+          [filterValues]="filters"
         />
       </div>
     </div>
