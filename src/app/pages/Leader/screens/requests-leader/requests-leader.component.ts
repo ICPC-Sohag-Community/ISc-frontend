@@ -59,7 +59,7 @@ export class RequestsLeaderComponent implements OnInit {
   showFilterModel: boolean = false;
   showSubmitModel: boolean = false;
   pageNumber: number = 1;
-  pageSize: number = 12;
+  pageSize: number = 20;
   sortbyNum: number = 0 | 1 | 2 | 3;
   applySystemFilter: boolean = false;
   filters: any;
@@ -108,10 +108,12 @@ export class RequestsLeaderComponent implements OnInit {
 
   sortTrainee(item: any): void {
     this.sortbyNum = item;
+    this.dataRequest = [];
     this.settingsFilterRequest = {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
       campId: this.campId,
+      sortBy: this.sortbyNum,
       applySystemFilter: this.applySystemFilter,
       filters: this.filters,
     };

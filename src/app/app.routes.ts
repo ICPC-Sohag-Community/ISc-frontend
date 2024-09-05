@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard, authGuardLoggdIn } from './authentication/guard/auth.guard';
 import { rolesGuard } from './authentication/guard/roles.guard';
-import { LoginComponent } from './authentication/screens/login/login.component';
 import { LayoutLeaderComponent } from './layouts/layout_leader/layout-leader.component';
 import { DashboardComponent } from './pages/Leader/screens/dashboard/dashboard.component';
 import { LayoutTraineeComponent } from './layouts/layout_trainee/layout-trainee.component';
@@ -41,26 +40,7 @@ import { RequestsLeaderComponent } from './pages/Leader/screens/requests-leader/
 
 import { StandingTraineeComponent } from './pages/Trainee/screens/standing-trainee/standing-trainee.component';
 
-
 export const routes: Routes = [
-  // Auth Pages
-  // {
-  //   path: 'login',
-  //   component: LoginComponent,
-  //   canActivate: [authGuardLoggdIn],
-  //   title: 'Login - ICPC',
-  // },
-  // {
-  //   path: 'register',
-  //   component: RegisterComponent,
-  //   canActivate: [authGuardLoggdIn],
-  // },
-  // {
-  //   path: 'confirm-email',
-  //   component: ConfirmEmailComponent,
-  //   canActivate: [authGuardLoggdIn],
-  // },
-
   // Trainee Pages
   {
     path: 'trainee',
@@ -218,13 +198,10 @@ export const routes: Routes = [
         path: 'practice',
         component: PracticeComponent,
         title: 'mentor / Practice - ICPC',
-      }
-     
+      },
     ],
-  }
-  
+  },
 
-    
   // {
 
   //   path: 'head-of-camp',
@@ -241,14 +218,12 @@ export const routes: Routes = [
   //       path: '',
   //       component: DashComponent,
 
-      
   //       title: 'HOC / Dashboard - ICPC',
   //     }
 
-
   //   ]
   // }
-  ,{
+  {
     path: 'login',
     component: LoginLayoutComponent,
     canActivate: [authGuardLoggdIn],
@@ -268,8 +243,7 @@ export const routes: Routes = [
         path: 'set/:token/:email',
         component: SetpassComponent,
         title: 'Reset Password',
-      }
-     
+      },
     ],
   },
   {
@@ -277,11 +251,6 @@ export const routes: Routes = [
     component: OtpComponent,
     canActivate: [authGuardLoggdIn],
     title: 'OTP',
-    children: [
-      
-    ],
-  }
-]
-    ],
+    children: [],
   },
 ];
