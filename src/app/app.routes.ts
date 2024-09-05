@@ -30,16 +30,21 @@ import { TraineesLeaderComponent } from './pages/Leader/screens/trainees-leader/
 import { ArchiveLeaderComponent } from './pages/Leader/screens/archive-leader/archive-leader.component';
 import { SheetsTraineeComponent } from './pages/Trainee/screens/sheets-trainee/sheets-trainee.component';
 import { ContestTraineeComponent } from './pages/Trainee/screens/contest-trainee/contest-trainee.component';
+import { LoginLayoutComponent } from './layouts/login/login-layout/login-layout.component';
+import { LogComponent } from './pages/login/log/log.component';
+import { ForgetComponent } from './pages/login/forget/forget.component';
+import { OtpComponent } from './pages/login/otp/otp.component';
+import { SetpassComponent } from './pages/login/setpass/setpass.component';
 
 
 export const routes: Routes = [
   // Auth Pages
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [authGuardLoggdIn],
-    title: 'Login - ICPC',
-  },
+  // {
+  //   path: 'login',
+  //   component: LoginComponent,
+  //   canActivate: [authGuardLoggdIn],
+  //   title: 'Login - ICPC',
+  // },
   // {
   //   path: 'register',
   //   component: RegisterComponent,
@@ -226,4 +231,37 @@ export const routes: Routes = [
 
   //   ]
   // }
+  ,{
+    path: 'login',
+    component: LoginLayoutComponent,
+    canActivate: [authGuardLoggdIn],
+    title: 'Login',
+    children: [
+      {
+        path: '',
+        component: LogComponent,
+        title: 'Login',
+      },
+      {
+        path: 'forget',
+        component: ForgetComponent,
+        title: 'Forget Password',
+      },
+      {
+        path: 'set/:token/:email',
+        component: SetpassComponent,
+        title: 'Reset Password',
+      }
+     
+    ],
+  },
+  {
+    path: 'otp/:email',
+    component: OtpComponent,
+    canActivate: [authGuardLoggdIn],
+    title: 'OTP',
+    children: [
+      
+    ],
+  }
 ]

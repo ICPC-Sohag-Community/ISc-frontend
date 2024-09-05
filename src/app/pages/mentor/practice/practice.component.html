@@ -82,7 +82,7 @@
             <path d="M11.3135 7.98633V11.4243H4.68555V15.9728H14.5139C15.271 15.9728 15.8853 15.3764 15.8853 14.6417V11.7757L11.3135 7.98633Z" fill="#00AC47"/>
             <path d="M14.5139 0H4.68555V4.54854H11.3135V7.98648L15.8853 4.30961V1.33108C15.8853 0.596268 15.271 0 14.5139 0Z" fill="#FFBA00"/>
             </svg>            
-        <input #l type="text" value="{{item.meetingLink}}" class="mx-4 bg-transparent  text-gray-800 flex-grow" readonly>
+        <input #l type="text" value="{{item.meetingLink}}" class="mx-4 bg-transparent focus:border-none focus:outline-0  text-gray-800 flex-grow" readonly>
         <button (click)="copyToClipboard(this.l.value)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9.24935 18.9577H5.74935C2.49102 18.9577 1.04102 17.5077 1.04102 14.2493V10.7493C1.04102 7.49102 2.49102 6.04102 5.74935 6.04102H9.24935C12.5077 6.04102 13.9577 7.49102 13.9577 10.7493V14.2493C13.9577 17.5077 12.5077 18.9577 9.24935 18.9577ZM5.74935 7.29102C3.16602 7.29102 2.29102 8.16602 2.29102 10.7493V14.2493C2.29102 16.8327 3.16602 17.7077 5.74935 17.7077H9.24935C11.8327 17.7077 12.7077 16.8327 12.7077 14.2493V10.7493C12.7077 8.16602 11.8327 7.29102 9.24935 7.29102H5.74935Z" fill="black"/>
             <path d="M14.2493 13.9577H13.3327C12.991 13.9577 12.7077 13.6743 12.7077 13.3327V10.7493C12.7077 8.16602 11.8327 7.29102 9.24935 7.29102H6.66602C6.32435 7.29102 6.04102 7.00768 6.04102 6.66602V5.74935C6.04102 2.49102 7.49102 1.04102 10.7493 1.04102H14.2493C17.5077 1.04102 18.9577 2.49102 18.9577 5.74935V9.24935C18.9577 12.5077 17.5077 13.9577 14.2493 13.9577ZM13.9577 12.7077H14.2493C16.8327 12.7077 17.7077 11.8327 17.7077 9.24935V5.74935C17.7077 3.16602 16.8327 2.29102 14.2493 2.29102H10.7493C8.16602 2.29102 7.29102 3.16602 7.29102 5.74935V6.04102H9.24935C12.5077 6.04102 13.9577 7.49101 13.9577 10.7493V12.7077Z" fill="black"/>
@@ -117,12 +117,9 @@
             
                 <label class="block text-sm font-medium text-gray-700 mb-1" for="status">Status</label>
                 <div class="relative">
-                    <button (click)="status()"
-                    [ngClass]="{
-                        'bg-[#7F77F1]': this.stat == 1,
-                        'bg-[#33A069]':this.stat == 2 
-                      }" class=" text-white font-bold py-1 px-2 rounded-[10px] gap-3 flex items-center">
-                       {{this.stat==1? 'Incoming' : 'Done'}}
+                    <button 
+                     class="bg-[#7F77F1] text-white font-bold py-1 px-2 rounded-[10px] gap-3 flex items-center">
+                        Incoming 
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M7.42578 16.6004L12.8591 11.1671C13.5008 10.5254 13.5008 9.47539 12.8591 8.83372L7.42578 3.40039" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>                

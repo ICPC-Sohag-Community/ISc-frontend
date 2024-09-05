@@ -26,7 +26,20 @@ export class TraineesComponent {
     facebookLink: "string",
     codeForceHandle: "string"
   };
+  handleClick(event: Event) {
+    event.stopPropagation();  
+    
+  }
   constructor(private renderer: Renderer2 , private serv:TraineesService){
+    const frontDiv = document.getElementById('frontDiv');
+  const backDiv = document.getElementById('backDiv');
+
+  // Forward scroll events from frontDiv to backDiv
+  if (frontDiv && backDiv){
+    frontDiv.addEventListener('wheel', (e) => {
+      backDiv.scrollTop += e.deltaY;
+    });
+  }
     if(localStorage.getItem("camp")){
       this.camps = localStorage.getItem("trainees");
       this.camps = JSON.parse(this.camps)
@@ -62,7 +75,7 @@ id:any;
     this.renderer.addClass(element, 'block');
     this.renderer.removeClass(element, 'hidden');
     this.renderer.addClass(element2, 'absolute');
-    this.renderer.addClass(element2, 'z-50');
+    this.renderer.addClass(element2, 'z-40');
     this.renderer.addClass(element2, 'left-[-40px]');
     this.renderer.addClass(element2, 'w-[380px]');
     this.renderer.addClass(element2, 'top-[-70px]');
@@ -76,7 +89,7 @@ id:any;
     this.renderer.removeClass(element, 'block');
     this.renderer.addClass(element, 'hidden');
     this.renderer.removeClass(element2, 'absolute');
-    this.renderer.removeClass(element2, 'z-50');
+    this.renderer.removeClass(element2, 'z-40');
     this.renderer.removeClass(element2, 'w-[380px]');
   }
 
