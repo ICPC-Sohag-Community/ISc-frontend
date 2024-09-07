@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import SwiperCore, { SwiperOptions } from 'swiper';
 import Swiper, { Navigation } from 'swiper';
 import { SwiperModule } from 'swiper/angular';
 import { HomeService } from '../../../Services/home.service';
 import { Mentor } from '../../../model/trinee-data';
+import { ResponsiveService } from '../../../Services/responsive.service';
 
 // Import and use Swiper modules
 Swiper.use([Navigation]);
@@ -21,6 +22,8 @@ export class HeadsCarouselComponent implements OnInit {
 
   // Dependency injection for HomeService
   private _homeService = inject(HomeService);
+  public _responsive = inject(ResponsiveService);
+
 
   // Array to hold Mentor data
   mentors: Mentor[] = [];
@@ -28,7 +31,11 @@ export class HeadsCarouselComponent implements OnInit {
   // Lifecycle hook to initialize component
   ngOnInit(): void {
     this.loadHeadsData();
+
   }
+
+
+
 
   // Method to load mentor data from service
   loadHeadsData(): void {
@@ -59,6 +66,7 @@ export class HeadsCarouselComponent implements OnInit {
     scrollbar: false,
     autoplay: false,
   };
+
 
   // Reference to Swiper instance
   private swiper?: SwiperCore;
