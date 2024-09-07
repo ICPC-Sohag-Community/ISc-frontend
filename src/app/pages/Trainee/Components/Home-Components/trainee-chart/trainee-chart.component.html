@@ -1,12 +1,12 @@
- <div class="w-4/5 mx-auto my-44">
+ <div class=" w-[90%] md:w-4/5 mx-auto my-10 md:my-44">
 
   <!-- Container for cards -->
-  <div class="flex justify-between items-center gap-28">
+  <div class="flex justify-between items-center flex-col md:flex-row md:gap-28">
 
     <!-- Card for Solving Percent -->
-    <div class="card">
-      <h4 class="mb-14 text-4xl font-bold">Solving Percent</h4>
-      <div class="relative bg-img rounded-[20px] min-w-[500px] min-h-[400px]">
+    <div class="card w-full md:w-[500px]">
+      <h4 class="mb-5 md:mb-14 text-4xl font-bold text-center">Solving Percent</h4>
+      <div class="relative bg-img rounded-[20px] w-full md:w-[500px] min-h-[250px] md:min-h-[400px]">
         <!-- Overlay for chart and legend -->
         <div class="absolute text-white inset-0 rounded-[20px] w-full h-full flex flex-col items-center justify-around bg-black bg-opacity-50">
 
@@ -18,12 +18,12 @@
             <!-- Solved percentage -->
             <div class="flex items-center">
               <div class="bg-[#00AC47] w-6 h-4 rounded-full font-semibold"></div>
-              <span class="font-semibold text-xl ml-3">Solved 40%</span>
+              <span class="font-semibold md:text-xl ml-2 md:ml-3">Solved 40%</span>
             </div>
             <!-- Minimum percentage -->
             <div class="flex items-center">
               <div class="bg-[#EF4A50] w-6 h-4 rounded-full font-semibold"></div>
-              <span class="font-semibold text-xl ml-3">Minimum percent 70%</span>
+              <span class="font-semibold md:text-xl ml-2 md:ml-3">Minimum percent 70%</span>
             </div>
           </div>
         </div>
@@ -31,37 +31,37 @@
     </div>
 
     <!-- Card for Next Practice -->
-    <div class="card">
-      <h4 class="mb-14 text-4xl font-bold">Next Practice</h4>
-      <div class="relative bg-img rounded-[20px] min-w-[500px] min-h-[400px]">
+    <div class="card w-full md:w-[500px]">
+      <h4 class="my-5 md:my-0 md:mb-14 text-4xl font-bold text-center md:text-start">Next Practice</h4>
+      <div class="relative bg-img rounded-[20px] w-[500px] min-h-[320px] md:min-h-[400px]">
         <!-- Overlay for practice details -->
-        <div class="absolute text-white inset-0 rounded-[20px] w-full h-full flex flex-col justify-evenly bg-black bg-opacity-50 px-10">
+        <div class="absolute text-white inset-0 rounded-[20px] w-full h-full flex flex-col justify-evenly bg-black bg-opacity-50 p-5 md:p-0 md:px-10">
 
           <!-- Practice name -->
-          @if(this.nextPractice == null){
+          @if(nextPractice == null){
             <h2 class="text-[3rem]">
               No Next Practice
             </h2>
           }
           @if(nextPractice != null){
-            <h2 class="text-[3rem]">
+            <h2 class="text-2xl font-bold text-center md:text-start md:text-[3rem]">
               {{nextPractice.title}}
             </h2>
             <!-- Practice details -->
-            <span class="text-xl">
+            <span class="md:text-xl">
               <p class="font-bold">
                 {{nextPractice.note}}
               </p>
-              <i class="fa-regular fa-clock mr-2 mt-5 text-[#FFBA00]"></i>
-              <span class="text-[#FFBA00] font-medium">
-                {{nextPractice}}
+              <i class="fa-regular fa-clock md:mr-2 mt-5 text-[#FFBA00]"></i>
+              <span class="text-[#FFBA00] font-medium text-[14px] md:text-[16px]">
+                {{formatDateTime(nextPractice.time)}}
               </span>
             </span>
 
             <!-- Contact information -->
             <div class="bg-white min-w-full flex justify-between items-center rounded-[20px] p-3">
               <img src="assets/img_trainee/google-meet.svg" alt="Google Meet">
-              <p class="text-gray-500">{{nextPractice.meetingLink}}</p>
+              <p class="text-gray-500 line-clamp-1">{{nextPractice.meetingLink}}</p>
               <img src="assets/img_trainee/copy.svg" role="button" class="cursor-pointer self-end" (click)="copyText(nextPractice.meetingLink)" alt="Copy">
             </div>
           }

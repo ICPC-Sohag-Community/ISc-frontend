@@ -35,17 +35,8 @@
 
   @if (dropdownOpen) {
   <ul
-    class="absolute left-0 mt-4 overflow-y-scroll bg-white shadow-lg custom-scrollbar-roles w-[230px] rounded-xl max-h-56"
+    class="absolute left-0 mt-4 overflow-y-auto top-full bg-white shadow-lg custom-scrollbar-roles w-[230px] rounded-xl max-h-56"
   >
-    <!-- <li
-      class="flex items-center text-slate-400 text-sm justify-between px-2.5 py-2 cursor-pointer"
-    >
-      @if (dropdownCampForH || dropdownCampForT) {
-      <span>Search or create role</span>
-      }@else {
-      <span>Create role</span>
-      }
-    </li> -->
     @for (role of filteredRoles; track role.name) {
 
     <li
@@ -61,7 +52,7 @@
     @if (selectedRole?.name === role.name) { @if (dropdownCampForT) {
 
     <ul
-      class="w-full overflow-y-scroll text-sm custom-scrollbar-camp h-28 ps-6"
+      class="w-full overflow-y-scroll text-sm custom-scrollbar-camp h-[95px] ps-5"
     >
       @for (item of allCamps; track $index) {
       <li

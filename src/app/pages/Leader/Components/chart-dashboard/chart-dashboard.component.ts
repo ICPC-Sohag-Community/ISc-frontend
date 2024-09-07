@@ -1,13 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  Chart,
-  DoughnutController,
-  ArcElement,
-  Tooltip,
-  Legend,
-  Plugin,
-  registerables,
-} from 'chart.js';
+import { Chart, Plugin, registerables } from 'chart.js';
 
 Chart.register(...registerables);
 @Component({
@@ -22,7 +14,7 @@ export class ChartDashboardComponent implements OnInit {
   @Input() malesCount: number = 50;
   @Input() femalesCount: number = 50;
   percentageMales: number = 50;
-  percentagefemales: number =50;
+  percentagefemales: number = 50;
   ngOnInit() {
     console.log(this.traineesCount);
     this.percentageMales = Math.round(

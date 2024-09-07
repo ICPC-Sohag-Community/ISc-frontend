@@ -40,6 +40,7 @@
           bindValue="id"
           formControlName="sortNumber"
           (change)="sortStaff($event)"
+          (close)="closeSort()"
           class="relative block w-40 h-10 my-2 text-black bg-white appearance-none rounded-xl cursor-none focus:outline-none"
         >
           <ng-option [value]="0">College</ng-option>
@@ -450,8 +451,6 @@
               fill="white"
             />
           </svg>
-          >
-
           <span class="text-[#EEEEEE]">Camp name:</span>
           <span>{{ onetraineeArchiveInfo.campName }}</span>
         </div>
@@ -800,7 +799,7 @@
         </div>
 
         <div class="w-1/2 mx-auto mb-4 border-b-2 border-gray-300"></div>
-        @if (onestaffArchiveInfo.facebookHandle) {
+
         <div class="flex items-center mb-2 gap-x-2">
           <svg
             class="size-5"
@@ -826,11 +825,11 @@
 
           <span class="text-[#EEEEEE]">Facebook Link:</span>
           <span>
-            {{ onestaffArchiveInfo.facebookHandle }}
+            @if (onestaffArchiveInfo.facebookHandle) {
+            <a [href]="onestaffArchiveInfo.facebookHandle">Profile</a>
+            }
           </span>
         </div>
-
-        }
 
         <div class="flex items-center mb-2 gap-x-2">
           <svg
@@ -958,17 +957,26 @@
     </button>
     }
     <div class="flex items-center space-x-2">
-      @for (page of [].constructor(traineeArchiveInfo.totalPages); track page;
-      let i = $index) {
+      @if (activeTab === 'tab1') { @for (page of getPageRange(); track page; let
+      i = $index) {
       <button
         class="px-3 py-1 font-bold rounded-tr-lg rounded-bl-lg rounded-br-lg text-activeLink"
-        (click)="traineesWithPagination(i + 1, 10, keywordSearch, sortbyNum)"
-        [class.bg-blue-500]="traineeArchiveInfo.currentPage === i + 1"
-        [class.text-white]="traineeArchiveInfo.currentPage === i + 1"
+        (click)="gotoPage(page)"
+        [class.bg-blue-500]="page === traineeArchiveInfo.currentPage"
+        [class.text-white]="page === traineeArchiveInfo.currentPage"
       >
-        {{ i + 1 }}
+        {{ page }}
       </button>
-      }
+      } }@else { @for (page of getPageRange(); track page; let i = $index) {
+      <button
+        class="px-3 py-1 font-bold rounded-tr-lg rounded-bl-lg rounded-br-lg text-activeLink"
+        (click)="gotoPage(page)"
+        [class.bg-blue-500]="page === staffArchiveInfo.currentPage"
+        [class.text-white]="page === staffArchiveInfo.currentPage"
+      >
+        {{ page }}
+      </button>
+      } }
     </div>
     @if (traineeArchiveInfo.totalPages !== 0) {
 

@@ -36,6 +36,11 @@ import { ForgetComponent } from './pages/login/forget/forget.component';
 import { OtpComponent } from './pages/login/otp/otp.component';
 import { SetpassComponent } from './pages/login/setpass/setpass.component';
 
+import { ReportsLeaderComponent } from './pages/Leader/screens/reports-leader/reports-leader.component';
+import { RequestsLeaderComponent } from './pages/Leader/screens/requests-leader/requests-leader.component';
+
+import { StandingTraineeComponent } from './pages/Trainee/screens/standing-trainee/standing-trainee.component';
+
 
 export const routes: Routes = [
   // Auth Pages
@@ -70,20 +75,25 @@ export const routes: Routes = [
         title: 'Trainee / Home - ICPC',
       },
       {
-        path:'home',
-        component:HomeTraineeComponent,
-        title: 'Trainee / Home - ICPC'
+        path: 'home',
+        component: HomeTraineeComponent,
+        title: 'Trainee / Home - ICPC',
       },
       {
-        path:'sheets',
-        component:SheetsTraineeComponent,
-        title:'Trainee / Sheets - ICPC'
+        path: 'sheets',
+        component: SheetsTraineeComponent,
+        title: 'Trainee / Sheets - ICPC',
       },
       {
-        path:'contests',
-        component:ContestTraineeComponent,
-        title:'Trainee / contests - ICPC'
-      }
+        path: 'contests',
+        component: ContestTraineeComponent,
+        title: 'Trainee / contests - ICPC',
+      },
+      {
+        path: 'standing',
+        component: StandingTraineeComponent,
+        title: 'Trainee / standing - ICPC',
+      },
     ],
   },
 
@@ -139,15 +149,21 @@ export const routes: Routes = [
         component: TraineesLeaderComponent,
         title: 'Leader / Trainees - ICPC',
       },
+
+      {
+        path: 'reports',
+        component: ReportsLeaderComponent,
+        title: 'Leader / reports - ICPC',
+      },
+      {
+        path: 'requests',
+        component: RequestsLeaderComponent,
+        title: 'Leader / requests - ICPC',
+      },
       {
         path: 'archive',
         component: ArchiveLeaderComponent,
-        title: 'Leader / Archive / Trainee - ICPC',
-      },
-      {
-        path: 'archive/staff',
-        component: ArchiveLeaderComponent,
-        title: 'Leader / Archive / Staff - ICPC',
+        title: 'Leader / Archive - ICPC',
       },
     ],
   },
@@ -155,21 +171,22 @@ export const routes: Routes = [
   {
     path: 'head-of-camp',
     component: HocLayoutComponent,
-    canActivate: [authGuard,rolesGuard],
+    canActivate: [authGuard, rolesGuard],
     title: 'HOC - Dashboard',
     children: [
       {
         path: '',
         component: DashComponent,
         title: 'head of camp - Dashboard',
-      }
-     
+      },
     ],
   },
+
+  // mentor Page
   {
     path: 'mentor',
     component: MentorLayoutComponent,
-    canActivate: [authGuard,rolesGuard],
+    canActivate: [authGuard, rolesGuard],
     title: 'Mentor',
     children: [
       {
@@ -265,3 +282,6 @@ export const routes: Routes = [
     ],
   }
 ]
+    ],
+  },
+];

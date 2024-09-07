@@ -38,7 +38,7 @@ export class HomeTasksInProgressComponent {
     this._homeService.UpdateTraineeTask(model).subscribe({
       next: ({ statusCode }) => {
         if (statusCode === 200) {
-          this._homeService.assignTraineeTasks();
+          this._homeService.loadTasks();
         }
       }
     });

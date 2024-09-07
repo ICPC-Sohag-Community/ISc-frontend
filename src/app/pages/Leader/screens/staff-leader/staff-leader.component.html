@@ -44,7 +44,7 @@
           class="relative block w-40 h-10 my-2 !text-white appearance-none rounded-xl !placeholder:text-white bg-mainblue cursor-none focus:outline-none"
         >
           <ng-option [value]="0">Faculty</ng-option>
-          <ng-option [value]="1">Grade</ng-option>
+          <ng-option [value]="1">Year</ng-option>
           <ng-option [value]="2">Gender</ng-option>
         </ng-select>
         <svg
@@ -410,9 +410,12 @@
               />
             </svg>
 
-            <span>{{ item.role }}</span>
+            <div class="flex items-start justify-center gap-x-2">
+              <span>{{ item.role }}</span> @if (item.campName) {
+              <span>-</span> }
+            </div>
             @if (item.campName) {
-            <span> - {{ item.campName }}</span>
+            <span class="w-full line-clamp-1">{{ item.campName }}</span>
             }
           </div>
           <button (click)="deleteRole(i)">
@@ -448,9 +451,12 @@
               />
             </svg>
 
-            <span>{{ item.role }}</span>
+            <div class="flex items-start justify-center gap-x-2">
+              <span>{{ item.role }}</span> @if (item.campName) {
+              <span>-</span> }
+            </div>
             @if (item.campName) {
-            <span> - {{ item.campName }}</span>
+            <span class="w-full line-clamp-1">{{ item.campName }}</span>
             }
           </div>
           <button (click)="restoreRole(i)">
@@ -525,15 +531,14 @@
     </button>
     }
     <div class="flex items-center space-x-2">
-      @for (page of [].constructor(allStaffInfo.totalPages); track page; let i =
-      $index) {
+      @for (page of getPageRange(); track page; let i = $index) {
       <button
         class="px-3 py-1 font-bold rounded-tr-lg rounded-bl-lg rounded-br-lg text-activeLink"
-        (click)="staffWithPagination(i + 1, 10, keywordSearch, sortbyNum)"
-        [class.bg-blue-500]="allStaffInfo.currentPage === i + 1"
-        [class.text-white]="allStaffInfo.currentPage === i + 1"
+        (click)="gotoPage(page)"
+        [class.bg-blue-500]="page === allStaffInfo.currentPage"
+        [class.text-white]="page === allStaffInfo.currentPage"
       >
-        {{ i + 1 }}
+        {{ page }}
       </button>
       }
     </div>

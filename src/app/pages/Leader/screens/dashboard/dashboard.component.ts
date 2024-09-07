@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, NgClass, NgIf } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ChartDashboardComponent } from '../../Components/chart-dashboard/chart-dashboard.component';
 import { DashboardService } from '../../services/dashboard.service';
-import { traineesAnalysis } from '../../model/dashboard';
+import { dashboardFeedbacks, traineesAnalysis } from '../../model/dashboard';
 import { TestimonialComponent } from '../../Components/testimonial/testimonial.component';
 import { RouterLink } from '@angular/router';
 
@@ -42,11 +42,14 @@ export class DashboardComponent implements OnInit {
   percentageCountCollege: number = 0;
   todayName: string = '';
   todayDate!: Date;
+  currentPage: number = 0;
+  dashboardFeedbacks: dashboardFeedbacks[] = [];
 
   ngOnInit() {
     this.setDates();
     this.fetchTraineesAnalysis();
     this.fetchDashboardCamps();
+    this.fetchDashboardFeedbacks();
   }
 
   setDates(): void {
@@ -92,6 +95,20 @@ export class DashboardComponent implements OnInit {
       error: (err) => {
         console.log(err);
         this.isLoading.update((v) => (v = false));
+      },
+    });
+  }
+
+  fetchDashboardFeedbacks(): void {
+    this.dashboardService.dashboardFeedbacks().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.dashboardFeedbacks = data;
+        } else {
+        }
+      },
+      error: (err) => {
+        console.log(err);
       },
     });
   }

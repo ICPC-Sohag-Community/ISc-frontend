@@ -68,4 +68,7 @@ export class EndedCarouselComponent implements OnInit {
   prevSlide() {
     this.swiper?.slidePrev();
   }
+  openLink(url:string):void{
+    window.open(url,'_blank')
+  }
 }

@@ -44,7 +44,7 @@
           class="relative block w-40 h-10 my-2 !text-white appearance-none rounded-xl placeholder:text-white bg-mainblue cursor-none focus:outline-none"
         >
           <ng-option [value]="0">Faculty</ng-option>
-          <ng-option [value]="1">Grade</ng-option>
+          <ng-option [value]="1">Year</ng-option>
           <ng-option [value]="2">Gender</ng-option>
         </ng-select>
         <svg
@@ -188,17 +188,17 @@
         <div>
           <img
             [src]="
-              TraineeInfo.photoUrl
-                ? TraineeInfo.photoUrl
+              traineeInfo.photoUrl
+                ? traineeInfo.photoUrl
                 : './../../../../../assets/img/user.jpeg'
             "
-            [alt]="TraineeInfo.firstName + TraineeInfo.middleName"
+            [alt]="traineeInfo.firstName"
             class="size-36 rounded-2xl"
           />
         </div>
         <h2 class="text-xl font-semibold text-white">
-          {{ TraineeInfo.firstName }} {{ TraineeInfo.middleName }}
-          {{ TraineeInfo.lastName }}
+          {{ traineeInfo.firstName }} {{ traineeInfo.middleName }}
+          {{ traineeInfo.lastName }}
         </h2>
       </div>
       <div
@@ -221,7 +221,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Email:</span>
-          <span>{{ TraineeInfo.email }}</span>
+          <span>{{ traineeInfo.email }}</span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -240,7 +240,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Phone:</span>
-          <span>{{ TraineeInfo.phoneNumber }}</span>
+          <span>{{ traineeInfo.phoneNumber }}</span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -256,7 +256,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Gender:</span>
-          <span> @if (TraineeInfo.gender === 0) { Male }@else { Female } </span>
+          <span> @if (traineeInfo.gender === 0) { Male }@else { Female } </span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -272,7 +272,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Collage:</span>
-          @switch (TraineeInfo.college ) { @case (0) {
+          @switch (traineeInfo.college ) { @case (0) {
           <span>Computer and Ai</span>
           } @case (1) {
           <span>EELU</span>
@@ -305,7 +305,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Year:</span>
-          <span>{{ TraineeInfo.grade }}</span>
+          <span>{{ traineeInfo.grade }}</span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -321,7 +321,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Codeforces:</span>
-          <span>{{ TraineeInfo.codeForceHandle }}</span>
+          <span>{{ traineeInfo.codeForceHandle }}</span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -337,7 +337,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Vjudge:</span>
-          <span>{{ TraineeInfo.vjudgeHandle || "" }}</span>
+          <span>{{ traineeInfo.vjudgeHandle || "" }}</span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -360,7 +360,7 @@
           </svg>
 
           <span class="text-[#EEEEEE]">National ID:</span>
-          <span>{{ TraineeInfo.nationalId }}</span>
+          <span>{{ traineeInfo.nationalId }}</span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -381,11 +381,11 @@
             [selectedStaffId]="selectedTraineeId"
           />
         </div>
-        @for (item of TraineeInfo.userRoles; track item.role; let i = $index) {
+        @for (item of traineeInfo.userRoles; track item.role; let i = $index) {
         <div
           class="flex items-center justify-between w-full mb-4 pe-6 ps-4 gap-x-2"
         >
-          <div class="flex items-center gap-x-2">
+          <div class="flex items-center w-10/12 gap-x-2">
             <svg
               class="size-4"
               viewBox="0 0 18 18"
@@ -401,9 +401,12 @@
               />
             </svg>
 
-            <span>{{ item.role }}</span>
+            <div class="flex items-start justify-center gap-x-2">
+              <span>{{ item.role }}</span> @if (item.campName) {
+              <span>-</span> }
+            </div>
             @if (item.campName) {
-            <span class="w-full traucate"> - {{ item.campName }}</span>
+            <span class="w-full line-clamp-1">{{ item.campName }}</span>
             }
           </div>
           <button (click)="deleteRole(i)">
@@ -423,7 +426,7 @@
         <div
           class="flex items-center justify-between w-full mb-4 pe-6 ps-4 gap-x-2"
         >
-          <div class="flex items-center gap-x-2">
+          <div class="flex items-center w-10/12 gap-x-2">
             <svg
               class="size-4"
               viewBox="0 0 18 18"
@@ -439,9 +442,12 @@
               />
             </svg>
 
-            <span>{{ item.role }}</span>
+            <div class="flex items-start justify-center gap-x-2">
+              <span>{{ item.role }}</span> @if (item.campName) {
+              <span>-</span> }
+            </div>
             @if (item.campName) {
-            <span> - {{ item.campName }}</span>
+            <span class="w-full line-clamp-1">{{ item.campName }}</span>
             }
           </div>
           <button (click)="restoreRole(i)">
@@ -516,15 +522,14 @@
     </button>
     }
     <div class="flex items-center space-x-2">
-      @for (page of [].constructor(allTraineesInfo.totalPages); track page; let
-      i = $index) {
+      @for (page of getPageRange(); track page; let i = $index) {
       <button
         class="px-3 py-1 font-bold rounded-tr-lg rounded-bl-lg rounded-br-lg text-activeLink"
-        (click)="traineesWithPagination(i + 1, 10, keywordSearch, sortbyNum)"
-        [class.bg-blue-500]="allTraineesInfo.currentPage === i + 1"
-        [class.text-white]="allTraineesInfo.currentPage === i + 1"
+        (click)="gotoPage(page)"
+        [class.bg-blue-500]="page === allTraineesInfo.currentPage"
+        [class.text-white]="page === allTraineesInfo.currentPage"
       >
-        {{ i + 1 }}
+        {{ page }}
       </button>
       }
     </div>
