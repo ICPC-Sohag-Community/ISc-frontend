@@ -282,6 +282,4 @@ export const routes: Routes = [
     ],
   }
 ]
-    ],
-  },
-];
+
