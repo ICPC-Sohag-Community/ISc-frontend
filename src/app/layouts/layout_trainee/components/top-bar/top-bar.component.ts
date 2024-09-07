@@ -37,7 +37,6 @@ export class TopBarComponent {
 
   ngOnInit() {
     this.currentUser = this._authService.currentUser();
-    this.getQrCode()
     this.resizeObserver = new ResizeObserver(entries => {
       for (let entry of entries) {
         this.checkScreenSize();
@@ -71,6 +70,7 @@ export class TopBarComponent {
     this.router.navigate(['/', role.toLowerCase()]);
   }
   toggleDialog():void{
+    this.getQrCode()
     $('.dialog-container').fadeToggle(150)
   }
   getQrCode():void{
@@ -84,8 +84,7 @@ export class TopBarComponent {
     })
   }
 
-
-
+  authService = inject(AuthService);
 
   ngOnDestroy() {
     if (this.resizeObserver) {

@@ -1,13 +1,5 @@
 import { Component, inject, OnInit, AfterViewInit } from '@angular/core';
-import {
-  Chart,
-  DoughnutController,
-  ArcElement,
-  Tooltip,
-  Legend,
-  Plugin,
-  registerables,
-} from 'chart.js';
+import { Chart, registerables, Plugin, ArcElement } from 'chart.js';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HomeService } from '../../../Services/home.service';
 import { NextPractice } from '../../../model/trinee-data';
@@ -19,44 +11,56 @@ Chart.register(...registerables);
   standalone: true,
   imports: [CommonModule],
   templateUrl: './trainee-chart.component.html',
-  styleUrl: './trainee-chart.component.scss',
-  providers: [DatePipe] // Provide DatePipe here
-
+  styleUrls: ['./trainee-chart.component.scss'],
+  providers: [DatePipe],
 })
 export class TraineeChartComponent implements OnInit, AfterViewInit {
-
-  // Inject HomeService to interact with backend
   private _homeService = inject(HomeService);
   private _DatePipe = inject(DatePipe);
-  nextPractice:NextPractice={
-    title:'Practice name',
-    note:' note note note note note note note note notenot e n o te vnotenotenoteno tenotenotenot enotenot enotenotenote note note note',
-    time:'2024-09-03T16:50:36.516Z',
-    meetingLink: "https://icpc.runasp.net/swagger/index.html",
+  nextPractice: NextPractice = {} as NextPractice;
+  solvedProblems = 0;
+  minimumProblems = 0;
+  AllProblems = 0;
+  public chart: any;
 
-  }as NextPractice
-
-  // Lifecycle hook for initialization
   ngOnInit(): void {
-    // this.loadNextPracticeData(); // Load data when component initializes
+    this.loadNextPracticeData();
+    this.loadChartData();
   }
 
-  // Lifecycle hook that runs after view initialization
   ngAfterViewInit(): void {
-    this.renderChart(); // Render the chart after view initialization
+    this.createChart();
   }
 
-  // Function to create and render the doughnut chart
-  renderChart(): void {
-    const myChart = new Chart('chart', {
+  createChart(): void {
+    const ctx = document.getElementById('myDoughnutChart') as HTMLCanvasElement;
+
+    this.chart = new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: ['Labels'], // Data labels
         datasets: [
           {
-            data: [100], // Data values
+            label: 'Solved Problems',
+            data: [this.solvedProblems],
+            backgroundColor: ['#00AC47'],
+            borderColor: 'transparent',
+            borderWidth: 0,
+            borderRadius: 12,
+            circumference: (this.solvedProblems / this.AllProblems) * 360,
+          },
+          {
+            label: 'Minimum Problems',
+            data: [this.minimumProblems],
+            backgroundColor: ['#EF4A50'],
+            borderColor: 'transparent',
+            borderWidth: 0,
+            borderRadius: 12,
+            circumference: (this.minimumProblems / this.AllProblems) * 360,
+          },
+          {
             label: 'All Problems',
-            backgroundColor: ['#E5E5E5'], // Segment colors
+            data: [this.AllProblems],
+            backgroundColor: ['#E5E5E5'],
             borderColor: 'transparent',
             borderWidth: 0,
             borderRadius: 12,
@@ -64,34 +68,45 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
         ],
       },
       options: {
-        cutout: '85%', // Cutout percentage for doughnut
         responsive: true,
-        maintainAspectRatio: false,
-        hover: {
-          mode: null, // Disable hover mode
-        },
-        plugins: {
-          legend: {
-            display: false, // Hide legend
-          },
-          tooltip: {
-            callbacks: {
-              title: () => '', // Hide tooltip title
-            },
-          },
-          title: {
-            display: false, // Hide chart title
-          },
-        },
-      } as any,
 
+        maintainAspectRatio: false,
+        plugins: {
+          // legend: { display: false },
+          tooltip: { callbacks: { title: () => '' } },
+          title: { display: false },
+        },
+      },
       plugins: [
-        this.createDoughnutBackgroundPlugin('#fff'), // Custom plugin for background
+        this.createDoughnutBackgroundPlugin('#fff'),
+        this.createDoughnutOverlappingPlugin(),
       ],
     });
   }
 
-  // Method to create a custom plugin for doughnut chart background
+  createDoughnutOverlappingPlugin(): Plugin {
+    return {
+      id: 'doughnutBackgroundPlugin',
+      beforeDraw: (chart) => {
+        const { ctx, data } = chart;
+
+        const meta = chart.getDatasetMeta(2); // Get the dataset meta
+        const element = meta.data[0] as ArcElement; // Assert the type to ArcElement
+
+        const innerRadius = element.innerRadius; // Now TypeScript recognizes innerRadius
+        const outerRadius = element.outerRadius; // Now TypeScript recognizes outerRadius
+
+        ctx.save()
+        data.datasets.forEach((_,index)=>{
+        let meta = chart.getDatasetMeta(index); // Get the dataset meta
+        let element = meta.data[0] as ArcElement; // Assert the type to ArcElement
+          element.innerRadius =innerRadius
+          element.outerRadius =outerRadius
+        })
+      }
+    };
+  }
+
   createDoughnutBackgroundPlugin(backgroundColor: string): Plugin {
     return {
       id: 'doughnutBackgroundPlugin',
@@ -118,36 +133,45 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
     };
   }
 
-  // Function to copy text to clipboard
   copyText(link: string): void {
-    navigator.clipboard.writeText(link); // Copy link to clipboard
+    navigator.clipboard.writeText(link);
   }
 
   formatDateTime(dateTimeString: string): string {
     if (!dateTimeString) return '';
 
-    // Parse the ISO string into a Date object
     const date = new Date(dateTimeString);
+    const dayOfWeek = this._DatePipe.transform(date, 'EEEE');
+    const day = this._DatePipe.transform(date, 'd');
+    const month = this._DatePipe.transform(date, 'M');
+    const year = this._DatePipe.transform(date, 'yyyy');
+    const time = this._DatePipe.transform(date, 'h:mm a');
 
-    // Format the date and time
-    const dayOfWeek = this._DatePipe.transform(date, 'EEEE'); // Sunday
-    const day = this._DatePipe.transform(date, 'd');          // 2
-    const month = this._DatePipe.transform(date, 'M');         // 9
-    const year = this._DatePipe.transform(date, 'yyyy');       // 2024
-    const time = this._DatePipe.transform(date, 'h:mm a');     // 9 AM
-
-    // Construct and return the formatted string
     return `${dayOfWeek} ${day}/${month}/${year} Starts at ${time}`;
   }
 
-  // Function to load data for next practice
-  // loadNextPracticeData(): void {
-  //   this._homeService.nextPractice().subscribe({
-  //     next: ({ statusCode, data }) => {
-  //       if (statusCode === 200) {
-  //         this.nextPractice= data // assign data
-  //       }
-  //     }
-  //   });
-  // }
+  loadNextPracticeData(): void {
+    this._homeService.nextPractice().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.nextPractice = data;
+        }
+      },
+    });
+  }
+
+  loadChartData(): void {
+    // this._homeService.TraineeCurrentSheetProgress().subscribe({
+    //   next: ({ statusCode, data }) => {
+    //     if (statusCode === 200) {
+    //     }
+    //   },
+    // });
+    this.minimumProblems = 20;
+    this.solvedProblems = 15;
+    this.AllProblems = 30;
+  }
+  roundUpIfHasDecimal(num: number): number {
+    return Math.ceil(num);
+  }
 }

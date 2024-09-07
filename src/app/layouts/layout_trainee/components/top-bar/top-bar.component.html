@@ -91,7 +91,7 @@
 
         <!-- QR Code Button -->
         <a class="text-gray-600 hover:text-gray-800 cursor-pointer" (click)="toggleDialog()">
-          <img src="assets/img_trainee/bi_qr-code.png" alt="QR Code" />
+          <img src="assets/img_trainee/bi_qr-code.svg" alt="QR Code" />
         </a>
 
         <!-- QR Code Dialog -->
@@ -115,12 +115,16 @@
             <img src="assets/img_trainee/bell.svg" alt="Notifications" />
           </button>
           <!-- Notification Indicator -->
-          <span class="absolute top-1 right-2 block h-2 w-2 transform translate-x-1 -translate-y-1 rounded-full bg-red-500"></span>
+          <!-- <span class="absolute top-1 right-2 block h-2 w-2 transform translate-x-1 -translate-y-1 rounded-full bg-red-500"></span> -->
         </div>
 
         <!-- Logout Button -->
-        <a href="#" *ngIf="hide" class="text-gray-600 hover:text-gray-800">
-          <img src="assets/img_trainee/humbleicons_logout.png" alt="Logout" />
+        <a  *ngIf="hide"
+            (click)="authService.logout()"
+            class="text-gray-600 hover:text-gray-800 cursor-pointer">
+
+          <img src="assets/img_trainee/humbleicons_logout.svg" alt="Logout" />
+
         </a>
       </div>
     </div>
