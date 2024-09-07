@@ -51,8 +51,8 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: HomeTraineeComponent,
-        title: 'Trainee / Home - ICPC',
+        redirectTo:'home',
+        pathMatch:'full'
       },
       {
         path: 'home',

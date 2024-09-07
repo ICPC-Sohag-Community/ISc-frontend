@@ -3,12 +3,12 @@
   <div class="container mx-auto w-11/12 flex justify-between items-center">
 
     <!-- Logo Section -->
-    <div *ngIf="hide" class="flex items-center xl:w-1/3">
+    <div *ngIf="!responsive.isSmallScreen" class="flex items-center xl:w-1/3">
       <img src="assets/img/IcpcLogo.svg" alt="IcpcLogo" loading="lazy" width="130" height="50" />
     </div>
 
     <!-- Navigation Links -->
-    <ul *ngIf="hide" class="inline-block sm:flex space-x-8 justify-center">
+    <ul *ngIf="!responsive.isSmallScreen" class="inline-block sm:flex space-x-8 justify-center">
       <li *ngFor="let link of navLinks">
         <a
           [routerLink]="link.path"
@@ -21,7 +21,7 @@
       </li>
     </ul>
 
-    <div *ngIf="!hide" class="relative text-left w-fit sm:inline-block">
+    <div *ngIf="responsive.isSmallScreen" class="relative text-left w-fit sm:inline-block">
       <button (click)="toggleNav()" class="inline-flex items-center w-full py-1 font-medium">
         <img src="../../../../../assets/img_trainee/Layers.svg" alt="Menu Icon" />
       </button>
@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <div *ngIf="!hide" class="sm:hidden flex items-center">
+    <div *ngIf="responsive.isSmallScreen" class="sm:hidden flex items-center">
       <img src="assets/img/IcpcLogo.svg" alt="IcpcLogo" loading="lazy" width="130" height="50" />
     </div>
 
@@ -48,11 +48,11 @@
         <div class="flex items-center">
 
           <!-- User Info -->
-          <div *ngIf="hide" class="mr-2">
+          <div *ngIf="!responsive.isSmallScreen" class="mr-2">
             <h2 class="text-base font-medium text-sidebarColor">
               {{ currentUser.firstName }} {{ currentUser.middleName }}
             </h2>
-            <div *ngIf="hide" class="relative text-left w-fit inline-block">
+            <div *ngIf="!responsive.isSmallScreen" class="relative text-left w-fit inline-block">
               <button (click)="showRoles()" class="inline-flex items-center gap-2 w-full py-1 font-medium text-black pe-6">
                 <svg [ngClass]="isShow ? 'rotate-180' : ''" class="w-4 h-4 ml-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -70,10 +70,10 @@
           </div>
 
           <!-- User Avatar -->
-          <div *ngIf="hide" class="relative">
+          <div *ngIf="!responsive.isSmallScreen" class="relative">
             <img class="object-cover w-10 h-10 rounded-full" [src]="currentUser.photoUrl || 'assets/img/user.png'" alt="Avatar" />
           </div>
-          <div *ngIf="!hide" class="relative">
+          <div *ngIf="responsive.isSmallScreen" class="relative">
             <img class="object-cover w-10 h-10 rounded-full" [src]="currentUser.photoUrl || 'assets/img/user.png'" alt="Avatar" (click)="showRoles()" />
             <div [ngClass]="isShow ? 'block' : 'hidden'" class="absolute z-50 mt-2 transition-all duration-500 bg-white border border-gray-200 rounded-md shadow-lg top-8 right-2 w-fit">
               <div class="py-1 text-sm text-gray-700 w-fit" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
@@ -119,7 +119,7 @@
         </div>
 
         <!-- Logout Button -->
-        <a  *ngIf="hide"
+        <a  *ngIf="!responsive.isSmallScreen"
             (click)="authService.logout()"
             class="text-gray-600 hover:text-gray-800 cursor-pointer">
 

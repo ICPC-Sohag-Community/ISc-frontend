@@ -36,6 +36,8 @@ export class SheetsComponent implements OnInit {
         if(statusCode===200){
           this.isLoading=false
         this.sheets = data; // Update sheets array with fetched data
+        console.log(data);
+
       }
       }
     });
