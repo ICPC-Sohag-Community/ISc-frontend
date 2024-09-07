@@ -42,7 +42,7 @@
                     <a (click)="changeTaskStatus(todo, 1)" class="flex items-center gap-2 px-4 py-2 uppercase text-xl cursor-pointer bg-[#2D91C7] text-white p-2 font-bold w-full">In Progress</a>
                     <a (click)="changeTaskStatus(todo, 2)" class="flex items-center gap-2 px-4 py-2 uppercase text-xl cursor-pointer bg-[#52B788] text-white p-2 font-bold w-full rounded-b-[10px]">Done</a>
                   </div>
-                  <span>To Do</span>
+                  <span>{{todo.title}}</span>
                 </div>
                 <!-- Deadline date -->
                 <span>{{todo.deadLine.split('T')[0]}}</span>
