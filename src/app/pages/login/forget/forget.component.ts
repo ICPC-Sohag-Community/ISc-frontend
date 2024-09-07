@@ -17,20 +17,24 @@ export class ForgetComponent {
   constructor(private serv : ForgetService,private router: Router ){
 
   }
+  isLoading:boolean = false;
   found = false;
   emailForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email])
   });
 find(email: any) {
+  this.isLoading = true;
   console.log(email.value)
 this.serv.otp(email.value).subscribe((d:ResponseHeader)=>{
   console.log(d);
   if(d.isSuccess){
-    this.router.navigate(['/otp' , email.value])
+    this.router.navigate(['/otp' , email.value]);
+    this.isLoading = false;
   }
   else{
     
     this.found = true;
+    this.isLoading = false;
   }
 });
 }

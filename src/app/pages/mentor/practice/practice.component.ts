@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { PracticeService } from '../services/practice.service';
 import { ResponseHeader } from '../../../shared/model/responseHeader';
 import { CommonModule } from '@angular/common';
@@ -6,15 +6,17 @@ import { UtcToLocalPipe } from '../../../pipes/utc-to-local.pipe';
 import { LocalTimePipe } from '../../../pipes/local-time.pipe';
 import { FormsModule } from '@angular/forms';
 import { UtcDatePipe } from '../../../pipes/utc-date.pipe';
+import { MentorHeaderComponent } from '../../../layouts/mentor/mentor-header/mentor-header.component';
 
 @Component({
   selector: 'app-practice',
   standalone: true,
-  imports: [FormsModule,CommonModule,UtcToLocalPipe,LocalTimePipe,UtcDatePipe],
+  imports: [MentorHeaderComponent,FormsModule,CommonModule,UtcToLocalPipe,LocalTimePipe,UtcDatePipe],
   templateUrl: './practice.component.html',
   styleUrl: './practice.component.scss'
 })
 export class PracticeComponent {
+  isLoading: boolean = false;
   private utc = new UtcDatePipe();
 dateEd: any;
 titleEd: any;
@@ -23,6 +25,17 @@ notesEd: any;
   statusEd: any = 1;
   timeEd: any;
   idEd: any;
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    // Check if the click was outside the dropdown and the related button
+    if (!target.closest('.relative') && !target.closest('.dropdown')) {
+      const dropdowns = document.querySelectorAll('.dropdown');
+      dropdowns.forEach(dropdown => dropdown.classList.add('hidden'));
+    }
+   
+  }
+  
 upd(ind:any , item:any) {
 
 item.state = this.stand[ind].state;
@@ -100,11 +113,15 @@ edi(id:any){
   stand: any;
 
   get(id:any){
+    this.isLoading = true
     if(id != null){
       this.serv.getData(id).subscribe((d:ResponseHeader)=>{
         this.stand = d.data;
-        console.log(this.stand)
+        this.isLoading = false;
       })
+    }
+    else{
+      this.isLoading = false;
     }
   }
   show(id:string){
@@ -123,6 +140,7 @@ edi(id:any){
     else{
       this.stat--;
     }
+    
   }
   statEd(){
     if(this.statusEd == 1){

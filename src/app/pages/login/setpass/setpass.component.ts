@@ -16,6 +16,7 @@ import { ResponseHeader } from '../../../shared/model/responseHeader';
 export class SetpassComponent {
 email : any;
 token:any;
+isLoading: boolean = false;
   constructor (private serv :SetpassService,private route: ActivatedRoute,private router: Router){
 
   }
@@ -51,6 +52,7 @@ token:any;
   error:boolean = false; 
   err:any[]=[];
   onSubmit() {
+    this.isLoading = true;
     if (this.passwordForm.valid) {
       // Handle the form submission logic here
       const inputElement = document.getElementById('pass') as HTMLInputElement;
@@ -61,7 +63,8 @@ token:any;
     }
     this.serv.reset(data).subscribe((d:ResponseHeader)=>{
       if(d.isSuccess){
-        this.router.navigate(['/login' ])
+        this.router.navigate(['/login' ]);
+        this.isLoading = false;
       }
       else{
         this.error = true;
@@ -72,7 +75,11 @@ token:any;
           }
         }
       }
+      this.isLoading = false;
     })
+    }
+    else{
+      this.isLoading = false;
     }
   }
 }

@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { TraineesService } from '../../../pages/mentor/services/trainees.service';
 import { ResponseHeader } from '../../../shared/model/responseHeader';
 import { CommonModule } from '@angular/common';
@@ -65,5 +65,14 @@ this.campName = name;
       });
       this.isShow = !this.isShow;
     }
-    
+    @HostListener('document:click', ['$event'])
+    onClickOutside(event: MouseEvent): void {
+      const target = event.target as HTMLElement;
+      // Check if the click was outside the dropdown and the related button
+      if (!target.closest('.relative') && !target.closest('.dropdown')) {
+        
+        this.isShow = false;
+      }
+     
+    }
 }

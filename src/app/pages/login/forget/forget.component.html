@@ -20,10 +20,17 @@
       <small *ngIf="found" class="text-red-500">E-mail Not Found </small>
       <button
         type="submit"
-        [disabled]="form.invalid"
-        class="block w-full py-2 text-center rounded-xl mt-5 bg-gradient-to-r from-[#3D91C7] via-[#3591C9] to-[#63ABFD]"
+        [disabled]="form.invalid || isLoading"
+        class="flex justify-center items-center w-full py-2 text-center rounded-xl mt-5 bg-gradient-to-r from-[#3D91C7] via-[#3591C9] to-[#63ABFD]"
       >
-        Send OTP
+      @if (isLoading) {
+        <img
+          class="w-8 h-8 animate-spin text-purple-950"
+          src="https://www.svgrepo.com/show/474682/loading.svg"
+          alt="Loading icon"
+        />
+        } @else { Send OTP }
+        
       </button>
     </form>
   </div>

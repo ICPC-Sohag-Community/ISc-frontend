@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { MentorHeaderComponent } from '../../../layouts/mentor/mentor-header/mentor-header.component';
-
 import { ResponseHeader } from '../../../shared/model/responseHeader';
 import { CommonModule } from '@angular/common';
 import { TasksService } from '../services/tasks.service';
@@ -18,17 +17,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class TasksComponent {
   id:any
-
+isLoading:boolean = false;
   showElement = true;
   formatDate(date: string | Date): string {
     // Convert the date to ISO format (YYYY-MM-DD)
     return new Date(date).toISOString().substring(0, 10);
   }
-  onClickOutside(id:any) {
-   
-    document.getElementById(id)?.classList.toggle("hidden");
-   
-  }
+ 
   updateTitle(data:any, dat:any): void {
     
     const dateObj = new Date();
@@ -50,7 +45,7 @@ export class TasksComponent {
   }
   
   err:any[] = [];
-create(task: HTMLInputElement ,date: HTMLInputElement ) {
+create(task: HTMLTextAreaElement ,date: HTMLInputElement ) {
   const deadlineDate = new Date(date.value);
   const utcDeadline = deadlineDate.toISOString().replace('Z', '');
 let data = {
@@ -188,18 +183,20 @@ add(id: string,trainee: any, f:String , l:String) {
     }
   }
   get(id:any){
+    this.isLoading = true;
     if(id != null){
       this.serv.getData(id).subscribe((d:ResponseHeader)=>{
         this.tasks = d.data;
-        console.log(this.tasks)
+        this.isLoading = false;
       })
     }
   }
   train(id:any){
+    this.isLoading = true;
     if(id != null){
       this.serv.trainees(id).subscribe((d:ResponseHeader)=>{
         this.trainee = d.data;
-        console.log(this.trainee)
+        this.isLoading = false;
       })
     }
   }
@@ -249,4 +246,14 @@ add(id: string,trainee: any, f:String , l:String) {
   this.show('gen');
   console.log(this.trainTask);
   }
+  @HostListener('document:click', ['$event'])
+onClickOutside(event: MouseEvent): void {
+  const target = event.target as HTMLElement;
+  // Check if the click was outside the dropdown and the related button
+  if (!target.closest('.relative') && !target.closest('.dropdown')) {
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => dropdown.classList.add('hidden'));
+  }
+}
+
 }

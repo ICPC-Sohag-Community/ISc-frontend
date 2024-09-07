@@ -11,26 +11,35 @@
     <!-- Title Section -->
     <h2 class="text-xl font-semibold mb-2">Enter your code</h2>
     <p class="text-gray-600 mb-6">
-      OTP has been sent to <span class="font-semibold text-black">ggg&#64;gmail.com</span>
+      OTP has been sent to <span class="font-semibold text-black">{{this.email}}</span>
     </p>
   
     <!-- OTP Input Section -->
     <div class="flex space-x-2 mb-4">
-      <input type="text" #a maxlength="1" class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
-      <input type="text" #b maxlength="1" class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
-      <input type="text" #c maxlength="1" class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
-      <input type="text" #d maxlength="1" class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <input #input1 type="number" (keyup)="moveToNext($event, input2)" #a max="9" min="0" class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <input #input2 type="number" (keyup)="moveToNext($event, input3)" #b max="9" min="0" class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <input #input3 type="number" (keyup)="moveToNext($event, input4)" #c max="9" min="0" class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <input #input4 type="number"  #d max="9" min="0" class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
     </div>
     <div *ngIf="check" class="text-[#DC3545] text-center text-sm mt-3">
       incorrect OTP
   </div>
-    <button (click)="get(email , a.value + b.value + c.value +d.value)" class="block px-6 py-2 text-center rounded-xl mt-5 bg-gradient-to-r from-[#3D91C7] via-[#3591C9] to-[#63ABFD]">
-    Send OTP
+  <div *ngIf="len" class="text-[#DC3545] text-center text-sm mt-3">
+    The OTP is at least 4 numbers 
+</div>
+    <button (click)="get(email , a.value + b.value + c.value +d.value)" class="flex justify-center items-center text-white px-6 py-2 text-center rounded-xl mt-5 mb-1 bg-gradient-to-r from-[#3D91C7] via-[#3591C9] to-[#63ABFD]">
+      @if (isLoading) {
+        <img
+          class="w-8 h-8 animate-spin text-purple-950"
+          src="https://www.svgrepo.com/show/474682/loading.svg"
+          alt="Loading icon"
+        />
+        } @else { Send OTP }
   </button>
     <!-- Resend Section -->
     <p class="text-gray-600">
       Don’t receive the email? 
-      <a href="#" class=" font-bold underline">Resend</a>
+      <a  class=" font-bold underline cursor-pointer" (click)="resend()">Resend</a>
     </p>
   </div>
   

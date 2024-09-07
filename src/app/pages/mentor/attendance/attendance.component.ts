@@ -12,6 +12,7 @@ import { MentorHeaderComponent } from '../../../layouts/mentor/mentor-header/men
   styleUrl: './attendance.component.scss'
 })
 export class AttendanceComponent {
+  isLoading:boolean = false;
 constructor(private serv :AttendanceService){
   if(localStorage.getItem("camp")){
     this.att(localStorage.getItem("camp"));
@@ -20,9 +21,10 @@ constructor(private serv :AttendanceService){
 }
 atten:any = null;
 att(id:any){
+  this.isLoading = true
   this.serv.getData(id).subscribe((d:ResponseHeader)=>{
     this.atten = d.data;
-    console.log(this.atten);
+    this.isLoading = false
   })
 }
 }
