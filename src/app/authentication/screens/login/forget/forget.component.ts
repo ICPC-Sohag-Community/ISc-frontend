@@ -3,7 +3,7 @@ import { ForgetService } from '../services/forget.service';
 import { FormGroup, FormControl, Validators,FormsModule } from '@angular/forms';
 import { HttpHeaderResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { ResponseHeader } from '../../../shared/model/responseHeader';
+import { ResponseHeader } from '../../../../shared/model/responseHeader';
 import { Router } from '@angular/router';
 
 @Component({

@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SetpassService } from '../services/setpass.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ResponseHeader } from '../../../shared/model/responseHeader';
+import { ResponseHeader } from '../../../../shared/model/responseHeader';
 
 @Component({
   selector: 'app-setpass',
@@ -68,6 +68,7 @@ isLoading: boolean = false;
       }
       else{
         this.error = true;
+        this.err = [];
         for (const field in d.errors) {
 
           if (d.errors.hasOwnProperty(field)) {

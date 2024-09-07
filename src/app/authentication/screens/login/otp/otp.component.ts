@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OtpService } from '../services/otp.service';
-import { ResponseHeader } from '../../../shared/model/responseHeader';
+import { ResponseHeader } from '../../../../shared/model/responseHeader';
 import { CommonModule } from '@angular/common';
 import { ForgetService } from '../services/forget.service';
 

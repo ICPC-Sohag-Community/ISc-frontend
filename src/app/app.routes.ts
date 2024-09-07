@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard, authGuardLoggdIn } from './authentication/guard/auth.guard';
 import { rolesGuard } from './authentication/guard/roles.guard';
-import { LoginComponent } from './authentication/screens/login/login.component';
+// import { LoginComponent } from './authentication/screens/login/login.component';
 import { LayoutLeaderComponent } from './layouts/layout_leader/layout-leader.component';
 import { DashboardComponent } from './pages/Leader/screens/dashboard/dashboard.component';
 import { LayoutTraineeComponent } from './layouts/layout_trainee/layout-trainee.component';
@@ -31,15 +31,17 @@ import { ArchiveLeaderComponent } from './pages/Leader/screens/archive-leader/ar
 import { SheetsTraineeComponent } from './pages/Trainee/screens/sheets-trainee/sheets-trainee.component';
 import { ContestTraineeComponent } from './pages/Trainee/screens/contest-trainee/contest-trainee.component';
 import { LoginLayoutComponent } from './layouts/login/login-layout/login-layout.component';
-import { LogComponent } from './pages/login/log/log.component';
-import { ForgetComponent } from './pages/login/forget/forget.component';
-import { OtpComponent } from './pages/login/otp/otp.component';
-import { SetpassComponent } from './pages/login/setpass/setpass.component';
+
+
 
 import { ReportsLeaderComponent } from './pages/Leader/screens/reports-leader/reports-leader.component';
 import { RequestsLeaderComponent } from './pages/Leader/screens/requests-leader/requests-leader.component';
 
 import { StandingTraineeComponent } from './pages/Trainee/screens/standing-trainee/standing-trainee.component';
+import { OtpComponent } from './authentication/screens/login/otp/otp.component';
+import { SetpassComponent } from './authentication/screens/login/setpass/setpass.component';
+import { ForgetComponent } from './authentication/screens/login/forget/forget.component';
+import { LogComponent } from './authentication/screens/login/log/log.component';
 
 
 export const routes: Routes = [
