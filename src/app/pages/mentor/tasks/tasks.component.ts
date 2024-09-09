@@ -24,14 +24,15 @@ isLoading:boolean = false;
     return new Date(date).toISOString().substring(0, 10);
   }
  
-  updateTitle(data:any, dat:any): void {
+  updateTitle(data:any, dat:any, end:any): void {
     
     const dateObj = new Date();
     const date = new Date(dat.value);
     // Check if inputElement is not null and has a value
     if (data.value && date.getTime() > dateObj.getTime() && date.getDate() != dateObj.getDate() ) {
       this.ed.title = data.value;
-      this.ed.deadLine = dat.value;
+      this.ed.startTime = dat.value;
+      this.ed.endTime = dat.value;
       console.log(this.ed)
       this.serv.updTask(this.ed).subscribe((d:ResponseHeader)=>{
         console.log(d);
@@ -217,7 +218,8 @@ add(id: string,trainee: any, f:String , l:String) {
     "lastName": "string",
     "photoUrl": null,
     "title": "string",
-    "deadLine": "2024-08-29T23:26:41.756Z"
+    "startTime": "2024-09-09T22:58:58.793Z",
+    "endTime": "2024-09-09T22:58:58.793Z",
   }
   edit(data:any){
     this.ed=data;

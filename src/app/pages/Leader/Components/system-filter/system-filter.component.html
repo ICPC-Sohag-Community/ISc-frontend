@@ -52,13 +52,17 @@
           </td>
 
           <td class="relative px-6 py-3">
-            <select
+            <ng-select
+              id="college"
+              [closeOnSelect]="true"
+              bindLabel="name"
+              bindValue="id"
               formControlName="community"
-              class="block w-32 pl-10 my-2 text-black bg-white rounded-lg ring-1 ring-gray-400 focus:outline-none focus:ring-activeLink"
+              class="block w-32 pl-6 my-2 text-black bg-white rounded-lg ring-1 ring-gray-400 focus:outline-none focus:ring-activeLink"
             >
-              <option [value]="1">Sohag</option>
-              <option [value]="2">Assiut</option>
-            </select>
+              <ng-option [value]="1">Sohag</ng-option>
+              <ng-option [value]="2">Assiut</ng-option>
+            </ng-select>
             <svg
               width="12"
               height="12"
@@ -86,7 +90,7 @@
 
           <td class="relative px-6 py-3">
             <input
-              type="text"
+              type="number"
               formControlName="passingPrecent"
               class="block w-32 pl-10 my-2 text-black bg-white rounded-lg ring-1 ring-gray-400 focus:outline-none focus:ring-activeLink"
             />

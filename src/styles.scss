@@ -55,14 +55,6 @@
   // border: 1;
 }
 
-.ng-value-label,
-.campName {
-  background-color: #3c8fc5;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 8px;
-}
-
 .focus\:outline-none:focus {
   outline: none;
   // border: none;
@@ -128,3 +120,12 @@
   height: 100% !important;
 }
 @import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
+@import "./app/pages/Leader/Components/system-filter/system-filter.component.scss";
+
+.ng-select span.ng-value-label[ng-reflect-escape="true"],
+.campName {
+  background-color: #3c8fc5;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+}

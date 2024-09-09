@@ -14,7 +14,7 @@
 <div *ngIf="id!= null" class="flex justify-around px-8 space-x-4">
     <!-- To Do Column -->
     <div class="w-1/3 max-h-[80vh] overflow-auto bg-white rounded-lg shadow p-4" style="border: 0.5px solid #3D91C7">
-      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">To do</h2>
+      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Incoming</h2>
       <!-- Task Card -->
       <div *ngIf="tasks[0]">
         <div id="{{item.taskId}}" *ngFor="let item of tasks[0].trainees ; let i = index" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
@@ -54,7 +54,8 @@
             
         </div>
         <p class="text-sm">• {{item.title}}</p>
-        <p class="text-sm text-gray-500 text-right">Deadline: {{item.deadLine | utcToLocal}}</p>
+        <p class="text-sm text-gray-500 text-right">Start Time: {{item.startTime | utcToLocal}}</p>
+        <p class="text-sm text-gray-500 text-right">End Time: {{item.endTime | utcToLocal}}</p>
       </div>
       </div>
       <!-- Repeat the task card structure for more tasks -->
@@ -62,7 +63,7 @@
   
     <!-- In Progress Column -->
     <div class="w-1/3 max-h-[80vh] overflow-auto bg-white rounded-lg shadow p-4"  style="border: 0.5px solid #3D91C7">
-      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">In progress</h2>
+      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Current</h2>
       <!-- Task Card -->
        <div *ngIf="tasks[1]">
         <div id="{{item.taskId}}" *ngFor="let item of tasks[1].trainees ; let i = index" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
@@ -102,7 +103,8 @@
               
           </div>
           <p class="text-sm">• {{item.title}}</p>
-          <p class="text-sm text-gray-500 text-right">Deadline: {{item.deadLine | utcToLocal}}</p>
+          <p class="text-sm text-gray-500 text-right">Start Time: {{item.startTime | utcToLocal}}</p>
+          <p class="text-sm text-gray-500 text-right">End Time: {{item.endTime | utcToLocal}}</p>
         </div>
       <!-- Repeat the task card structure for more tasks -->
         </div>
@@ -110,7 +112,7 @@
   
     <!-- Done Column -->
     <div class="w-1/3 max-h-[80vh] overflow-auto bg-white rounded-lg shadow p-4" style="border: 0.5px solid #3D91C7">
-      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Done</h2>
+      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Ended</h2>
       <!-- Task Card -->
        <div *ngIf="tasks[2]">
       <div id="{{item.taskId}}" *ngFor="let item of tasks[2].trainees ; let i = index" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
@@ -150,7 +152,8 @@
             
         </div>
         <p class="text-sm">• {{item.title}}</p>
-        <p class="text-sm text-gray-500 text-right">Deadline: {{item.deadLine | utcToLocal}}</p>
+        <p class="text-sm text-gray-500 text-right">Start Time: {{item.startTime | utcToLocal}}</p>
+        <p class="text-sm text-gray-500 text-right">End Time: {{item.endTime | utcToLocal}}</p>
       </div>
     </div>
       <!-- Repeat the task card structure for more tasks -->
@@ -260,7 +263,8 @@
             <div>
                 <p class="text-lg font-semibold">{{this.ed.firstName}} {{this.ed.middleName}} {{this.ed.lastName}}</p>
                 <!-- <p class="text-gray-500 text-sm">Deadline: {{this.ed.deadLine | utcToLocal}}</p> -->
-               <label class="text-gray-500 text-sm" for="dateEdit">Deadline: </label>  <input #edDate id="dateEdit" class="mt-2 w-[170px] px-2 py-1  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]" type="date" [value]="formatDate(ed.deadLine)">
+                <label class="text-gray-500 text-sm" for="dateEdit">Start Time: </label>  <input #startTime id="sdateEdit" class="mt-2 w-[170px] px-2 py-1  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]" type="date" [value]="formatDate(ed.startTime)">
+                <label class="text-gray-500 text-sm" for="dateEdit">End Time: </label>  <input #endTime id="edateEdit" class="mt-2 w-[170px] px-2 py-1  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]" type="date" [value]="formatDate(ed.endTime)">
             </div>
         </div>
 
@@ -275,7 +279,7 @@
         <!-- Action Buttons -->
         <div class="flex justify-center space-x-2">
             <button (click)="show('edit')" class="bg-[#EF4A50] text-white px-6 py-1 rounded ">Cancel</button>
-            <button (click)="updateTitle(this.taskEd, this.edDate)" class="bg-[#3D91C7] hover:bg-[#2679AF] text-white px-6 py-1 rounded ">Save</button>
+            <button (click)="updateTitle(this.taskEd, this.startTime , this.endTime)" class="bg-[#3D91C7] hover:bg-[#2679AF] text-white px-6 py-1 rounded ">Save</button>
         </div>
     </div>
   </div>

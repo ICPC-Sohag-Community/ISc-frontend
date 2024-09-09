@@ -5,6 +5,7 @@ import {
   EventEmitter,
   HostListener,
   inject,
+  Input,
   OnInit,
   Output,
 } from '@angular/core';
@@ -35,6 +36,7 @@ export type FormFilter = FormGroup<{
   styleUrl: './system-filter.component.scss',
 })
 export class SystemFilterComponent implements OnInit {
+  @Input() filterValues: any;
   @Output() saveFilter = new EventEmitter<Form>();
   @Output() clickOutside = new EventEmitter<void>();
   elementRef = inject(ElementRef);
@@ -45,6 +47,11 @@ export class SystemFilterComponent implements OnInit {
     this.filterForm = this.fb.group({
       filters: this.fb.array<FormFilter>([this.generateFilter()]),
     }) as Form;
+    debugger;
+    console.log(this.filterValues);
+    if (this.filterValues) {
+      this.setSavedFilters(this.filterValues);
+    }
   }
 
   generateFilter(): FormFilter {
@@ -59,7 +66,9 @@ export class SystemFilterComponent implements OnInit {
     return this.filterForm.get('filters') as FormArray<FormFilter>;
   }
   addFilter() {
-    this.filters.push(this.generateFilter());
+    if (this.filterForm.valid) {
+      this.filters.push(this.generateFilter());
+    }
   }
 
   removeFilter(index: number) {
@@ -76,10 +85,30 @@ export class SystemFilterComponent implements OnInit {
         passingPrecent: textBoxValue,
       });
     });
+    debugger;
 
     if (this.filterForm.valid) {
       this.saveFilter.emit(this.filterForm);
     }
+  }
+
+  setSavedFilters(savedData: any[]) {
+    this.filters.clear(); // Clear existing form array
+
+    // Loop through each item in the saved data array
+    savedData.forEach((filterData) => {
+      const newFilter = this.generateFilter(); // Generate a new form group for each filter
+
+      // Use patchValue to apply the values
+      newFilter.patchValue({
+        sheetId: filterData.sheetId,
+        community: filterData.community,
+        passingPrecent: filterData.passingPrecent,
+      });
+
+      // Push the new filter to the form array
+      this.filters.push(newFilter);
+    });
   }
 
   @HostListener('document:click', ['$event.target'])

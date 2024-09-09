@@ -24,6 +24,9 @@ export class HomeService {
   TraineeCurrentSheet():Observable<any>{
     return this._HttpClient.get( environment.BASE_URL + `/api/Trainee/currentSheet` )
   }
+  TraineeCurrentSheetProgress():Observable<any>{
+    return this._HttpClient.get( environment.BASE_URL + `/api/Trainee/currentSheetProgress` )
+  }
   TraineeIncomingContest():Observable<any>{
     return this._HttpClient.get( environment.BASE_URL + `/api/Trainee/IncomingContest` )
   }

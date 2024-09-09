@@ -2,3 +2,10 @@
 .ng-select:focus {
   height: 38px;
 }
+
+.ng-value-label[ng-reflect-escape="true"] {
+  background-color: #3c8fc5 !important;
+  color: white !important;
+  padding: 4px 8px !important;
+  border-radius: 8px !important;
+}

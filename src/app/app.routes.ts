@@ -45,24 +45,6 @@ import { LogComponent } from './authentication/screens/login/log/log.component';
 
 
 export const routes: Routes = [
-  // Auth Pages
-  // {
-  //   path: 'login',
-  //   component: LoginComponent,
-  //   canActivate: [authGuardLoggdIn],
-  //   title: 'Login - ICPC',
-  // },
-  // {
-  //   path: 'register',
-  //   component: RegisterComponent,
-  //   canActivate: [authGuardLoggdIn],
-  // },
-  // {
-  //   path: 'confirm-email',
-  //   component: ConfirmEmailComponent,
-  //   canActivate: [authGuardLoggdIn],
-  // },
-
   // Trainee Pages
   {
     path: 'trainee',
@@ -73,8 +55,8 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: HomeTraineeComponent,
-        title: 'Trainee / Home - ICPC',
+        redirectTo:'home',
+        pathMatch:'full'
       },
       {
         path: 'home',
@@ -220,13 +202,10 @@ export const routes: Routes = [
         path: 'practice',
         component: PracticeComponent,
         title: 'mentor / Practice - ICPC',
-      }
-     
+      },
     ],
-  }
-  
+  },
 
-    
   // {
 
   //   path: 'head-of-camp',
@@ -243,14 +222,12 @@ export const routes: Routes = [
   //       path: '',
   //       component: DashComponent,
 
-      
   //       title: 'HOC / Dashboard - ICPC',
   //     }
 
-
   //   ]
   // }
-  ,{
+  {
     path: 'login',
     component: LoginLayoutComponent,
     canActivate: [authGuardLoggdIn],
@@ -270,8 +247,7 @@ export const routes: Routes = [
         path: 'set/:token/:email',
         component: SetpassComponent,
         title: 'Reset Password',
-      }
-     
+      },
     ],
   },
   {

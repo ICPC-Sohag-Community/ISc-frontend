@@ -35,7 +35,8 @@ export class TasksService {
     return this.http.put<any>(`${environment.BASE_URL}/api/Mentor/tasks`,  {
         "taskId": data.taskId,
         "title": data.title,
-        "deadLine": data.deadLine,
+        "startTime": data.startTime,
+        "endTime": data.endTime,
         "traineeId": data.traineeId
       }
     ); 
