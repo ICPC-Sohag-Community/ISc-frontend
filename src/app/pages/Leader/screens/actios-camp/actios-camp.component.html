@@ -1,6 +1,6 @@
 <div class="w-full p-4 space-y-4 sm:p-6 sm:ps-4 sm:space-y-6">
   <form
-    [formGroup]="addUserForm"
+    [formGroup]="campForm"
     (ngSubmit)="craeteUser()"
     class="w-full py-8 bg-white px-14 rounded-xl"
   >
@@ -8,31 +8,282 @@
       <h2 class="w-full pb-6 text-3xl font-bold border-b-2">
         @if (id === 0) { Add Camp }@else { Edit Camp }
       </h2>
-      <div class="flex items-center justify-between w-10/12 ps-4">
+      <div class="flex items-center justify-between w-full mt-2 ps-4">
+        <div class="relative flex flex-col basis-1/2">
+          <label class="text-lg">Camp name</label>
+          <div
+            (click)="isCampsActive = !isCampsActive"
+            class="relative text-left cursor-pointer text-lg px-4 flex justify-between items-center w-[450px] my-2 py-2.5 text-gray-400 bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+          >
+            <span
+              [ngClass]="
+                selectedCamp ? 'bg-activeLink text-white px-4 rounded-md' : ''
+              "
+            >
+              @if (selectedCamp) {
+              {{ selectedCamp }}
+              }@else { Name }
+            </span>
+            <svg
+              [ngClass]="isCampsActive ? 'rotate-180' : ''"
+              class="absolute transition-transform size-8 right-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
+                stroke="#A8A8A8"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          @if (isCampsActive) {
+          <div
+            class="w-[450px] absolute top-24 z-30 overflow-y-auto scroll-host bg-white border-2 rounded-lg max-h-44"
+          >
+            <ul>
+              <li class="relative flex items-center ps-2">
+                <span class="text-[#F14C50] font-bold">|</span>
+                <input
+                  type="text"
+                  placeholder="Add Camp"
+                  class="w-full h-full px-2 py-3 pt-4 border-b outline-none pe-4 border-activeLink"
+                />
+              </li>
+              @for (camp of allCamps; track camp.id; let last = $last) {
+              <li
+                [ngClass]="{
+                  'border-b border-activeLink': !last,
+                  'bg-activeLink text-white hover:text-white':
+                    selectedCamp == camp.name
+                }"
+                class="relative flex items-center justify-between cursor-pointer hover:text-activeLink"
+              >
+                <div
+                  (click)="selectCamp(camp)"
+                  class="w-11/12 h-full px-4 py-3"
+                >
+                  {{ camp.name }}
+                </div>
+                <span
+                  (click)="deleteCamp(camp.id)"
+                  class="absolute z-40 right-2 hover:text-red-600"
+                >
+                  <svg
+                    width="28"
+                    height="28"
+                    class="text-gray-800 hover:text-red-600"
+                    viewBox="0 0 28 28"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M22.1848 21.5657C22.2669 21.6478 22.313 21.7591 22.313 21.8752C22.313 21.9913 22.2669 22.1027 22.1848 22.1848C22.1027 22.2669 21.9913 22.313 21.8752 22.313C21.7591 22.313 21.6478 22.2669 21.5657 22.1848L14.0002 14.6193L6.43477 22.1848C6.35268 22.2669 6.24134 22.313 6.12524 22.313C6.00915 22.313 5.89781 22.2669 5.81571 22.1848C5.73362 22.1027 5.6875 21.9913 5.6875 21.8752C5.6875 21.7591 5.73362 21.6478 5.81571 21.5657L13.3812 14.0002L5.81571 6.43477C5.73362 6.35268 5.6875 6.24134 5.6875 6.12524C5.6875 6.00915 5.73362 5.8978 5.81571 5.81571C5.8978 5.73362 6.00915 5.6875 6.12524 5.6875C6.24134 5.6875 6.35268 5.73362 6.43477 5.81571L14.0002 13.3812L21.5657 5.81571C21.6064 5.77506 21.6546 5.74282 21.7077 5.72082C21.7608 5.69882 21.8178 5.6875 21.8752 5.6875C21.9327 5.6875 21.9897 5.69882 22.0428 5.72082C22.0959 5.74282 22.1441 5.77506 22.1848 5.81571C22.2254 5.85636 22.2577 5.90462 22.2797 5.95773C22.3017 6.01084 22.313 6.06776 22.313 6.12524C22.313 6.18273 22.3017 6.23965 22.2797 6.29276C22.2577 6.34587 22.2254 6.39413 22.1848 6.43477L14.6193 14.0002L22.1848 21.5657Z"
+                    />
+                  </svg>
+                </span>
+              </li>
+              }
+            </ul>
+          </div>
+          }
+        </div>
+
         <div class="flex flex-col basis-1/2">
-          <label for="college">Camp name</label>
+          <label class="text-lg">Term</label>
           <div class="relative">
             <ng-select
-              id="college"
-              [items]="allCollega"
+              [items]="allTerms"
               [closeOnSelect]="true"
               bindLabel="name"
               bindValue="id"
-              formControlName="college"
-              [placeholder]="'Name'"
-              [ngClass]="
-                addUserForm.controls['college'].errors && submitted
-                  ? 'border-rose-600 '
-                  : ''
-              "
-              class="relative block w-[450px] placeholder:text-gray-500 my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
+              formControlName="term"
+              placeholder="Select Term"
+              class="relative block w-[450px] my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
             >
             </ng-select>
             <svg
-              width="24"
-              height="24"
               [ngClass]="foucsCollega ? 'rotate-180' : ''"
-              class="absolute top-[14px] left-52 transition-transform"
+              class="absolute transition-transform top-4 size-8 right-32"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
+                stroke="#A8A8A8"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <!-- Dates -->
+      <div class="flex items-center justify-between w-full mt-2 ps-4">
+        <div class="flex flex-col basis-1/2">
+          <label class="text-lg">Start date</label>
+          <div class="relative">
+            <input
+              #datepickerInput
+              type="text"
+              placeholder="Select Date"
+              formControlName="startDate"
+              class="relative block w-[450px] px-4 py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+              readonly
+              (click)="toggleCalendar()"
+            />
+
+            <div
+              #calendar
+              class="absolute left-0 z-10 hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
+            >
+              <div class="flex items-center justify-between mb-2">
+                <button (click)="changeMonth(-1)" class="focus:outline-none">
+                  &lt;
+                </button>
+                <span class="font-semibold text-gray-700">{{ monthYear }}</span>
+                <button (click)="changeMonth(1)" class="focus:outline-none">
+                  &gt;
+                </button>
+              </div>
+              <div class="grid grid-cols-7 text-sm text-center text-gray-500">
+                @for (day of daysOfWeek; track $index) {
+                <div>{{ day }}</div>
+
+                }
+              </div>
+              <div class="grid grid-cols-7 mt-2 text-sm text-center">
+                @for (day of days; track $index) {
+                <ng-container>
+                  <div
+                    [ngClass]="{
+                      'bg-activeLink text-white': selectedDay === day
+                    }"
+                    class="p-3 border cursor-pointer hover:bg-gray-200"
+                    (click)="selectDate(day)"
+                  >
+                    {{ day }}
+                  </div>
+                </ng-container>
+                }
+              </div>
+            </div>
+            <svg
+              class="absolute transition-transform top-4 size-8 right-32"
+              viewBox="0 0 40 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M31.6654 6.66683H28.332V5.00016C28.332 4.55814 28.1564 4.13421 27.8439 3.82165C27.5313 3.50909 27.1074 3.3335 26.6654 3.3335C26.2233 3.3335 25.7994 3.50909 25.4869 3.82165C25.1743 4.13421 24.9987 4.55814 24.9987 5.00016V6.66683H14.9987V5.00016C14.9987 4.55814 14.8231 4.13421 14.5105 3.82165C14.198 3.50909 13.7741 3.3335 13.332 3.3335C12.89 3.3335 12.4661 3.50909 12.1535 3.82165C11.841 4.13421 11.6654 4.55814 11.6654 5.00016V6.66683H8.33203C7.00595 6.66683 5.73418 7.19361 4.7965 8.1313C3.85882 9.06898 3.33203 10.3407 3.33203 11.6668V31.6668C3.33203 32.9929 3.85882 34.2647 4.7965 35.2024C5.73418 36.14 7.00595 36.6668 8.33203 36.6668H31.6654C32.9914 36.6668 34.2632 36.14 35.2009 35.2024C36.1386 34.2647 36.6654 32.9929 36.6654 31.6668V11.6668C36.6654 10.3407 36.1386 9.06898 35.2009 8.1313C34.2632 7.19361 32.9914 6.66683 31.6654 6.66683ZM33.332 31.6668C33.332 32.1089 33.1564 32.5328 32.8439 32.8453C32.5313 33.1579 32.1074 33.3335 31.6654 33.3335H8.33203C7.89 33.3335 7.46608 33.1579 7.15352 32.8453C6.84096 32.5328 6.66536 32.1089 6.66536 31.6668V20.0002H33.332V31.6668ZM33.332 16.6668H6.66536V11.6668C6.66536 11.2248 6.84096 10.8009 7.15352 10.4883C7.46608 10.1758 7.89 10.0002 8.33203 10.0002H11.6654V11.6668C11.6654 12.1089 11.841 12.5328 12.1535 12.8453C12.4661 13.1579 12.89 13.3335 13.332 13.3335C13.7741 13.3335 14.198 13.1579 14.5105 12.8453C14.8231 12.5328 14.9987 12.1089 14.9987 11.6668V10.0002H24.9987V11.6668C24.9987 12.1089 25.1743 12.5328 25.4869 12.8453C25.7994 13.1579 26.2233 13.3335 26.6654 13.3335C27.1074 13.3335 27.5313 13.1579 27.8439 12.8453C28.1564 12.5328 28.332 12.1089 28.332 11.6668V10.0002H31.6654C32.1074 10.0002 32.5313 10.1758 32.8439 10.4883C33.1564 10.8009 33.332 11.2248 33.332 11.6668V16.6668Z"
+                fill="#D9D9D9"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div class="flex flex-col basis-1/2">
+          <label class="text-lg">End date</label>
+          <div class="relative">
+            <input
+              #datepickerInput
+              type="text"
+              placeholder="Select Date"
+              formControlName="startDate"
+              class="relative block w-[450px] px-4 py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+              readonly
+              (click)="toggleCalendar()"
+            />
+
+            <div
+              #calendar
+              class="absolute left-0 z-10 hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
+            >
+              <div class="flex items-center justify-between mb-2">
+                <button (click)="changeMonth(-1)" class="focus:outline-none">
+                  &lt;
+                </button>
+                <span class="font-semibold text-gray-700">{{ monthYear }}</span>
+                <button (click)="changeMonth(1)" class="focus:outline-none">
+                  &gt;
+                </button>
+              </div>
+              <div class="grid grid-cols-7 text-sm text-center text-gray-500">
+                @for (day of daysOfWeek; track $index) {
+                <div>{{ day }}</div>
+
+                }
+              </div>
+              <div class="grid grid-cols-7 mt-2 text-sm text-center">
+                @for (day of days; track $index) {
+                <ng-container>
+                  <div
+                    [ngClass]="{
+                      'bg-activeLink text-white': selectedDay === day
+                    }"
+                    class="p-3 border cursor-pointer hover:bg-gray-200"
+                    (click)="selectDate(day)"
+                  >
+                    {{ day }}
+                  </div>
+                </ng-container>
+                }
+              </div>
+            </div>
+            <svg
+              class="absolute transition-transform top-4 size-8 right-32"
+              viewBox="0 0 40 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M31.6654 6.66683H28.332V5.00016C28.332 4.55814 28.1564 4.13421 27.8439 3.82165C27.5313 3.50909 27.1074 3.3335 26.6654 3.3335C26.2233 3.3335 25.7994 3.50909 25.4869 3.82165C25.1743 4.13421 24.9987 4.55814 24.9987 5.00016V6.66683H14.9987V5.00016C14.9987 4.55814 14.8231 4.13421 14.5105 3.82165C14.198 3.50909 13.7741 3.3335 13.332 3.3335C12.89 3.3335 12.4661 3.50909 12.1535 3.82165C11.841 4.13421 11.6654 4.55814 11.6654 5.00016V6.66683H8.33203C7.00595 6.66683 5.73418 7.19361 4.7965 8.1313C3.85882 9.06898 3.33203 10.3407 3.33203 11.6668V31.6668C3.33203 32.9929 3.85882 34.2647 4.7965 35.2024C5.73418 36.14 7.00595 36.6668 8.33203 36.6668H31.6654C32.9914 36.6668 34.2632 36.14 35.2009 35.2024C36.1386 34.2647 36.6654 32.9929 36.6654 31.6668V11.6668C36.6654 10.3407 36.1386 9.06898 35.2009 8.1313C34.2632 7.19361 32.9914 6.66683 31.6654 6.66683ZM33.332 31.6668C33.332 32.1089 33.1564 32.5328 32.8439 32.8453C32.5313 33.1579 32.1074 33.3335 31.6654 33.3335H8.33203C7.89 33.3335 7.46608 33.1579 7.15352 32.8453C6.84096 32.5328 6.66536 32.1089 6.66536 31.6668V20.0002H33.332V31.6668ZM33.332 16.6668H6.66536V11.6668C6.66536 11.2248 6.84096 10.8009 7.15352 10.4883C7.46608 10.1758 7.89 10.0002 8.33203 10.0002H11.6654V11.6668C11.6654 12.1089 11.841 12.5328 12.1535 12.8453C12.4661 13.1579 12.89 13.3335 13.332 13.3335C13.7741 13.3335 14.198 13.1579 14.5105 12.8453C14.8231 12.5328 14.9987 12.1089 14.9987 11.6668V10.0002H24.9987V11.6668C24.9987 12.1089 25.1743 12.5328 25.4869 12.8453C25.7994 13.1579 26.2233 13.3335 26.6654 13.3335C27.1074 13.3335 27.5313 13.1579 27.8439 12.8453C28.1564 12.5328 28.332 12.1089 28.332 11.6668V10.0002H31.6654C32.1074 10.0002 32.5313 10.1758 32.8439 10.4883C33.1564 10.8009 33.332 11.2248 33.332 11.6668V16.6668Z"
+                fill="#D9D9D9"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOC  -->
+      <div class="flex items-center justify-between w-full mt-2 ps-4">
+        <div class="flex flex-col basis-1/2">
+          <label class="text-lg">Heads of camp</label>
+          <div class="relative">
+            <ng-select
+              [items]="allHeadsOfCamp"
+              [closeOnSelect]="false"
+              [hideSelected]="true"
+              [multiple]="true"
+              bindLabel="fullName"
+              bindValue="id"
+              formControlName="headsIds"
+              placeholder="Head of camp"
+              class="relative block w-[450px] placeholder:text-gray-500 my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
+            >
+              <ng-template ng-option-tmp let-item="item" let-index="index">
+                <ng-option
+                  class="flex items-center justify-between w-full h-full"
+                  [class.cursor-not-allowed]="item.isInCamp"
+                  [disabled]="item.isInCamp"
+                >
+                  <h4>{{ item.fullName }}</h4>
+                  @if (item.isInCamp) {
+                  <span>(In camp)</span>
+                  }
+                </ng-option>
+              </ng-template>
+            </ng-select>
+            <svg
+              [ngClass]="foucsCollega ? 'rotate-180' : ''"
+              class="absolute transition-transform top-4 size-8 right-32"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -50,28 +301,23 @@
         </div>
 
         <div class="flex flex-col basis-1/2">
-          <label for="college">college </label>
+          <label class="text-lg">Mentors</label>
           <div class="relative">
             <ng-select
-              id="college"
-              [items]="allCollega"
-              [closeOnSelect]="true"
-              bindLabel="name"
+              [items]="allMentors"
+              [closeOnSelect]="false"
+              [hideSelected]="true"
+              [multiple]="true"
+              bindLabel="fullName"
               bindValue="id"
-              formControlName="college"
-              [ngClass]="
-                addUserForm.controls['college'].errors && submitted
-                  ? 'border-rose-600 '
-                  : ''
-              "
-              class="relative block w-[450px] py-4 my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
+              formControlName="mentorsIds"
+              placeholder="Mentor"
+              class="relative block w-[450px] my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
             >
             </ng-select>
             <svg
-              width="24"
-              height="24"
               [ngClass]="foucsCollega ? 'rotate-180' : ''"
-              class="absolute top-[14px] left-52 transition-transform"
+              class="absolute transition-transform top-4 size-8 right-32"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -104,3 +350,37 @@
     </div>
   </form>
 </div>
+
+<!-- 
+
+  <div class="relative">
+            <ng-select
+              [items]="allCamps"
+              [closeOnSelect]="false"
+              [addTag]="addTagPromise"
+              [loading]="loadingAdd"
+              bindLabel="name"
+              bindValue="id"
+              formControlName="name"
+              placeholder="Name"
+              class="relative block w-[450px] placeholder:text-gray-500 my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
+            >
+            </ng-select>
+            <svg
+              [ngClass]="foucsCollega ? 'rotate-180' : ''"
+              class="absolute transition-transform top-4 size-8 right-32"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
+                stroke="#A8A8A8"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+-->

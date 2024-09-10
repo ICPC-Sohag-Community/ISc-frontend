@@ -121,7 +121,12 @@
                   (click)="showRoles()"
                   class="inline-flex items-center w-full py-1 font-medium text-black pe-6"
                 >
+                  @if (currentPath === '/leader') {
+
                   <span>Leader</span>
+                  }@else {
+                  <span>Head Of Camp</span>
+                  }
 
                   <svg
                     [ngClass]="isShow ? 'rotate-180' : ''"

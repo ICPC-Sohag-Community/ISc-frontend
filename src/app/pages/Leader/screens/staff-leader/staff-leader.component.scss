@@ -3,8 +3,7 @@ table {
   border-spacing: 0px 12px;
 }
 
-.custom-scrollbar-side::-webkit-scrollbar,
-.scroll-host::-webkit-scrollbar {
+.custom-scrollbar-side::-webkit-scrollbar {
   display: none;
 }
 

@@ -25,6 +25,7 @@
     "angularx-qrcode": "^17.0.1",
     "chart.js": "^4.4.3",
     "jquery": "^3.7.1",
+    "ng-pick-datetime": "^4.3.4",
     "rxjs": "~7.8.0",
     "swiper": "^8.4.6",
     "tslib": "^2.3.0",
