@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './standings.component.scss'
 })
 export class StandingsComponent {
+  isLoading:boolean = false;
   change(index: number, i: string, inc: boolean, points: number) {
     // Ensure stand[index] and stand[index].achivers are defined before proceeding
     if (this.stand && this.stand.achivers[index]) {
@@ -41,10 +42,11 @@ export class StandingsComponent {
   stand: any = {};
 
   get(id:any){
+    this.isLoading = true
     if(id != null){
       this.serv.getData(id).subscribe((d:ResponseHeader)=>{
         this.stand = d.data;
-        console.log(this.stand)
+        this.isLoading = false
       })
     }
   }

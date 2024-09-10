@@ -1,4 +1,11 @@
 <app-mentor-header></app-mentor-header>
+@if (isLoading) {
+  <img
+    class="w-8 h-8 block mx-auto my-12 animate-spin text-purple-950"
+    src="https://www.svgrepo.com/show/474682/loading.svg"
+    alt="Loading icon"
+  />
+  } @else { 
 <div *ngIf="atten != null" class="w-[90vw] h-[calc(100vh-200px)] m-auto  border-collapse border rounded-xl border-gray-300 overflow-y-auto overflow-x-auto custom-scrollbar">
     <table class="hover-table max-h-full border-collapse border rounded-xl border-gray-300  ">
         <thead class="sticky top-[-1px] z-10 bg-[#F4F5F8] border-b border-black" >
@@ -35,3 +42,4 @@
         </tbody>
       </table>
 </div>
+  }

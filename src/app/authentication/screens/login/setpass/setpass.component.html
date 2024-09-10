@@ -30,18 +30,23 @@
       <small *ngIf="passwordForm.errors?.['passwordMismatch'] && confirmPassword?.touched" class="text-red-500 text-center block">
         Passwords do not match.
       </small>
-      <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-        <strong class="font-bold">Invalid Data!</strong> <br>
-        <div *ngFor="let i of err" class="block ">{{i}}</div>
-        
-    </div>
+      
+    <small *ngIf="error" class="text-red-500 text-center block">
+      <div *ngFor="let i of err" class="block ">{{i}}</div>
+    </small>
       <!-- Save Button -->
       <button
         type="submit"
         
-        class="block w-full py-2 text-center rounded-xl mt-5 bg-gradient-to-r from-[#3D91C7] via-[#3591C9] to-[#63ABFD]"
+        class="flex justify-center items-center w-full py-2 text-center rounded-xl mt-5 bg-gradient-to-r from-[#3D91C7] via-[#3591C9] to-[#63ABFD]"
       >
-        Save
+      @if (isLoading) {
+        <img
+          class="w-8 h-8 animate-spin text-purple-950"
+          src="https://www.svgrepo.com/show/474682/loading.svg"
+          alt="Loading icon"
+        />
+        } @else { Save }
       </button>
     </form>
   </div>
