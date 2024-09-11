@@ -59,7 +59,8 @@ export interface HeadsInfo {
 export interface task {
   id: string
   title: string
-  deadLine: string
+  endTime:string
+  startTime:string
 }
 export interface NextPractice {
   id: number

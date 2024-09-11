@@ -4,7 +4,7 @@ import SwiperCore, { SwiperOptions } from 'swiper';
 import Swiper, { Navigation } from 'swiper';
 import { SwiperModule } from 'swiper/angular';
 import { HomeService } from '../../../Services/home.service';
-import { Mentor } from '../../../model/trinee-data';
+import { Mentor } from '../../../model/trinee-home';
 import { ResponsiveService } from '../../../Services/responsive.service';
 
 // Import and use Swiper modules

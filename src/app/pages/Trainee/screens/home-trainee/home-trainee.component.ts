@@ -58,7 +58,7 @@ export class HomeTraineeComponent implements OnInit {
       next:({statusCode,data})=>{
         if(statusCode===200){
           this.SessionId=data
-          this.calcTime(null)
+          this.calcTime(data)
         }
       }
     })

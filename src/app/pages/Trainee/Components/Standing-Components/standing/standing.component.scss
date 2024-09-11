@@ -19,3 +19,22 @@ table {
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
 }
+@media screen and (max-width:640px){
+  table {
+    padding: 0 7px;
+  }
+  .border-y{
+    border-top: #686666 6px solid;
+    border-bottom: #686666 6px solid;
+  }
+  .border-left{
+    border-left: #686666 6px solid;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+  .border-right{
+    border-right: #686666 6px solid;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+}

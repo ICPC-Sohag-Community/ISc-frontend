@@ -42,6 +42,8 @@ import { OtpComponent } from './authentication/screens/login/otp/otp.component';
 import { SetpassComponent } from './authentication/screens/login/setpass/setpass.component';
 import { ForgetComponent } from './authentication/screens/login/forget/forget.component';
 import { LogComponent } from './authentication/screens/login/log/log.component';
+import { LayoutPublicComponent } from './layouts/layout_public/layout-public.component';
+import { HomePublicComponent } from './pages/public/screens/home-public/home-public.component';
 
 
 export const routes: Routes = [
@@ -77,6 +79,24 @@ export const routes: Routes = [
         path: 'standing',
         component: StandingTraineeComponent,
         title: 'Trainee / standing - ICPC',
+      },
+    ],
+  },
+  {
+    path: 'guest',
+    title: 'ICPC',
+    component: LayoutPublicComponent,
+
+    children: [
+      {
+        path: '',
+        redirectTo:'home',
+        pathMatch:'full'
+      },
+      {
+        path: 'home',
+        component: HomePublicComponent,
+        title: 'Guest / Home - ICPC',
       },
     ],
   },
@@ -256,7 +276,7 @@ export const routes: Routes = [
     canActivate: [authGuardLoggdIn],
     title: 'OTP',
     children: [
-      
+
     ],
   }
 ]

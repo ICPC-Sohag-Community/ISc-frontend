@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { HomeService } from '../../../Services/home.service';
-import { task } from '../../../model/trinee-data';
+import { task } from '../../../model/trinee-home';
 declare var $: any;
 
 @Component({

@@ -12,9 +12,9 @@
         <tr class="bg-white text-[#0A0A0A] text-lg">
           <th class="px-4 py-2 text-left">Name</th>
           <th class="px-4 py-2">Handle</th>
-          <th class="px-4 py-2">Mentor</th>
+          <th class="px-4 py-2" *ngIf="!responsive.isSmallScreen">Mentor</th>
           <th class="px-4 py-2">Solve</th>
-          <th class="px-4 py-2">Points</th>
+          <th class="px-4 py-2" *ngIf="!responsive.isSmallScreen">Points</th>
         </tr>
       </thead>
 
@@ -36,7 +36,7 @@
           </td>
           <td class="px-4 py-2" [ngClass]="{'border-y': trainee.id==currentUser.id}">{{trainee.codeForceHandle}}</td>
           <td class="px-4 py-2" [ngClass]="{'border-y': trainee.id==currentUser.id}">{{trainee.mentorName}}</td>
-          <td class="px-4 py-2" [ngClass]="{'border-y': trainee.id==currentUser.id}">{{trainee.solvedProblems}}/1620</td>
+          <td class="px-4 py-2" [ngClass]="{'border-y': trainee.id==currentUser.id}">{{trainee.solvedProblems}}/{{totalProblems}}</td>
           <td class="px-4 py-2 rounded-r-lg" [ngClass]="{'border-y border-right': trainee.id==currentUser.id}">{{trainee.points}}</td>
         </tr>
         }
@@ -54,15 +54,15 @@
           </td>
           <td class="px-4 py-2" [ngClass]="{'border-y': trainee.id==currentUser.id}">{{trainee.codeForceHandle}}</td>
           <td class="px-4 py-2" [ngClass]="{'border-y': trainee.id==currentUser.id}">{{trainee.mentorName}}</td>
-          <td class="px-4 py-2" [ngClass]="{'border-y': trainee.id==currentUser.id}">{{trainee.solvedProblems}}/1620</td>
+          <td class="px-4 py-2" [ngClass]="{'border-y': trainee.id==currentUser.id}">{{trainee.solvedProblems}}/{{totalProblems}}</td>
           <td class="px-4 py-2 rounded-r-lg" [ngClass]="{'border-y border-right': trainee.id==currentUser.id}">{{trainee.points}}</td>
         </tr>
       }
       @for (trainee of redZone ; track trainee.id ; let i = $index) {
         <tr
-          class=" bg-[#EF4A50] text-white text-center text-base font-medium rounded-lg "
+          class=" bg-[#EF4A50] text-white text-center text-base font-medium rounded-lg text-[12px] sm:text-[16px] "
         >
-          <td class="p-4 text-left rounded-l-lg" [ngClass]="{'border-y border-left': trainee.id==currentUser.id}">
+          <td class="p-2 sm:p-4 text-left rounded-l-lg" [ngClass]="{'border-y border-left': trainee.id==currentUser.id}">
             <div class="flex items-center gap-3">
               <div class=" relative size-7 bg-white rounded-[6px] text-[#EF4A50] flex items-center justify-center ">
                 {{i+1+greenZone.length+yellowZone.length}}
@@ -71,9 +71,9 @@
             </div>
           </td>
           <td class="px-4 py-2" [ngClass]="{'border-y': trainee.id==currentUser.id}" >{{trainee.codeForceHandle}}</td>
-          <td class="px-4 py-2 " [ngClass]="{'border-y': trainee.id==currentUser.id}">{{trainee.mentorName}}</td>
-          <td class="px-4 py-2 " [ngClass]="{'border-y': trainee.id==currentUser.id}">{{trainee.solvedProblems}}/1620</td>
-          <td class="px-4 py-2 rounded-r-lg" [ngClass]="{'border-y border-right': trainee.id==currentUser.id}">{{trainee.points}}</td>
+          <td class="px-4 py-2 " *ngIf="!responsive.isSmallScreen" [ngClass]="{'border-y': trainee.id==currentUser.id}">{{trainee.mentorName}}</td>
+          <td class="px-4 py-2 " [ngClass]="{'border-y': trainee.id==currentUser.id}">{{trainee.solvedProblems}}/{{totalProblems}}</td>
+          <td class="px-4 py-2 rounded-r-lg" *ngIf="!responsive.isSmallScreen" [ngClass]="{'border-y border-right': trainee.id==currentUser.id}">{{trainee.points}}</td>
         </tr>
       }
       </tbody>
