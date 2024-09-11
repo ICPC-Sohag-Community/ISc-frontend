@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, inject } from '@angular/core';
 import { HomeHeroComponent } from '../../Components/Home-Components/home-hero/home-hero.component';
+import { AboutUsComponent } from "../../Components/Home-Components/about-us/about-us.component";
 
 declare var $: any;
 
@@ -7,8 +8,9 @@ declare var $: any;
   selector: 'app-home-public',
   standalone: true,
   imports: [
-    HomeHeroComponent
-  ],
+    HomeHeroComponent,
+    AboutUsComponent
+],
   templateUrl: './home-public.component.html',
   styleUrls: ['./home-public.component.scss']
 })
