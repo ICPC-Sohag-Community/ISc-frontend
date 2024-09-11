@@ -50,11 +50,13 @@ item.state = this.stand[ind].state;
 }
 console.log(i);
 this.serv.upd(i).subscribe((d:ResponseHeader)=>{
-  if(this.stand[ind].state == 1){
-    this.stand[ind].state = this.stand[ind].state + 1;
-  }
-  else{
-    this.stand[ind].state = this.stand[ind].state - 1;
+  if(d.isSuccess){
+    if(this.stand[ind].state == 1){
+      this.stand[ind].state = this.stand[ind].state + 1;
+    }
+    else{
+      this.stand[ind].state = this.stand[ind].state - 1;
+    }
   }
   console.log(d);
 })
@@ -86,13 +88,29 @@ edi(id:any){
     "time": this.dateEd  ,
     "state": this.statusEd
   }
-  
-  this.serv.upd(i).subscribe((d:ResponseHeader)=>{
-    console.log(d);
-    this.get(localStorage.getItem("camp"));
-    this.show('edit')
-  })
+  this.edError = [];
+  if(this.dateEd){
+    this.serv.upd(i).subscribe((d:ResponseHeader)=>{
+      if(d.isSuccess){
+        console.log(d);
+      this.get(localStorage.getItem("camp"));
+      this.show('edit')
+      }
+      else{
+        
+        for (const field in d.errors) {
+          if (d.errors.hasOwnProperty(field)) {
+            this.edError.push(`${field}: ${d.errors[field].join(', ')}`);
+          }
+        }
+      }
+    })
+  }
+  else{
+    this.edError.push('Enter a valid date');
+  }
 }
+edError:any[] = [];
   isShow: boolean  = false;
   date: any = '';  // Initialize as empty string
   link: any = '';  // Initialize as empty string
