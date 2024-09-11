@@ -16,11 +16,11 @@
     <div class="w-1/3 max-h-[80vh] overflow-auto bg-white rounded-lg shadow p-4" style="border: 0.5px solid #3D91C7">
       <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Incoming</h2>
       <!-- Task Card -->
-      <div *ngIf="tasks[0]">
-        <div id="{{item.taskId}}" *ngFor="let item of tasks[0].trainees ; let i = index" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+      <div id="{{item.taskId}}" *ngFor="let item of tasks ; let i = index">
+        <div  *ngIf="item.status == 0" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
         <!-- Avatar and Name -->
          
-        <div class="flex items-center mb-2 justify-between">
+        <div class="flex items-center mb-2 justify-between"  >
           <!-- Replace with an img tag for the avatar -->
           <div class="flex items-center mb-2">
             <img alt=" " class="w-8 h-8 bg-gray-300 rounded-lg mr-2" src="{{item.photoUrl?item.photoUrl : '../../../../../../assets/img/user.jpeg'}}">
@@ -54,8 +54,8 @@
             
         </div>
         <p class="text-sm">• {{item.title}}</p>
-        <p class="text-sm text-gray-500 text-right">Start Time: {{item.startTime | utcToLocal}}</p>
-        <p class="text-sm text-gray-500 text-right">End Time: {{item.endTime | utcToLocal}}</p>
+        <p class="text-sm text-gray-500 ">Start Time: {{item.startTime | utcToLocal}}</p>
+        <p class="text-sm text-gray-500 ">End Time: {{item.endTime | utcToLocal}}</p>
       </div>
       </div>
       <!-- Repeat the task card structure for more tasks -->
@@ -65,11 +65,11 @@
     <div class="w-1/3 max-h-[80vh] overflow-auto bg-white rounded-lg shadow p-4"  style="border: 0.5px solid #3D91C7">
       <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Current</h2>
       <!-- Task Card -->
-       <div *ngIf="tasks[1]">
-        <div id="{{item.taskId}}" *ngFor="let item of tasks[1].trainees ; let i = index" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+       <div *ngFor="let item of tasks ; let i = index" id="{{item.taskId}}">
+        <div  *ngIf="item.status == 1"  class="bg-[#3D91C733] rounded-lg p-4 mb-4">
           <!-- Avatar and Name -->
           
-          <div class="flex items-center mb-2 justify-between">
+          <div class="flex items-center mb-2 justify-between"  >
             <!-- Replace with an img tag for the avatar -->
             <div class="flex items-center mb-2">
               <img alt=" " class="w-8 h-8 bg-gray-300 rounded-lg mr-2" src="{{item.photoUrl?item.photoUrl : '../../../../../../assets/img/user.jpeg'}}">
@@ -103,8 +103,8 @@
               
           </div>
           <p class="text-sm">• {{item.title}}</p>
-          <p class="text-sm text-gray-500 text-right">Start Time: {{item.startTime | utcToLocal}}</p>
-          <p class="text-sm text-gray-500 text-right">End Time: {{item.endTime | utcToLocal}}</p>
+          <p class="text-sm text-gray-500 ">Start Time: {{item.startTime | utcToLocal}}</p>
+          <p class="text-sm text-gray-500 ">End Time: {{item.endTime | utcToLocal}}</p>
         </div>
       <!-- Repeat the task card structure for more tasks -->
         </div>
@@ -114,11 +114,11 @@
     <div class="w-1/3 max-h-[80vh] overflow-auto bg-white rounded-lg shadow p-4" style="border: 0.5px solid #3D91C7">
       <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Ended</h2>
       <!-- Task Card -->
-       <div *ngIf="tasks[2]">
-      <div id="{{item.taskId}}" *ngFor="let item of tasks[2].trainees ; let i = index" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+       <div *ngFor="let item of tasks ; let i = index" id="{{item.taskId}}">
+      <div  *ngIf="item.status == 2" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
         <!-- Avatar and Name -->
          
-        <div class="flex items-center mb-2 justify-between">
+        <div class="flex items-center mb-2 justify-between" >
           <!-- Replace with an img tag for the avatar -->
           <div class="flex items-center mb-2">
             <img alt=" " class="w-8 h-8 bg-gray-300 rounded-lg mr-2" src="{{item.photoUrl?item.photoUrl : '../../../../../../assets/img/user.jpeg'}}">
@@ -152,8 +152,8 @@
             
         </div>
         <p class="text-sm">• {{item.title}}</p>
-        <p class="text-sm text-gray-500 text-right">Start Time: {{item.startTime | utcToLocal}}</p>
-        <p class="text-sm text-gray-500 text-right">End Time: {{item.endTime | utcToLocal}}</p>
+        <p class="text-sm text-gray-500 ">Start Time: {{item.startTime | utcToLocal}}</p>
+        <p class="text-sm text-gray-500 ">End Time: {{item.endTime | utcToLocal}}</p>
       </div>
     </div>
       <!-- Repeat the task card structure for more tasks -->
@@ -207,9 +207,13 @@
 
             <!-- Due to -->
             <div class="mb-4 flex gap-6 items-center">
-                <label class="flex items-center text-sm font-medium ">Due to</label>
-                <input #date type="date" class="mt-2 w-[170px] px-4 py-2  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]">
+                <label class="flex items-center text-sm font-medium ">Start Time</label>
+                <input #startTime type="datetime-local" class="mt-2 w-[170px] px-4 py-2  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]">
             </div>
+            <div class="mb-4 flex gap-6 items-center">
+              <label class="flex items-center text-sm font-medium ">End Time</label>
+              <input #endTime type="datetime-local" class="mt-2 w-[170px] px-4 py-2  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]">
+          </div>
 
             <!-- Tasks' agenda -->
             <div class="mb-4">
@@ -249,7 +253,7 @@
 
             <!-- Create Button -->
             <div class="flex justify-end">
-                <button (click)="create(this.task, this.date)" class="bg-[#3D91C7] hover:bg-[#2679AF] text-white px-4 py-2 rounded-lg  focus:outline-none">
+                <button (click)="create(this.task, this.startTime, this.endTime)" class="bg-[#3D91C7] hover:bg-[#2679AF] text-white px-4 py-2 rounded-lg  focus:outline-none">
                     Create
                 </button>
             </div>
@@ -264,6 +268,7 @@
                 <p class="text-lg font-semibold">{{this.ed.firstName}} {{this.ed.middleName}} {{this.ed.lastName}}</p>
                 <!-- <p class="text-gray-500 text-sm">Deadline: {{this.ed.deadLine | utcToLocal}}</p> -->
                 <label class="text-gray-500 text-sm" for="dateEdit">Start Time: </label>  <input #startTime id="sdateEdit" class="mt-2 w-[170px] px-2 py-1  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]" type="date" [value]="formatDate(ed.startTime)">
+                <br>
                 <label class="text-gray-500 text-sm" for="dateEdit">End Time: </label>  <input #endTime id="edateEdit" class="mt-2 w-[170px] px-2 py-1  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]" type="date" [value]="formatDate(ed.endTime)">
             </div>
         </div>

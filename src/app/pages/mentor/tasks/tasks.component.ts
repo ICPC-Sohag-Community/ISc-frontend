@@ -46,12 +46,15 @@ isLoading:boolean = false;
   }
   
   err:any[] = [];
-create(task: HTMLTextAreaElement ,date: HTMLInputElement ) {
-  const deadlineDate = new Date(date.value);
-  const utcDeadline = deadlineDate.toISOString().replace('Z', '');
+create(task: HTMLTextAreaElement ,startTime: HTMLInputElement,endTime: HTMLInputElement ) {
+  const start = new Date(startTime.value);
+  const st = start.toISOString().replace('Z', '');
+  const end = new Date(endTime.value);
+  const en = end.toISOString().replace('Z', '');
 let data = {
   "title":task.value,
-  "deadLine" : utcDeadline,
+  "startTime": st,
+  "endTime": en,
   "traineesIds": this.trainTask,
   "campId":Number(localStorage.getItem("camp")) 
 }
@@ -61,7 +64,8 @@ this.taskNo.forEach(element => {
   if(element != null){
     data = {
       "title":element,
-      "deadLine" : utcDeadline,
+      "startTime": st,
+  "endTime": en,
       "traineesIds":this.trainTask ,
       "campId":Number(localStorage.getItem("camp"))
     }
@@ -188,7 +192,9 @@ add(id: string,trainee: any, f:String , l:String) {
     if(id != null){
       this.serv.getData(id).subscribe((d:ResponseHeader)=>{
         this.tasks = d.data;
+        console.log(d)
         this.isLoading = false;
+
       })
     }
   }
