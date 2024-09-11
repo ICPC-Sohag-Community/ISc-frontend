@@ -2,7 +2,7 @@ import { Component, inject, OnInit, AfterViewInit } from '@angular/core';
 import { Chart, registerables, Plugin, ArcElement } from 'chart.js';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HomeService } from '../../../Services/home.service';
-import { NextPractice } from '../../../model/trinee-data';
+import { NextPractice } from '../../../model/trinee-home';
 
 Chart.register(...registerables);
 

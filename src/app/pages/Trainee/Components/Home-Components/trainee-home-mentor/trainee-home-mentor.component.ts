@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { HomeService } from '../../../Services/home.service';
-import { Mentor } from '../../../model/trinee-data';
+import { Mentor } from '../../../model/trinee-home';
 import { ResponsiveService } from '../../../Services/responsive.service';
 declare var $: any;
 
