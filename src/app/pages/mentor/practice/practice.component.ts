@@ -46,16 +46,16 @@ item.state = this.stand[ind].state;
   "meetingLink": item.meetingLink,
   "note": item.note,
   "time": item.time  ,
-  "state": item.state == 1? 2 : 1
+  "state": item.state != 1? 1 : 2
 }
 console.log(i);
 this.serv.upd(i).subscribe((d:ResponseHeader)=>{
   if(d.isSuccess){
     if(this.stand[ind].state == 1){
-      this.stand[ind].state = this.stand[ind].state + 1;
+      this.stand[ind].state = 2;
     }
     else{
-      this.stand[ind].state = this.stand[ind].state - 1;
+      this.stand[ind].state = 1;
     }
   }
   console.log(d);
@@ -205,7 +205,7 @@ edError:any[] = [];
         this.notes = '';
          this.error = false;
          this.success = true;
-         this.get(localStorage.getItem("camp"));
+         window.location.reload();
        }
      })
     }
