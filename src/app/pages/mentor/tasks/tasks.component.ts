@@ -24,69 +24,111 @@ isLoading:boolean = false;
     return new Date(date).toISOString().substring(0, 10);
   }
  
-  updateTitle(data:any, dat:any, end:any): void {
+  updateTitle(data : any, dat:any , end:any): void {
     
     const dateObj = new Date();
     const date = new Date(dat.value);
     // Check if inputElement is not null and has a value
-    if (data.value && date.getTime() > dateObj.getTime() && date.getDate() != dateObj.getDate() ) {
-      this.ed.title = data.value;
-      this.ed.startTime = dat.value;
-      this.ed.endTime = dat.value;
-      console.log(this.ed)
-      this.serv.updTask(this.ed).subscribe((d:ResponseHeader)=>{
-        console.log(d);
-        this.show('edit')
-      })
+   
+    
+    let task = {
+      "taskId": this.ed.taskId,
+      "title":  data.value,
+      "startTime":  dat.value,
+      "endTime":  end.value,
+      "traineeId":  this.ed.traineeId
     }
-    else{
-      console.log(dat.value )
-      alert('Enter a deadline in the future')
+    this.serv.updTask(task).subscribe((d:ResponseHeader)=>{
+      if (d.isSuccess) {
+        this.ed.title = data.value;
+        this.ed.startTime = dat.value;
+        this.ed.endTime = end.value;
+        console.log(task)
+          console.log(d);
+          this.show('edit')
+        
+      }
+      else{
+        this.errors = [];
+        console.log(task)
+        console.log(d )
+        for (const field in d.errors) {
+
+          if (d.errors.hasOwnProperty(field)) {
+            this.errors.push(`${field}: ${d.errors[field].join(', ')}`);
+          }
+        }
+      }
+    })
     }
-  }
-  
   err:any[] = [];
-create(task: HTMLTextAreaElement ,date: HTMLInputElement ) {
-  const deadlineDate = new Date(date.value);
-  const utcDeadline = deadlineDate.toISOString().replace('Z', '');
+  errors:any = [];
+create(task: HTMLTextAreaElement ,startTime: HTMLInputElement,endTime: HTMLInputElement ) {
+  let start :any;
+  let st :any;
+  let end :any;
+  let en :any;
+  let flag = false;
+  if(startTime.value && endTime.value){
+     start = startTime.value? new Date(startTime.value): null;
+   st = start?start.toISOString().replace('Z', '') : null;
+   end = new Date(endTime.value);
+   en = end?end.toISOString().replace('Z', '') : null;
+  }
 let data = {
   "title":task.value,
-  "deadLine" : utcDeadline,
+  "startTime": st,
+  "endTime": en,
   "traineesIds": this.trainTask,
   "campId":Number(localStorage.getItem("camp")) 
 }
 console.log(data);
-
+this.crError = [];
 this.taskNo.forEach(element => {
   if(element != null){
     data = {
       "title":element,
-      "deadLine" : utcDeadline,
+      "startTime": st,
+  "endTime": en,
       "traineesIds":this.trainTask ,
       "campId":Number(localStorage.getItem("camp"))
     }
+    if(st && en && this.chars.length != 0 && this.taskNo.length != 0){
     this.serv.addTask(data).subscribe((d:ResponseHeader)=>{
       if(!d.isSuccess){
-        this.err= d.errors;
         
-          if(d.errors.DeadLine){
-            alert("Deadline must be in future");
+        
+        for (const field in d.errors) {
+
+          if (d.errors.hasOwnProperty(field)) {
+            this.crError.push(`${field}: ${d.errors[field].join(', ')}`);
           }
-          else{
-            alert("All fields are required");
-          }
+        }
         
       }
       else{
         console.log(d.message);
-        window.location.reload();
+        this.get(localStorage.getItem("camp"));
+        this.show('add');
+        // window.location.reload();
+        
       }
-      })
+      })  
+    }
+    else if (!st || !en || this.chars.length == 0 || this.taskNo.length == 0){
+      this.crError.push('All fields are required');
+    }
+    else{
+      this.crError.push('All fields are required');
+    }
+    
+    
   }
 });
 
 
 }
+crError: any[] = [];
 del(id:any){
   let data = {
     "taskId":id
@@ -99,14 +141,15 @@ del(id:any){
 }
 taskNo:any[] = [];
 onKeydown(event: KeyboardEvent, task:any) {
-  if (event.key === 'Enter') {
+  if (event.key === 'Enter' && task.value.replace(/\s+/g, '') != '') {
     this.taskNo.push(task.value);
-    let e = document.getElementById('tasks');
+    // let e = document.getElementById('tasks');
     task.value = ''
   }
+  
 }
 en(event: KeyboardEvent, task:any, val:any) {
-  if (event.key === 'Enter') {
+  if (event.key === 'Enter' && val.value.replace(/\s+/g, '') != '') {
     this.enable('en'+ task);
     this.taskNo[task] = val.value;
     console.log(this.taskNo)
@@ -147,8 +190,11 @@ add(id: string,trainee: any, f:String , l:String) {
   this.chars = this.chars.filter(item => item !== char);
  }
  else{
-  this.trainTask.push(trainee);
-  this.chars.push(char);
+  
+  if(!this.chars.includes('ALL')){
+    this.trainTask.push(trainee);
+    this.chars.push(char);
+  }
 
  }
  console.log(this.chars)
@@ -188,7 +234,9 @@ add(id: string,trainee: any, f:String , l:String) {
     if(id != null){
       this.serv.getData(id).subscribe((d:ResponseHeader)=>{
         this.tasks = d.data;
+        console.log(d)
         this.isLoading = false;
+
       })
     }
   }
@@ -203,12 +251,10 @@ add(id: string,trainee: any, f:String , l:String) {
   }
   isShow = false;
   enable(id:any){
-    if(document.getElementById(id)?.hasAttribute("disabled")){
+    
       document.getElementById(id)?.removeAttribute("disabled");
-    }
-    else{
-      document.getElementById(id)?.setAttribute("disabled" , "")
-    }
+    
+    
   }
   ed={
     "traineeId": "string",
@@ -223,8 +269,17 @@ add(id: string,trainee: any, f:String , l:String) {
   }
   edit(data:any){
     this.ed=data;
+    this.ed.taskId = data.id;
+    // this.ed = {
+    //   "taskId": data.taskId,
+    //   "title":  data.title,
+    //   "startTime":  data.startTime,
+    //   "endTime":  data.endTime,
+    //   "traineeId":  data.traineeId
+    // }
     this.show('edit');
     console.log(this.ed);
+    console.log(data);
   }
   gen(){
     this.chars = [];

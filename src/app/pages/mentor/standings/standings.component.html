@@ -15,7 +15,7 @@
         <th class="px-10  py-3 text-left">Handle</th>
         <th class="px-10   py-3 text-left">Mentor</th>
         <th class="px-10   py-3 text-left">Solve</th>
-        <th class="px-10  rounded-r-lg py-3 text-left" colspan="3">Points</th>
+        <th class="px-10  rounded-r-lg py-3 text-center" colspan="3">Points</th>
       </tr>
     </thead>
     
@@ -31,13 +31,13 @@
         </td>
         <td class="px-6 py-4">{{item.mentorName}}</td>
         <td class="px-6 py-4">{{item.solvedProblems}} / {{stand.totalProblems}}</td>
-        <td class="px-6 py-4 rounded-r-lg"> 
+        <td class="px-6 py-4 text-center"> 
           <button (click)="change(i,item.id , true ,item.points)" class="px-2 rounded-md text-lg text-black mx-2 bg-white">+</button>
             </td>
-            <td>
+            <td class="px-6 py-4 text-center">
             <span id="{{i}}">{{item.points}}</span>
             </td>
-            <td>
+            <td class="px-6 py-4 rounded-r-lg text-center">
               <button (click)="change(i,item.id , false , item.points)" class="px-2 rounded-md text-lg text-black mx-2 bg-white">-</button>
             </td>
       </tr>
