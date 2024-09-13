@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
-import { task } from '../model/trinee-data';
+import { task } from '../model/trinee-home';
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +62,8 @@ export class HomeService {
     this.TraineeTasks().subscribe({
       next: ({statusCode,data}) => {
         if(statusCode===200){
+          console.log(data);
+
           this.toDo.next( this.getTasksByStatus(data,0))
           this.inProgress.next( this.getTasksByStatus(data,1))
           this.done.next( this.getTasksByStatus(data,2))

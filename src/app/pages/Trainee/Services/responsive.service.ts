@@ -23,8 +23,6 @@ export class ResponsiveService {
   }
   checkScreenSize() {
     this.isSmallScreen= window.innerWidth < 640 ;
-    console.log(this.isSmallScreen);
-
   }
     // Method to clean up (unobserve)
     destroy() {

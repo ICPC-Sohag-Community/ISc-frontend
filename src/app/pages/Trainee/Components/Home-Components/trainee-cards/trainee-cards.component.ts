@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { HomeService } from '../../../Services/home.service';
-import { CurrentSheet, InComingContest, NextSession } from '../../../model/trinee-data';
+import { CurrentSheet, InComingContest, NextSession } from '../../../model/trinee-home';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormatDatePipe } from '../../../Pipes/formatte-Date.pipe';
 

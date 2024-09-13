@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormatDatePipe } from '../../../Pipes/formatte-Date.pipe';
 import { StandingService } from '../../../Services/standing.service';
 import { Achiver } from '../../../model/trinee-standing';
+import { ResponsiveService } from '../../../Services/responsive.service';
 
 @Component({
   selector: 'app-standing',
@@ -14,12 +15,14 @@ import { Achiver } from '../../../model/trinee-standing';
 export class StandingComponent implements OnInit {
 
   private standingService = inject(StandingService);
+          responsive = inject(ResponsiveService);
 
   greenZone: Achiver[] = [];
   yellowZone: Achiver[] = [];
   redZone: Achiver[] = [];
   isLoading = true;
   currentUser: any;
+  totalProblems:number=0
 
   ngOnInit(): void {
     this.fetchStandings();
@@ -31,6 +34,7 @@ export class StandingComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.isLoading = false;
+          this.totalProblems = data.totalProblems;
           this.categorizeTrainees(data.achivers, data.totalProblems);
         }
       }
