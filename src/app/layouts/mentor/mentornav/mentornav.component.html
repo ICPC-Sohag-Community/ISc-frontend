@@ -23,7 +23,13 @@
         <path d="M7.15875 14.56C4.73875 16.18 4.73875 18.82 7.15875 20.43C9.90875 22.27 14.4188 22.27 17.1688 20.43C19.5888 18.81 19.5888 16.17 17.1688 14.56C14.4288 12.73 9.91875 12.73 7.15875 14.56Z" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>            
 </button>
-    <img class="w-[40px]  h-[40px] rounded-full" [src]="currentUser.photoUrl? currentUser.photoUrl: './../../../../../assets/img/user.png'" alt="Avatar">
+<img
+class="aspect-ratio-img"
+  style="width: 2.5rem; height: 2.5rem; border-radius: 50%; object-fit: cover; display: block;"
+  [src]="currentUser.photoUrl ? currentUser.photoUrl : './../../../../../assets/img/user.png'"
+  alt="Avatar"
+/>
+
     <div><h2 class="text-base font-medium text-[#979797]">
         {{ currentUser.firstName }}
         {{ currentUser.middleName }}

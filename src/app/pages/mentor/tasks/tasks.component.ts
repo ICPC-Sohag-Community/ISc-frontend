@@ -97,7 +97,7 @@ this.taskNo.forEach(element => {
     this.serv.addTask(data).subscribe((d:ResponseHeader)=>{
       if(!d.isSuccess){
         
-        
+        this.crError.push('All fields are required');
         for (const field in d.errors) {
 
           if (d.errors.hasOwnProperty(field)) {
@@ -118,15 +118,16 @@ this.taskNo.forEach(element => {
     else if (!st || !en || this.chars.length == 0 || this.taskNo.length == 0){
       this.crError.push('All fields are required');
     }
-    else{
-      this.crError.push('All fields are required');
-    }
+    
     
     
   }
+  
 });
-
-
+if(this.taskNo.length == 0)
+ 
+    this.crError.push('All fields are required');
+  
 }
 crError: any[] = [];
 del(id:any){
@@ -140,21 +141,28 @@ del(id:any){
   })
 }
 taskNo:any[] = [];
-onKeydown(event: KeyboardEvent, task:any) {
-  if (event.key === 'Enter' && task.value.replace(/\s+/g, '') != '') {
+onKeydown(event: KeyboardEvent, task: any) {
+  let v = task.value;
+
+  // Check if the Enter key was pressed and the input is not just whitespace
+  if (event.key === 'Enter' && v.replace(/\s+/g, '') !== '') {
+    event.preventDefault(); // Prevents default newline behavior in textarea or input
     this.taskNo.push(task.value);
-    // let e = document.getElementById('tasks');
-    task.value = ''
+    task.value = ''; // Clears the input
   }
-  
 }
-en(event: KeyboardEvent, task:any, val:any) {
-  if (event.key === 'Enter' && val.value.replace(/\s+/g, '') != '') {
-    this.enable('en'+ task);
+
+en(event: KeyboardEvent, task: any, val: any) {
+  // Check if the Enter key was pressed and the input is not just whitespace
+  if (event.key === 'Enter' && val.value.replace(/\s+/g, '') !== '') {
+    event.preventDefault(); // Prevents default newline behavior
+    this.enable('en' + task);
     this.taskNo[task] = val.value;
-    console.log(this.taskNo)
+    val.value = ''; // Clears the input
+    console.log(this.taskNo);
   }
 }
+
 handleClick(event: Event) {
   event.stopPropagation();  
   
@@ -224,6 +232,9 @@ add(id: string,trainee: any, f:String , l:String) {
   }
   trainee: any ;
   show(id:string){
+    this.err = [];
+    this.crError = [];
+    this.errors = [];
     document.getElementById(id)?.classList.toggle("hidden");
     if(id == "names"){
       this.isShow = !this.isShow

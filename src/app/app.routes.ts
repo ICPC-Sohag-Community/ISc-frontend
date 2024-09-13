@@ -42,6 +42,7 @@ import { OtpComponent } from './authentication/screens/login/otp/otp.component';
 import { SetpassComponent } from './authentication/screens/login/setpass/setpass.component';
 import { ForgetComponent } from './authentication/screens/login/forget/forget.component';
 import { LogComponent } from './authentication/screens/login/log/log.component';
+import { BlankComponent } from './pages/mentor/blank/blank.component';
 
 
 export const routes: Routes = [
@@ -201,6 +202,11 @@ export const routes: Routes = [
       {
         path: 'practice',
         component: PracticeComponent,
+        title: 'mentor / Practice - ICPC',
+      },
+      {
+        path: 'blank',
+        component: BlankComponent,
         title: 'mentor / Practice - ICPC',
       },
     ],
