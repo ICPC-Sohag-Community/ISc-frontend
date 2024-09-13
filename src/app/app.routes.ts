@@ -44,6 +44,7 @@ import { ForgetComponent } from './authentication/screens/login/forget/forget.co
 import { LogComponent } from './authentication/screens/login/log/log.component';
 import { LayoutPublicComponent } from './layouts/layout_public/layout-public.component';
 import { HomePublicComponent } from './pages/public/screens/home-public/home-public.component';
+import { BlankComponent } from './pages/mentor/blank/blank.component';
 
 
 export const routes: Routes = [
@@ -221,6 +222,11 @@ export const routes: Routes = [
       {
         path: 'practice',
         component: PracticeComponent,
+        title: 'mentor / Practice - ICPC',
+      },
+      {
+        path: 'blank',
+        component: BlankComponent,
         title: 'mentor / Practice - ICPC',
       },
     ],

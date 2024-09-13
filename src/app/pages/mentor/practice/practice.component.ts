@@ -88,6 +88,7 @@ edi(id:any){
     "time": this.dateEd  ,
     "state": this.statusEd
   }
+  console.log(i.time)
   this.edError = [];
   if(this.dateEd){
     this.serv.upd(i).subscribe((d:ResponseHeader)=>{
@@ -143,6 +144,9 @@ edError:any[] = [];
     }
   }
   show(id:string){
+    this.edError = [];
+    this.error = false;
+    this.err = [];
     document.getElementById(id)?.classList.toggle("hidden");
     
   }
