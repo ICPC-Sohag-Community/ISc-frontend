@@ -1,13 +1,215 @@
-.feed-back{
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:wght@300..700&display=swap');
 
-  // display: none;
-  top: 150%;
+.header{
+  background-image: url(../../../../../assets/img_public/bg-hero-section.jpg);
+  background-position:center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+  color: white;
+  min-height: 110dvh;
+  h1{
+    font-family: Inter;
+    font-size: 60px;
+    font-weight: 800;
+    line-height: 72.61px;
+    text-align: center;
+    box-shadow: 0px 4px 14.3px 0px #00000040;
+    span{
+      color:#E69C24 ;
+    }
+  }
+  p{
+    font-family: Poppins;
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 32.5px;
+    text-align: center;
+    max-width: 950px;
+    margin: 0 auto;
+  }
 }
-.border-feed-back{
-  border: 3px solid #D1D4DA;
-  border-radius: 10px;
+.about-us{
+    min-height: 125dvh;
+  h1{
+    font-family: Cormorant;
+    font-size: 80px;
+    font-weight: 400;
+    line-height: 96.88px;
+    text-align: left;
+    max-width: 200px;
+  }
+  p{
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 39px;
+    text-align: left;
+    max-width: 520px;
+
+  }
+  .right-circale{
+    width: 1100px;
+    height: 1050px;
+    background: #E69C2424;
+    border-radius: 50%;
+    left: 60%;
+  }
+  .about-img::after{
+    content: '';
+    position: absolute;
+    height: 5px;
+    width: 74.8%;
+    top: 0;
+    background: linear-gradient(90deg, #3D91C7 0%, #E69C24 50%, #EF4A50 100%);
+    z-index: 1 ;
+  }
+  .about-img::before{
+    content: '';
+    position: absolute;
+    height: 5px;
+    width: 74.9%;
+    bottom: 0;
+    left: 25.1%;
+    background: linear-gradient(90deg, #3D91C7 0%, #E69C24 50%, #EF4A50 100%);
+    z-index: 1 ;
+  }
+
+
 }
-:host{
-  overflow: hidden;
+.achievements{
+  min-height: 200dvh;
+  .headers{
+    h1{
+      font-family: Cormorant;
+      font-size: 60px;
+      font-weight: 400;
+      line-height: 84.77px;
+      text-align:start;
+      text-transform: uppercase;
+    }
+    ::after{
+      content: '';
+      position: absolute;
+      height: 3px;
+      width: 27%;
+      background: #000;
+      left: 0;
+      bottom: 0;
+    }
+  }
+  .left-circale{
+    width: 1100px;
+    height: 1050px;
+    background: #3D91C724;
+    border-radius: 50%;
+    right: 60%;
+    top: 36%;
+  }
+}
+.box{
+  border: 1px solid #ccc;
+  border-radius: 26px;
+  p{
+    font-family: Inter;
+    font-size: 50px;
+    font-weight: 600;
+    line-height: 72.61px;
+    text-align: left;
+
+  }
+  .badge{
+    span{
+      font-family: Lato;
+      font-size: 40px;
+      font-weight: 500;
+      line-height: 48px;
+      text-align: center;
+
+    }
+  }
+
+}
+.founders{
+  .right-circale{
+    width: 1100px;
+    height: 1050px;
+    background: #EF4A5024;
+    border-radius: 50%;
+    left: 60%;
+    top: 30%;
+    z-index: -1;
+  }
+  .card{
+    h4{
+      font-family: Inter;
+      font-size: 25px;
+      font-weight: 700;
+      line-height: 30.26px;
+      text-align: left;
+
+    }
+  }
+}
+.coaches{
+  .card{
+    h4{
+      font-family: Inter;
+      font-size: 25px;
+      font-weight: 700;
+      line-height: 30.26px;
+      text-align: left;
+
+    }
+  }
+}
+.feedbacks{
+  min-height: 100vh;
+  .card-container {
+    width: 100%;
+    display: flex;
+    flex: 2;
+    flex-wrap: wrap; /* Allows the cards to wrap if needed */
+    gap: 10px; /* Adjust the spacing between cards */
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Makes each card take equal space */
+    align-items: stretch; /* Ensures all cards stretch to the same height */
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    box-sizing: border-box; /* Ensures padding is included in the width/height */
+  }
+  .swiper {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    list-style: none;
+    padding: 0 80px;
+    z-index: 1;
+}
+
+
+}
+.headers{
+  h1{
+    font-family: Cormorant;
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 84.77px;
+    text-align:start;
+    text-transform: uppercase;
+  }
+  ::after{
+    content: '';
+    position: absolute;
+    height: 3px;
+    width: 22%;
+    background: #000;
+    left: 0;
+    bottom: 0;
+  }
 }
 
