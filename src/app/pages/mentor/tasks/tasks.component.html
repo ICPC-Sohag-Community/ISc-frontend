@@ -17,7 +17,7 @@
       <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Incoming</h2>
       <!-- Task Card -->
       <div id="{{item.id}}" *ngFor="let item of tasks ; let i = index">
-        <div  *ngIf="item.status == 0" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+        <div  *ngIf="getStat(item.startTime , item.endTime) == 2" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
         <!-- Avatar and Name -->
          
         <div class="flex items-center mb-2 justify-between"  >
@@ -66,7 +66,7 @@
       <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Current</h2>
       <!-- Task Card -->
        <div *ngFor="let item of tasks ; let i = index" id="{{item.id}}">
-        <div  *ngIf="item.status == 1"  class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+        <div  *ngIf="getStat(item.startTime , item.endTime) == 1"   class="bg-[#3D91C733] rounded-lg p-4 mb-4">
           <!-- Avatar and Name -->
           
           <div class="flex items-center mb-2 justify-between"  >
@@ -115,7 +115,7 @@
       <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Ended</h2>
       <!-- Task Card -->
        <div *ngFor="let item of tasks ; let i = index" id="{{item.taskId}}">
-      <div  *ngIf="item.status == 2" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+      <div  *ngIf="getStat(item.startTime , item.endTime) == 0"  class="bg-[#3D91C733] rounded-lg p-4 mb-4">
         <!-- Avatar and Name -->
          
         <div class="flex items-center mb-2 justify-between" >
@@ -211,7 +211,7 @@
                 <input #startTime type="datetime-local" class="mt-2 w-[170px] px-4 py-2  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]">
             </div>
             <div class="mb-4 flex gap-6 items-center">
-              <label class="flex items-center text-sm font-medium ">End Time</label>
+              <label class="flex items-center text-sm font-medium ">End Time&nbsp;&nbsp;</label>
               <input #endTime type="datetime-local" class="mt-2 w-[170px] px-4 py-2  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]">
           </div>
 
@@ -269,7 +269,7 @@
                 <!-- <p class="text-gray-500 text-sm">Deadline: {{this.ed.deadLine | utcToLocal}}</p> -->
                 <label class="text-gray-500 text-sm" for="sdateEdit">Start Time: </label>  <input #stTime id="sdateEdit" class="mt-2 w-[170px] px-2 py-1  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]" type="date" [value]="formatDate(ed.startTime)">
                 <br>
-                <label class="text-gray-500 text-sm" for="edateEdit">End Time: </label>  <input #enTime id="edateEdit" class="mt-2 w-[170px] px-2 py-1  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]" type="date" [value]="formatDate(ed.endTime)">
+                <label class="text-gray-500 text-sm" for="edateEdit">End Time:&nbsp;&nbsp;</label>  <input #enTime id="edateEdit" class="mt-2 w-[170px] px-2 py-1  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]" type="date" [value]="formatDate(ed.endTime)">
             </div>
         </div>
 

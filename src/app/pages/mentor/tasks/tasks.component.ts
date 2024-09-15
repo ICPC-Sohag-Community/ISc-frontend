@@ -145,7 +145,7 @@ onKeydown(event: KeyboardEvent, task: any) {
   let v = task.value;
 
   // Check if the Enter key was pressed and the input is not just whitespace
-  if (event.key === 'Enter' && v.replace(/\s+/g, '') !== '') {
+  if (event.key === 'Enter' && v.replace(/\s+/g, '') !== '' && !event.shiftKey)  {
     event.preventDefault(); // Prevents default newline behavior in textarea or input
     this.taskNo.push(task.value);
     task.value = ''; // Clears the input
@@ -154,7 +154,7 @@ onKeydown(event: KeyboardEvent, task: any) {
 
 en(event: KeyboardEvent, task: any, val: any) {
   // Check if the Enter key was pressed and the input is not just whitespace
-  if (event.key === 'Enter' && val.value.replace(/\s+/g, '') !== '') {
+  if (event.key === 'Enter' && val.value.replace(/\s+/g, '') !== '' && !event.shiftKey) {
     event.preventDefault(); // Prevents default newline behavior
     this.enable('en' + task);
     this.taskNo[task] = val.value;
@@ -322,6 +322,22 @@ onClickOutside(event: MouseEvent): void {
     const dropdowns = document.querySelectorAll('.dropdown');
     dropdowns.forEach(dropdown => dropdown.classList.add('hidden'));
   }
+}
+getStat(start:any , end:any){
+let d = new Date();
+start = new Date(start)
+end = new Date(end)
+
+if(d.getTime()>= start.getTime() && d.getTime()<= end.getTime()){
+return 1;
+}
+else if (d.getTime()< start.getTime() ){
+  return 2;
+  }
+  else{
+    return 0;
+  }
+
 }
 
 }
