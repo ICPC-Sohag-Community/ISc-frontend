@@ -18,13 +18,16 @@ import { AuthService } from '../../../../authentication/services/auth.service';
 })
 export class SecondNavbarComponent implements OnInit {
   authService = inject(AuthService);
+  elementRef = inject(ElementRef);
   router = inject(Router);
   isShow: boolean = false;
   currentUser: any;
-  constructor(private elementRef: ElementRef) {}
+  currentPath: string = '';
 
   ngOnInit() {
     this.currentUser = this.authService.currentUser();
+    this.currentPath = this.router.url;
+    console.log('Current Path:', this.currentPath);
   }
 
   showRoles() {

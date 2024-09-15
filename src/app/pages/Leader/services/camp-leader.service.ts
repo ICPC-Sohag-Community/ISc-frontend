@@ -39,4 +39,21 @@ export class CampLeaderService {
       params,
     });
   }
+
+  getAllCamps(): Observable<ResponseHeader> {
+    return this.http.get<any>(
+      `${environment.BASE_URL}/api/Leader/camps/getAll`
+    );
+  }
+
+  getAllMentors(): Observable<ResponseHeader> {
+    return this.http.get<any>(
+      `${environment.BASE_URL}/api/Leader/camps/mentors`
+    );
+  }
+  getAllHeadsOfCamp(): Observable<ResponseHeader> {
+    return this.http.get<any>(
+      `${environment.BASE_URL}/api/Leader/camps/headsOfCamp`
+    );
+  }
 }

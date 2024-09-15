@@ -154,7 +154,6 @@ export class DropdownRolesComponent implements OnInit {
 
   saveNewRoles(roleInfo: any): void {
     console.log(roleInfo);
-    debugger;
     this.rolesService.assignToRole(roleInfo).subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
@@ -190,15 +189,9 @@ export class DropdownRolesComponent implements OnInit {
   }
 
   deleteRole(roleName: string) {
-    debugger;
     this.rolesService.removeRoleFromSystem(roleName).subscribe({
       next: ({ statusCode, data }) => {
         this.fetchAllRoles();
-        // const roleInfo = {
-        //   userId: this.selectedStaffId,
-        //   role: roleName,
-        // };
-        // this.saveNewRoles(roleInfo);
         if (statusCode === 200) {
         } else {
           console.log('error');
