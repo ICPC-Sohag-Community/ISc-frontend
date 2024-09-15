@@ -7,8 +7,8 @@
           alt="Loading icon"
         />
         } @else { 
-    <div class="flex  flex-wrap justify-center gap-6 px-5 text-[#696969] z-0">
-        <div *ngFor="let trainee of camps; let i = index"  (click)="showTrainee(i)"  class=" cursor-pointer relative w-[300px] px-5  py-5 rounded-[20px]">
+    <div class="flex  flex-wrap justify-center gap-6 px-5 text-[#696969] z-0 " [ngClass]="mb ? 'mb-96' : 'mb-0'">
+        <div *ngFor="let trainee of camps; let i = index"  (click)="showTrainee(i)"  class=" cursor-pointer relative w-[300px] px-5  py-5 rounded-[20px] ">
             <div id="x{{i}}" style="box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, 0.5);" class="bg-[#EEEEEE]   cursor-pointer w-[300px] pr-5  py-5 rounded-[20px]">
                 <div class="mt-6 text-center ">
                     <img [src]="trainee.photoUrl?trainee.photoUrl:'../../../../../../assets/img/user.jpeg'" alt="" class="w-[100px] block m-auto h-[100px] rounded-full">
