@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { PracticeService } from '../services/practice.service';
 import { ResponseHeader } from '../../../shared/model/responseHeader';
 import { CommonModule } from '@angular/common';
@@ -6,15 +6,17 @@ import { UtcToLocalPipe } from '../../../pipes/utc-to-local.pipe';
 import { LocalTimePipe } from '../../../pipes/local-time.pipe';
 import { FormsModule } from '@angular/forms';
 import { UtcDatePipe } from '../../../pipes/utc-date.pipe';
+import { MentorHeaderComponent } from '../../../layouts/mentor/mentor-header/mentor-header.component';
 
 @Component({
   selector: 'app-practice',
   standalone: true,
-  imports: [FormsModule,CommonModule,UtcToLocalPipe,LocalTimePipe,UtcDatePipe],
+  imports: [MentorHeaderComponent,FormsModule,CommonModule,UtcToLocalPipe,LocalTimePipe,UtcDatePipe],
   templateUrl: './practice.component.html',
   styleUrl: './practice.component.scss'
 })
 export class PracticeComponent {
+  isLoading: boolean = false;
   private utc = new UtcDatePipe();
 dateEd: any;
 titleEd: any;
@@ -23,6 +25,17 @@ notesEd: any;
   statusEd: any = 1;
   timeEd: any;
   idEd: any;
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    // Check if the click was outside the dropdown and the related button
+    if (!target.closest('.relative') && !target.closest('.dropdown')) {
+      const dropdowns = document.querySelectorAll('.dropdown');
+      dropdowns.forEach(dropdown => dropdown.classList.add('hidden'));
+    }
+   
+  }
+  
 upd(ind:any , item:any) {
 
 item.state = this.stand[ind].state;
@@ -33,15 +46,17 @@ item.state = this.stand[ind].state;
   "meetingLink": item.meetingLink,
   "note": item.note,
   "time": item.time  ,
-  "state": item.state == 1? 2 : 1
+  "state": item.state != 1? 1 : 2
 }
 console.log(i);
 this.serv.upd(i).subscribe((d:ResponseHeader)=>{
-  if(this.stand[ind].state == 1){
-    this.stand[ind].state = this.stand[ind].state + 1;
-  }
-  else{
-    this.stand[ind].state = this.stand[ind].state - 1;
+  if(d.isSuccess){
+    if(this.stand[ind].state == 1){
+      this.stand[ind].state = 2;
+    }
+    else{
+      this.stand[ind].state = 1;
+    }
   }
   console.log(d);
 })
@@ -73,13 +88,30 @@ edi(id:any){
     "time": this.dateEd  ,
     "state": this.statusEd
   }
-  
-  this.serv.upd(i).subscribe((d:ResponseHeader)=>{
-    console.log(d);
-    this.get(localStorage.getItem("camp"));
-    this.show('edit')
-  })
+  console.log(i.time)
+  this.edError = [];
+  if(this.dateEd){
+    this.serv.upd(i).subscribe((d:ResponseHeader)=>{
+      if(d.isSuccess){
+        console.log(d);
+      this.get(localStorage.getItem("camp"));
+      this.show('edit')
+      }
+      else{
+        
+        for (const field in d.errors) {
+          if (d.errors.hasOwnProperty(field)) {
+            this.edError.push(`${field}: ${d.errors[field].join(', ')}`);
+          }
+        }
+      }
+    })
+  }
+  else{
+    this.edError.push('Enter a valid date');
+  }
 }
+edError:any[] = [];
   isShow: boolean  = false;
   date: any = '';  // Initialize as empty string
   link: any = '';  // Initialize as empty string
@@ -100,14 +132,21 @@ edi(id:any){
   stand: any;
 
   get(id:any){
+    this.isLoading = true
     if(id != null){
       this.serv.getData(id).subscribe((d:ResponseHeader)=>{
         this.stand = d.data;
-        console.log(this.stand)
+        this.isLoading = false;
       })
+    }
+    else{
+      this.isLoading = false;
     }
   }
   show(id:string){
+    this.edError = [];
+    this.error = false;
+    this.err = [];
     document.getElementById(id)?.classList.toggle("hidden");
     
   }
@@ -123,6 +162,7 @@ edi(id:any){
     else{
       this.stat--;
     }
+    
   }
   statEd(){
     if(this.statusEd == 1){
@@ -169,7 +209,7 @@ edi(id:any){
         this.notes = '';
          this.error = false;
          this.success = true;
-         this.get(localStorage.getItem("camp"));
+         window.location.reload();
        }
      })
     }

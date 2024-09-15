@@ -1,8 +1,9 @@
 import { NgClass } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { TraineesService } from '../../../pages/mentor/services/trainees.service';
 import { ResponseHeader } from '../../../shared/model/responseHeader';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-mentor-header',
   standalone: true,
@@ -12,6 +13,14 @@ import { CommonModule } from '@angular/common';
 })
 export class MentorHeaderComponent {
   campid:any;
+  
+
+  refreshRouterOutlet() {
+    this.router.navigateByUrl('/mentor/blank' , { skipLocationChange: true }).then(() => {
+      console.log(this.getFullPath(this.activatedRoute))
+      this.router.navigate(['mentor/' + this.getFullPath(this.activatedRoute)]);
+    });
+  }
 change(id:any , name:any) {
   this.campid = id;
 this.campName = name;
@@ -19,9 +28,18 @@ this.campName = name;
 
 }
   camps: any;
-  constructor(private service: TraineesService) {
+  constructor(private service: TraineesService, private router: Router, private activatedRoute: ActivatedRoute) {
     this.get();
     
+  }
+  getFullPath(route: ActivatedRoute): string {
+    let path = route.snapshot.url.map(segment => segment.path).join('/');
+
+    // Recursively add paths from child routes if they exist
+    if (route.firstChild) {
+      path += '/' + this.getFullPath(route.firstChild);
+    }
+    return path;
   }
   campName:any = localStorage.getItem("cName")?localStorage.getItem("cName"): 'Select Camp';
   show() {
@@ -45,6 +63,7 @@ this.campName = name;
     }
     trainees:any;
     train(id:any, name:any) {
+      
       this.service.trainees(id).subscribe((response: ResponseHeader) => {
         if (response.isSuccess) {
           this.trainees = response.data;
@@ -57,7 +76,7 @@ this.campName = name;
           this.campName = localStorage.getItem("cName")?localStorage.getItem("cName"): 'Select Camp';
           this.get();
           
-          window.location.reload();
+          this.refreshRouterOutlet();
         } else {
           this.trainees =  null;
           console.error('Error:', response.message);
@@ -65,5 +84,14 @@ this.campName = name;
       });
       this.isShow = !this.isShow;
     }
-    
+    @HostListener('document:click', ['$event'])
+    onClickOutside(event: MouseEvent): void {
+      const target = event.target as HTMLElement;
+      // Check if the click was outside the dropdown and the related button
+      if (!target.closest('.relative') && !target.closest('.dropdown')) {
+        
+        this.isShow = false;
+      }
+     
+    }
 }

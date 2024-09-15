@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { MentorHeaderComponent } from '../../../layouts/mentor/mentor-header/mentor-header.component';
-
 import { ResponseHeader } from '../../../shared/model/responseHeader';
 import { CommonModule } from '@angular/common';
 import { TasksService } from '../services/tasks.service';
@@ -18,79 +17,119 @@ import { FormsModule } from '@angular/forms';
 })
 export class TasksComponent {
   id:any
-
+isLoading:boolean = false;
   showElement = true;
   formatDate(date: string | Date): string {
     // Convert the date to ISO format (YYYY-MM-DD)
     return new Date(date).toISOString().substring(0, 10);
   }
-  onClickOutside(id:any) {
-   
-    document.getElementById(id)?.classList.toggle("hidden");
-   
-  }
-  updateTitle(data:any, dat:any): void {
+ 
+  updateTitle(data : any, dat:any , end:any): void {
     
     const dateObj = new Date();
     const date = new Date(dat.value);
     // Check if inputElement is not null and has a value
-    if (data.value && date.getTime() > dateObj.getTime() && date.getDate() != dateObj.getDate() ) {
-      this.ed.title = data.value;
-      this.ed.deadLine = dat.value;
-      console.log(this.ed)
-      this.serv.updTask(this.ed).subscribe((d:ResponseHeader)=>{
-        console.log(d);
-        this.show('edit')
-      })
+   
+    
+    let task = {
+      "taskId": this.ed.taskId,
+      "title":  data.value,
+      "startTime":  dat.value,
+      "endTime":  end.value,
+      "traineeId":  this.ed.traineeId
     }
-    else{
-      console.log(dat.value )
-      alert('Enter a deadline in the future')
+    this.serv.updTask(task).subscribe((d:ResponseHeader)=>{
+      if (d.isSuccess) {
+        this.ed.title = data.value;
+        this.ed.startTime = dat.value;
+        this.ed.endTime = end.value;
+        console.log(task)
+          console.log(d);
+          this.show('edit')
+        
+      }
+      else{
+        this.errors = [];
+        console.log(task)
+        console.log(d )
+        for (const field in d.errors) {
+
+          if (d.errors.hasOwnProperty(field)) {
+            this.errors.push(`${field}: ${d.errors[field].join(', ')}`);
+          }
+        }
+      }
+    })
     }
-  }
-  
   err:any[] = [];
-create(task: HTMLInputElement ,date: HTMLInputElement ) {
-  const deadlineDate = new Date(date.value);
-  const utcDeadline = deadlineDate.toISOString().replace('Z', '');
+  errors:any = [];
+create(task: HTMLTextAreaElement ,startTime: HTMLInputElement,endTime: HTMLInputElement ) {
+  let start :any;
+  let st :any;
+  let end :any;
+  let en :any;
+  let flag = false;
+  if(startTime.value && endTime.value){
+     start = startTime.value? new Date(startTime.value): null;
+   st = start?start.toISOString().replace('Z', '') : null;
+   end = new Date(endTime.value);
+   en = end?end.toISOString().replace('Z', '') : null;
+  }
 let data = {
   "title":task.value,
-  "deadLine" : utcDeadline,
+  "startTime": st,
+  "endTime": en,
   "traineesIds": this.trainTask,
   "campId":Number(localStorage.getItem("camp")) 
 }
 console.log(data);
-
+this.crError = [];
 this.taskNo.forEach(element => {
   if(element != null){
     data = {
       "title":element,
-      "deadLine" : utcDeadline,
+      "startTime": st,
+  "endTime": en,
       "traineesIds":this.trainTask ,
       "campId":Number(localStorage.getItem("camp"))
     }
+    if(st && en && this.chars.length != 0 && this.taskNo.length != 0){
     this.serv.addTask(data).subscribe((d:ResponseHeader)=>{
       if(!d.isSuccess){
-        this.err= d.errors;
         
-          if(d.errors.DeadLine){
-            alert("Deadline must be in future");
+        this.crError.push('All fields are required');
+        for (const field in d.errors) {
+
+          if (d.errors.hasOwnProperty(field)) {
+            this.crError.push(`${field}: ${d.errors[field].join(', ')}`);
           }
-          else{
-            alert("All fields are required");
-          }
+        }
         
       }
       else{
         console.log(d.message);
-        window.location.reload();
+        this.get(localStorage.getItem("camp"));
+        this.show('add');
+        // window.location.reload();
+        
       }
-      })
+      })  
+    }
+    else if (!st || !en || this.chars.length == 0 || this.taskNo.length == 0){
+      this.crError.push('All fields are required');
+    }
+    
+    
+    
   }
+  
 });
-
-
+if(this.taskNo.length == 0)
+ 
+    this.crError.push('All fields are required');
+  
 }
+crError: any[] = [];
 del(id:any){
   let data = {
     "taskId":id
@@ -102,20 +141,28 @@ del(id:any){
   })
 }
 taskNo:any[] = [];
-onKeydown(event: KeyboardEvent, task:any) {
-  if (event.key === 'Enter') {
+onKeydown(event: KeyboardEvent, task: any) {
+  let v = task.value;
+
+  // Check if the Enter key was pressed and the input is not just whitespace
+  if (event.key === 'Enter' && v.replace(/\s+/g, '') !== '' && !event.shiftKey)  {
+    event.preventDefault(); // Prevents default newline behavior in textarea or input
     this.taskNo.push(task.value);
-    let e = document.getElementById('tasks');
-    task.value = ''
+    task.value = ''; // Clears the input
   }
 }
-en(event: KeyboardEvent, task:any, val:any) {
-  if (event.key === 'Enter') {
-    this.enable('en'+ task);
+
+en(event: KeyboardEvent, task: any, val: any) {
+  // Check if the Enter key was pressed and the input is not just whitespace
+  if (event.key === 'Enter' && val.value.replace(/\s+/g, '') !== '' && !event.shiftKey) {
+    event.preventDefault(); // Prevents default newline behavior
+    this.enable('en' + task);
     this.taskNo[task] = val.value;
-    console.log(this.taskNo)
+    val.value = ''; // Clears the input
+    console.log(this.taskNo);
   }
 }
+
 handleClick(event: Event) {
   event.stopPropagation();  
   
@@ -151,8 +198,11 @@ add(id: string,trainee: any, f:String , l:String) {
   this.chars = this.chars.filter(item => item !== char);
  }
  else{
-  this.trainTask.push(trainee);
-  this.chars.push(char);
+  
+  if(!this.chars.includes('ALL')){
+    this.trainTask.push(trainee);
+    this.chars.push(char);
+  }
 
  }
  console.log(this.chars)
@@ -182,35 +232,40 @@ add(id: string,trainee: any, f:String , l:String) {
   }
   trainee: any ;
   show(id:string){
+    this.err = [];
+    this.crError = [];
+    this.errors = [];
     document.getElementById(id)?.classList.toggle("hidden");
     if(id == "names"){
       this.isShow = !this.isShow
     }
   }
   get(id:any){
+    this.isLoading = true;
     if(id != null){
       this.serv.getData(id).subscribe((d:ResponseHeader)=>{
         this.tasks = d.data;
-        console.log(this.tasks)
+        console.log(d)
+        this.isLoading = false;
+
       })
     }
   }
   train(id:any){
+    this.isLoading = true;
     if(id != null){
       this.serv.trainees(id).subscribe((d:ResponseHeader)=>{
         this.trainee = d.data;
-        console.log(this.trainee)
+        this.isLoading = false;
       })
     }
   }
   isShow = false;
   enable(id:any){
-    if(document.getElementById(id)?.hasAttribute("disabled")){
+    
       document.getElementById(id)?.removeAttribute("disabled");
-    }
-    else{
-      document.getElementById(id)?.setAttribute("disabled" , "")
-    }
+    
+    
   }
   ed={
     "traineeId": "string",
@@ -220,12 +275,22 @@ add(id: string,trainee: any, f:String , l:String) {
     "lastName": "string",
     "photoUrl": null,
     "title": "string",
-    "deadLine": "2024-08-29T23:26:41.756Z"
+    "startTime": "2024-09-09T22:58:58.793Z",
+    "endTime": "2024-09-09T22:58:58.793Z",
   }
   edit(data:any){
     this.ed=data;
+    this.ed.taskId = data.id;
+    // this.ed = {
+    //   "taskId": data.taskId,
+    //   "title":  data.title,
+    //   "startTime":  data.startTime,
+    //   "endTime":  data.endTime,
+    //   "traineeId":  data.traineeId
+    // }
     this.show('edit');
     console.log(this.ed);
+    console.log(data);
   }
   gen(){
     this.chars = [];
@@ -249,4 +314,30 @@ add(id: string,trainee: any, f:String , l:String) {
   this.show('gen');
   console.log(this.trainTask);
   }
+  @HostListener('document:click', ['$event'])
+onClickOutside(event: MouseEvent): void {
+  const target = event.target as HTMLElement;
+  // Check if the click was outside the dropdown and the related button
+  if (!target.closest('.relative') && !target.closest('.dropdown')) {
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => dropdown.classList.add('hidden'));
+  }
+}
+getStat(start:any , end:any){
+let d = new Date();
+start = new Date(start)
+end = new Date(end)
+
+if(d.getTime()>= start.getTime() && d.getTime()<= end.getTime()){
+return 1;
+}
+else if (d.getTime()< start.getTime() ){
+  return 2;
+  }
+  else{
+    return 0;
+  }
+
+}
+
 }

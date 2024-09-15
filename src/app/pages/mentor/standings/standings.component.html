@@ -1,5 +1,13 @@
 <app-mentor-header></app-mentor-header>
+
 <h1 class="py-[20px] bg-white border-[#3591C9] font-bold w-[75vw] text-4xl my-5 border mx-auto rounded-[20px] text-[#3591C9] text-center" >HALL OF FAME “{{this.stand ? this.stand.campName:"Select Camp"}}”</h1>
+@if (isLoading) {
+  <img
+    class="w-8 h-8 block mx-auto my-12 animate-spin text-purple-950"
+    src="https://www.svgrepo.com/show/474682/loading.svg"
+    alt="Loading icon"
+  />
+  } @else {
 <table class="w-[calc(100vw-64px)] m-auto border-spacing-y-4 border-spacing-x-0 border-separate">
     <thead class=" text-gray-600 text-sm leading-normal text-center">
       <tr>
@@ -7,9 +15,10 @@
         <th class="px-10  py-3 text-left">Handle</th>
         <th class="px-10   py-3 text-left">Mentor</th>
         <th class="px-10   py-3 text-left">Solve</th>
-        <th class="px-10  rounded-r-lg py-3 text-left">Points</th>
+        <th class="px-10  rounded-r-lg py-3 text-center" colspan="1">Points</th>
       </tr>
     </thead>
+    
     <tbody class="text-sm font-light">
       <tr *ngFor="let item of stand?.achivers , let i = index" class=" text-white rounded-lg my-2"[ngClass]="{
         'bg-[#41B253]': item.solvedProblems/stand.totalProblems > 85 ,
@@ -22,13 +31,21 @@
         </td>
         <td class="px-6 py-4">{{item.mentorName}}</td>
         <td class="px-6 py-4">{{item.solvedProblems}} / {{stand.totalProblems}}</td>
-        <td class="px-6 py-4 rounded-r-lg"> <button (click)="change(i,item.id , true ,item.points)" class="px-2 rounded-md text-lg text-black mx-2 bg-white">+</button>
-            <span id="{{i}}">{{item.points}}</span>
-             <button (click)="change(i,item.id , false , item.points)" class="px-2 rounded-md text-lg text-black mx-2 bg-white">-</button>
-                
+        <td class="px-6 py-4 rounded-r-lg text-center">
+          <div class="flex justify-center">
+            <button (click)="change(i,item.id , false , item.points)" class="px-2 rounded-md text-lg text-black mx-2 bg-white">-</button> 
+          
+            
+            
+            <span id="{{i}}" class="inline-block w-14">{{item.points}}</span>
+            
+            
+              <button (click)="change(i,item.id , true ,item.points)" class="px-2 rounded-md text-lg text-black mx-2 bg-white">+</button>
+          </div>
             </td>
       </tr>
       
     </tbody>
-  </table>
   
+  </table>
+  }

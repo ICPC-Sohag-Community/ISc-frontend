@@ -6,3 +6,13 @@ line-height: 45.57px;
 text-align: left;
 
 }
+
+@media screen and (max-width:640px) {
+
+  p{
+    span{
+      font-size: 12px;
+    }
+  }
+
+}

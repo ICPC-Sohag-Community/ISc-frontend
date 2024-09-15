@@ -4,6 +4,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../../authentication/services/auth.service';
 import { HomeService } from '../../../../pages/Trainee/Services/home.service';
 import { QRCodeModule } from 'angularx-qrcode';
+import { ResponsiveService } from '../../../../pages/Trainee/Services/responsive.service';
 declare var $: any;
 
 
@@ -15,17 +16,16 @@ declare var $: any;
   styleUrl: './top-bar.component.scss'
 })
 export class TopBarComponent {
-  _authService = inject(AuthService);
+  authService = inject(AuthService);
+  responsive = inject(ResponsiveService);
   _homeService = inject(HomeService);
   router = inject(Router);
   isShow: boolean = false;
+  navShow: boolean = false;
   currentUser: any;
   qrData: string = '';
   isOpen = false;
-  hide:boolean=true
-  navShow:boolean=false
-  isSmallScreen: boolean = false;
-  resizeObserver!:ResizeObserver;
+  isMenuOpen = false;
   navLinks = [
     { label: 'Home', path: '/trainee/home' },
     { label: 'Sheets', path: '/trainee/sheets' },
@@ -36,17 +36,8 @@ export class TopBarComponent {
   constructor(private elementRef: ElementRef) {}
 
   ngOnInit() {
-    this.currentUser = this._authService.currentUser();
-    this.getQrCode()
-    this.resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        this.checkScreenSize();
-      }
-    });
-
-    this.resizeObserver.observe(document.body);
-    this.checkScreenSize(); // Initial check
-  }
+    this.currentUser = this.authService.currentUser();
+     }
   @HostListener('document:click', ['$event.target'])
   public onClick(targetElement: HTMLElement): void {
     const clickedInside = this.elementRef.nativeElement.contains(targetElement);
@@ -71,6 +62,7 @@ export class TopBarComponent {
     this.router.navigate(['/', role.toLowerCase()]);
   }
   toggleDialog():void{
+    this.getQrCode()
     $('.dialog-container').fadeToggle(150)
   }
   getQrCode():void{
@@ -84,25 +76,6 @@ export class TopBarComponent {
     })
   }
 
-
-
-
-  ngOnDestroy() {
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect(); // Cleanup observer on destroy
-    }
-  }
-
-  checkScreenSize() {
-    this.isSmallScreen = window.innerWidth < 640;
-    if (this.isSmallScreen) {
-      this.hide=false
-    } else {
-      this.hide=true
-    }
-
-  }
-  isMenuOpen = false;
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;

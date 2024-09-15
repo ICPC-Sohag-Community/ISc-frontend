@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './tracking.component.scss'
 })
 export class TrackingComponent {
+  isLoading: boolean = true;
 constructor (private serv:TrackingService){
 this.get(this.id);
 }
@@ -19,40 +20,66 @@ sheet: any = {};
 contest: any = {};
 id = localStorage.getItem("camp") || null;
   get(id:any){
+    this.isLoading = true
     if(id != null){
-      this.serv.getContest(id).subscribe((d:ResponseHeader)=>{
-        this.contest = d.data;
-        console.log(this.contest);
-      });
+      
       this.serv.getSheet(id).subscribe((d:ResponseHeader)=>{
         this.sheet = d.data;
         console.log(this.sheet);
+        this.isLoading = false
       });
-      this.curr = this.contest;
+      
+      
     }
   }
+  con:boolean = false;
+  sh:boolean = true;
   she(){
+    this.isLoading = true
     let e = document.getElementById('contest');
     let e1 = document.getElementById('she');
     let a = document.getElementById('sheet');
     let a1 = document.getElementById('cont');
-    e?.classList.remove('hidden');
+    this.con = false;
+    this.sh = true;
     e1?.classList.add('bg-[#3591C9]', 'text-white');
     e1?.classList.remove('border', 'text-[#3591C9]', 'border-[#3591C9]');
     a1?.classList.remove('bg-[#3591C9]', 'text-white');
     a1?.classList.add('border', 'text-[#3591C9]', 'border-[#3591C9]');
-    a?.classList.add('hidden');
+    
+    this.isLoading = false
   }
+  conte:boolean = true;
+   getCont(){
+    this.isLoading = true
+    if(this.id != null && this.conte){
+      this.serv.getContest(this.id).subscribe((d:ResponseHeader)=>{
+        this.contest = d.data;
+        this.conte = false;
+        this.isLoading = false;
+      });    
+    }
+    else{
+      this.isLoading = false;
+    }
+   }
   cont(){
+    
+    
+      this.getCont();
+      
+    
     let e = document.getElementById('sheet');
     let e1 = document.getElementById('cont');
     let a = document.getElementById('contest');
     let a1 = document.getElementById('she');
-    e?.classList.remove('hidden');
+   
     e1?.classList.add('bg-[#3591C9]', 'text-white');
     e1?.classList.remove('border', 'text-[#3591C9]', 'border-[#3591C9]');
     a1?.classList.remove('bg-[#3591C9]', 'text-white');
     a1?.classList.add('border', 'text-[#3591C9]', 'border-[#3591C9]');
-    a?.classList.add('hidden');
+    this.con = true;
+    this.sh = false;
+    
   }
 }

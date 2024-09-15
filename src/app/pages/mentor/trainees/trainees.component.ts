@@ -13,6 +13,7 @@ import { ResponseHeader } from '../../../shared/model/responseHeader';
   styleUrls: ['./trainees.component.scss'] // Fixed typo
 })
 export class TraineesComponent {
+  isLoading : boolean = true;
   trainee = false;
   camps: any;
   activeTrainee = {
@@ -31,22 +32,17 @@ export class TraineesComponent {
     
   }
   constructor(private renderer: Renderer2 , private serv:TraineesService){
-    const frontDiv = document.getElementById('frontDiv');
-  const backDiv = document.getElementById('backDiv');
-
-  // Forward scroll events from frontDiv to backDiv
-  if (frontDiv && backDiv){
-    frontDiv.addEventListener('wheel', (e) => {
-      backDiv.scrollTop += e.deltaY;
-    });
-  }
+    
+this.isLoading = true;
+  
     if(localStorage.getItem("camp")){
       this.camps = localStorage.getItem("trainees");
       this.camps = JSON.parse(this.camps)
-      console.log(1)
+      this.isLoading = false;
     }
     else {
       this.camps = null;
+      this.isLoading = false;
     }
   }
   info:any = {
@@ -56,21 +52,18 @@ export class TraineesComponent {
     vjudgeHandle: null
   };
 id:any;
+mb:boolean = false;
   showTrainee(id:any) {
-
+    if(id == this.camps.length - 1 &&(this.camps.length )%(Math.floor((window.innerWidth - 112) / 300)) == 1){
+      this.mb = true
+    }
     this.activeTrainee = this.camps[id];
     this.trainee = true;
     this.id = id;
     this.serv.info(this.activeTrainee.id).subscribe((response: ResponseHeader) => {
       if (response.isSuccess) {
        this.info = response.data;
-       console.log(this.info)
-      } else {
-        
-        console.error('Error:', response.message);
-      }
-    });
-    const element = this.renderer.selectRootElement(`#z${id}`, true);
+       const element = this.renderer.selectRootElement(`#z${id}`, true);
     const element2 = this.renderer.selectRootElement(`#x${id}`, true);
     this.renderer.addClass(element, 'block');
     this.renderer.removeClass(element, 'hidden');
@@ -79,10 +72,18 @@ id:any;
     this.renderer.addClass(element2, 'left-[-40px]');
     this.renderer.addClass(element2, 'w-[380px]');
     this.renderer.addClass(element2, 'top-[-70px]');
-    console.log(element);
+    
+      } else {
+        
+        
+      }
+    });
+    
+    
   }
 
   hideTrainee() {
+    this.mb = false
     this.trainee = false;
     const element = this.renderer.selectRootElement(`#z${this.id}`, true);
     const element2 = this.renderer.selectRootElement(`#x${this.id}`, true);

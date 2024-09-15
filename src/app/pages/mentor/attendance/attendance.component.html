@@ -1,7 +1,14 @@
 <app-mentor-header></app-mentor-header>
-<div *ngIf="atten != null" class="w-[90vw] h-[calc(100vh-200px)] m-auto  border-collapse border rounded-xl border-gray-300 overflow-y-auto overflow-x-auto custom-scrollbar">
+@if (isLoading) {
+  <img
+    class="w-8 h-8 block mx-auto my-12 animate-spin text-purple-950"
+    src="https://www.svgrepo.com/show/474682/loading.svg"
+    alt="Loading icon"
+  />
+  } @else { 
+<div *ngIf="atten != null" class="w-[90vw] h-[calc(100vh-200px)] m-auto  border-collapse border relative rounded-xl border-gray-300 overflow-y-auto overflow-x-auto custom-scrollbar">
     <table class="hover-table max-h-full border-collapse border rounded-xl border-gray-300  ">
-        <thead class="sticky top-[-1px] z-10 bg-[#F4F5F8] border-b border-black" >
+        <thead class="sticky top-[-1px] z-[11] bg-[#F4F5F8] border-b border-black" >
           <tr>
             <th class=" px-3 py-3">Trainee Name</th>
             <th class="w-fit px-3  py-3" *ngFor="let item of atten.sessions">{{item.topic}}</th>
@@ -10,7 +17,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of atten.trainees" class="border-b  ">
-            <td class="font-bold  px-3 py-3  " >{{item.firstName}} {{item.middleName}} {{item.lastName}}</td>
+            <th class="font-bold bg-[#F4F5F8] !sticky !left-0 z-10 px-3 py-3  " >{{item.firstName}} {{item.middleName}} {{item.lastName}}</th>
             <td  class="  px-3 py-3 " *ngFor="let i of item.attendances">
                 <svg  class="m-auto" *ngIf='!i.state' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_3634_13663)">
@@ -35,3 +42,4 @@
         </tbody>
       </table>
 </div>
+  }

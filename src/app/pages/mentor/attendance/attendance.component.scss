@@ -51,4 +51,8 @@
   .hover-table tbody tr:hover td:hover::before {
     background-color: #cbd5e0; /* Tailwind's bg-gray-300 */
   }
+  .hover-table tbody tr:hover th {
+    background-color: #E2E8F0; /* Tailwind's bg-gray-300 */
+  }
+  
   

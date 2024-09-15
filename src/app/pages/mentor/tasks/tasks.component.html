@@ -1,22 +1,29 @@
-<div class="flex justify-between items-center pr-10"   >
+<div class="flex justify-between items-center pr-10"   (click)="onClickOutside($event)">
     <app-mentor-header></app-mentor-header>
-    <button (click)="show('add')" class="bg-[#3D91C7] hover:bg-blue-600 text-white font-semibold h-[48px] px-4 rounded-[24px]">
+    <button (click)="show('add')" class="bg-[#3D91C7] hover:bg-[#2679AF] text-white font-semibold h-[48px] px-4 rounded-[24px]">
         Add Task
       </button>
 </div>
+@if (isLoading) {
+  <img
+    class="w-8 h-8 block mx-auto my-12 animate-spin text-purple-950"
+    src="https://www.svgrepo.com/show/474682/loading.svg"
+    alt="Loading icon"
+  />
+  } @else { 
 <div *ngIf="id!= null" class="flex justify-around px-8 space-x-4">
     <!-- To Do Column -->
-    <div class="w-1/3 bg-white rounded-lg shadow p-4" style="border: 0.5px solid #3D91C7">
-      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">To do</h2>
+    <div class="w-1/3 max-h-[80vh] overflow-auto bg-white rounded-lg shadow p-4" style="border: 0.5px solid #3D91C7">
+      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Incoming</h2>
       <!-- Task Card -->
-      <div *ngIf="tasks[0]">
-        <div id="{{item.taskId}}" *ngFor="let item of tasks[0].trainees ; let i = index" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+      <div id="{{item.id}}" *ngFor="let item of tasks ; let i = index">
+        <div  *ngIf="getStat(item.startTime , item.endTime) == 2" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
         <!-- Avatar and Name -->
          
-        <div class="flex items-center mb-2 justify-between">
+        <div class="flex items-center mb-2 justify-between"  >
           <!-- Replace with an img tag for the avatar -->
           <div class="flex items-center mb-2">
-            <img alt=" " class="w-8 h-8 bg-gray-300 rounded-full mr-2" src="{{item.photoUrl?item.photoUrl : '../../../../../../assets/img/user.jpeg'}}">
+            <img alt=" " class="w-8 h-8 bg-gray-300 rounded-lg mr-2" src="{{item.photoUrl?item.photoUrl : '../../../../../../assets/img/user.jpeg'}}">
           <span class="font-semibold">{{item.firstName}} {{item.middleName}} {{item.lastName}}  </span>
           </div>
           <div class="relative inline-block text-left">
@@ -30,14 +37,14 @@
             </div>
           
             <!-- Dropdown Menu -->
-            <div  id="{{'to'+i}}" class="hidden origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div  id="{{'to'+i}}" class="dropdown hidden origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div class="py-1">
                
                 <button (click)="edit(item)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
                   Edit
                 </button>
                 
-                <button (click)="del(item.taskId)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
+                <button (click)="del(item.id)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
                   Delete
                 </button>
               </div>
@@ -47,24 +54,25 @@
             
         </div>
         <p class="text-sm">• {{item.title}}</p>
-        <p class="text-sm text-gray-500 text-right">Deadline: {{item.deadLine | utcToLocal}}</p>
+        <p class="text-sm text-gray-500 ">Start Time: {{item.startTime | utcToLocal}}</p>
+        <p class="text-sm text-gray-500 ">End Time: {{item.endTime | utcToLocal}}</p>
       </div>
       </div>
       <!-- Repeat the task card structure for more tasks -->
     </div>
   
     <!-- In Progress Column -->
-    <div class="w-1/3 bg-white rounded-lg shadow p-4"  style="border: 0.5px solid #3D91C7">
-      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">In progress</h2>
+    <div class="w-1/3 max-h-[80vh] overflow-auto bg-white rounded-lg shadow p-4"  style="border: 0.5px solid #3D91C7">
+      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Current</h2>
       <!-- Task Card -->
-       <div *ngIf="tasks[1]">
-        <div id="{{item.taskId}}" *ngFor="let item of tasks[1].trainees ; let i = index" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+       <div *ngFor="let item of tasks ; let i = index" id="{{item.id}}">
+        <div  *ngIf="getStat(item.startTime , item.endTime) == 1"   class="bg-[#3D91C733] rounded-lg p-4 mb-4">
           <!-- Avatar and Name -->
           
-          <div class="flex items-center mb-2 justify-between">
+          <div class="flex items-center mb-2 justify-between"  >
             <!-- Replace with an img tag for the avatar -->
             <div class="flex items-center mb-2">
-              <img alt=" " class="w-8 h-8 bg-gray-300 rounded-full mr-2" src="{{item.photoUrl?item.photoUrl : '../../../../../../assets/img/user.jpeg'}}">
+              <img alt=" " class="w-8 h-8 bg-gray-300 rounded-lg mr-2" src="{{item.photoUrl?item.photoUrl : '../../../../../../assets/img/user.jpeg'}}">
             <span class="font-semibold">{{item.firstName}} {{item.middleName}} {{item.lastName}}  </span>
             </div>
             <div class="relative inline-block text-left">
@@ -78,14 +86,14 @@
               </div>
             
               <!-- Dropdown Menu -->
-              <div id="{{'in'+i}}" class="hidden origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div id="{{'in'+i}}" class="hidden dropdown origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div class="py-1">
                 
                   <button (click)="edit(item)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
                     Edit
                   </button>
                   
-                  <button (click)="del(item.taskId)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
+                  <button (click)="del(item.id)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
                     Delete
                   </button>
                 </div>
@@ -95,24 +103,25 @@
               
           </div>
           <p class="text-sm">• {{item.title}}</p>
-          <p class="text-sm text-gray-500 text-right">Deadline: {{item.deadLine | utcToLocal}}</p>
+          <p class="text-sm text-gray-500 ">Start Time: {{item.startTime | utcToLocal}}</p>
+          <p class="text-sm text-gray-500 ">End Time: {{item.endTime | utcToLocal}}</p>
         </div>
       <!-- Repeat the task card structure for more tasks -->
         </div>
     </div>
   
     <!-- Done Column -->
-    <div class="w-1/3 bg-white rounded-lg shadow p-4" style="border: 0.5px solid #3D91C7">
-      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Done</h2>
+    <div class="w-1/3 max-h-[80vh] overflow-auto bg-white rounded-lg shadow p-4" style="border: 0.5px solid #3D91C7">
+      <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Ended</h2>
       <!-- Task Card -->
-       <div *ngIf="tasks[2]">
-      <div id="{{item.taskId}}" *ngFor="let item of tasks[2].trainees ; let i = index" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+       <div *ngFor="let item of tasks ; let i = index" id="{{item.taskId}}">
+      <div  *ngIf="getStat(item.startTime , item.endTime) == 0"  class="bg-[#3D91C733] rounded-lg p-4 mb-4">
         <!-- Avatar and Name -->
          
-        <div class="flex items-center mb-2 justify-between">
+        <div class="flex items-center mb-2 justify-between" >
           <!-- Replace with an img tag for the avatar -->
           <div class="flex items-center mb-2">
-            <img alt=" " class="w-8 h-8 bg-gray-300 rounded-full mr-2" src="{{item.photoUrl?item.photoUrl : '../../../../../../assets/img/user.jpeg'}}">
+            <img alt=" " class="w-8 h-8 bg-gray-300 rounded-lg mr-2" src="{{item.photoUrl?item.photoUrl : '../../../../../../assets/img/user.jpeg'}}">
           <span class="font-semibold">{{item.firstName}} {{item.middleName}} {{item.lastName}}  </span>
           </div>
           <div class="relative inline-block text-left">
@@ -126,14 +135,14 @@
             </div>
           
             <!-- Dropdown Menu -->
-            <div id="{{'done'+i}}" class="hidden origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div  id="{{'done'+i}}" class="dropdown hidden origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div class="py-1">
                
                 <button (click)="edit(item)"   class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
                   Edit
                 </button>
                 
-                <button (click)="del(item.taskId)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
+                <button (click)="del(item.id)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
                   Delete
                 </button>
               </div>
@@ -143,7 +152,8 @@
             
         </div>
         <p class="text-sm">• {{item.title}}</p>
-        <p class="text-sm text-gray-500 text-right">Deadline: {{item.deadLine | utcToLocal}}</p>
+        <p class="text-sm text-gray-500 ">Start Time: {{item.startTime | utcToLocal}}</p>
+        <p class="text-sm text-gray-500 ">End Time: {{item.endTime | utcToLocal}}</p>
       </div>
     </div>
       <!-- Repeat the task card structure for more tasks -->
@@ -160,7 +170,7 @@
                     <div class="flex ">
                       <button (click)="show('names')" class="w-[160px] ml-2 flex gap-6 items-center border border-[#97979780] rounded-md px-2 py-1">
                         Assigned to  
-                          <svg [ngClass]="isShow ? 'rotate-180' : ''" class="duration-200" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <svg [ngClass]="isShow ? 'rotate-360' : 'rotate-180'" class="duration-200" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M2.7193 10.0332L7.06596 5.68654C7.5793 5.1732 8.4193 5.1732 8.93263 5.68654L13.2793 10.0332" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                           </svg>
 
@@ -170,9 +180,9 @@
                           <div *ngIf="i==6" class="min-w-[35px] ml-1 py-1 text-white font-bold flex justify-center items-center pr-1 rounded-full bg-[#0D99FF]">...</div>
                         </div>
                     </div>
-                    <div id="names" class="hidden origin-top-right absolute left-0 mt-2   rounded-md shadow-lg bg-[#F3F3F3] ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div id="names" class="hidden origin-top-right absolute left-0 mt-2 text-center  rounded-md shadow-lg bg-[#F3F3F3] ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div class="py-1 overflow-auto custom-scrollbar h-60">
-                        <div (click)="gen()"   class="flex cursor-pointer hover:bg-[#0D99FF]  justify-between px-4 py-2 text-sm text-gray-700 ">
+                        <div (click)="gen()"   class="flex cursor-pointer hover:bg-[#3D91C7]  justify-between px-4 py-2 text-sm text-gray-700 ">
                           General
                           <div class="w-[18px] hidden" id="gen">
                             <svg class="ml-1" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -197,9 +207,13 @@
 
             <!-- Due to -->
             <div class="mb-4 flex gap-6 items-center">
-                <label class="flex items-center block text-sm font-medium ">Due to</label>
-                <input #date type="date" class="mt-2 w-[170px] px-4 py-2 border rounded-lg text-[#979797] focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                <label class="flex items-center text-sm font-medium ">Start Time</label>
+                <input #startTime type="datetime-local" class="mt-2 w-[170px] px-4 py-2  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]">
             </div>
+            <div class="mb-4 flex gap-6 items-center">
+              <label class="flex items-center text-sm font-medium ">End Time&nbsp;&nbsp;</label>
+              <input #endTime type="datetime-local" class="mt-2 w-[170px] px-4 py-2  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]">
+          </div>
 
             <!-- Tasks' agenda -->
             <div class="mb-4">
@@ -209,7 +223,8 @@
                 <div id="tasks" class="max-h-[200px] overflow-auto custom-scrollbar">
                   <div *ngFor="let i of this.taskNo , let ind = index"  >
                     <div *ngIf="i!=null" class=" w-full flex justify-between  px-4 py-2 border">
-                      <input type="text" #val name="" id="{{'en'+ind}}" value="{{i}}" (keydown)="en($event, ind , this.val)" disabled>
+                      
+                      <textarea style="resize: none;" class="w-full" type="text" #val name="" id="{{'en'+ind}}" value="{{i}}" (keydown)="en($event, ind , this.val)" disabled style="resize: none;"></textarea>
                     <p class="flex gap-3 items-center">
                     <svg (click)="enable('en'+ ind)" class="cursor-pointer" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M2.33297 13.6676C2.8863 14.2209 3.77964 14.2209 4.33297 13.6676L12.9996 5.00094C13.553 4.4476 13.553 3.55427 12.9996 3.00094C12.4463 2.4476 11.553 2.4476 10.9996 3.00094L2.33297 11.6676C1.77964 12.2209 1.77964 13.1143 2.33297 13.6676Z" stroke="#52B788" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -231,13 +246,14 @@
                       
                   </div>
                 </div>
-                <input (keydown)="onKeydown($event, this.task)" #task type="text" placeholder="+ Add text " class=" w-full  px-4 py-2 border-t focus:outline-none ">
+                
+                <textarea (keydown)="onKeydown($event, this.task)" #task type="text" placeholder="+ Add text " class=" w-full  px-4 py-2 border-t focus:outline-none " style="resize: none;"></textarea>
                </div>
             </div>
-
+            <div *ngFor="let error of crError" class="text-[#EF4A50]">{{ error }}</div>
             <!-- Create Button -->
             <div class="flex justify-end">
-                <button (click)="create(this.task, this.date)" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <button (click)="create(this.task, this.startTime, this.endTime)" class="bg-[#3D91C7] hover:bg-[#2679AF] text-white px-4 py-2 rounded-lg  focus:outline-none">
                     Create
                 </button>
             </div>
@@ -247,28 +263,29 @@
       <div (click)="handleClick($event)" class="bg-white rounded-lg shadow-lg w-[500px] p-6 relative">
         <!-- Modal Content -->
         <div class="flex items-center mb-4">
-            <img src="{{this.ed.photoUrl?? './../../../../../assets/img/user.jpeg'}}" alt="User Image" class="w-10 h-10 rounded-full mr-3">
+            <img src="{{this.ed.photoUrl?? './../../../../../assets/img/user.jpeg'}}" alt="User Image" class="w-10 h-10 rounded-lg mr-3">
             <div>
                 <p class="text-lg font-semibold">{{this.ed.firstName}} {{this.ed.middleName}} {{this.ed.lastName}}</p>
                 <!-- <p class="text-gray-500 text-sm">Deadline: {{this.ed.deadLine | utcToLocal}}</p> -->
-               <label class="text-gray-500 text-sm" for="dateEdit">Deadline: </label>  <input #edDate id="dateEdit" type="date" [value]="formatDate(ed.deadLine)">
+                <label class="text-gray-500 text-sm" for="sdateEdit">Start Time: </label>  <input #stTime id="sdateEdit" class="mt-2 w-[170px] px-2 py-1  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]" type="date" [value]="formatDate(ed.startTime)">
+                <br>
+                <label class="text-gray-500 text-sm" for="edateEdit">End Time:&nbsp;&nbsp;</label>  <input #enTime id="edateEdit" class="mt-2 w-[170px] px-2 py-1  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]" type="date" [value]="formatDate(ed.endTime)">
             </div>
         </div>
 
         <!-- Task Input -->
-        <input 
-  [value]="ed.title"  
-   #taskEd
-  class="w-full border rounded p-2 mb-16" 
-  >
+   
+  <textarea [value]="ed.title"  
+  #taskEd
+ class="w-full border rounded p-2 mb-4 " style="resize: none;"></textarea>
 
 
-
+ <div *ngFor="let error of errors" class="text-[#EF4A50]">{{ error }}</div>
         <!-- Action Buttons -->
-        <div class="flex justify-center space-x-2">
-            <button (click)="show('edit')" class="bg-red-500 text-white px-6 py-1 rounded hover:bg-red-600">Cancel</button>
-            <button (click)="updateTitle(this.taskEd, this.edDate)" class="bg-blue-500 text-white px-6 py-1 rounded hover:bg-blue-600">Save</button>
+        <div class="flex justify-center space-x-2 mt-10">
+            <button (click)="show('edit')" class="bg-[#EF4A50] text-white px-6 py-1 rounded ">Cancel</button>
+            <button (click)="updateTitle(this.taskEd, this.stTime , this.enTime)" class="bg-[#3D91C7] hover:bg-[#2679AF] text-white px-6 py-1 rounded ">Save</button>
         </div>
     </div>
   </div>
-  
+}

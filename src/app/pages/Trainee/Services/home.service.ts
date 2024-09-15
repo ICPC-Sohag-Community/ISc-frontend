@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
-import { task } from '../model/trinee-data';
+import { task } from '../model/trinee-home';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +18,7 @@ export class HomeService {
   isLoading: boolean = true;
 
   constructor() {}
+
 
   TraineeCurrentSheet(): Observable<any> {
     return this._HttpClient.get(
