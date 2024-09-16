@@ -1,6 +1,9 @@
-<div class="relative w-full p-4 space-y-2 sm:p-6 sm:ps-4">
-  <div class="flex items-center justify-between px-12 py-8 bg-white rounded-xl">
-    <h2 class="text-2xl font-bold">Sessions</h2>
+<div
+  style="height: calc(100vh - 72px)"
+  class="relative w-full p-4 space-y-2 sm:p-6 sm:ps-4"
+>
+  <div class="flex items-center justify-between px-12 py-4 bg-white rounded-xl">
+    <h2 class="text-2xl font-bold">Sheets</h2>
     <div class="flex items-center justify-between px-2">
       <button
         (click)="goToActionSheet(0)"
@@ -21,7 +24,7 @@
   </div>
   } @else {
   <div
-    class="max-h-[28rem] overflow-y-auto scroll-host-table"
+    class="max-h-[31rem] overflow-y-auto scroll-host-table"
     (scroll)="loadMoreData($event)"
   >
     <table class="min-w-full text-center table-auto">
@@ -43,7 +46,19 @@
         >
           <td class="p-4 text-left rounded-s-lg">{{ item.name }}</td>
           <td class="p-4">
-            {{ item.status }}
+            <span
+              [ngClass]="
+                item.status === 0
+                  ? 'bg-[#EF4A504F] text-[#EF4A50]'
+                  : item.status === 1
+                  ? 'bg-[#3D91C74F] text-[#3D91C7]'
+                  : 'bg-[#66AE1F4F] text-[#66AE1F]'
+              "
+              class="px-4 py-1 text-sm rounded-full"
+            >
+              @switch (item.status) { @case (0) { Incoming }@case (1) {
+              Inprogress }@case (2) { Completed } }
+            </span>
           </td>
           <td class="p-4">
             <a
@@ -128,24 +143,43 @@
         </tr>
         @if (expandedRow === item.id) {
         <tr>
-          <td colspan="6" class="p-4 bg-[#e4e5eb]">
+          <td colspan="6" class="p-2 bg-[#e4e5eb] rounded-md">
             <div
-              class="overflow-hidden transition-all duration-300 ease-in-out"
+              class="overflow-hidden overflow-y-auto transition-all duration-300 ease-in-out scroll-host-table"
               [style.max-height]="expandedRow === item.id ? '500px' : '0px'"
             >
               <table class="w-full border-gray-200 table-auto">
                 <thead>
-                  <tr class="border-b">
-                    <th class="p-4 text-left">Name</th>
-                    <th class="p-4 text-center">Link</th>
-                    <th class="p-4 text-right">Delete</th>
+                  <tr class="">
+                    <th class="p-2 text-left border-b border-gray-500 ps-10">
+                      Name
+                    </th>
+                    <th class="p-2 text-left border-b border-gray-500">Link</th>
+                    <th class="p-2 border-b border-gray-500">Delete</th>
                   </tr>
                 </thead>
-                <tbody>
+                @if (isLoadingMaterial()) {
+                <tr
+                  class="flex items-center justify-center w-full bg-opacity-60"
+                >
+                  <td colspan="6" class="flex items-center justify-center">
+                    <div
+                      class="w-8 h-8 border-4 border-blue-600 border-dashed rounded-full animate-spin"
+                    ></div>
+                  </td>
+                </tr>
+                }@else {
+                <tbody cdkDropList (cdkDropListDropped)="drop($event, item.id)">
                   @for (sub of materailsSheet; track $index) {
 
-                  <tr class="border-b">
-                    <td class="flex items-center p-4 text-left gap-x-2">
+                  <tr
+                    class="border-b border-gray-500 cdk-drag-drop-table"
+                    cdkDrag
+                    [cdkDragData]="{ sheetId: item.id, materialId: sub.id }"
+                  >
+                    <td
+                      class="flex items-center p-2 text-left border-b border-gray-500 cursor-move gap-x-2"
+                    >
                       <svg
                         width="15"
                         height="11"
@@ -160,11 +194,11 @@
                       </svg>
                       <span> {{ sub.title }}</span>
                     </td>
-                    <td class="p-4 text-center">
+                    <td class="p-2 text-left border-b border-gray-500">
                       <a
                         [href]="sub.link"
                         target="_blank"
-                        class="flex items-center justify-center"
+                        class="flex items-center justify-start"
                       >
                         <svg
                           class="size-6 hover:text-activeLink"
@@ -183,7 +217,8 @@
                       </a>
                     </td>
                     <td
-                      class="flex items-center justify-end p-4 cursor-pointer"
+                      (click)="deleteMaterial(sub.id)"
+                      class="p-2 border-b border-gray-500 cursor-pointer"
                     >
                       <svg
                         class="flex justify-center w-full hover:fill-red-500 size-5 fill-[#6B7088]"
@@ -198,7 +233,92 @@
                     </td>
                   </tr>
                   }
+                  <tr [formGroup]="formMaterial">
+                    <td class="text-left border-b border-gray-500">
+                      <div class="flex items-center justify-center gap-x-2">
+                        <svg
+                          width="2"
+                          height="38"
+                          viewBox="0 0 2 38"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect
+                            width="2"
+                            height="38"
+                            fill="#686666"
+                            fill-opacity="0.62"
+                          />
+                        </svg>
+
+                        <input
+                          type="text"
+                          formControlName="title"
+                          class="py-4 px-2 w-full bg-transparent text-black focus:outline-none placeholder:text-[#A1A0A0]"
+                          placeholder="Material Name"
+                        />
+                      </div>
+                    </td>
+                    <td class="text-left border-b border-gray-500">
+                      <div class="flex items-center justify-start gap-x-2">
+                        <svg
+                          width="2"
+                          height="38"
+                          viewBox="0 0 2 38"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect
+                            width="2"
+                            height="38"
+                            fill="#686666"
+                            fill-opacity="0.62"
+                          />
+                        </svg>
+
+                        <input
+                          type="text"
+                          formControlName="link"
+                          class="px-2 bg-transparent text-black focus:outline-none placeholder:text-[#A1A0A0]"
+                          placeholder="link"
+                        />
+                      </div>
+                    </td>
+                    <td class="border-b border-gray-500 cursor-pointer">
+                      <button
+                        type="submit"
+                        (click)="addMaterial()"
+                        [disabled]="formMaterial.invalid"
+                        class="disabled:cursor-not-allowed"
+                      >
+                        @if (isLoadingMaterialAdd()) {
+                        <div
+                          class="flex items-center justify-center w-full bg-opacity-60"
+                        >
+                          <div class="flex items-center justify-center">
+                            <div
+                              class="w-8 h-8 border-4 border-blue-600 border-dashed rounded-full animate-spin"
+                            ></div>
+                          </div>
+                        </div>
+                        }@else {
+                        <svg
+                          class="flex justify-center w-full size-7"
+                          viewBox="0 0 40 40"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M29.9987 21.6634H21.6654V29.9967C21.6654 30.4388 21.4898 30.8627 21.1772 31.1753C20.8646 31.4878 20.4407 31.6634 19.9987 31.6634C19.5567 31.6634 19.1327 31.4878 18.8202 31.1753C18.5076 30.8627 18.332 30.4388 18.332 29.9967V21.6634H9.9987C9.55667 21.6634 9.13275 21.4878 8.82019 21.1753C8.50763 20.8627 8.33203 20.4388 8.33203 19.9967C8.33203 19.5547 8.50763 19.1308 8.82019 18.8182C9.13275 18.5057 9.55667 18.3301 9.9987 18.3301H18.332V9.99674C18.332 9.55472 18.5076 9.13079 18.8202 8.81823C19.1327 8.50567 19.5567 8.33008 19.9987 8.33008C20.4407 8.33008 20.8646 8.50567 21.1772 8.81823C21.4898 9.13079 21.6654 9.55472 21.6654 9.99674V18.3301H29.9987C30.4407 18.3301 30.8647 18.5057 31.1772 18.8182C31.4898 19.1308 31.6654 19.5547 31.6654 19.9967C31.6654 20.4388 31.4898 20.8627 31.1772 21.1753C30.8647 21.4878 30.4407 21.6634 29.9987 21.6634Z"
+                            fill="#3D91C7"
+                          />
+                        </svg>
+                        }
+                      </button>
+                    </td>
+                  </tr>
                 </tbody>
+                }
               </table>
             </div>
           </td>

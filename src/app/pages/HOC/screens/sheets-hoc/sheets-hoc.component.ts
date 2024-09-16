@@ -1,14 +1,31 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { SheetsHOCService } from '../sheets-hoc.service';
+import { SheetsHOCService } from '../../services/sheets-hoc.service';
 import { CasheService } from '../../../../shared/services/cashe.service';
 import { Router } from '@angular/router';
 import { DataMaterial, SheetsHoc } from '../../model/sheets-hoc';
 import { ConfirmDeleteHocComponent } from '../../components/confirm-delete-hoc/confirm-delete-hoc.component';
+import {
+  CdkDragDrop,
+  DragDropModule,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
+import { NgClass } from '@angular/common';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-sheets-hoc',
   standalone: true,
-  imports: [ConfirmDeleteHocComponent],
+  imports: [
+    ConfirmDeleteHocComponent,
+    DragDropModule,
+    ReactiveFormsModule,
+    NgClass,
+  ],
   templateUrl: './sheets-hoc.component.html',
   styleUrl: './sheets-hoc.component.scss',
 })
@@ -16,7 +33,10 @@ export class SheetsHOCComponent implements OnInit {
   sheetsHOCService = inject(SheetsHOCService);
   casheService = inject(CasheService);
   router = inject(Router);
+  fb = inject(FormBuilder);
+  formMaterial!: FormGroup;
   allSheets!: SheetsHoc;
+  sheetId: number = 0;
   currentPage: number = 1;
   pageSize: number = 15;
   keyword: string = '';
@@ -27,9 +47,17 @@ export class SheetsHOCComponent implements OnInit {
   expandedRow: number | null = null;
   materailsSheet!: DataMaterial[];
   isLoadingMaterial = signal<boolean>(false);
+  isLoadingMaterialAdd = signal<boolean>(false);
+  isDeleted: boolean = false;
+  submitted: boolean = false;
 
   ngOnInit() {
     this.getAllSheets(this.currentPage, this.pageSize);
+    this.formMaterial = this.fb.group({
+      title: ['', [Validators.required]],
+      link: ['', [Validators.required]],
+      sheetId: [''],
+    });
   }
 
   getAllSheets(currentPage: number, pageSize: number, keyword?: string): void {
@@ -49,6 +77,33 @@ export class SheetsHOCComponent implements OnInit {
         error: (err) => {
           console.log(err);
           this.isLoading.update((v) => (v = false));
+        },
+      });
+  }
+
+  addMaterial(): void {
+    this.submitted = true;
+    if (this.formMaterial.invalid) {
+      return;
+    }
+    this.formMaterial.get('sheetId')?.setValue(this.sheetId);
+    console.log(this.formMaterial.value);
+    this.isLoadingMaterialAdd.set(true);
+    this.sheetsHOCService
+      .addMaterialToSheet(this.formMaterial.value)
+      .subscribe({
+        next: ({ statusCode }) => {
+          if (statusCode === 200) {
+            this.getMaterailsBySheetId(this.sheetId);
+            this.isLoadingMaterialAdd.update((v) => (v = false));
+            this.formMaterial.reset();
+          } else {
+            this.isLoadingMaterialAdd.update((v) => (v = false));
+          }
+        },
+        error: (err) => {
+          console.log(err);
+          this.isLoadingMaterialAdd.update((v) => (v = false));
         },
       });
   }
@@ -91,6 +146,7 @@ export class SheetsHOCComponent implements OnInit {
   }
 
   getMaterailsBySheetId(id: number): void {
+    this.sheetId = id;
     this.isLoadingMaterial.set(true);
     this.sheetsHOCService.getMaterailsBySheetId(id).subscribe({
       next: ({ data, statusCode }) => {
@@ -104,6 +160,73 @@ export class SheetsHOCComponent implements OnInit {
       error: (err) => {
         console.log(err);
         this.isLoadingMaterial.update((v) => (v = false));
+      },
+    });
+  }
+
+  // Function to handle row reordering
+  drop(event: CdkDragDrop<any[]>, sheetId: number) {
+    moveItemInArray(
+      this.materailsSheet,
+      event.previousIndex,
+      event.currentIndex
+    );
+    this.materailsSheet.forEach((item, index) => {
+      item.materialOrder = index + 1;
+    });
+    const extractedData = this.materailsSheet.map((item) => {
+      return {
+        materialId: item.id,
+        order: item.materialOrder,
+      };
+    });
+    console.log('Extracted Data:', extractedData);
+
+    const info = {
+      sheetId: sheetId,
+      materials: extractedData,
+    };
+    this.updateOrdersMaterails(info);
+  }
+
+  updateOrdersMaterails(info: any): void {
+    // this.isLoadingMaterial.set(true);
+    this.sheetsHOCService.updateOrdersMaterails(info).subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          // this.materailsSheet = data;
+          // this.isLoadingMaterial.update((v) => (v = false));
+        } else {
+          // this.isLoadingMaterial.update((v) => (v = false));
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        // this.isLoadingMaterial.update((v) => (v = false));
+      },
+    });
+  }
+
+  deleteMaterial(id: number): void {
+    this.deleteItem(id);
+  }
+
+  deleteItem(id: number) {
+    this.isDeleted = true;
+    this.sheetsHOCService.deleteMaterial(id).subscribe({
+      next: ({ statusCode }) => {
+        if (statusCode === 200) {
+          this.casheService.clearCache();
+          this.getMaterailsBySheetId(this.sheetId);
+          this.isDeleted = false;
+          console.log(this.sheetId);
+        } else {
+          this.isDeleted = false;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this.isDeleted = false;
       },
     });
   }
