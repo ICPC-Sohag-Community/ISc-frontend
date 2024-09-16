@@ -1,1 +1,178 @@
-<p>weekly-filter-hoc works!</p>
+<div
+  style="height: calc(100vh - 72px)"
+  class="relative w-full p-4 space-y-4 sm:ps-4 sm:space-y-6"
+>
+  <div class="flex items-center justify-between px-12 py-4 bg-white rounded-xl">
+    <h2 class="text-xl font-bold">Weekly Filter</h2>
+  </div>
+
+  @if( isLoading()) {
+  <div class="fixed z-50 top-[60%] lg:left-[50%] left-[40%] bg-opacity-60">
+    <div class="flex items-center">
+      <div
+        class="w-16 h-16 border-8 border-blue-600 border-dashed rounded-full animate-spin"
+      ></div>
+    </div>
+  </div>
+  } @else {
+
+  <div class="bg-white rounded-xl">
+    <div class="flex space-x-2 bg-[#F4F5F8]">
+      <button
+        class="px-6 py-2 text-xl font-semibold rounded-t-xl focus:outline-none"
+        [ngClass]="{
+          'bg-white text-mainblue': activeTab === 'tab1',
+          'text-black hover:text-mainblue': activeTab !== 'tab1'
+        }"
+        (click)="selectTab('tab1')"
+      >
+        To Filter
+      </button>
+      <button
+        class="px-6 py-2 text-xl font-semibold rounded-t-xl focus:outline-none"
+        [ngClass]="{
+          'bg-white text-mainblue': activeTab === 'tab2',
+          'text-black hover:text-mainblue': activeTab !== 'tab2'
+        }"
+        (click)="selectTab('tab2')"
+      >
+        Other
+      </button>
+    </div>
+    <div
+      class="px-2 pt-6 pb-4 rounded-b-lg"
+      [ngClass]="{
+        'bg-white': activeTab === 'tab1' || activeTab === 'tab2',
+        'bg-gray-100': activeTab !== 'tab1' && activeTab !== 'tab2'
+      }"
+    >
+      @if (activeTab === 'tab1') {
+      <table
+        class="relative px-2 pb-2 bg-[#F4F5F8] rounded-xl min-w-full text-center"
+      >
+        <thead>
+          <tr class="text-[#6B7088] bg-white">
+            <th class="px-4 py-2 text-left">Name</th>
+            <th class="px-4 py-2">Email</th>
+            <th class="px-4 py-2">Codeforce handle</th>
+            <th class="px-4 py-2">Absence Count</th>
+            <th class="px-4 py-2">Solving Percent</th>
+            <th class="flex items-center justify-center px-4 py-2">Exclude</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (item of filterData.data; track $index) {
+          <tr
+            class="my-6 text-base font-medium text-center text-black bg-white rounded-lg"
+          >
+            <td class="px-4 py-2 rounded-s-lg">
+              {{ item.firstName }} {{ item.middleName }} {{ item.lastName }}
+            </td>
+            <td class="px-4 py-2">{{ item.email }}</td>
+            <td class="px-4 py-2">{{ item.codeForceHandle }}</td>
+            <td class="px-4 py-2">{{ item.absenceCount }}</td>
+            <td class="px-4 py-2">weeklySolvingPrecent</td>
+            <td class="px-4 py-2 cursor-pointer rounded-e-lg">
+              <input
+                type="checkbox"
+                class="w-4 h-4 text-blue-600 form-checkbox"
+                (change)="toggleItem(item.id, $event)"
+                [checked]="selectedIds.includes(item.id)"
+              />
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      }@else { Others
+      <!-- <table
+        class="relative p-2 bg-[#F4F5F8] rounded-xl min-w-full text-center"
+      >
+        <thead>
+          <tr class="text-[#6B7088] text-lg">
+            <th class="px-4 py-2">Full name</th>
+            <th class="px-4 py-2">Codeforces</th>
+            <th class="px-4 py-2">Collage</th>
+            <th class="px-4 py-2">Role</th>
+            <th class="px-4 py-2">Gender</th>
+            <th class="flex items-center justify-center px-4 py-2">
+              <svg
+                width="24"
+                height="17"
+                viewBox="0 0 24 17"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14.4297 4.04297L20.4997 8.1816L14.4297 12.3202"
+                  stroke="#6B7088"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M3.5 8.18164H20.33"
+                  stroke="#6B7088"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (item of staffArchiveInfo.data; track $index) {
+          <tr
+            class="my-6 text-base font-medium text-center text-black bg-white rounded-lg"
+          >
+            <td class="px-4 py-2 rounded-s-lg">
+              {{ item.firstName }} {{ item.middleName }} {{ item.lastName }}
+            </td>
+            <td class="px-4 py-2">{{ item.codeForceHandle }}</td>
+            <td class="px-4 py-2">{{ item.college }}</td>
+            <td class="px-4 py-2">{{ item.role }}</td>
+            <td class="px-4 py-2">
+              @if (item.gender === 0) { Male }@else { Female }
+            </td>
+            <td
+              (click)="showSideBar(item.id)"
+              class="px-4 py-2 cursor-pointer rounded-e-lg"
+            >
+              <svg
+                class="flex justify-center w-full hover:text-green-500 hover:scale-125 transition-all size-5 text-[#6B7088]"
+                viewBox="0 0 24 17"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14.4297 4.04297L20.4997 8.1816L14.4297 12.3202"
+                  stroke="#6B7088"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M3.5 8.18164H20.33"
+                  stroke="#6B7088"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table> -->
+      }
+    </div>
+  </div>
+  }
+</div>

@@ -31,8 +31,27 @@ export class SheetsHOCService {
     );
   }
   getMaterailsBySheetId(id: number): Observable<ResponseHeader> {
-    return this.casheService.get<any>(
+    return this.http.get<any>(
       `${environment.BASE_URL}/api/Head/getMaterailsBySheetId/${id}`
+    );
+  }
+  updateOrdersMaterails(info: any): Observable<ResponseHeader> {
+    return this.http.put<any>(
+      `${environment.BASE_URL}/api/Head/materials/updateOrders`,
+      info
+    );
+  }
+
+  deleteMaterial(id: number): Observable<ResponseHeader> {
+    return this.http.delete<any>(
+      `${environment.BASE_URL}/api/Head/materials/${id}`
+    );
+  }
+
+  addMaterialToSheet(materialInfo: any): Observable<ResponseHeader> {
+    return this.http.post<any>(
+      `${environment.BASE_URL}/api/Head/materials`,
+      materialInfo
     );
   }
 }

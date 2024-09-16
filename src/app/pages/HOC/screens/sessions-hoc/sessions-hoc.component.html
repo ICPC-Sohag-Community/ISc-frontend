@@ -1,5 +1,8 @@
-<div class="relative w-full p-4 space-y-2 sm:p-6 sm:ps-4">
-  <div class="flex items-center justify-between px-12 py-8 bg-white rounded-xl">
+<div
+  style="height: calc(100vh - 72px)"
+  class="relative w-full p-4 space-y-2 sm:p-6 sm:ps-4"
+>
+  <div class="flex items-center justify-between px-12 py-4 bg-white rounded-xl">
     <h2 class="text-2xl font-bold">Sessions</h2>
     <div class="flex items-center justify-between px-2">
       <button
@@ -21,11 +24,11 @@
   </div>
   } @else {
   <div
-    class="max-h-[28rem] overflow-y-auto scroll-host-table"
+    class="max-h-[31rem] overflow-y-auto scroll-host-table"
     (scroll)="loadMoreData($event)"
   >
     <table class="min-w-full text-center table-auto">
-      <thead class="sticky top-0 z-10 bg-[#f4f5f8]">
+      <thead class="sticky top-0 bg-[#f4f5f8]">
         <tr class="bg-transparent text-[#6B7088]">
           <th class="p-4 text-left">Instructor Name</th>
           <th class="p-4">Topic</th>

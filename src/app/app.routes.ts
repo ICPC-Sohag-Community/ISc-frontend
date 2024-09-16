@@ -227,7 +227,7 @@ export const routes: Routes = [
         path: 'attendance',
         children: [
           {
-            path: 'edit-attendance/:id',
+            path: 'edit-attendance',
             component: EditAttendanceComponent,
             title: 'head of camp / Attendance / edit-attendance- ICPC',
           },

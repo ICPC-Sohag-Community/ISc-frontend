@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { ContestsHocService } from '../../services/contests-hoc.service';
 import { SessionsHOCService } from '../../services/sessions-hoc.service';
+import { SheetsHOCService } from '../../services/sheets-hoc.service';
 
 @Component({
   selector: 'app-confirm-delete-hoc',
@@ -19,6 +20,7 @@ import { SessionsHOCService } from '../../services/sessions-hoc.service';
 export class ConfirmDeleteHocComponent {
   contestsHocService = inject(ContestsHocService);
   sessionsHOCService = inject(SessionsHOCService);
+  sheetsHOCService = inject(SheetsHOCService);
   @Input() itemId: number | null = null;
   @Input() lable?: string = '';
   @Output() closeModal = new EventEmitter<boolean>();
@@ -39,6 +41,8 @@ export class ConfirmDeleteHocComponent {
         this.deleteItem(this.itemId);
       } else if (this.lable === 'session') {
         this.deleteSession(this.itemId);
+      } else if (this.lable === 'sheet') {
+        this.deleteSheet(this.itemId);
       }
     }
   }
@@ -48,7 +52,6 @@ export class ConfirmDeleteHocComponent {
     this.contestsHocService.deleteContest(id).subscribe({
       next: ({ message, statusCode }) => {
         if (statusCode === 200) {
-          console.log(message);
           this.isLoading.update((v) => (v = false));
           this.isDeleted = true;
         } else {
@@ -69,7 +72,6 @@ export class ConfirmDeleteHocComponent {
     this.sessionsHOCService.deleteSession(id).subscribe({
       next: ({ message, statusCode }) => {
         if (statusCode === 200) {
-          console.log(message);
           this.isLoading.update((v) => (v = false));
           this.isDeleted = true;
         } else {
@@ -81,6 +83,26 @@ export class ConfirmDeleteHocComponent {
         console.log(err);
         this.isDeleted = false;
 
+        this.isLoading.update((v) => (v = false));
+      },
+    });
+  }
+
+  deleteSheet(id: number) {
+    this.isLoading.set(true);
+    this.sheetsHOCService.deleteSheet(id).subscribe({
+      next: ({ message, statusCode }) => {
+        if (statusCode === 200) {
+          this.isLoading.update((v) => (v = false));
+          this.isDeleted = true;
+        } else {
+          this.isDeleted = false;
+          this.isLoading.update((v) => (v = false));
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this.isDeleted = false;
         this.isLoading.update((v) => (v = false));
       },
     });
