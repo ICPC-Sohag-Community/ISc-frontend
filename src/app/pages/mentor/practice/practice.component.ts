@@ -209,7 +209,9 @@ edError:any[] = [];
         this.notes = '';
          this.error = false;
          this.success = true;
-         window.location.reload();
+        //  window.location.reload();
+        this.show('add');
+        this.get(localStorage.getItem('camp'))
        }
      })
     }

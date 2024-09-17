@@ -31,6 +31,9 @@ id = localStorage.getItem("camp") || null;
       
       
     }
+    else{
+      this.isLoading = false;
+    }
   }
   con:boolean = false;
   sh:boolean = true;

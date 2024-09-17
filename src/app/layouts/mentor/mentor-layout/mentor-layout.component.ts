@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './mentor-layout.component.scss'
 })
 export class MentorLayoutComponent {
-  camp : boolean = false;
+  camp : boolean = true;
 constructor (){
   this.camp = localStorage.getItem('camp')? true : false;
 }
