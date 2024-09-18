@@ -7,6 +7,7 @@ import { DropdownRolesComponent } from '../../Components/dropdown-roles/dropdown
 import { TraineesLeaderService } from '../../services/trainees-leader.service';
 import { OnTraineeInfo, TraineeInfo } from '../../model/trainees-leader';
 import { RolesService } from '../../services/roles.service';
+import { AuthService } from '../../../../authentication/services/auth.service';
 
 @Component({
   selector: 'app-trainees-leader',
@@ -22,6 +23,7 @@ import { RolesService } from '../../services/roles.service';
 })
 export class TraineesLeaderComponent implements OnInit {
   traineesLeaderService = inject(TraineesLeaderService);
+  authService = inject(AuthService);
   rolesService = inject(RolesService);
   casheService = inject(CasheService);
   allTraineesInfo!: TraineeInfo;
@@ -125,12 +127,12 @@ export class TraineesLeaderComponent implements OnInit {
   deleteRole(index: number) {
     const deletedRole = this.traineeInfo.userRoles.splice(index, 1)[0];
     this.deletedRoles.push(deletedRole);
-    // delete deletedRole.campName;
     this.roleInfo = {
       userId: this.selectedTraineeId,
       roleInfos: this.deletedRoles,
     };
   }
+
   restoreRole(index: number) {
     const restoredRole = this.deletedRoles.splice(index, 1)[0];
     this.traineeInfo.userRoles.push(restoredRole);
@@ -141,6 +143,12 @@ export class TraineesLeaderComponent implements OnInit {
     this.rolesService.unAssignToRole(this.roleInfo).subscribe({
       next: ({ statusCode }) => {
         if (statusCode === 200) {
+          if (this.authService.currentUser().id === this.roleInfo.userId) {
+            this.authService.updateUserRoles(
+              this.traineeInfo.userRoles.map((r) => r.role),
+              'delete'
+            );
+          }
           if (this.traineeInfo.userRoles.length === 0) {
             window.location.reload();
           } else {

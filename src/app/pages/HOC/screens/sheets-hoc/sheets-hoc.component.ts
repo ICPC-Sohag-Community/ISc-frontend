@@ -164,7 +164,6 @@ export class SheetsHOCComponent implements OnInit {
     });
   }
 
-  // Function to handle row reordering
   drop(event: CdkDragDrop<any[]>, sheetId: number) {
     moveItemInArray(
       this.materailsSheet,
@@ -180,8 +179,6 @@ export class SheetsHOCComponent implements OnInit {
         order: item.materialOrder,
       };
     });
-    console.log('Extracted Data:', extractedData);
-
     const info = {
       sheetId: sheetId,
       materials: extractedData,
@@ -194,7 +191,6 @@ export class SheetsHOCComponent implements OnInit {
     this.sheetsHOCService.updateOrdersMaterails(info).subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
-          // this.materailsSheet = data;
           // this.isLoadingMaterial.update((v) => (v = false));
         } else {
           // this.isLoadingMaterial.update((v) => (v = false));
@@ -202,7 +198,6 @@ export class SheetsHOCComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
-        // this.isLoadingMaterial.update((v) => (v = false));
       },
     });
   }

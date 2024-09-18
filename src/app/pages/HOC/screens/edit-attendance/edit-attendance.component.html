@@ -4,7 +4,9 @@
   >
     <h2 class="text-xl font-bold">Attendance</h2>
   </div>
-  <div class="flex w-full py-4 overflow-x-auto border-b scroll-host-table">
+  <div
+    class="sticky top-0 flex w-full py-4 overflow-x-auto border-b scroll-host-table"
+  >
     @for (session of allSesions; track session.id; let i = $index) {
     <div
       (click)="onTabClick(session.id)"

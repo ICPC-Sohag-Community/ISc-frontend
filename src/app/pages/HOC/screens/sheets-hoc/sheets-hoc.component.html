@@ -24,11 +24,12 @@
   </div>
   } @else {
   <div
-    class="max-h-[31rem] overflow-y-auto scroll-host-table"
+    style="max-height: calc(100vh - 180px)"
+    class="overflow-y-auto scroll-host-table"
     (scroll)="loadMoreData($event)"
   >
     <table class="min-w-full text-center table-auto">
-      <thead class="sticky top-0 z-10 bg-[#f4f5f8]">
+      <thead class="sticky top-0 bg-[#f4f5f8]">
         <tr class="bg-transparent text-[#6B7088]">
           <th class="p-4 text-left">Name</th>
           <th class="p-4">Status</th>
@@ -327,7 +328,6 @@
       </tbody>
     </table>
     @if (isLoading()) { @if (dataRequest.length !== 0) {
-
     <div class="flex items-center justify-center w-full bg-opacity-60">
       <div class="flex items-center justify-center">
         <div

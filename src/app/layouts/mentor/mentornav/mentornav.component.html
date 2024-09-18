@@ -1,36 +1,111 @@
-<nav class="h-[72px] z-50 flex justify-between items-center  bg-[#E7E7E9]" style="box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.25);">
-<div class="flex gap-[30px] pl-[30px] h-[72px] items-center text-[20px] sections">
-    <a  routerLink="/mentor/" routerLinkActive="text-[#3591C9]" [routerLinkActiveOptions]="{ exact: true }">Trainees</a>
-    <a routerLink="/mentor/attendance" routerLinkActive="text-[#3591C9]">Attendance</a>
-    <a routerLink="/mentor/standings" routerLinkActive="text-[#3591C9]" >Standing</a>
-    <a routerLink="/mentor/tracking" routerLinkActive="text-[#3591C9]" >Tracking</a>
-    <a routerLink="/mentor/tasks" routerLinkActive="text-[#3591C9]" >Tasks</a>
-    <a routerLink="/mentor/practice" routerLinkActive="text-[#3591C9]" >Practice</a>
-</div>
-<div class="flex h-[72px] items-center gap-3 mr-[25px]">
-  <button>
-    <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12.0225 4.90967C8.71253 4.90967 6.02253 7.59967 6.02253 10.9097V13.7997C6.02253 14.4097 5.76253 15.3397 5.45253 15.8597L4.30253 17.7697C3.59253 18.9497 4.08253 20.2597 5.38253 20.6997C9.69253 22.1397 14.3425 22.1397 18.6525 20.6997C19.8625 20.2997 20.3925 18.8697 19.7325 17.7697L18.5825 15.8597C18.2825 15.3397 18.0225 14.4097 18.0225 13.7997V10.9097C18.0225 7.60967 15.3225 4.90967 12.0225 4.90967Z" stroke="#0A0A0A" stroke-width="1.6" stroke-miterlimit="10" stroke-linecap="round"/>
-        <path d="M19.2016 9.95C21.604 9.95 23.5516 8.00244 23.5516 5.6C23.5516 3.19756 21.604 1.25 19.2016 1.25C16.7991 1.25 14.8516 3.19756 14.8516 5.6C14.8516 8.00244 16.7991 9.95 19.2016 9.95Z" fill="#FF6333" stroke="#FF6333" stroke-width="1.5"/>
-        <path d="M13.8719 5.1997C13.5619 5.1097 13.2419 5.0397 12.9119 4.9997C11.9519 4.8797 11.0319 4.9497 10.1719 5.1997C10.4619 4.4597 11.1819 3.9397 12.0219 3.9397C12.8619 3.9397 13.5819 4.4597 13.8719 5.1997Z" stroke="#0A0A0A" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M15.0195 21.0603C15.0195 22.7103 13.6695 24.0603 12.0195 24.0603C11.1995 24.0603 10.4395 23.7203 9.89953 23.1803C9.35953 22.6403 9.01953 21.8803 9.01953 21.0603" stroke="#0A0A0A" stroke-width="1.6" stroke-miterlimit="10"/>
-        </svg>
-        
-</button>
-<button>
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12.1586 10.87C12.0586 10.86 11.9386 10.86 11.8286 10.87C9.44859 10.79 7.55859 8.84 7.55859 6.44C7.55859 3.99 9.53859 2 11.9986 2C14.4486 2 16.4386 3.99 16.4386 6.44C16.4286 8.84 14.5386 10.79 12.1586 10.87Z" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M7.15875 14.56C4.73875 16.18 4.73875 18.82 7.15875 20.43C9.90875 22.27 14.4188 22.27 17.1688 20.43C19.5888 18.81 19.5888 16.17 17.1688 14.56C14.4288 12.73 9.91875 12.73 7.15875 14.56Z" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>            
-</button>
-<img
-class="aspect-ratio-img"
-  style="width: 2.5rem; height: 2.5rem; border-radius: 50%; object-fit: cover; display: block;"
-  [src]="currentUser.photoUrl ? currentUser.photoUrl : './../../../../../assets/img/user.png'"
-  alt="Avatar"
-/>
+<nav
+  class="h-[72px] z-50 flex justify-between items-center bg-[#E7E7E9]"
+  style="box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.25)"
+>
+  <div
+    class="flex gap-[30px] pl-[30px] h-[72px] items-center text-[20px] sections"
+  >
+    <a
+      routerLink="/mentor/"
+      routerLinkActive="text-[#3591C9]"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Trainees</a
+    >
+    <a routerLink="/mentor/attendance" routerLinkActive="text-[#3591C9]"
+      >Attendance</a
+    >
+    <a routerLink="/mentor/standings" routerLinkActive="text-[#3591C9]"
+      >Standing</a
+    >
+    <a routerLink="/mentor/tracking" routerLinkActive="text-[#3591C9]"
+      >Tracking</a
+    >
+    <a routerLink="/mentor/tasks" routerLinkActive="text-[#3591C9]">Tasks</a>
+    <a routerLink="/mentor/practice" routerLinkActive="text-[#3591C9]"
+      >Practice</a
+    >
+  </div>
+  <div class="flex h-[72px] items-center gap-3 mr-[25px]">
+    <button>
+      <svg
+        width="25"
+        height="26"
+        viewBox="0 0 25 26"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12.0225 4.90967C8.71253 4.90967 6.02253 7.59967 6.02253 10.9097V13.7997C6.02253 14.4097 5.76253 15.3397 5.45253 15.8597L4.30253 17.7697C3.59253 18.9497 4.08253 20.2597 5.38253 20.6997C9.69253 22.1397 14.3425 22.1397 18.6525 20.6997C19.8625 20.2997 20.3925 18.8697 19.7325 17.7697L18.5825 15.8597C18.2825 15.3397 18.0225 14.4097 18.0225 13.7997V10.9097C18.0225 7.60967 15.3225 4.90967 12.0225 4.90967Z"
+          stroke="#0A0A0A"
+          stroke-width="1.6"
+          stroke-miterlimit="10"
+          stroke-linecap="round"
+        />
+        <path
+          d="M19.2016 9.95C21.604 9.95 23.5516 8.00244 23.5516 5.6C23.5516 3.19756 21.604 1.25 19.2016 1.25C16.7991 1.25 14.8516 3.19756 14.8516 5.6C14.8516 8.00244 16.7991 9.95 19.2016 9.95Z"
+          fill="#FF6333"
+          stroke="#FF6333"
+          stroke-width="1.5"
+        />
+        <path
+          d="M13.8719 5.1997C13.5619 5.1097 13.2419 5.0397 12.9119 4.9997C11.9519 4.8797 11.0319 4.9497 10.1719 5.1997C10.4619 4.4597 11.1819 3.9397 12.0219 3.9397C12.8619 3.9397 13.5819 4.4597 13.8719 5.1997Z"
+          stroke="#0A0A0A"
+          stroke-width="1.5"
+          stroke-miterlimit="10"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M15.0195 21.0603C15.0195 22.7103 13.6695 24.0603 12.0195 24.0603C11.1995 24.0603 10.4395 23.7203 9.89953 23.1803C9.35953 22.6403 9.01953 21.8803 9.01953 21.0603"
+          stroke="#0A0A0A"
+          stroke-width="1.6"
+          stroke-miterlimit="10"
+        />
+      </svg>
+    </button>
+    <button>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12.1586 10.87C12.0586 10.86 11.9386 10.86 11.8286 10.87C9.44859 10.79 7.55859 8.84 7.55859 6.44C7.55859 3.99 9.53859 2 11.9986 2C14.4486 2 16.4386 3.99 16.4386 6.44C16.4286 8.84 14.5386 10.79 12.1586 10.87Z"
+          stroke="#0A0A0A"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M7.15875 14.56C4.73875 16.18 4.73875 18.82 7.15875 20.43C9.90875 22.27 14.4188 22.27 17.1688 20.43C19.5888 18.81 19.5888 16.17 17.1688 14.56C14.4288 12.73 9.91875 12.73 7.15875 14.56Z"
+          stroke="#0A0A0A"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <img
+      class="aspect-ratio-img"
+      style="
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+      "
+      [src]="
+        currentUser.photoUrl
+          ? currentUser.photoUrl
+          : './../../../../../assets/img/user.png'
+      "
+      alt="Avatar"
+    />
 
-    <div><h2 class="text-base font-medium text-[#979797]">
+    <div>
+      <h2 class="text-base font-medium text-[#979797]">
         {{ currentUser.firstName }}
         {{ currentUser.middleName }}
       </h2>
@@ -60,7 +135,7 @@ class="aspect-ratio-img"
 
         <div
           [ngClass]="isShow ? 'block' : 'hidden'"
-          class="absolute  mt-2 transition-all duration-500 bg-white border border-gray-200 rounded-md shadow-lg top-6 right-2 w-fit"
+          class="absolute mt-2 transition-all duration-500 bg-white border border-gray-200 rounded-md shadow-lg top-6 right-2 w-fit"
         >
           <div
             class="py-1 text-sm text-gray-700 w-fit"
@@ -68,12 +143,10 @@ class="aspect-ratio-img"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            @for (item of currentUser.roles; track $index; let last =
-            $last) {
+            @for (item of currentUser.roles; track $index; let last = $last) {
 
             <button
               (click)="goSpecificRole(item)"
-              
               class="block w-full px-4 py-2 font-medium transition-colors hover:text-activeLink text-start"
               role="menuitem"
             >
@@ -83,15 +156,27 @@ class="aspect-ratio-img"
           </div>
         </div>
       </div>
-      
     </div>
-    
+
     <button
-          (click)="authService.logout()"
-          class="flex items-center w-full  self-end py-6 gap-x-3.5  text-xl font-medium text-sidebarColor hover:text-activeLink transition-colors"
-        > <svg width="34" height="32" viewBox="0 0 34 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M28.3346 15.9999H14.8763M25.5013 19.9999L29.7513 15.9999L25.5013 11.9999M18.418 9.33325V7.99992C18.418 7.29267 18.1195 6.6144 17.5881 6.1143C17.0568 5.6142 16.3361 5.33325 15.5846 5.33325H8.5013C7.74986 5.33325 7.02919 5.6142 6.49783 6.1143C5.96648 6.6144 5.66797 7.29267 5.66797 7.99992V23.9999C5.66797 24.7072 5.96648 25.3854 6.49783 25.8855C7.02919 26.3856 7.74986 26.6666 8.5013 26.6666H15.5846C16.3361 26.6666 17.0568 26.3856 17.5881 25.8855C18.1195 25.3854 18.418 24.7072 18.418 23.9999V22.6666" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          </button>
-</div>
+      (click)="authService.logout()"
+      class="flex items-center w-full self-end py-6 gap-x-3.5 text-xl font-medium text-sidebarColor hover:text-activeLink transition-colors"
+    >
+      <svg
+        width="34"
+        height="32"
+        viewBox="0 0 34 32"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M28.3346 15.9999H14.8763M25.5013 19.9999L29.7513 15.9999L25.5013 11.9999M18.418 9.33325V7.99992C18.418 7.29267 18.1195 6.6144 17.5881 6.1143C17.0568 5.6142 16.3361 5.33325 15.5846 5.33325H8.5013C7.74986 5.33325 7.02919 5.6142 6.49783 6.1143C5.96648 6.6144 5.66797 7.29267 5.66797 7.99992V23.9999C5.66797 24.7072 5.96648 25.3854 6.49783 25.8855C7.02919 26.3856 7.74986 26.6666 8.5013 26.6666H15.5846C16.3361 26.6666 17.0568 26.3856 17.5881 25.8855C18.1195 25.3854 18.418 24.7072 18.418 23.9999V22.6666"
+          stroke="black"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+  </div>
 </nav>
