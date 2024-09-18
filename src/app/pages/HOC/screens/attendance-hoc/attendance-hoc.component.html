@@ -26,11 +26,12 @@
   </div>
   } @else {
   <div
-    class="max-h-[31rem] pb-4 overflow-auto scroll-host-table"
+    style="max-height: calc(100vh - 180px)"
+    class="pb-4 overflow-auto scroll-host-table"
     (scroll)="loadMoreData($event)"
   >
     <table class="min-w-full text-center bg-white rounded-lg">
-      <thead class="sticky top-0 z-10 text-sm">
+      <thead class="sticky top-0 text-sm">
         <tr class="border-b border-black text-[#6B7088]">
           <th
             class="sticky left-0 z-10 p-4 text-left bg-white rounded-lg whitespace-nowrap"

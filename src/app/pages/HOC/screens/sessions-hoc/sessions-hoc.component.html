@@ -24,7 +24,8 @@
   </div>
   } @else {
   <div
-    class="max-h-[31rem] overflow-y-auto scroll-host-table"
+    style="max-height: calc(100vh - 180px)"
+    class="overflow-y-auto scroll-host-table"
     (scroll)="loadMoreData($event)"
   >
     <table class="min-w-full text-center table-auto">

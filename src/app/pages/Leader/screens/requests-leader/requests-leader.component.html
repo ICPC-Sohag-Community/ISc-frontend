@@ -114,7 +114,8 @@
     </div>
     } @else {
     <div
-      class="pb-4 h-[28rem] overflow-auto border rounded-lg custom-scrollbar-request"
+      style="max-height: calc(100vh - 250px)"
+      class="pb-4 overflow-auto border rounded-lg custom-scrollbar-request"
     >
       <table class="min-w-full text-center">
         <thead class="bg-white sticky top-0 z-[5] shadow-sm">
@@ -303,10 +304,11 @@
 
 @if (isLoading()) { @if (dataRequest.length !== 0) {
 
-<div class="flex justify-center gap-2 py-12">
-  <div class="w-5 h-5 bg-blue-600 rounded-full animate-pulse"></div>
-  <div class="w-5 h-5 bg-blue-600 rounded-full animate-pulse"></div>
-  <div class="w-5 h-5 bg-blue-600 rounded-full animate-pulse"></div>
-  <div class="">Loading more data</div>
+<div class="flex items-center justify-center w-full bg-opacity-60">
+  <div class="flex items-center justify-center">
+    <div
+      class="w-8 h-8 border-4 border-blue-600 border-dashed rounded-full animate-spin"
+    ></div>
+  </div>
 </div>
 } }

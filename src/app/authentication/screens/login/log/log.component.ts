@@ -15,9 +15,16 @@ import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-log',
   standalone: true,
-  imports: [CommonModule,FormsModule, ReactiveFormsModule, NgClass, RouterLink,RouterOutlet],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgClass,
+    RouterLink,
+    RouterOutlet,
+  ],
   templateUrl: './log.component.html',
-  styleUrl: './log.component.scss'
+  styleUrl: './log.component.scss',
 })
 export class LogComponent {
   authService = inject(AuthService);
@@ -30,16 +37,15 @@ export class LogComponent {
 
   passwordFieldType: string = 'password';
   password: string = '';
-  hide= false;
-show(){
-if(!this.hide){
-  document.getElementById('pass')?.setAttribute('type' , 'text');
-}
-else{
-  document.getElementById('pass')?.setAttribute('type' , 'password');
-}
-this.hide = !this.hide
-}
+  hide = false;
+  show() {
+    if (!this.hide) {
+      document.getElementById('pass')?.setAttribute('type', 'text');
+    } else {
+      document.getElementById('pass')?.setAttribute('type', 'password');
+    }
+    this.hide = !this.hide;
+  }
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       userName: ['', [Validators.required]],
@@ -55,10 +61,9 @@ this.hide = !this.hide
 
   onLogin() {
     this.submitted = true;
-    
     this.isLoading = true;
     this.authService.loginUser(this.loginForm.value).subscribe({
-      next: ({ statusCode, data, msg }) => {
+      next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           if (data.roles[0] === 'Leader') {
             this.router.navigate(['/leader']);
@@ -85,4 +90,3 @@ this.hide = !this.hide
     });
   }
 }
-
