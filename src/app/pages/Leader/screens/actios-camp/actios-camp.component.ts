@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { NgClass, SlicePipe } from '@angular/common';
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -22,7 +22,13 @@ import { CampLeaderService } from '../../services/camp-leader.service';
 @Component({
   selector: 'app-actios-camp',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSelectModule, NgClass, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    NgSelectModule,
+    NgClass,
+    RouterLink,
+    SlicePipe,
+  ],
   templateUrl: './actios-camp.component.html',
   styleUrl: './actios-camp.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -46,10 +52,10 @@ export class ActiosCampComponent implements OnInit {
   days: number[] = [];
   monthYear: string = '';
 
-  allMentors: { id: number; fullName: string }[] = [];
-  allHeadsOfCamp: { id: number; fullName: string; isInCamp: boolean }[] = [];
+  allMentors: { id: string; fullName: string; isInCamp?: boolean }[] = [];
+  allHeadsOfCamp: { id: string; fullName: string; isInCamp: boolean }[] = [];
+  // allHeadsOfCamp: any[] = [];
   allCamps: { name: string }[] = [];
-  allTerms: { id: number; name: string }[] = [];
   selectedCamp: string = '';
   isCampsActive: boolean = false;
   nameForm!: FormGroup;
@@ -68,17 +74,20 @@ export class ActiosCampComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.id = parseInt(params['id']);
-      if (this.id > 0) {
-        this.getOneCamp(this.id);
-      }
     });
+    if (this.id > 0) {
+      this.getOneCamp(this.id);
+    } else {
+      this.fetchAllMentors();
+      this.fetchAllHeadsOfCamp();
+    }
     this.campForm = this.fb.group({
       id: [''],
       name: [null, [Validators.required]],
       term: [null, [Validators.required]],
-      headsIds: [null, [Validators.required]],
-      mentorsIds: [null, [Validators.required]],
-      openForRegister: [true, [Validators.required]],
+      headsIds: [null],
+      mentorsIds: [null],
+      openForRegister: [false, [Validators.required]],
       durationInWeeks: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
       startDate: [null, [Validators.required]],
@@ -88,26 +97,6 @@ export class ActiosCampComponent implements OnInit {
       name: ['', [Validators.required]],
     });
 
-    this.allTerms = [
-      {
-        id: 1,
-        name: 'First Term',
-      },
-      {
-        id: 2,
-        name: 'Second Term',
-      },
-      {
-        id: 3,
-        name: 'Summer',
-      },
-      {
-        id: 4,
-        name: 'MidYear',
-      },
-    ];
-    this.fetchAllMentors();
-    this.fetchAllHeadsOfCamp();
     this.fetchAllCamp();
     this.renderCalendar(this.currentDate);
   }
@@ -144,8 +133,9 @@ export class ActiosCampComponent implements OnInit {
     }
     const name = this.nameForm.value.name;
     this.campLeaderService.addCamp(name).subscribe({
-      next: ({ statusCode, message, errors }) => {
+      next: ({ statusCode }) => {
         if (statusCode === 200) {
+          this.selectedCamp = name;
           this.allCamps.unshift({ name });
           this.nameForm.reset();
         }
@@ -163,8 +153,16 @@ export class ActiosCampComponent implements OnInit {
         if (statusCode == 200) {
           this.isLoading = false;
           this.selectedCamp = data.name;
+          // this.renderCalendar(data.startDate);
           this.selectedDay = new Date(data.startDate).getDate();
           this.selectedDayEnd = new Date(data.endDate).getDate();
+          this.allMentors = data.mentorsOfCamp;
+          this.allHeadsOfCamp = data.headsOfCamp;
+          const x = this.allMentors
+            .filter((item: any) => item.inCamp)
+            .map((item: any) => item.id);
+
+          console.log(x);
           this.campForm.patchValue({
             id: data.id,
             name: data.name,
@@ -173,8 +171,12 @@ export class ActiosCampComponent implements OnInit {
             term: data.term,
             durationInWeeks: data.durationInWeeks,
             openForRegister: data.openForRegister,
-            headsIds: data.mentorsOfCamp.map((m: any) => m.id),
-            mentorsIds: data.headsOfCamp.map((m: any) => m.id),
+            headsIds: this.allHeadsOfCamp
+              .filter((item: any) => item.inCamp)
+              .map((item: any) => item.id),
+            mentorsIds: this.allMentors
+              .filter((item: any) => item.inCamp)
+              .map((item: any) => item.id),
           });
         } else {
           // this.toastr.error(msg);
@@ -197,10 +199,9 @@ export class ActiosCampComponent implements OnInit {
       this.campLeaderService.createCamp(this.campForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
-            alert('done');
-            this.campForm.reset();
             this.selectedCamp = '';
             this.isLoading = false;
+            this.router.navigate(['/leader/camps']);
           } else if (errors) {
             console.log(errors);
             alert(errors);

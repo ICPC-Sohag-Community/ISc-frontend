@@ -16,11 +16,7 @@
             (click)="isCampsActive = !isCampsActive"
             class="relative text-left cursor-pointer text-lg px-4 flex justify-between items-center w-[450px] my-2 py-2.5 text-gray-400 bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
           >
-            <span
-              [ngClass]="
-                selectedCamp ? 'bg-activeLink text-white px-4 rounded-md' : ''
-              "
-            >
+            <span [ngClass]="selectedCamp ? 'text-black' : ''">
               @if (selectedCamp) {
               {{ selectedCamp }}
               }@else { Name }
@@ -113,9 +109,8 @@
 
         <div class="flex flex-col basis-1/2">
           <label class="text-lg">Term</label>
-          <div class="relative">
+          <div class="relative w-[450px]">
             <ng-select
-              [items]="allTerms"
               [closeOnSelect]="true"
               bindLabel="name"
               bindValue="id"
@@ -123,12 +118,16 @@
               placeholder="Select Term"
               (open)="handleClose()"
               (close)="handleOpen()"
-              class="relative block w-[450px] my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
+              class="relative block text-lg w-full my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
             >
+              <ng-option [value]="1"> First Term </ng-option>
+              <ng-option [value]="2"> Second Term </ng-option>
+              <ng-option [value]="3"> Summer </ng-option>
+              <ng-option [value]="4"> Mid Year </ng-option>
             </ng-select>
             <svg
               [ngClass]="foucsTerm ? 'rotate-180' : ''"
-              class="absolute transition-transform top-4 size-8 right-32"
+              class="absolute transition-transform top-4 size-8 right-4"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -149,13 +148,13 @@
       <div class="flex items-center justify-between w-full mt-2 ps-4">
         <div class="flex flex-col basis-1/2">
           <label class="text-lg">Start date</label>
-          <div class="relative">
+          <div class="relative w-[450px]">
             <input
               #startDateInput
               type="text"
               placeholder="Select Date"
               formControlName="startDate"
-              class="relative block w-[450px] px-4 cursor-pointer py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+              class="relative block w-full px-4 cursor-pointer py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
               readonly
               (click)="toggleCalendar('start')"
             />
@@ -207,7 +206,7 @@
             </div>
             <svg
               (click)="toggleCalendar('start')"
-              class="absolute transition-transform top-4 size-8 right-32"
+              class="absolute transition-transform top-4 size-8 right-4"
               viewBox="0 0 40 40"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -222,13 +221,13 @@
 
         <div class="flex flex-col basis-1/2">
           <label class="text-lg">End date</label>
-          <div class="relative">
+          <div class="relative w-[450px]">
             <input
               #endDateInput
               type="text"
               placeholder="Select End Date"
               formControlName="endDate"
-              class="relative block w-[450px] px-4 py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+              class="relative block w-full px-4 py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
               readonly
               (click)="toggleCalendar('end')"
             />
@@ -278,7 +277,7 @@
               </div>
             </div>
             <svg
-              class="absolute transition-transform top-4 size-8 right-32"
+              class="absolute transition-transform top-4 size-8 right-4"
               viewBox="0 0 40 40"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -296,11 +295,10 @@
       <div class="flex items-center justify-between w-full mt-2 ps-4">
         <div class="flex flex-col basis-1/2">
           <label class="text-lg">Heads of camp</label>
-          <div class="relative">
+          <div class="relative w-[450px]">
             <ng-select
               [items]="allHeadsOfCamp"
               [closeOnSelect]="false"
-              [hideSelected]="true"
               [multiple]="true"
               bindLabel="fullName"
               bindValue="id"
@@ -310,6 +308,29 @@
               placeholder="Head of camp"
               class="relative block w-[450px] placeholder:text-gray-500 my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
             >
+              <ng-template
+                ng-multi-label-tmp
+                let-items="items"
+                let-clear="clear"
+              >
+                @for (item of items | slice: 0 : 1; track item) {
+                <div class="ng-value">
+                  <span class="ng-value-label"> {{ items[0].fullName }}</span>
+                  <span
+                    class="ng-value-icon right"
+                    (click)="clear(item)"
+                    aria-hidden="true"
+                    >×</span
+                  >
+                </div>
+                } @if (items.length > 1) {
+                <div class="ng-value">
+                  <span class="ng-value-label"
+                    >{{ items.length - 1 }} more...</span
+                  >
+                </div>
+                }
+              </ng-template>
               <ng-template ng-option-tmp let-item="item" let-index="index">
                 <ng-option
                   class="flex items-center justify-between w-full h-full py-1"
@@ -323,7 +344,7 @@
             </ng-select>
             <svg
               [ngClass]="foucsHoc ? 'rotate-180' : ''"
-              class="absolute transition-transform top-4 size-8 right-32"
+              class="absolute transition-transform top-4 size-8 right-4"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -342,11 +363,10 @@
 
         <div class="flex flex-col basis-1/2">
           <label class="text-lg">Mentors</label>
-          <div class="relative">
+          <div class="relative w-[450px]">
             <ng-select
               [items]="allMentors"
               [closeOnSelect]="false"
-              [hideSelected]="true"
               [multiple]="true"
               bindLabel="fullName"
               bindValue="id"
@@ -354,8 +374,31 @@
               placeholder="Mentor"
               (open)="handleCloseM()"
               (close)="handleOpenM()"
-              class="relative block w-[450px] my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
+              class="relative block w-full my-2 pe-4 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
             >
+              <ng-template
+                ng-multi-label-tmp
+                let-items="items"
+                let-clear="clear"
+              >
+                @for (item of items | slice: 0 : 1; track item) {
+                <div class="ng-value">
+                  <span class="ng-value-label"> {{ items[0].fullName }}</span>
+                  <span
+                    class="ng-value-icon right"
+                    (click)="clear(item)"
+                    aria-hidden="true"
+                    >×</span
+                  >
+                </div>
+                } @if (items.length > 1) {
+                <div class="ng-value">
+                  <span class="ng-value-label"
+                    >{{ items.length - 1 }} more...</span
+                  >
+                </div>
+                }
+              </ng-template>
               <ng-template ng-option-tmp let-item="item" let-index="index">
                 <ng-option
                   class="flex items-center justify-between w-full h-full py-1"
@@ -366,7 +409,7 @@
             </ng-select>
             <svg
               [ngClass]="foucsMen ? 'rotate-180' : ''"
-              class="absolute transition-transform top-4 size-8 right-32"
+              class="absolute transition-transform top-4 size-8 right-4"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -398,9 +441,7 @@
         </div>
 
         <div class="flex items-center pt-6 gap-x-44 basis-1/2">
-          <label for="openForRegister" class="text-lg text-gray-700"
-            >Open For Register</label
-          >
+          <label class="text-lg text-gray-700">Open For Register</label>
           <div>
             <input
               id="openForRegister"
