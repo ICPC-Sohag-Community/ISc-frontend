@@ -3,47 +3,40 @@
 @tailwind utilities;
 
 @import "swiper/css/bundle";
+@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
 
-::-webkit-scrollbar,
-.scroll-host::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 12px !important;
 }
 
-::-webkit-scrollbar-track,
-.scroll-host::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: #abd0e7;
   border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb,
-.scroll-host::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: #3d91c7;
   border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover,
-.scroll-host::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
-.custom-scrollbar::-webkit-scrollbar,
-.scroll-host::-webkit-scrollbar {
+.custom-scrollbar::-webkit-scrollbar {
   width: 8px !important;
 }
-.custom-scrollbar::-webkit-scrollbar-track,
-.scroll-host::-webkit-scrollbar-track {
+.custom-scrollbar::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 10px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb,
-.scroll-host::-webkit-scrollbar-thumb {
+.custom-scrollbar::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 10px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover,
-.scroll-host::-webkit-scrollbar-thumb:hover {
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
@@ -106,20 +99,36 @@
   border: none;
 }
 
+//camp
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-value {
+  padding: 0 !important;
+}
+
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-value {
+  background-color: transparent;
+}
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-value
+  .ng-value-icon.left {
+  border: none;
+}
+
 .ng-select .ng-select-container,
 .ng-select.ng-select-opened .ng-select-container {
   background-color: transparent;
 }
 
-.ng-select .ng-select-container .ng-value-container .ng-placeholder {
-  font-size: 18px;
-  font-weight: 500;
-}
-
 .ng-select .ng-select-container {
   height: 100% !important;
 }
-@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
 @import "./app/pages/Leader/Components/system-filter/system-filter.component.scss";
 
 .ng-select span.ng-value-label[ng-reflect-escape="true"],
@@ -128,4 +137,16 @@
   color: white;
   padding: 4px 8px;
   border-radius: 8px;
+}
+
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-placeholder {
+  top: 8px !important;
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-placeholder {
+  font-size: 18px;
+  font-weight: 500;
 }

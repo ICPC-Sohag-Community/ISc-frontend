@@ -7,12 +7,8 @@ import { DashboardComponent } from './pages/Leader/screens/dashboard/dashboard.c
 import { LayoutTraineeComponent } from './layouts/layout_trainee/layout-trainee.component';
 import { HomeTraineeComponent } from './pages/Trainee/screens/home-trainee/home-trainee.component';
 
-import { HOCDashboardComponent } from './HOC/hocdashboard/hocdashboard.component';
-import { DashComponent } from './HOC/comp/dash/dash.component';
-
 import { AddUserComponent } from './pages/Leader/screens/add-user/add-user.component';
 
-import { HocLayoutComponent } from './layouts/HOC/hoc-layout/hoc-layout.component';
 import { MentornavComponent } from './layouts/mentor/mentornav/mentornav.component';
 import { MentorLayoutComponent } from './layouts/mentor/mentor-layout/mentor-layout.component';
 import { TraineesComponent } from './pages/mentor/trainees/trainees.component';
@@ -38,6 +34,20 @@ import { ReportsLeaderComponent } from './pages/Leader/screens/reports-leader/re
 import { RequestsLeaderComponent } from './pages/Leader/screens/requests-leader/requests-leader.component';
 
 import { StandingTraineeComponent } from './pages/Trainee/screens/standing-trainee/standing-trainee.component';
+
+import { HocLayoutComponent } from './layouts/hoc-layout/hoc-layout.component';
+import { ContestsHOCComponent } from './pages/HOC/screens/contests-hoc/contests-hoc.component';
+import { SessionsHOCComponent } from './pages/HOC/screens/sessions-hoc/sessions-hoc.component';
+import { ActionsContestsComponent } from './pages/HOC/screens/actions-contests/actions-contests.component';
+import { ActionsSessionsComponent } from './pages/HOC/screens/actions-sessions/actions-sessions.component';
+import { DashoardHOCComponent } from './pages/HOC/screens/dashoard-hoc/dashoard-hoc.component';
+import { AssignHOCComponent } from './pages/HOC/screens/assign-hoc/assign-hoc.component';
+import { SheetsHOCComponent } from './pages/HOC/screens/sheets-hoc/sheets-hoc.component';
+import { ActionsSheetsComponent } from './pages/HOC/screens/actions-sheets/actions-sheets.component';
+import { EditAttendanceComponent } from './pages/HOC/screens/edit-attendance/edit-attendance.component';
+import { WeeklyFilterHOCComponent } from './pages/HOC/screens/weekly-filter-hoc/weekly-filter-hoc.component';
+import { AttendanceHOCComponent } from './pages/HOC/screens/attendance-hoc/attendance-hoc.component';
+
 import { OtpComponent } from './authentication/screens/login/otp/otp.component';
 import { SetpassComponent } from './authentication/screens/login/setpass/setpass.component';
 import { ForgetComponent } from './authentication/screens/login/forget/forget.component';
@@ -45,6 +55,7 @@ import { LogComponent } from './authentication/screens/login/log/log.component';
 import { LayoutPublicComponent } from './layouts/layout_public/layout-public.component';
 import { HomePublicComponent } from './pages/public/screens/home-public/home-public.component';
 import { BlankComponent } from './pages/mentor/blank/blank.component';
+
 
 
 export const routes: Routes = [
@@ -173,16 +184,87 @@ export const routes: Routes = [
     ],
   },
 
+  // HOC Pages
   {
-    path: 'head-of-camp',
+    path: 'head_of_camp',
     component: HocLayoutComponent,
     canActivate: [authGuard, rolesGuard],
     title: 'HOC - Dashboard',
     children: [
       {
         path: '',
-        component: DashComponent,
+        component: DashoardHOCComponent,
         title: 'head of camp - Dashboard',
+      },
+      {
+        path: 'assign',
+        component: AssignHOCComponent,
+        title: 'head of camp - Assign',
+      },
+      {
+        path: 'contests',
+        component: ContestsHOCComponent,
+        title: 'head of camp - Contests',
+      },
+      {
+        path: 'contests',
+        children: [
+          {
+            path: 'action-contest/:id',
+            component: ActionsContestsComponent,
+            title: 'head of camp / Contests / action-contest- ICPC',
+          },
+        ],
+      },
+      {
+        path: 'sessions',
+        component: SessionsHOCComponent,
+        title: 'head of camp - Sessions',
+      },
+      {
+        path: 'sessions',
+        children: [
+          {
+            path: 'action-session/:id',
+            component: ActionsSessionsComponent,
+            title: 'head of camp / Sessions / action-contest- ICPC',
+          },
+        ],
+      },
+      {
+        path: 'sheets',
+        component: SheetsHOCComponent,
+        title: 'head of camp - Sheets',
+      },
+      {
+        path: 'sheets',
+        children: [
+          {
+            path: 'action-sheets/:id',
+            component: ActionsSheetsComponent,
+            title: 'head of camp / Sheets / action-sheets- ICPC',
+          },
+        ],
+      },
+      {
+        path: 'attendance',
+        component: AttendanceHOCComponent,
+        title: 'head of camp - Attendance',
+      },
+      {
+        path: 'attendance',
+        children: [
+          {
+            path: 'edit-attendance',
+            component: EditAttendanceComponent,
+            title: 'head of camp / Attendance / edit-attendance- ICPC',
+          },
+        ],
+      },
+      {
+        path: 'Weekly-filter',
+        component: WeeklyFilterHOCComponent,
+        title: 'head of camp - Weekly Filter',
       },
     ],
   },
@@ -232,27 +314,6 @@ export const routes: Routes = [
     ],
   },
 
-  // {
-
-  //   path: 'head-of-camp',
-  //   component: HocLayoutComponent,
-  //   canActivate: [authGuard],
-
-  //   path: 'head_of_camp',
-  //   component: HOCDashboardComponent,
-  //   canActivate: [authGuard, rolesGuard],
-
-  //   title: 'HOC - Dashboard',
-  //   children: [
-  //     {
-  //       path: '',
-  //       component: DashComponent,
-
-  //       title: 'HOC / Dashboard - ICPC',
-  //     }
-
-  //   ]
-  // }
   {
     path: 'login',
     component: LoginLayoutComponent,

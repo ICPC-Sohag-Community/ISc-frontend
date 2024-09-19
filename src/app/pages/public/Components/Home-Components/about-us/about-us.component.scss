@@ -1,6 +1,5 @@
-section{
-  min-height: 150dvh;
-}
+.about-us{
+  // min-height: 125dvh;
 h1{
   font-family: Cormorant;
   font-size: 80px;
@@ -19,10 +18,11 @@ p{
 }
 .right-circale{
   width: 1100px;
-  height: 1100px;
+  height: 1050px;
   background: #E69C2424;
   border-radius: 50%;
   left: 60%;
+  z-index: -1;
 }
 .about-img::after{
   content: '';
@@ -42,4 +42,5 @@ p{
   left: 25.1%;
   background: linear-gradient(90deg, #3D91C7 0%, #E69C24 50%, #EF4A50 100%);
   z-index: 1 ;
+}
 }

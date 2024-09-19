@@ -1,26 +1,29 @@
-<div class=" w-[80vw]  sm:w-[400px]  py-16 px-6">
-    <h1 class="text-4xl font-bold">
-        Login
-    </h1>
-    <p>Glad you’re back.!</p>
-    <form 
+<div class="w-[80vw] sm:w-[400px] py-16 px-6">
+  <h1 class="text-4xl font-bold">Login</h1>
+  <p>Glad you’re back.!</p>
+  <form
     [formGroup]="loginForm"
     (ngSubmit)="onLogin()"
-    class="flex flex-col gap-3 mt-3" >
-        <input 
-        required
-    name="userName"
-    formControlName="userName"
-    
-    [ngClass]="
-      loginForm.controls['userName'].errors && submitted
-        ? 'border-red-400 placeholder:text-red-500'
-        : 'border-gray-300 focus:border-primaryAdmin'
-    "
-        type="text" class="bg-transparent border focus:outline-0  border-white rounded-[12px] text-white placeholder-white py-2 px-3" placeholder="Username">
-       
-        <div class="pass focus:outline-white justify-between flex py-2 px-3 border border-white rounded-[12px]">
-        <input
+    class="flex flex-col gap-3 mt-3"
+  >
+    <input
+      required
+      name="userName"
+      formControlName="userName"
+      [ngClass]="
+        loginForm.controls['userName'].errors && submitted
+          ? 'border-red-400 placeholder:text-red-500'
+          : 'border-gray-300 focus:border-primaryAdmin'
+      "
+      type="text"
+      class="bg-transparent border focus:outline-0 border-white rounded-[12px] text-white placeholder-white py-2 px-3"
+      placeholder="Username"
+    />
+
+    <div
+      class="pass focus:outline-white justify-between flex py-2 px-3 border border-white rounded-[12px]"
+    >
+      <input
         autocomplete="new-password"
         name="password"
         formControlName="password"

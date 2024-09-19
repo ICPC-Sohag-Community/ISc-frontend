@@ -31,31 +31,6 @@ export class AuthService {
   /// All Funs.
 
   // Login Fun.
-  googleLogin(
-    credential: any,
-    roleCode: string,
-    visitorId: string
-  ): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const params = new HttpParams()
-      .set('credential', credential)
-      .set('roleCode', roleCode)
-      .set('visitorId', visitorId);
-    return this.http
-      .get<any>(`${environment.BASE_URL}/api/Authentication/googleLogin`, {
-        headers: headers,
-        params: params,
-      })
-      .pipe(
-        tap((res: any) => {
-          if (res.statusCode === 200) {
-            this.doLoggedUser(res.token, res.result);
-          }
-        })
-      );
-  }
-
-  // Login Fun.
   loginUser(userBody: {
     userNameuserName: string;
     password: string;
@@ -113,6 +88,20 @@ export class AuthService {
     if (userData) {
       this.currentUser.set(userData);
       localStorage.setItem(this.CURRENT_USER, JSON.stringify(userData));
+    }
+  }
+
+  updateUserRoles(newRole: any, action: string): void {
+    let savedCurrentUser = JSON.parse(
+      localStorage.getItem(this.CURRENT_USER) || '{}'
+    );
+    if (savedCurrentUser) {
+      if (action === 'add') {
+        savedCurrentUser.roles = [...savedCurrentUser.roles, newRole];
+      } else {
+        savedCurrentUser.roles = newRole;
+      }
+      localStorage.setItem(this.CURRENT_USER, JSON.stringify(savedCurrentUser));
     }
   }
 

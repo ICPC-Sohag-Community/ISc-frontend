@@ -43,9 +43,15 @@
           (close)="closeSort()"
           class="relative block w-40 h-10 my-2 text-black bg-white appearance-none rounded-xl cursor-none focus:outline-none"
         >
+          @if (activeTab === 'tab1') {
           <ng-option [value]="0">College</ng-option>
           <ng-option [value]="1">Gender</ng-option>
-          <ng-option [value]="2">Camp</ng-option>
+          <ng-option [value]="2">Camp Name</ng-option>
+          }@else {
+          <ng-option [value]="0">College</ng-option>
+          <ng-option [value]="1">Gender</ng-option>
+          <ng-option [value]="2">Year</ng-option>
+          }
         </ng-select>
         <svg
           width="24"
@@ -508,9 +514,14 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Facebook Link:</span>
-          <span>
-            {{ onetraineeArchiveInfo.facebookHandle }}
-          </span>
+          @if (onestaffArchiveInfo.facebookHandle) {
+          <a
+            [href]="onestaffArchiveInfo.facebookHandle"
+            target="_blank"
+            class="hover:text-activeLink"
+            >Profile</a
+          >
+          }
         </div>
 
         }
@@ -826,7 +837,12 @@
           <span class="text-[#EEEEEE]">Facebook Link:</span>
           <span>
             @if (onestaffArchiveInfo.facebookHandle) {
-            <a [href]="onestaffArchiveInfo.facebookHandle">Profile</a>
+            <a
+              [href]="onestaffArchiveInfo.facebookHandle"
+              target="_blank"
+              class="hover:text-activeLink"
+              >Profile</a
+            >
             }
           </span>
         </div>
@@ -962,7 +978,7 @@
       <button
         class="px-3 py-1 font-bold rounded-tr-lg rounded-bl-lg rounded-br-lg text-activeLink"
         (click)="gotoPage(page)"
-        [class.bg-blue-500]="page === traineeArchiveInfo.currentPage"
+        [class.bg-[#3d91c7]]="page === traineeArchiveInfo.currentPage"
         [class.text-white]="page === traineeArchiveInfo.currentPage"
       >
         {{ page }}
@@ -971,7 +987,7 @@
       <button
         class="px-3 py-1 font-bold rounded-tr-lg rounded-bl-lg rounded-br-lg text-activeLink"
         (click)="gotoPage(page)"
-        [class.bg-blue-500]="page === staffArchiveInfo.currentPage"
+        [class.bg-[#3d91c7]]="page === staffArchiveInfo.currentPage"
         [class.text-white]="page === staffArchiveInfo.currentPage"
       >
         {{ page }}

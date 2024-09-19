@@ -7,6 +7,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { DropdownRolesComponent } from '../../Components/dropdown-roles/dropdown-roles.component';
 import { RolesService } from '../../services/roles.service';
+import { AuthService } from '../../../../authentication/services/auth.service';
 
 @Component({
   selector: 'app-staff-leader',
@@ -22,6 +23,7 @@ import { RolesService } from '../../services/roles.service';
 })
 export class StaffLeaderComponent implements OnInit {
   staffLeaderService = inject(StaffLeaderService);
+  authService = inject(AuthService);
   rolesService = inject(RolesService);
   casheService = inject(CasheService);
   allStaffInfo!: StaffInfo;
@@ -143,6 +145,12 @@ export class StaffLeaderComponent implements OnInit {
     this.rolesService.unAssignToRole(this.roleInfo).subscribe({
       next: ({ statusCode }) => {
         if (statusCode === 200) {
+          if (this.authService.currentUser().id === this.roleInfo.userId) {
+            this.authService.updateUserRoles(
+              this.staffInfo.userRoles.map((r) => r.role),
+              'delete'
+            );
+          }
           if (this.staffInfo.userRoles.length === 0) {
             window.location.reload();
           } else {

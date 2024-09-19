@@ -1,10 +1,6 @@
 <div
-  [ngClass]="
-    showFilterModel
-      ? 'space-y-4 sm:p-6 sm:ps-4 sm:space-y-6'
-      : 'space-y-4 sm:p-6 sm:ps-4 sm:space-y-6'
-  "
-  class="relative w-full p-4"
+  style="height: calc(100vh - 72px)"
+  class="relative w-full p-4 space-y-4 sm:p-6 sm:ps-4 sm:space-y-6"
 >
   <div class="flex items-center justify-between ps-2 pe-8">
     <div class="flex items-center gap-x-6">
@@ -109,7 +105,7 @@
 
   <div [ngClass]="isLoading() ? 'min-h-screen' : ''">
     @if (campId !== 0) { @if( isLoading() && dataRequest.length === 0) {
-    <div class="fixed z-50 top-[40%] lg:left-[50%] left-[40%] bg-opacity-60">
+    <div class="fixed z-50 top-[45%] left-[55%] bg-opacity-60">
       <div class="flex items-center">
         <div
           class="w-16 h-16 border-8 border-blue-600 border-dashed rounded-full animate-spin"
@@ -118,12 +114,13 @@
     </div>
     } @else {
     <div
-      class="pb-4 overflow-x-auto border rounded-lg custom-scrollbar-request"
+      style="max-height: calc(100vh - 250px)"
+      class="pb-4 overflow-auto border rounded-lg custom-scrollbar-request"
     >
       <table class="min-w-full text-center">
-        <thead>
-          <tr class="bg-transparent text-[#6B7088] text-lg">
-            <th class="p-4">
+        <thead class="bg-white sticky top-0 z-[5] shadow-sm">
+          <tr class="bg-[#F4F5F8] text-[#6B7088] text-lg">
+            <th class="sticky left-0 bg-[#F4F5F8] z-[5] p-4">
               <input
                 type="checkbox"
                 class="w-5 h-5 text-blue-600"
@@ -131,19 +128,21 @@
                 [checked]="areAllItemsSelected()"
               />
             </th>
-            <th class="px-4 py-3 text-left">Name</th>
-            <th class="px-4 py-3">Email</th>
-            <th class="px-4 py-3">Phone</th>
+            <th class="sticky z-[5] px-4 py-3 bg-[#F4F5F8] text-left left-11">
+              Name
+            </th>
             <th class="px-4 py-3">Codeforces</th>
-            <th class="px-4 py-3">Vjudge</th>
-            <th class="px-4 py-3 whitespace-nowrap">Facebook link</th>
             <th class="px-4 py-3 whitespace-nowrap">Has laptop</th>
-            <th class="px-4 py-3">Collage</th>
             <th class="px-4 py-3">Year</th>
-            <th class="px-4 py-3 whitespace-nowrap">National ID</th>
-            <th class="px-4 py-3 whitespace-nowrap">Birth date</th>
+            <th class="px-4 py-3">Collage</th>
             <th class="px-4 py-3">Gender</th>
             <th class="px-4 py-3">Comment</th>
+            <th class="px-4 py-3">Email</th>
+            <th class="px-4 py-3">Phone</th>
+            <th class="px-4 py-3 whitespace-nowrap">National ID</th>
+            <th class="px-4 py-3 whitespace-nowrap">Facebook link</th>
+            <th class="px-4 py-3 whitespace-nowrap">Birth date</th>
+            <th class="px-4 py-3">Vjudge</th>
           </tr>
         </thead>
 
@@ -153,7 +152,7 @@
           <tr
             class="my-6 text-base font-medium text-center text-black bg-white rounded-lg"
           >
-            <td class="p-4">
+            <td class="sticky left-0 z-[4] p-4 bg-white">
               <input
                 type="checkbox"
                 class="w-4 h-4 text-blue-600 form-checkbox"
@@ -161,23 +160,25 @@
                 [checked]="selectedIds.includes(item.id)"
               />
             </td>
-            <td class="px-4 py-2 text-left rounded-s-lg whitespace-nowrap">
+            <td
+              class="sticky z-[4] px-4 py-2 text-left bg-white left-10 rounded-s-lg whitespace-nowrap"
+            >
               {{ item.firstName }} {{ item.middleName }} {{ item.lastName }}
             </td>
-            <td class="p-4">{{ item.email }}</td>
-            <td class="p-4">{{ item.phone }}</td>
             <td class="p-4">{{ item.codeForceHandle }}</td>
-            <td class="p-4 whitespace-nowrap">{{ item.vjudge }}</td>
-            <td class="p-4">{{ item.facebookLink }}</td>
             <td class="p-4">@if (item.hasLaptop) { Yes }@else { NO }</td>
-            <td class="p-4 whitespace-nowrap">{{ item.college }}</td>
             <td class="p-4">{{ item.grade }}</td>
-            <td class="p-4 whitespace-nowrap">{{ item.nationalId }}</td>
-            <td class="p-4 whitespace-nowrap">{{ item.birthDate }}</td>
+            <td class="p-4 whitespace-nowrap">{{ item.college }}</td>
             <td class="p-4">
               @if (item.gender === 0) { Male }@else { Female }
             </td>
             <td class="p-4 whitespace-nowrap">{{ item.comment }}</td>
+            <td class="p-4">{{ item.email }}</td>
+            <td class="p-4">{{ item.phoneNumber }}</td>
+            <td class="p-4 whitespace-nowrap">{{ item.nationalId }}</td>
+            <td class="p-4">{{ item.facebookLink }}</td>
+            <td class="p-4 whitespace-nowrap">{{ item.birthDate }}</td>
+            <td class="p-4 whitespace-nowrap">{{ item.vjudge }}</td>
           </tr>
           } }
         </tbody>
@@ -303,10 +304,11 @@
 
 @if (isLoading()) { @if (dataRequest.length !== 0) {
 
-<div class="flex justify-center gap-2 py-12">
-  <div class="w-5 h-5 bg-blue-600 rounded-full animate-pulse"></div>
-  <div class="w-5 h-5 bg-blue-600 rounded-full animate-pulse"></div>
-  <div class="w-5 h-5 bg-blue-600 rounded-full animate-pulse"></div>
-  <div class="">Loading more data</div>
+<div class="flex items-center justify-center w-full bg-opacity-60">
+  <div class="flex items-center justify-center">
+    <div
+      class="w-8 h-8 border-4 border-blue-600 border-dashed rounded-full animate-spin"
+    ></div>
+  </div>
 </div>
 } }
