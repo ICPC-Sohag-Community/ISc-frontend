@@ -66,7 +66,13 @@ export class AuthService {
       .pipe(
         tap((res: any) => {
           if (res.statusCode === 200) {
+           if(userBody.rememberMe){
             this.doLoggedUser(res.data.token, res.data);
+           }
+           else{
+            this.setCurrentUser(res.data);
+            this.setTokenrem(res.data.token);
+           }
           }
         })
       );
@@ -79,11 +85,21 @@ export class AuthService {
   }
 
   getToken(): string {
-    return localStorage.getItem(this.JWT_TOKEN) || '';
+    const tokenKey = 'JWT_TOKEN'; // Define the key used to store the token
+    
+    const token = localStorage.getItem(tokenKey) || sessionStorage.getItem(tokenKey);
+    console.log(token)
+    return token ? token : ''; // If token is null or undefined, return an empty string
   }
+  
 
   private setToken(token: string): void {
     localStorage.setItem(this.JWT_TOKEN, token);
+    sessionStorage.setItem(this.JWT_TOKEN, token);
+  }
+  private setTokenrem(token: string): void {
+    
+    sessionStorage.setItem(this.JWT_TOKEN, token);
   }
 
   // Is LoggedIn
@@ -102,9 +118,10 @@ export class AuthService {
 
   // LogOut Fun.
   logout() {
-    localStorage.removeItem(this.JWT_TOKEN);
-    localStorage.removeItem(this.CURRENT_USER);
+    // localStorage.removeItem(this.JWT_TOKEN);
+    // localStorage.removeItem(this.CURRENT_USER);
     this.setIsAuth(false);
+    localStorage.clear();
     this.router.navigateByUrl('/login');
   }
 

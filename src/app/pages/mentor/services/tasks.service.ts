@@ -13,8 +13,8 @@ export class TasksService {
   getData(id:any): Observable<ResponseHeader>{
     return this.http.get<ResponseHeader>(`${environment.BASE_URL}/api/Mentor/tasksOnStatus/${id}`)
   }
-  getAssign(): Observable<ResponseHeader>{
-    return this.http.get<ResponseHeader>(`${environment.BASE_URL}/api/Mentor/getTraineeForAssign`)
+  getAssign(id:any): Observable<ResponseHeader>{
+    return this.http.get<ResponseHeader>(`${environment.BASE_URL}/api/Mentor/getTraineeForAssign/${id}`)
   }
   trainees(id:any): Observable<ResponseHeader>{
     
