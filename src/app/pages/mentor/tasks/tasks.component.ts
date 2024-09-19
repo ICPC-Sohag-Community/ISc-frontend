@@ -235,7 +235,7 @@ add(id: string,trainee: any, f:String , l:String) {
   tasks: any = {};
   assign:any;
   assig(){
-    this.serv.getAssign().subscribe((d:ResponseHeader)=>{
+    this.serv.getAssign(localStorage.getItem("camp")).subscribe((d:ResponseHeader)=>{
       this.assign = d.data;
       console.log(this.assign);
     })

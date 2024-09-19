@@ -34,7 +34,6 @@ export class LogComponent {
   submitted = false;
   error: string = '';
   isLoading: boolean = false;
-
   passwordFieldType: string = 'password';
   password: string = '';
   hide = false;
@@ -50,7 +49,7 @@ export class LogComponent {
     this.loginForm = this.formBuilder.group({
       userName: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      rememberMe: [true, [Validators.required]],
+      rememberMe: [(<HTMLInputElement>document.getElementById('rememberMe')).checked?true:false, [Validators.required]], 
     });
   }
 
@@ -61,9 +60,13 @@ export class LogComponent {
 
   onLogin() {
     this.submitted = true;
+    this.loginForm.value.rememberMe = (<HTMLInputElement>document.getElementById('rememberMe')).checked?true:false;
+    console.log(this.loginForm.value)
     this.isLoading = true;
+
     this.authService.loginUser(this.loginForm.value).subscribe({
-      next: ({ statusCode, data }) => {
+      
+      next: ({ statusCode, data, msg }) => {
         if (statusCode === 200) {
           if (data.roles[0] === 'Leader') {
             this.router.navigate(['/leader']);

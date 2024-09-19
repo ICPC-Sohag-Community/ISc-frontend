@@ -11,11 +11,11 @@
 <table class="w-[calc(100vw-64px)] m-auto border-spacing-y-4 border-spacing-x-0 border-separate">
     <thead class=" text-gray-600 text-sm leading-normal text-center">
       <tr>
-        <th class="px-10  rounded-l-lg py-3 text-left">Achievers</th>
-        <th class="px-10  py-3 text-left">Handle</th>
-        <th class="px-10   py-3 text-left">Mentor</th>
-        <th class="px-10   py-3 text-left">Solve</th>
-        <th class="px-10  rounded-r-lg py-3 text-center" colspan="1">Points</th>
+        <th class="px-6  rounded-l-lg py-3 text-left">Achievers</th>
+        <th class="px-6  py-3 text-left">Handle</th>
+        <th class="px-6   py-3 text-left">Mentor</th>
+        <th class="px-6   py-3 text-left">Solve</th>
+        <th class="px-6  rounded-r-lg py-3 text-center" colspan="1">Points</th>
       </tr>
     </thead>
     
@@ -30,7 +30,7 @@
            {{item.codeForceHandle}}
         </td>
         <td class="px-6 py-4">{{item.mentorName}}</td>
-        <td class="px-6 py-4">{{item.solvedProblems}} / {{stand.totalProblems}}</td>
+        <td class="px-6 py-4 text-left">{{item.solvedProblems}} / {{stand.totalProblems}}</td>
         <td class="px-6 py-4 rounded-r-lg text-center">
           <div class="flex justify-center">
             <button (click)="change(i,item.id , false , item.points)" class="px-2 rounded-md text-lg text-black mx-2 bg-white">-</button> 
