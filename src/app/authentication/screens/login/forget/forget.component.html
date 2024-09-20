@@ -12,18 +12,19 @@
       required
       email
       #email="ngModel"
+      (keydown)="sub()"
       placeholder="E-mail"
       class="w-full bg-transparent border focus:outline-0 border-white rounded-[12px] text-white placeholder-white py-2 px-3"
     />
     <small
       *ngIf="email.errors?.['required'] && email.touched"
       class="text-red-500"
-      >Email is required.</small
+      > Email is required.</small
     >
     <small *ngIf="email.errors?.['email'] && email.touched" class="text-red-500"
-      >Please enter a valid email.</small
+      > Please enter a valid email.</small
     >
-    <small *ngIf="found" class="text-red-500">E-mail Not Found </small>
+    <small *ngIf="found" class="text-red-500"> E-mail Not Found </small>
     <button
       type="submit"
       [disabled]="form.invalid || isLoading"

@@ -64,7 +64,7 @@
     
     @if (submitted && (loginForm.controls['userName'].errors ||loginForm.controls['password'].errors) ) {
         <div>
-          @if (loginForm.controls['userName'].errors ) {
+          @if (loginForm.controls['userName'].errors || userData) {
             <div class="text-[#DC3545] text-center text-sm mt-3">
                 Username or password you entered is incorrect
             </div>

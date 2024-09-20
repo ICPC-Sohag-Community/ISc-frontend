@@ -33,6 +33,7 @@ export class LogComponent {
   loginForm!: FormGroup;
   submitted = false;
   error: string = '';
+  userData:boolean = false;
   isLoading: boolean = false;
   passwordFieldType: string = 'password';
   password: string = '';
@@ -61,7 +62,7 @@ export class LogComponent {
   onLogin() {
     this.submitted = true;
     this.loginForm.value.rememberMe = (<HTMLInputElement>document.getElementById('rememberMe')).checked?true:false;
-    console.log(this.loginForm.value)
+   
     this.isLoading = true;
 
     this.authService.loginUser(this.loginForm.value).subscribe({
@@ -83,6 +84,7 @@ export class LogComponent {
           this.authService.setIsAuth(true);
         } else {
           this.isLoading = false;
+          this.userData = true;
           this.authService.setIsAuth(false);
         }
       },

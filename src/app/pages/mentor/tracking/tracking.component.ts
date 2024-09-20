@@ -25,7 +25,7 @@ id = localStorage.getItem("camp") || null;
       
       this.serv.getSheet(id).subscribe((d:ResponseHeader)=>{
         this.sheet = d.data;
-        console.log(this.sheet);
+        
         this.isLoading = false
       });
       

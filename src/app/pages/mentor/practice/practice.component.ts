@@ -48,7 +48,7 @@ item.state = this.stand[ind].state;
   "time": item.time  ,
   "state": item.state != 1? 1 : 2
 }
-console.log(i);
+
 this.serv.upd(i).subscribe((d:ResponseHeader)=>{
   if(d.isSuccess){
     if(this.stand[ind].state == 1){
@@ -58,12 +58,12 @@ this.serv.upd(i).subscribe((d:ResponseHeader)=>{
       this.stand[ind].state = 1;
     }
   }
-  console.log(d);
+ 
 })
 }
 del(id: any) {
 this.serv.del(id).subscribe((d:ResponseHeader)=>{
-  console.log(d);
+
   if(d.isSuccess){
     document.getElementById("d" + id)?.remove();
   }
@@ -88,12 +88,12 @@ edi(id:any){
     "time": this.dateEd  ,
     "state": this.statusEd
   }
-  console.log(i.time)
+  
   this.edError = [];
   if(this.dateEd){
     this.serv.upd(i).subscribe((d:ResponseHeader)=>{
       if(d.isSuccess){
-        console.log(d);
+        
       this.get(localStorage.getItem("camp"));
       this.show('edit')
       }
@@ -183,7 +183,7 @@ edError:any[] = [];
       "time": this.date,
       "campId": localStorage.getItem("camp")
     }
-   console.log(data); 
+   
     this.err = [];
     this.success = false;
     if(this.date == ''){

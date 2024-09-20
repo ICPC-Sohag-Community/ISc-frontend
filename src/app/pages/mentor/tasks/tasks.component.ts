@@ -49,15 +49,13 @@ isLoading:boolean = false;
         this.ed.title = data.value;
         this.ed.startTime = dat.value;
         this.ed.endTime = end.value;
-        console.log(task)
-          console.log(d);
+       
           this.show('edit')
         
       }
       else{
         this.errors = [];
-        console.log(task)
-        console.log(d )
+      
         for (const field in d.errors) {
 
           if (d.errors.hasOwnProperty(field)) {
@@ -88,7 +86,7 @@ let data = {
   "traineesIds": this.trainTask,
   "campId":Number(localStorage.getItem("camp")) 
 }
-console.log(data);
+
 this.crError = [];
 this.taskNo.forEach(element => {
   if(element != null){
@@ -113,7 +111,7 @@ this.taskNo.forEach(element => {
         
       }
       else{
-        console.log(d.message);
+        
         this.get(localStorage.getItem("camp"));
         this.show('add');
         this.taskNo = [];
@@ -144,9 +142,9 @@ del(id:any){
   let data = {
     "taskId":id
   }
-  console.log(data)
+  
   this.serv.del(id).subscribe((d:ResponseHeader)=>{
-    console.log(d);
+    ;
     document.getElementById(id)?.remove()
   })
 }
@@ -169,16 +167,26 @@ en(event: KeyboardEvent, task: any, val: any) {
     this.enable('en' + task);
     this.taskNo[task] = val.value;
     val.value = ''; // Clears the input
-    console.log(this.taskNo);
+    
   }
 }
 
 handleClick(event: Event) {
+  const element = event.target as HTMLElement;
+  if(element.id != 'names' && element.id != 'rel' && this.isShow){
+    this.show('names');
+    
+  }
+  event.stopPropagation();  
+  
+}
+handle(event: Event) {
+  
   event.stopPropagation();  
   
 }
 removeGrandparent(id:any, ind:any) {
-  console.log(id);
+ 
   
   const grandparent = this.getGrandparentElement(id);
 
@@ -215,7 +223,7 @@ add(id: string,trainee: any, f:String , l:String) {
   }
 
  }
- console.log(this.chars)
+ 
 }
   constructor(private serv : TasksService){
 
@@ -237,7 +245,7 @@ add(id: string,trainee: any, f:String , l:String) {
   assig(){
     this.serv.getAssign(localStorage.getItem("camp")).subscribe((d:ResponseHeader)=>{
       this.assign = d.data;
-      console.log(this.assign);
+      
     })
   }
   trainee: any ;
@@ -247,6 +255,7 @@ add(id: string,trainee: any, f:String , l:String) {
     this.errors = [];
     document.getElementById(id)?.classList.toggle("hidden");
     if(id == "names"){
+
       this.isShow = !this.isShow
     }
   }
@@ -255,7 +264,7 @@ add(id: string,trainee: any, f:String , l:String) {
     if(id != null){
       this.serv.getData(id).subscribe((d:ResponseHeader)=>{
         this.tasks = d.data;
-        console.log(d)
+        
         this.isLoading = false;
 
       })
@@ -304,8 +313,7 @@ add(id: string,trainee: any, f:String , l:String) {
       x.value = this.ed.title;
     }
     this.show('edit');
-    console.log(this.ed);
-    console.log(data);
+   
   }
   gen(){
     this.chars = [];
@@ -327,7 +335,7 @@ add(id: string,trainee: any, f:String , l:String) {
 
     
   this.show('gen');
-  console.log(this.trainTask);
+  
   }
   @HostListener('document:click', ['$event'])
 onClickOutside(event: MouseEvent): void {
