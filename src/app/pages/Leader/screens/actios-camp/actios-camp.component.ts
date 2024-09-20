@@ -10,6 +10,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
@@ -44,6 +45,9 @@ export class ActiosCampComponent implements OnInit {
   @ViewChild('endDateInput') endDateInput!: ElementRef;
   @ViewChild('calendar') calendar!: ElementRef;
   @ViewChild('calendar2') calendar2!: ElementRef;
+  @ViewChild('termSelect') termSelect!: NgSelectComponent;
+  @ViewChild('mentorsSelect') mentorsSelect!: NgSelectComponent;
+  @ViewChild('hocSelect') hocSelect!: NgSelectComponent;
 
   selectedDay: number | null | any = null;
   selectedDayEnd: number | null | any = null;
@@ -93,7 +97,10 @@ export class ActiosCampComponent implements OnInit {
       headsIds: [null],
       mentorsIds: [null],
       openForRegister: [false, [Validators.required]],
-      durationInWeeks: [null, [Validators.required]],
+      durationInWeeks: [
+        null,
+        [Validators.required, this.positiveNumberValidator],
+      ],
       endDate: [null, [Validators.required]],
       startDate: [null, [Validators.required]],
     });
@@ -103,6 +110,14 @@ export class ActiosCampComponent implements OnInit {
     });
 
     this.fetchAllCamp();
+  }
+
+  positiveNumberValidator(control: AbstractControl) {
+    const value = control.value;
+    if (value !== null && value < 0) {
+      return { negativeNumber: true };
+    }
+    return null;
   }
 
   selectCamp(item: any): void {
@@ -301,17 +316,7 @@ export class ActiosCampComponent implements OnInit {
     });
   }
 
-  @HostListener('document:click', ['$event.target'])
-  public onClick(targetElement: HTMLElement) {
-    const clickedInside = this.elementRef.nativeElement.contains(targetElement);
-    console.log(clickedInside);
-    if (!clickedInside) {
-      this.isCampsActive = false;
-    }
-  }
-
   toggleCalendar(name: string) {
-    debugger;
     if (name === 'start') {
       this.calendar.nativeElement.classList.toggle('hidden');
     } else {
@@ -398,10 +403,18 @@ export class ActiosCampComponent implements OnInit {
     ) {
       this.calendar2.nativeElement.classList.add('hidden');
     }
+    if (this.termSelect.dropdownPanel === undefined) {
+      this.foucsTerm = false;
+    }
+    if (this.mentorsSelect.dropdownPanel === undefined) {
+      this.dropdownOpen = false;
+    }
+    if (this.hocSelect.dropdownPanel === undefined) {
+      this.dropdownOpenH = false;
+    }
   }
 
   toggleDropdown(mentorsSelect: NgSelectComponent) {
-    debugger;
     if (this.dropdownOpen) {
       mentorsSelect.close();
     } else {

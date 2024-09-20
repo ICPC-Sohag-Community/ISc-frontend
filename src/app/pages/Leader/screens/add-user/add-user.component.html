@@ -250,6 +250,7 @@
           >
           <div class="relative">
             <ng-select
+              #collegaSelect
               id="college"
               [items]="allCollega"
               [closeOnSelect]="true"
@@ -257,8 +258,7 @@
               bindValue="id"
               formControlName="college"
               #formControl
-              (open)="handleClose()"
-              (close)="handleOpen()"
+              (click)="toggleDropdownC(collegaSelect)"
               [ngClass]="
                 addUserForm.controls['college'].errors && submitted
                   ? 'border-rose-600 '
@@ -268,10 +268,11 @@
             >
             </ng-select>
             <svg
+              (click)="toggleDropdownC(collegaSelect)"
               width="24"
               height="24"
               [ngClass]="foucsCollega ? 'rotate-180' : ''"
-              class="absolute top-[14px] left-52 transition-transform"
+              class="absolute top-[14px] left-[220px] cursor-pointer transition-transform"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -365,7 +366,7 @@
           <div class="flex items-center gap-x-4">
             <div class="relative">
               <ng-select
-                id="role"
+                #roleSelect
                 [items]="allRoles"
                 [closeOnSelect]="false"
                 bindLabel="name"
@@ -375,6 +376,7 @@
                 (change)="getRole($event)"
                 (focus)="showCampsWhenFocus()"
                 (blur)="hideCampsWhenblur($event)"
+                (click)="toggleDropdownR(roleSelect)"
                 [ngClass]="
                   addUserForm.controls['role'].errors && submitted
                     ? 'border-rose-600'
@@ -384,6 +386,7 @@
               >
               </ng-select>
               <svg
+                (click)="toggleDropdownR(roleSelect)"
                 width="24"
                 height="24"
                 [ngClass]="foucsRole ? 'rotate-180' : ''"
