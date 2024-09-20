@@ -16,7 +16,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { CampLeaderService } from '../../services/camp-leader.service';
 
 @Component({
@@ -49,12 +49,17 @@ export class ActiosCampComponent implements OnInit {
   selectedDayEnd: number | null | any = null;
   currentDate = new Date();
   daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  days: number[] = [];
-  monthYear: string = '';
+  startDays: number[] = [];
+  endDays: number[] = [];
+  dropdownOpen: boolean = false;
+  dropdownOpenH: boolean = false;
+  startMonthYear: string = '';
+  endMonthYear: string = '';
+  dateStart!: Date;
+  dateEnd!: Date;
 
   allMentors: { id: string; fullName: string; isInCamp?: boolean }[] = [];
   allHeadsOfCamp: { id: string; fullName: string; isInCamp: boolean }[] = [];
-  // allHeadsOfCamp: any[] = [];
   allCamps: { name: string }[] = [];
   selectedCamp: string = '';
   isCampsActive: boolean = false;
@@ -63,8 +68,6 @@ export class ActiosCampComponent implements OnInit {
   campName: string = '';
 
   foucsTerm: boolean = false;
-  foucsHoc: boolean = false;
-  foucsMen: boolean = false;
 
   submitted: boolean = false;
   isLoading: boolean = false;
@@ -80,6 +83,8 @@ export class ActiosCampComponent implements OnInit {
     } else {
       this.fetchAllMentors();
       this.fetchAllHeadsOfCamp();
+      this.renderCalendar(this.currentDate, 'start');
+      this.renderCalendar(this.currentDate, 'end');
     }
     this.campForm = this.fb.group({
       id: [''],
@@ -98,7 +103,6 @@ export class ActiosCampComponent implements OnInit {
     });
 
     this.fetchAllCamp();
-    this.renderCalendar(this.currentDate);
   }
 
   selectCamp(item: any): void {
@@ -146,6 +150,21 @@ export class ActiosCampComponent implements OnInit {
     });
   }
 
+  toggleDropdownC(event: MouseEvent) {
+    event.stopPropagation(); // Stop event propagation to avoid closing the dropdown
+    this.isCampsActive = !this.isCampsActive;
+  }
+
+  @HostListener('window:click', ['$event'])
+  closeDropdown(event: Event) {
+    const targetElement = event.target as HTMLElement;
+    const dropdownElement = document.querySelector('.relative.flex.flex-col');
+
+    if (dropdownElement && !dropdownElement.contains(targetElement)) {
+      this.isCampsActive = false;
+    }
+  }
+
   getOneCamp(id: number): void {
     this.isLoading = true;
     this.campLeaderService.getOneCamp(id).subscribe({
@@ -153,16 +172,17 @@ export class ActiosCampComponent implements OnInit {
         if (statusCode == 200) {
           this.isLoading = false;
           this.selectedCamp = data.name;
-          // this.renderCalendar(data.startDate);
-          this.selectedDay = new Date(data.startDate).getDate();
-          this.selectedDayEnd = new Date(data.endDate).getDate();
+          this.renderCalendar(data.startDate, 'start');
+          this.renderCalendar(data.endDate, 'end');
+          this.dateStart = new Date(data.startDate);
+          this.dateEnd = new Date(data.endDate);
+          this.selectedDay = this.dateStart.getDate();
+          this.selectedDayEnd = this.dateEnd.getDate();
           this.allMentors = data.mentorsOfCamp;
           this.allHeadsOfCamp = data.headsOfCamp;
           const x = this.allMentors
             .filter((item: any) => item.inCamp)
             .map((item: any) => item.id);
-
-          console.log(x);
           this.campForm.patchValue({
             id: data.id,
             name: data.name,
@@ -179,7 +199,6 @@ export class ActiosCampComponent implements OnInit {
               .map((item: any) => item.id),
           });
         } else {
-          // this.toastr.error(msg);
           this.isLoading = false;
         }
       },
@@ -292,6 +311,7 @@ export class ActiosCampComponent implements OnInit {
   }
 
   toggleCalendar(name: string) {
+    debugger;
     if (name === 'start') {
       this.calendar.nativeElement.classList.toggle('hidden');
     } else {
@@ -299,9 +319,14 @@ export class ActiosCampComponent implements OnInit {
     }
   }
 
-  changeMonth(monthChange: number) {
-    this.currentDate.setMonth(this.currentDate.getMonth() + monthChange);
-    this.renderCalendar(this.currentDate);
+  changeMonth(monthChange: number, name: string) {
+    if (name === 'start') {
+      this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
+      this.renderCalendar(this.dateStart, name);
+    } else {
+      this.dateEnd.setMonth(this.dateEnd.getMonth() + monthChange);
+      this.renderCalendar(this.dateEnd, name);
+    }
   }
 
   selectDate(day: number, name: string) {
@@ -321,24 +346,41 @@ export class ActiosCampComponent implements OnInit {
     }
   }
 
-  renderCalendar(date: Date) {
-    const month = date.getMonth();
-    const year = date.getFullYear();
+  renderCalendar(date: Date, name?: string) {
+    const newDate = new Date(date);
+    const month = newDate.getMonth();
+    const year = newDate.getFullYear();
     const firstDay = new Date(year, month, 1).getDay();
     const lastDate = new Date(year, month + 1, 0).getDate();
 
-    this.days = [];
-    this.monthYear = date.toLocaleDateString('en-US', {
-      month: 'long',
-      year: 'numeric',
-    });
+    if (name === 'start') {
+      this.startDays = [];
+      this.startMonthYear = newDate.toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric',
+      });
 
-    for (let i = 0; i < firstDay; i++) {
-      this.days.push(0);
-    }
+      for (let i = 0; i < firstDay; i++) {
+        this.startDays.push(0);
+      }
 
-    for (let i = 1; i <= lastDate; i++) {
-      this.days.push(i);
+      for (let i = 1; i <= lastDate; i++) {
+        this.startDays.push(i);
+      }
+    } else {
+      this.endDays = [];
+      this.endMonthYear = newDate.toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric',
+      });
+
+      for (let i = 0; i < firstDay; i++) {
+        this.endDays.push(0);
+      }
+
+      for (let i = 1; i <= lastDate; i++) {
+        this.endDays.push(i);
+      }
     }
   }
 
@@ -358,27 +400,41 @@ export class ActiosCampComponent implements OnInit {
     }
   }
 
-  handleOpen() {
-    this.foucsTerm = false;
+  toggleDropdown(mentorsSelect: NgSelectComponent) {
+    debugger;
+    if (this.dropdownOpen) {
+      mentorsSelect.close();
+    } else {
+      mentorsSelect.open();
+    }
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+  onItemClick(mentorsSelect: NgSelectComponent) {
+    setTimeout(() => {
+      mentorsSelect.open();
+    });
   }
 
-  handleClose(): void {
-    this.foucsTerm = true;
+  toggleDropdownH(hocSelect: NgSelectComponent) {
+    if (this.dropdownOpenH) {
+      hocSelect.close();
+    } else {
+      hocSelect.open();
+    }
+    this.dropdownOpenH = !this.dropdownOpenH;
+  }
+  onItemClickH(hocSelect: NgSelectComponent) {
+    setTimeout(() => {
+      hocSelect.open();
+    });
   }
 
-  handleOpenH() {
-    this.foucsHoc = false;
-  }
-
-  handleCloseH(): void {
-    this.foucsHoc = true;
-  }
-
-  handleOpenM() {
-    this.foucsMen = false;
-  }
-
-  handleCloseM(): void {
-    this.foucsMen = true;
+  toggleDropdownT(termSelect: NgSelectComponent) {
+    if (this.foucsTerm) {
+      termSelect.close();
+    } else {
+      termSelect.open();
+    }
+    this.foucsTerm = !this.foucsTerm;
   }
 }

@@ -10,16 +10,14 @@
       </h2>
 
       <div class="flex items-center justify-between w-full mt-2 ps-4">
-        <div class="relative flex flex-col basis-1/2">
+        <div class="relative flex flex-col pb-5 basis-1/2">
           <label class="text-lg">Camp name</label>
           <div
-            (click)="isCampsActive = !isCampsActive"
+            (click)="toggleDropdownC($event)"
             class="relative text-left cursor-pointer text-lg px-4 flex justify-between items-center w-[450px] my-2 py-2.5 text-gray-400 bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
           >
             <span [ngClass]="selectedCamp ? 'text-black' : ''">
-              @if (selectedCamp) {
-              {{ selectedCamp }}
-              }@else { Name }
+              {{ selectedCamp || "Name" }}
             </span>
             <svg
               [ngClass]="isCampsActive ? 'rotate-180' : ''"
@@ -111,36 +109,40 @@
           <label class="text-lg">Term</label>
           <div class="relative w-[450px]">
             <ng-select
+              #termSelect
               [closeOnSelect]="true"
               bindLabel="name"
               bindValue="id"
               formControlName="term"
               placeholder="Select Term"
-              (open)="handleClose()"
-              (close)="handleOpen()"
-              class="relative block text-lg w-full my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
+              (open)="foucsTerm = false"
+              (close)="foucsTerm = true"
+              (click)="toggleDropdownT(termSelect)"
+              class="relative block text-lg w-full my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
             >
               <ng-option [value]="1"> First Term </ng-option>
               <ng-option [value]="2"> Second Term </ng-option>
               <ng-option [value]="3"> Summer </ng-option>
               <ng-option [value]="4"> Mid Year </ng-option>
             </ng-select>
-            <svg
-              [ngClass]="foucsTerm ? 'rotate-180' : ''"
-              class="absolute transition-transform top-4 size-8 right-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
-                stroke="#A8A8A8"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <button (click)="toggleDropdownT(termSelect)" type="button">
+              <svg
+                [ngClass]="foucsTerm ? 'rotate-180' : ''"
+                class="absolute transition-transform top-4 size-8 right-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
+                  stroke="#A8A8A8"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -152,7 +154,7 @@
             <input
               #startDateInput
               type="text"
-              placeholder="Select Date"
+              placeholder="Select Start Date"
               formControlName="startDate"
               class="relative block w-full px-4 cursor-pointer py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
               readonly
@@ -160,20 +162,22 @@
             />
             <div
               #calendar
-              class="absolute left-0 z-10 hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
+              class="absolute left-0 z-[60] hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
             >
               <div class="flex items-center justify-between mb-2">
                 <button
                   type="button"
-                  (click)="changeMonth(-1)"
+                  (click)="changeMonth(-1, 'start')"
                   class="focus:outline-none"
                 >
                   &lt;
                 </button>
-                <span class="font-semibold text-gray-700">{{ monthYear }}</span>
+                <span class="font-semibold text-gray-700">{{
+                  startMonthYear
+                }}</span>
                 <button
                   type="button"
-                  (click)="changeMonth(1)"
+                  (click)="changeMonth(1, 'start')"
                   class="focus:outline-none"
                 >
                   &gt;
@@ -188,7 +192,7 @@
                 }
               </div>
               <div class="grid grid-cols-7 mt-2 text-sm text-center">
-                @for (day of days; track $index) {
+                @for (day of startDays; track $index) {
                 <ng-container>
                   <div
                     [ngClass]="{
@@ -205,7 +209,6 @@
               </div>
             </div>
             <svg
-              (click)="toggleCalendar('start')"
               class="absolute transition-transform top-4 size-8 right-4"
               viewBox="0 0 40 40"
               fill="none"
@@ -227,27 +230,29 @@
               type="text"
               placeholder="Select End Date"
               formControlName="endDate"
-              class="relative block w-full px-4 py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+              class="relative block cursor-pointer w-full px-4 py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
               readonly
               (click)="toggleCalendar('end')"
             />
 
             <div
               #calendar2
-              class="absolute left-0 z-10 hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
+              class="absolute left-0 z-[60] hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
             >
               <div class="flex items-center justify-between mb-2">
                 <button
                   type="button"
-                  (click)="changeMonth(-1)"
+                  (click)="changeMonth(-1, 'end')"
                   class="focus:outline-none"
                 >
                   &lt;
                 </button>
-                <span class="font-semibold text-gray-700">{{ monthYear }}</span>
+                <span class="font-semibold text-gray-700">{{
+                  endMonthYear
+                }}</span>
                 <button
                   type="button"
-                  (click)="changeMonth(1)"
+                  (click)="changeMonth(1, 'end')"
                   class="focus:outline-none"
                 >
                   &gt;
@@ -260,7 +265,7 @@
                 }
               </div>
               <div class="grid grid-cols-7 mt-2 text-sm text-center">
-                @for (day of days; track $index) {
+                @for (day of endDays; track $index) {
                 <ng-container>
                   <div
                     [ngClass]="{
@@ -297,16 +302,16 @@
           <label class="text-lg">Heads of camp</label>
           <div class="relative w-[450px]">
             <ng-select
+              #hocSelect
               [items]="allHeadsOfCamp"
               [closeOnSelect]="false"
               [multiple]="true"
               bindLabel="fullName"
               bindValue="id"
               formControlName="headsIds"
-              (open)="handleCloseH()"
-              (close)="handleOpenH()"
+              (click)="toggleDropdownH(hocSelect)"
               placeholder="Head of camp"
-              class="relative block w-[450px] placeholder:text-gray-500 my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
+              class="relative block w-[450px] placeholder:text-gray-500 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
             >
               <ng-template
                 ng-multi-label-tmp
@@ -333,6 +338,7 @@
               </ng-template>
               <ng-template ng-option-tmp let-item="item" let-index="index">
                 <ng-option
+                  (click)="onItemClickH(hocSelect)"
                   class="flex items-center justify-between w-full h-full py-1"
                 >
                   <h4>{{ item.fullName }}</h4>
@@ -342,22 +348,28 @@
                 </ng-option>
               </ng-template>
             </ng-select>
-            <svg
-              [ngClass]="foucsHoc ? 'rotate-180' : ''"
-              class="absolute transition-transform top-4 size-8 right-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+            <button
+              class="absolute z-30 transition-transform cursor-pointer top-4 size-8 right-4"
+              (click)="toggleDropdownH(hocSelect)"
+              type="button"
             >
-              <path
-                d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
-                stroke="#A8A8A8"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+              <svg
+                class="w-full h-full"
+                [ngClass]="dropdownOpenH ? 'rotate-180' : ''"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
+                  stroke="#A8A8A8"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -365,6 +377,7 @@
           <label class="text-lg">Mentors</label>
           <div class="relative w-[450px]">
             <ng-select
+              #mentorsSelect
               [items]="allMentors"
               [closeOnSelect]="false"
               [multiple]="true"
@@ -372,9 +385,8 @@
               bindValue="id"
               formControlName="mentorsIds"
               placeholder="Mentor"
-              (open)="handleCloseM()"
-              (close)="handleOpenM()"
-              class="relative block w-full my-2 pe-4 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
+              (click)="toggleDropdown(mentorsSelect)"
+              class="relative block w-full my-2 cursor-pointer text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
             >
               <ng-template
                 ng-multi-label-tmp
@@ -401,28 +413,35 @@
               </ng-template>
               <ng-template ng-option-tmp let-item="item" let-index="index">
                 <ng-option
+                  (click)="onItemClick(mentorsSelect)"
                   class="flex items-center justify-between w-full h-full py-1"
                 >
                   <h4>{{ item.fullName }}</h4>
                 </ng-option>
               </ng-template>
             </ng-select>
-            <svg
-              [ngClass]="foucsMen ? 'rotate-180' : ''"
-              class="absolute transition-transform top-4 size-8 right-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+            <button
+              class="absolute z-30 transition-transform cursor-pointer top-4 size-8 right-4"
+              (click)="toggleDropdown(mentorsSelect)"
+              type="button"
             >
-              <path
-                d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
-                stroke="#A8A8A8"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+              <svg
+                [ngClass]="dropdownOpen ? 'rotate-180' : ''"
+                class="w-full h-full"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
+                  stroke="#A8A8A8"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -504,37 +523,3 @@
     </div>
   </form>
 </div>
-
-<!-- 
-
-  <div class="relative">
-            <ng-select
-              [items]="allCamps"
-              [closeOnSelect]="false"
-              [addTag]="addTagPromise"
-              [loading]="loadingAdd"
-              bindLabel="name"
-              bindValue="id"
-              formControlName="name"
-              placeholder="Name"
-              class="relative block w-[450px] placeholder:text-gray-500 my-2 text-black bg-[#fff] border-2 cursor-none rounded-lg appearance-none focus:outline-none"
-            >
-            </ng-select>
-            <svg
-              [ngClass]="foucsCollega ? 'rotate-180' : ''"
-              class="absolute transition-transform top-4 size-8 right-32"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
-                stroke="#A8A8A8"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
--->

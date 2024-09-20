@@ -3,9 +3,20 @@
   height: 50px;
 }
 
+.ng-select.ng-select-multiple .ng-select-container {
+  width: 89.5%;
+}
+
 .ng-select.ng-select-multiple .ng-select-container .ng-value-container {
+  width: 100% !important;
   height: 50px !important;
   overflow-y: auto !important;
+}
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-input {
+  display: none;
 }
 
 .ng-select span.ng-value-label[ng-reflect-escape="true"],

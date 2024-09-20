@@ -8,6 +8,7 @@ import {
   Input,
   OnInit,
   Output,
+  ViewEncapsulation,
 } from '@angular/core';
 import {
   FormArray,
@@ -34,6 +35,7 @@ export type FormFilter = FormGroup<{
   imports: [ReactiveFormsModule, CommonModule, NgSelectModule],
   templateUrl: './system-filter.component.html',
   styleUrl: './system-filter.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class SystemFilterComponent implements OnInit {
   @Input() filterValues: any;
