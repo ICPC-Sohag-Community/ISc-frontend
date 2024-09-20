@@ -17,6 +17,12 @@ import { FormsModule } from '@angular/forms';
 })
 export class TasksComponent {
   id:any
+  // cancel(task : HTMLTextAreaElement){
+  //   let x = this.ed.title;
+  //   task.value = ''
+  //   this.ed.title = x;
+  //   this.show('edit');
+  // }
 isLoading:boolean = false;
   showElement = true;
   formatDate(date: string | Date): string {
@@ -110,6 +116,10 @@ this.taskNo.forEach(element => {
         console.log(d.message);
         this.get(localStorage.getItem("camp"));
         this.show('add');
+        this.taskNo = [];
+        this.chars = [];
+        this.trainTask = [];
+        
         // window.location.reload();
         
       }
@@ -174,7 +184,7 @@ removeGrandparent(id:any, ind:any) {
 
   if (grandparent) {
     
-    this.taskNo[ind] = null;
+    this.taskNo.splice(ind, 1);
   }
   
 }
@@ -225,7 +235,7 @@ add(id: string,trainee: any, f:String , l:String) {
   tasks: any = {};
   assign:any;
   assig(){
-    this.serv.getAssign().subscribe((d:ResponseHeader)=>{
+    this.serv.getAssign(localStorage.getItem("camp")).subscribe((d:ResponseHeader)=>{
       this.assign = d.data;
       console.log(this.assign);
     })
@@ -281,6 +291,7 @@ add(id: string,trainee: any, f:String , l:String) {
   edit(data:any){
     this.ed=data;
     this.ed.taskId = data.id;
+    this.ed.title = data.title;
     // this.ed = {
     //   "taskId": data.taskId,
     //   "title":  data.title,
@@ -288,6 +299,10 @@ add(id: string,trainee: any, f:String , l:String) {
     //   "endTime":  data.endTime,
     //   "traineeId":  data.traineeId
     // }
+    let x = document.getElementById('edTitle') as HTMLTextAreaElement | null;
+    if(x){
+      x.value = this.ed.title;
+    }
     this.show('edit');
     console.log(this.ed);
     console.log(data);
