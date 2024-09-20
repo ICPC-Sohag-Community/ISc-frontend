@@ -17,7 +17,7 @@ export class MentorHeaderComponent {
 
   refreshRouterOutlet() {
     this.router.navigateByUrl('/mentor/blank' , { skipLocationChange: true }).then(() => {
-      console.log(this.getFullPath(this.activatedRoute))
+      
       this.router.navigate(['mentor/' + this.getFullPath(this.activatedRoute)]);
     });
   }
@@ -50,7 +50,7 @@ this.campName = name;
       this.service.getData().subscribe((response: ResponseHeader) => {
         if (response.isSuccess) {
           this.camps = response.data;
-          console.log(this.camps);
+          
           // this.campid = this.camps[0].id || null;
           // this.campName = this.camps[0].name || null;
           // localStorage.setItem("cName" , this.campName);
@@ -67,7 +67,7 @@ this.campName = name;
       this.service.trainees(id).subscribe((response: ResponseHeader) => {
         if (response.isSuccess) {
           this.trainees = response.data;
-          console.log(this.trainees);
+          
           localStorage.setItem("trainees" , JSON.stringify(this.trainees));
           this.change(id, name);
           localStorage.setItem("camp" , this.campid);

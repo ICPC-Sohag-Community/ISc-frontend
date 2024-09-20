@@ -28,7 +28,7 @@ export class StandingsComponent {
           }
         })
     } else {
-        console.error(`Stand or Achivers not found at index ${index}`);
+        alert('somthing went wrong')
     }
 }
   constructor(private serv:StandingsService){
