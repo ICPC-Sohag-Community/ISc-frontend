@@ -1,11 +1,11 @@
 import {
   Component,
   ElementRef,
+  HostListener,
   inject,
   OnInit,
   QueryList,
   ViewChild,
-  ViewChildren,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -14,7 +14,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { DashboardService } from '../../services/dashboard.service';
 import { NgClass } from '@angular/common';
 
@@ -45,6 +45,8 @@ export class AddUserComponent implements OnInit {
   addUserForm!: FormGroup;
   @ViewChild('formControl') formControls!: QueryList<ElementRef>;
   @ViewChild(FormGroupDirective) formDir!: FormGroupDirective;
+  @ViewChild('collegaSelect') collegaSelect!: NgSelectComponent;
+  @ViewChild('roleSelect') roleSelect!: NgSelectComponent;
 
   ngOnInit(): void {
     this.addUserForm = this.fb.group({
@@ -206,14 +208,6 @@ export class AddUserComponent implements OnInit {
     }
   }
 
-  handleOpen() {
-    this.foucsCollega = false;
-  }
-
-  handleClose(): void {
-    this.foucsCollega = true;
-  }
-
   getCampId(camp: any): void {
     this.selectedCamp = camp.name;
     this.addUserForm.get('campId')?.setValue(camp.id);
@@ -221,37 +215,60 @@ export class AddUserComponent implements OnInit {
   }
 
   fetchAllRoles(): void {
-    // this.isLoading.set(true);
     this.dashboardService.roles().subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.allRoles = data;
-          // this.isLoading.update((v) => (v = false));
         } else {
-          // this.isLoading.update((v) => (v = false));
+          console.log('error');
         }
       },
       error: (err) => {
         console.log(err);
-        // this.isLoading.update((v) => (v = false));
       },
     });
   }
   fetchAllCamps(): void {
-    // this.isLoading.set(true);
     this.dashboardService.getAllCamps().subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.allCamps = data;
-          // this.isLoading.update((v) => (v = false));
         } else {
-          // this.isLoading.update((v) => (v = false));
+          console.log('error');
         }
       },
       error: (err) => {
         console.log(err);
-        // this.isLoading.update((v) => (v = false));
       },
     });
+  }
+
+  toggleDropdownC(collegaSelect: NgSelectComponent) {
+    debugger;
+    if (this.foucsCollega) {
+      collegaSelect.close();
+    } else {
+      collegaSelect.open();
+    }
+    this.foucsCollega = !this.foucsCollega;
+  }
+  toggleDropdownR(roleSelect: NgSelectComponent) {
+    debugger;
+    if (this.foucsRole) {
+      roleSelect.close();
+    } else {
+      roleSelect.open();
+    }
+    this.foucsRole = !this.foucsRole;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (this.collegaSelect.dropdownPanel === undefined) {
+      this.foucsCollega = false;
+    }
+    if (this.roleSelect.dropdownPanel === undefined) {
+      this.foucsRole = false;
+    }
   }
 }
