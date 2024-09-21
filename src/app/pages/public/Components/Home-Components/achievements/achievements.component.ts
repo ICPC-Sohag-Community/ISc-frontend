@@ -1,10 +1,10 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-achievements',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,NgOptimizedImage],
   templateUrl: './achievements.component.html',
   styleUrl: './achievements.component.scss'
 })
