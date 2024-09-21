@@ -1,15 +1,6 @@
 .ng-select span.ng-value-label[ng-reflect-escape="true"] {
   background-color: #fff;
   color: black;
-  padding: 4px 6px;
+  padding: 4px 8px;
   border-radius: 8px;
-}
-.ng-select .ng-select-container,
-.ng-select.ng-select-opened .ng-select-container {
-  margin-left: 4px;
-  width: 94%;
-}
-
-.ng-select .ng-select-container .ng-value-container {
-  padding-left: 0px;
 }

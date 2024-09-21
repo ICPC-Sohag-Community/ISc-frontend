@@ -1,11 +1,4 @@
-import {
-  Component,
-  HostListener,
-  inject,
-  OnInit,
-  signal,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ConfirmDeleteRequestComponent } from '../../Components/confirm-delete-request/confirm-delete-request.component';
 import { RequestsLeaderService } from '../../services/requests-leader.service';
@@ -51,7 +44,6 @@ interface AllTraineesInfo {
   ],
   templateUrl: './requests-leader.component.html',
   styleUrl: './requests-leader.component.scss',
-  encapsulation: ViewEncapsulation.None,
 })
 export class RequestsLeaderComponent implements OnInit {
   requestsLeaderService = inject(RequestsLeaderService);
