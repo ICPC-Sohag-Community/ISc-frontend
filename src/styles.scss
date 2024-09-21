@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 @import "swiper/css/bundle";
-@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
 
 ::-webkit-scrollbar {
   width: 12px !important;
@@ -154,3 +153,5 @@
 .ng-select .ng-arrow-wrapper {
   display: none;
 }
+
+@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
