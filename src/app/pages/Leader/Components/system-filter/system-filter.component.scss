@@ -5,6 +5,10 @@
   border-radius: 8px;
 }
 
+.ng-select .ng-select-container {
+  min-height: 24px !important;
+}
+
 .ng-select span.ng-value-label {
   background-color: transparent;
   color: black;
