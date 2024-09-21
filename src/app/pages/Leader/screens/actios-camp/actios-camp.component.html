@@ -9,8 +9,8 @@
         @if (id === 0) { Add Camp }@else { Edit Camp }
       </h2>
 
-      <div class="flex items-center justify-between w-full mt-2 ps-4">
-        <div class="relative flex flex-col pb-5 basis-1/2">
+      <div class="flex items-center justify-between w-full ps-4">
+        <div class="relative flex flex-col basis-1/2">
           <label class="text-lg">Camp name</label>
           <div
             (click)="toggleDropdownC($event)"
@@ -38,7 +38,7 @@
           </div>
           @if (isCampsActive) {
           <div
-            class="w-[450px] absolute top-24 z-30 overflow-y-auto scroll-host bg-white border-2 rounded-lg max-h-44"
+            class="w-[450px] absolute top-24 z-[1150] overflow-y-auto scroll-host bg-white border-2 rounded-lg max-h-44"
           >
             <ul>
               <li
@@ -105,7 +105,7 @@
           }
         </div>
 
-        <div class="flex flex-col basis-1/2">
+        <div class="flex flex-col pt-5 basis-1/2">
           <label class="text-lg">Term</label>
           <div class="relative w-[450px]">
             <ng-select
@@ -123,10 +123,14 @@
               <ng-option [value]="3"> Summer </ng-option>
               <ng-option [value]="4"> Mid Year </ng-option>
             </ng-select>
-            <button (click)="toggleDropdownT(termSelect)" type="button">
+            <button
+              (click)="toggleDropdownT(termSelect)"
+              type="button"
+              class=""
+            >
               <svg
                 [ngClass]="foucsTerm ? 'rotate-180' : ''"
-                class="absolute transition-transform top-4 size-8 right-4"
+                class="absolute transition-transform top-4 z-[1100] size-8 right-4"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -160,7 +164,7 @@
             />
             <div
               #calendar
-              class="absolute left-0 z-[60] hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
+              class="absolute left-0 z-[1200] hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
             >
               <div class="flex items-center justify-between mb-2">
                 <button
@@ -235,7 +239,7 @@
 
             <div
               #calendar2
-              class="absolute left-0 z-[60] hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
+              class="absolute left-0 z-[1200] hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
             >
               <div class="flex items-center justify-between mb-2">
                 <button
@@ -347,7 +351,7 @@
               </ng-template>
             </ng-select>
             <button
-              class="absolute z-30 transition-transform cursor-pointer top-4 size-8 right-4"
+              class="absolute z-[1100] transition-transform cursor-pointer top-4 size-8 right-4"
               (click)="toggleDropdownH(hocSelect)"
               type="button"
             >
@@ -419,7 +423,7 @@
               </ng-template>
             </ng-select>
             <button
-              class="absolute z-30 transition-transform cursor-pointer top-4 size-8 right-4"
+              class="absolute z-[1100] transition-transform cursor-pointer top-4 size-8 right-4"
               (click)="toggleDropdown(mentorsSelect)"
               type="button"
             >

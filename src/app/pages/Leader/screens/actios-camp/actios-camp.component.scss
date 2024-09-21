@@ -3,11 +3,15 @@
   height: 50px;
 }
 
-.ng-select .ng-select-container {
-  width: 89.5% !important;
-}
-.ng-select.ng-select-multiple .ng-select-container {
-  width: 89.5%;
+// .ng-select .ng-select-container {
+//   width: 89.5% !important;
+// }
+// .ng-select.ng-select-multiple .ng-select-container {
+//   width: 89.5%;
+// }
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container {
+  height: 50px !important;
 }
 
 .ng-select.ng-select-multiple .ng-select-container .ng-value-container {
