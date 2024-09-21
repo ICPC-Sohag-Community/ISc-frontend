@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 import { CasheService } from '../../../../shared/services/cashe.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -20,6 +26,7 @@ import { AuthService } from '../../../../authentication/services/auth.service';
   ],
   templateUrl: './trainees-leader.component.html',
   styleUrl: './trainees-leader.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class TraineesLeaderComponent implements OnInit {
   traineesLeaderService = inject(TraineesLeaderService);

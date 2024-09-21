@@ -3,6 +3,11 @@
   height: 50px;
 }
 
+.ng-select.ng-select-multiple .ng-select-container,
+.ng-select .ng-select-container {
+  width: 98% !important;
+}
+
 .ng-select.ng-select-multiple .ng-select-container .ng-value-container {
   height: 50px !important;
 }
@@ -22,7 +27,8 @@
 .ng-select.ng-select-multiple
   .ng-select-container
   .ng-value-container
-  div.ng-placeholder {
+  div.ng-placeholder,
+.ng-select .ng-select-container .ng-value-container div.ng-placeholder {
   font-size: 18px;
   font-weight: 500;
   color: #c4c3c3;

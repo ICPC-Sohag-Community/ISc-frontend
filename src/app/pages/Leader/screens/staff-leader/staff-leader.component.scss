@@ -3,6 +3,11 @@ table {
   border-spacing: 0px 12px;
 }
 
+.ng-select .ng-select-container,
+.ng-select.ng-select-opened .ng-select-container {
+  background-color: transparent;
+}
+
 .custom-scrollbar-side::-webkit-scrollbar {
   display: none;
 }
