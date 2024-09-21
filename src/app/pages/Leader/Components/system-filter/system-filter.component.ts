@@ -12,22 +12,12 @@ import {
 } from '@angular/core';
 import {
   FormArray,
-  FormControl,
-  FormGroup,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-
-export type Form = FormGroup<{
-  filters: FormArray<FormFilter>;
-}>;
-export type FormFilter = FormGroup<{
-  sheetId: FormControl;
-  community: FormControl;
-  passingPrecent: FormControl;
-}>;
+import { Form, FormFilter } from '../../model/requests';
 
 @Component({
   selector: 'app-system-filter',
@@ -49,11 +39,10 @@ export class SystemFilterComponent implements OnInit {
     this.filterForm = this.fb.group({
       filters: this.fb.array<FormFilter>([this.generateFilter()]),
     }) as Form;
-    debugger;
-    console.log(this.filterValues);
     if (this.filterValues) {
       this.setSavedFilters(this.filterValues);
     }
+    this.updateLastRowValidation();
   }
 
   generateFilter(): FormFilter {
@@ -68,49 +57,71 @@ export class SystemFilterComponent implements OnInit {
     return this.filterForm.get('filters') as FormArray<FormFilter>;
   }
   addFilter() {
-    if (this.filterForm.valid) {
-      this.filters.push(this.generateFilter());
-    }
+    this.filters.push(this.generateFilter());
+    this.updateLastRowValidation();
   }
 
   removeFilter(index: number) {
     this.filters.removeAt(index);
+    this.updateLastRowValidation();
   }
 
   saveCustomFilter(): void {
     this.filters.controls.forEach((control) => {
-      const selectValue = Number(control.get('community')?.value);
-      const textBoxValue = Number(control.get('passingPrecent')?.value);
-
       control.patchValue({
-        community: selectValue,
-        passingPrecent: textBoxValue,
+        community: Number(control.get('community')?.value),
+        passingPrecent: Number(control.get('passingPrecent')?.value),
       });
     });
-    debugger;
-
-    if (this.filterForm.valid) {
+    if (this.filterForm.valid && this.filters.length > 1) {
+      this.filters.removeAt(this.filters.length - 1);
       this.saveFilter.emit(this.filterForm);
     }
   }
 
   setSavedFilters(savedData: any[]) {
-    this.filters.clear(); // Clear existing form array
-
-    // Loop through each item in the saved data array
+    this.filters.clear();
     savedData.forEach((filterData) => {
-      const newFilter = this.generateFilter(); // Generate a new form group for each filter
-
-      // Use patchValue to apply the values
+      const newFilter = this.generateFilter();
       newFilter.patchValue({
         sheetId: filterData.sheetId,
         community: filterData.community,
         passingPrecent: filterData.passingPrecent,
       });
-
-      // Push the new filter to the form array
       this.filters.push(newFilter);
     });
+    this.updateLastRowValidation();
+  }
+
+  updateLastRowValidation() {
+    const length = this.filters.length;
+    if (length === 1) {
+      const firstRow = this.filters.controls[0];
+      firstRow.get('sheetId')?.setValidators([Validators.required]);
+      firstRow.get('community')?.setValidators([Validators.required]);
+      firstRow.get('passingPrecent')?.setValidators([Validators.required]);
+
+      firstRow.get('sheetId')?.updateValueAndValidity();
+      firstRow.get('community')?.updateValueAndValidity();
+      firstRow.get('passingPrecent')?.updateValueAndValidity();
+    } else {
+      this.filters.controls.forEach((filterGroup, index) => {
+        if (index === length - 1) {
+          filterGroup.get('sheetId')?.clearValidators();
+          filterGroup.get('community')?.clearValidators();
+          filterGroup.get('passingPrecent')?.clearValidators();
+        } else {
+          filterGroup.get('sheetId')?.setValidators([Validators.required]);
+          filterGroup.get('community')?.setValidators([Validators.required]);
+          filterGroup
+            .get('passingPrecent')
+            ?.setValidators([Validators.required]);
+        }
+        filterGroup.get('sheetId')?.updateValueAndValidity();
+        filterGroup.get('community')?.updateValueAndValidity();
+        filterGroup.get('passingPrecent')?.updateValueAndValidity();
+      });
+    }
   }
 
   @HostListener('document:click', ['$event.target'])

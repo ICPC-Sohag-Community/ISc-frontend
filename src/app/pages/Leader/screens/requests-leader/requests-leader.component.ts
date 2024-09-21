@@ -158,8 +158,8 @@ export class RequestsLeaderComponent implements OnInit {
 
   handleSaveFilter(data: any) {
     this.filters = data.value.filters;
+    console.log(this.filters);
     this.dataRequest = [];
-    this.applySystemFilter = true;
     this.settingsFilterRequest = {
       pageNumber: 1,
       pageSize: this.pageSize,
@@ -172,6 +172,20 @@ export class RequestsLeaderComponent implements OnInit {
     this.closeConfirmFilter();
   }
 
+  systemFilter(event: any): void {
+    this.applySystemFilter = event.target.checked;
+    this.dataRequest = [];
+    this.settingsFilterRequest = {
+      pageNumber: 1,
+      pageSize: this.pageSize,
+      campId: this.campId,
+      applySystemFilter: this.applySystemFilter,
+      filters: this.filters,
+    };
+    this.casheService.clearCache();
+    this.traineesRegisterations(this.settingsFilterRequest);
+  }
+
   // Delete
   showConfirmDelete() {
     this.showModalDelete = true;
@@ -180,7 +194,6 @@ export class RequestsLeaderComponent implements OnInit {
   handleClose(confirmed: boolean) {
     if (confirmed && this.selectedIds.length !== 0) {
       this.dataRequest = [];
-      this.applySystemFilter = true;
       this.settingsFilterRequest = {
         pageNumber: 1,
         pageSize: this.pageSize,
@@ -197,7 +210,6 @@ export class RequestsLeaderComponent implements OnInit {
   closeRequestMessage() {
     this.showSubmitModel = false;
     this.dataRequest = [];
-    this.applySystemFilter = true;
     this.settingsFilterRequest = {
       pageNumber: 1,
       pageSize: this.pageSize,

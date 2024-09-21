@@ -40,6 +40,7 @@ export class StaffLeaderComponent implements OnInit {
   deletedRoles: any[] = [];
   startPageIndex: number = 0;
   maxVisiblePages: number = 4;
+  focusOrder: boolean = false;
 
   searchForm!: FormGroup;
   ngOnInit() {
@@ -221,5 +222,12 @@ export class StaffLeaderComponent implements OnInit {
     if ((event.target as HTMLElement).classList.contains('fixed')) {
       this.handleClose();
     }
+  }
+
+  focusSelect(): void {
+    this.focusOrder = true;
+  }
+  blurSelect(): void {
+    this.focusOrder = true;
   }
 }

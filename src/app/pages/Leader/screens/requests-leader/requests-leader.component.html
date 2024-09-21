@@ -10,7 +10,13 @@
       >
         Custom Filter
       </button>
-      <div class="flex items-center gap-x-2">
+      <label class="flex items-center gap-x-2">
+        <input
+          type="checkbox"
+          id=""
+          class="hidden"
+          (change)="systemFilter($event)"
+        />
         <div
           class="flex items-center justify-center bg-white rounded-md size-7"
         >
@@ -34,7 +40,7 @@
           }
         </div>
         <span>System Filter</span>
-      </div>
+      </label>
     </div>
     <div class="flex items-center justify-between px-2 gap-x-6">
       <div class="relative flex items-center text-lg gap-x-4">
