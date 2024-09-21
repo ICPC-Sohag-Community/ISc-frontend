@@ -63,7 +63,7 @@ export class AuthService {
     const tokenKey = 'JWT_TOKEN'; // Define the key used to store the token
     
     const token = localStorage.getItem(tokenKey) || sessionStorage.getItem(tokenKey);
-    console.log(token)
+    
     return token ? token : ''; // If token is null or undefined, return an empty string
   }
   

@@ -1,7 +1,8 @@
 <div class="flex flex-col gap-14 my-24 w-11/12 mx-auto">
   <!-- Header Section -->
   <h1 class="head">Coming later</h1>
-  <!-- Swiper Container with Custom Navigation Buttons -->
+  @if (inComingContests.length>0) {
+    <!-- Swiper Container with Custom Navigation Buttons -->
   <div class="relative">
     <!-- Custom navigation buttons for the swiper -->
     <div class="custom-buttons mb-14 w-full min-h-[16rem] flex items-center justify-between absolute inset-0 z-10">
@@ -49,4 +50,10 @@
     }
     </swiper>
   </div>
+  }
+  @else {
+    <p class="no-contest">
+      No In Coming Contest
+    </p>
+  }
 </div>

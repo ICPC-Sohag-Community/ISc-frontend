@@ -55,6 +55,7 @@ import { LogComponent } from './authentication/screens/login/log/log.component';
 import { LayoutPublicComponent } from './layouts/layout_public/layout-public.component';
 import { HomePublicComponent } from './pages/public/screens/home-public/home-public.component';
 import { BlankComponent } from './pages/mentor/blank/blank.component';
+import { CampsPublicComponent } from './pages/public/screens/camps-public/camps-public.component';
 
 
 
@@ -109,6 +110,11 @@ export const routes: Routes = [
         path: 'home',
         component: HomePublicComponent,
         title: 'Guest / Home - ICPC',
+      },
+      {
+        path: 'camps',
+        component: CampsPublicComponent,
+        title: 'Guest / Camps - ICPC',
       },
     ],
   },

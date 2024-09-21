@@ -25,6 +25,11 @@ export class HomeService {
       environment.BASE_URL + `/api/Trainee/currentSheet`
     );
   }
+  TraineeSheetProgress(): Observable<any> {
+    return this._HttpClient.get(
+      environment.BASE_URL + `/api/Trainee/currentSheetProgress`
+    );
+  }
   TraineeIncomingContest(): Observable<any> {
     return this._HttpClient.get(
       environment.BASE_URL + `/api/Trainee/IncomingContest`

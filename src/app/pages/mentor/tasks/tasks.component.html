@@ -168,10 +168,10 @@
                 <div class="relative mt-2 rounded-[8px] ">
                     
                     <div class="flex ">
-                      <button (click)="show('names')" class="w-[160px] ml-2 flex gap-6 items-center border border-[#97979780] rounded-md px-2 py-1">
+                      <button (click)="show('names')" class="w-[160px] ml-2 flex gap-6 items-center border border-[#97979780] rounded-md px-2 py-1" id="rel" >
                         Assigned to  
-                          <svg [ngClass]="isShow ? 'rotate-360' : 'rotate-180'" class="duration-200" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M2.7193 10.0332L7.06596 5.68654C7.5793 5.1732 8.4193 5.1732 8.93263 5.68654L13.2793 10.0332" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                          <svg id="rel" [ngClass]="isShow ? 'rotate-360' : 'rotate-180'" class="duration-200" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path id="rel" d="M2.7193 10.0332L7.06596 5.68654C7.5793 5.1732 8.4193 5.1732 8.93263 5.68654L13.2793 10.0332" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                           </svg>
 
                         </button>
@@ -180,7 +180,7 @@
                           <div *ngIf="i==6" class="min-w-[35px] ml-1 py-1 text-white font-bold flex justify-center items-center pr-1 rounded-full bg-[#0D99FF]">...</div>
                         </div>
                     </div>
-                    <div id="names" class="hidden origin-top-right absolute left-0 mt-2 text-center  rounded-md shadow-lg bg-[#F3F3F3] ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div id="names" (click)="handle($event)" class="hidden origin-top-right absolute left-0 mt-2 text-center  rounded-md shadow-lg bg-[#F3F3F3] ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div class="py-1 overflow-auto custom-scrollbar max-h-60">
                         <div (click)="gen()"   class="flex cursor-pointer hover:bg-[#3D91C7]  justify-between px-4 py-2 text-sm text-gray-700 ">
                           General

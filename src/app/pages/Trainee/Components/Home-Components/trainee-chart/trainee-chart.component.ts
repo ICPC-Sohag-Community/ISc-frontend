@@ -161,15 +161,15 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
   }
 
   loadChartData(): void {
-    // this._homeService.TraineeCurrentSheetProgress().subscribe({
-    //   next: ({ statusCode, data }) => {
-    //     if (statusCode === 200) {
-    //     }
-    //   },
-    // });
-    this.minimumProblems = 20;
-    this.solvedProblems = 15;
-    this.AllProblems = 30;
+    this._homeService.TraineeSheetProgress().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          // this.minimumProblems = data.minimumPrecent;
+          // this.solvedProblems = data.solvedPrecent;
+          // this.AllProblems =data.allPrecent;
+        }
+      },
+    });
   }
   roundUpIfHasDecimal(num: number): number {
     return Math.ceil(num);
