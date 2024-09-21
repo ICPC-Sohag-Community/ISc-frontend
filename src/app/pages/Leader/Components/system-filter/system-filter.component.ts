@@ -40,6 +40,11 @@ export class SystemFilterComponent implements OnInit {
       filters: this.fb.array<FormFilter>([this.generateFilter()]),
     }) as Form;
     if (this.filterValues) {
+      this.filterValues.push({
+        sheetId: '',
+        community: null,
+        passingPrecent: null,
+      });
       this.setSavedFilters(this.filterValues);
     }
     this.updateLastRowValidation();
@@ -47,9 +52,9 @@ export class SystemFilterComponent implements OnInit {
 
   generateFilter(): FormFilter {
     return this.fb.group({
-      sheetId: ['', [Validators.required]],
-      community: [null, [Validators.required]],
-      passingPrecent: [null, [Validators.required]],
+      sheetId: [''],
+      community: [null],
+      passingPrecent: [null],
     }) as FormFilter;
   }
 
@@ -67,15 +72,40 @@ export class SystemFilterComponent implements OnInit {
   }
 
   saveCustomFilter(): void {
+    const formData = this.filterForm.value?.filters ?? [];
+
     this.filters.controls.forEach((control) => {
       control.patchValue({
         community: Number(control.get('community')?.value),
         passingPrecent: Number(control.get('passingPrecent')?.value),
       });
     });
-    if (this.filterForm.valid && this.filters.length > 1) {
+    const rowHasValues = (row: any) => {
+      return row.sheetId || row.community || row.passingPrecent;
+    };
+
+    if (formData.length > 1) {
+      if (!rowHasValues(formData.length - 1)) {
+        this.filters.removeAt(this.filters.length - 1);
+        this.saveFilter.emit(this.filterForm);
+      }
+    }
+
+    const firstRow = formData[0];
+    const hasMultipleRows = this.filters.length > 1;
+
+    if (!rowHasValues(firstRow)) {
       this.filters.removeAt(this.filters.length - 1);
       this.saveFilter.emit(this.filterForm);
+    } else if (
+      rowHasValues(firstRow) &&
+      rowHasValues(formData.length - 1) &&
+      hasMultipleRows
+    ) {
+      this.filters.removeAt(this.filters.length - 1);
+      this.saveFilter.emit(this.filterForm);
+    } else {
+      console.log('Form not submitted - only the first row has values');
     }
   }
 
@@ -95,33 +125,21 @@ export class SystemFilterComponent implements OnInit {
 
   updateLastRowValidation() {
     const length = this.filters.length;
-    if (length === 1) {
-      const firstRow = this.filters.controls[0];
-      firstRow.get('sheetId')?.setValidators([Validators.required]);
-      firstRow.get('community')?.setValidators([Validators.required]);
-      firstRow.get('passingPrecent')?.setValidators([Validators.required]);
 
-      firstRow.get('sheetId')?.updateValueAndValidity();
-      firstRow.get('community')?.updateValueAndValidity();
-      firstRow.get('passingPrecent')?.updateValueAndValidity();
-    } else {
-      this.filters.controls.forEach((filterGroup, index) => {
-        if (index === length - 1) {
-          filterGroup.get('sheetId')?.clearValidators();
-          filterGroup.get('community')?.clearValidators();
-          filterGroup.get('passingPrecent')?.clearValidators();
-        } else {
-          filterGroup.get('sheetId')?.setValidators([Validators.required]);
-          filterGroup.get('community')?.setValidators([Validators.required]);
-          filterGroup
-            .get('passingPrecent')
-            ?.setValidators([Validators.required]);
-        }
-        filterGroup.get('sheetId')?.updateValueAndValidity();
-        filterGroup.get('community')?.updateValueAndValidity();
-        filterGroup.get('passingPrecent')?.updateValueAndValidity();
-      });
-    }
+    this.filters.controls.forEach((filterGroup, index) => {
+      if (index === length - 1) {
+        filterGroup.get('sheetId')?.clearValidators();
+        filterGroup.get('community')?.clearValidators();
+        filterGroup.get('passingPrecent')?.clearValidators();
+      } else {
+        filterGroup.get('sheetId')?.setValidators([Validators.required]);
+        filterGroup.get('community')?.setValidators([Validators.required]);
+        filterGroup.get('passingPrecent')?.setValidators([Validators.required]);
+      }
+      filterGroup.get('sheetId')?.updateValueAndValidity();
+      filterGroup.get('community')?.updateValueAndValidity();
+      filterGroup.get('passingPrecent')?.updateValueAndValidity();
+    });
   }
 
   @HostListener('document:click', ['$event.target'])
