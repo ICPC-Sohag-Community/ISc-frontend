@@ -119,11 +119,6 @@
   border: none;
 }
 
-.ng-select .ng-select-container,
-.ng-select.ng-select-opened .ng-select-container {
-  background-color: transparent;
-}
-
 .ng-select .ng-select-container {
   height: 100% !important;
   border: none !important;
@@ -153,5 +148,3 @@
 .ng-select .ng-arrow-wrapper {
   display: none;
 }
-
-@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";

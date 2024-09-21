@@ -1,5 +1,11 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import {
@@ -15,6 +21,7 @@ import { ArchiveLeaderService } from '../../services/archive-leader.service';
   imports: [NgSelectModule, ReactiveFormsModule, NgClass],
   templateUrl: './archive-leader.component.html',
   styleUrl: './archive-leader.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class ArchiveLeaderComponent implements OnInit {
   archiveLeaderService = inject(ArchiveLeaderService);
