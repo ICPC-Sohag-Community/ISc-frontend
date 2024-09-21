@@ -6,31 +6,41 @@
     <!-- Card for Solving Percent -->
     <div class="card w-[19.5rem] md:w-[500px]">
       <h4 class="mb-5 md:mb-14 text-4xl font-bold text-center sm:text-start">Solving Percent</h4>
-      <div class="relative bg-img rounded-[20px] w-full md:w-[500px] min-h-[250px] md:min-h-[400px]">
-        <!-- Overlay for chart and legend -->
-        <div class="absolute text-white inset-0 rounded-[20px] w-full h-full flex flex-col items-center justify-around bg-black bg-opacity-50">
+      @if (AllProblems==0 && solvedProblems==0 && minimumProblems==0 ) {
+        <div class="relative bg-img rounded-[20px] w-full md:w-[500px] min-h-[250px] md:min-h-[400px]">
+          <!-- Overlay for chart and legend -->
+          <div class="absolute text-white inset-0 rounded-[20px] w-full h-full flex flex-col items-center justify-around bg-black bg-opacity-50">
 
-          <!-- Canvas for Chart.js chart -->
-          <!-- <canvas id="chart"></canvas> -->
-          <div style="display: block;">
-            <canvas id="myDoughnutChart" width="400" height="400"></canvas>
+            <p class="text-[3rem]">No Problems To Show</p>
+
           </div>
+        </div>
+      }@else {
+        <div class="relative bg-img rounded-[20px] w-full md:w-[500px] min-h-[250px] md:min-h-[400px]">
+          <!-- Overlay for chart and legend -->
+          <div class="absolute text-white inset-0 rounded-[20px] w-full h-full flex flex-col items-center justify-around bg-black bg-opacity-50">
 
-          <!-- Legend for chart -->
-          <div class="flex flex-col items-baseline w-4/5 mx-auto ">
-            <!-- Solved percentage -->
-            <div class="flex items-center">
-              <div class="bg-[#00AC47] w-6 h-4 rounded-full font-semibold"></div>
-              <span class="font-semibold md:text-xl ml-2 md:ml-3">Solved {{ roundUpIfHasDecimal(solvedProblems / AllProblems * 100) }}%</span>
+
+            <div style="display: block;">
+              <canvas id="myDoughnutChart" width="400" height="400"></canvas>
             </div>
-            <!-- Minimum percentage -->
-            <div class="flex items-center">
-              <div class="bg-[#EF4A50] w-6 h-4 rounded-full font-semibold"></div>
-              <span class="font-semibold md:text-xl ml-2 md:ml-3">Minimum percent {{ roundUpIfHasDecimal(minimumProblems / AllProblems * 100) }}%</span>
+
+            <!-- Legend for chart -->
+            <div class="flex flex-col items-baseline w-4/5 mx-auto ">
+              <!-- Solved percentage -->
+              <div class="flex items-center">
+                <div class="bg-[#00AC47] w-6 h-4 rounded-full font-semibold"></div>
+                <span class="font-semibold md:text-xl ml-2 md:ml-3">Solved {{ roundUpIfHasDecimal(solvedProblems / AllProblems * 100) }}%</span>
+              </div>
+              <!-- Minimum percentage -->
+              <div class="flex items-center">
+                <div class="bg-[#EF4A50] w-6 h-4 rounded-full font-semibold"></div>
+                <span class="font-semibold md:text-xl ml-2 md:ml-3">Minimum percent {{ roundUpIfHasDecimal(minimumProblems / AllProblems * 100) }}%</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      }
     </div>
 
     <!-- Card for Next Practice -->
@@ -42,9 +52,9 @@
 
           <!-- Practice name -->
           @if(nextPractice == null){
-            <h2 class="text-[3rem]">
+            <p class="text-[3rem]">
               No Next Practice
-            </h2>
+            </p>
           }
           @if(nextPractice != null){
             <h2 class="text-2xl font-bold text-center md:text-start md:text-[3rem]">
