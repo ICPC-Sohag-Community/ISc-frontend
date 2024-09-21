@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import "swiper/css/bundle";
+@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
 
 ::-webkit-scrollbar {
   width: 12px !important;
@@ -119,11 +120,15 @@
   border: none;
 }
 
+.ng-select .ng-select-container,
+.ng-select.ng-select-opened .ng-select-container {
+  background-color: transparent;
+}
+
 .ng-select .ng-select-container {
   height: 100% !important;
-  border: none !important;
+  border: none;
 }
-@import "./app/pages/Leader/Components/system-filter/system-filter.component.scss";
 
 .ng-select span.ng-value-label[ng-reflect-escape="true"],
 .campName {

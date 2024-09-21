@@ -1,10 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CasheService } from '../../../../shared/services/cashe.service';
 import { StaffLeaderService } from '../../services/staff-leader.service';
 import { OnStaffInfo, StaffInfo } from '../../model/staff';
@@ -26,7 +20,6 @@ import { AuthService } from '../../../../authentication/services/auth.service';
   ],
   templateUrl: './staff-leader.component.html',
   styleUrl: './staff-leader.component.scss',
-  encapsulation: ViewEncapsulation.None,
 })
 export class StaffLeaderComponent implements OnInit {
   staffLeaderService = inject(StaffLeaderService);
