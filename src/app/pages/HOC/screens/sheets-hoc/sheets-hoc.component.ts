@@ -124,7 +124,7 @@ export class SheetsHOCComponent implements OnInit {
   }
 
   goToActionSheet(id: number): void {
-    this.router.navigate(['head_of_camp/sheets/action-session/', id]);
+    this.router.navigate(['head_of_camp/sheets/action-sheets/', id]);
   }
 
   loadMoreData(event: any): void {
@@ -187,13 +187,12 @@ export class SheetsHOCComponent implements OnInit {
   }
 
   updateOrdersMaterails(info: any): void {
-    // this.isLoadingMaterial.set(true);
     this.sheetsHOCService.updateOrdersMaterails(info).subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           // this.isLoadingMaterial.update((v) => (v = false));
         } else {
-          // this.isLoadingMaterial.update((v) => (v = false));
+          console.log('error');
         }
       },
       error: (err) => {
@@ -203,10 +202,6 @@ export class SheetsHOCComponent implements OnInit {
   }
 
   deleteMaterial(id: number): void {
-    this.deleteItem(id);
-  }
-
-  deleteItem(id: number) {
     this.isDeleted = true;
     this.sheetsHOCService.deleteMaterial(id).subscribe({
       next: ({ statusCode }) => {
@@ -224,5 +219,26 @@ export class SheetsHOCComponent implements OnInit {
         this.isDeleted = false;
       },
     });
+  }
+
+  dropSheet(event: CdkDragDrop<any[]>) {
+    // console.log(event);
+    moveItemInArray(this.dataRequest, event.previousIndex, event.currentIndex);
+    this.dataRequest.forEach((item, index) => {
+      item.data.forEach((d: any, i: any) => {
+        // item.materialOrder = index + 1;
+      });
+    });
+    // const extractedData = this.materailsSheet.map((item) => {
+    //   return {
+    //     materialId: item.id,
+    //     order: item.materialOrder,
+    //   };
+    // });
+    // const info = {
+    //   sheetId: sheetId,
+    //   materials: extractedData,
+    // };
+    // this.updateOrdersMaterails(info);
   }
 }
