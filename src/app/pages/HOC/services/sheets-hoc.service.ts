@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
@@ -53,5 +53,23 @@ export class SheetsHOCService {
       `${environment.BASE_URL}/api/Head/materials`,
       materialInfo
     );
+  }
+
+  createSheet(formData: any): Observable<ResponseHeader> {
+    const myHeaders = new HttpHeaders({
+      Accept: 'text/plain',
+    });
+    return this.http.post<any>(
+      `${environment.BASE_URL}/api/Head/sheets`,
+      formData,
+      { headers: myHeaders }
+    );
+  }
+
+  getOneSheet(id: number): Observable<ResponseHeader> {
+    return this.http.get<any>(`${environment.BASE_URL}/api/Head/sheets/${id}`);
+  }
+  updateSheet(info: any): Observable<ResponseHeader> {
+    return this.http.put<any>(`${environment.BASE_URL}/api/Head/sheets`, info);
   }
 }

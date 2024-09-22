@@ -19,6 +19,7 @@ import {
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { CampLeaderService } from '../../services/camp-leader.service';
+import { CasheService } from '../../../../shared/services/cashe.service';
 
 @Component({
   selector: 'app-actios-camp',
@@ -37,6 +38,7 @@ import { CampLeaderService } from '../../services/camp-leader.service';
 })
 export class ActiosCampComponent implements OnInit {
   campLeaderService = inject(CampLeaderService);
+  casheService = inject(CasheService);
   fb = inject(FormBuilder);
   elementRef = inject(ElementRef);
   router = inject(Router);
@@ -55,12 +57,12 @@ export class ActiosCampComponent implements OnInit {
   daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   startDays: number[] = [];
   endDays: number[] = [];
-  dropdownOpen: boolean = false;
-  dropdownOpenH: boolean = false;
   startMonthYear: string = '';
   endMonthYear: string = '';
   dateStart!: Date;
   dateEnd!: Date;
+  dropdownOpen: boolean = false;
+  dropdownOpenH: boolean = false;
 
   allMentors: { id: string; fullName: string; isInCamp?: boolean }[] = [];
   allHeadsOfCamp: { id: string; fullName: string; isInCamp: boolean }[] = [];
@@ -166,7 +168,7 @@ export class ActiosCampComponent implements OnInit {
   }
 
   toggleDropdownC(event: MouseEvent) {
-    event.stopPropagation(); // Stop event propagation to avoid closing the dropdown
+    event.stopPropagation();
     this.isCampsActive = !this.isCampsActive;
   }
 
@@ -195,9 +197,6 @@ export class ActiosCampComponent implements OnInit {
           this.selectedDayEnd = this.dateEnd.getDate();
           this.allMentors = data.mentorsOfCamp;
           this.allHeadsOfCamp = data.headsOfCamp;
-          const x = this.allMentors
-            .filter((item: any) => item.inCamp)
-            .map((item: any) => item.id);
           this.campForm.patchValue({
             id: data.id,
             name: data.name,
@@ -235,6 +234,8 @@ export class ActiosCampComponent implements OnInit {
           if (statusCode === 200) {
             this.selectedCamp = '';
             this.isLoading = false;
+            this.casheService.clearCache();
+
             this.router.navigate(['/leader/camps']);
           } else if (errors) {
             console.log(errors);
@@ -255,8 +256,9 @@ export class ActiosCampComponent implements OnInit {
         .subscribe({
           next: ({ statusCode, message, errors }) => {
             if (statusCode === 200) {
-              this.router.navigate(['/leader/camps']);
               this.isLoading = false;
+              this.casheService.clearCache();
+              this.router.navigate(['/leader/camps']);
             } else if (errors) {
               console.log(errors);
               alert(errors);

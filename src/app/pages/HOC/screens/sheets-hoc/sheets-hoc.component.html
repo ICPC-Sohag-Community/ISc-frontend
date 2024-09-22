@@ -32,21 +32,25 @@
       <thead class="sticky top-0 bg-[#f4f5f8]">
         <tr class="bg-transparent text-[#6B7088]">
           <th class="p-4 text-left">Name</th>
-          <th class="p-4">Status</th>
+          <th class="p-4 text-left">Status</th>
           <th class="p-4">Link</th>
           <th class="p-4">Edit</th>
           <th class="p-4">Delete</th>
           <th class="p-4">Materials</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody cdkDropList (cdkDropListDropped)="dropSheet($event)">
         @for (sheet of dataRequest; track $index) { @for (item of sheet.data;
         track item.id; let i = $index) {
         <tr
+          cdkDrag
+          [cdkDragData]="{ sheetId: item.id }"
           class="my-6 bg-white text-[#6B7088] text-center text-base font-medium rounded-lg"
         >
-          <td class="p-4 text-left rounded-s-lg">{{ item.name }}</td>
-          <td class="p-4">
+          <td class="p-4 text-left cursor-move rounded-s-lg">
+            {{ item.name }}
+          </td>
+          <td class="p-4 text-left">
             <span
               [ngClass]="
                 item.status === 0
@@ -289,6 +293,7 @@
                       <button
                         type="submit"
                         (click)="addMaterial()"
+                        (keydown.enter)="addMaterial()"
                         [disabled]="formMaterial.invalid"
                         class="disabled:cursor-not-allowed"
                       >
