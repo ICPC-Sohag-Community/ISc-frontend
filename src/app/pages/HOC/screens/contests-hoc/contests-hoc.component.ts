@@ -19,7 +19,7 @@ export class ContestsHOCComponent implements OnInit {
   router = inject(Router);
   allContests!: Contests;
   currentPage: number = 1;
-  pageSize: number = 10;
+  pageSize: number = 20;
   keyword: string = '';
   isLoading = signal<boolean>(false);
   showModal: boolean = false;
@@ -81,6 +81,7 @@ export class ContestsHOCComponent implements OnInit {
     const atBottom =
       element.scrollHeight - element.scrollTop === element.clientHeight;
     if (atBottom && !this.isLoading() && this.allContests?.hasNextPage) {
+      console.log('ss');
       this.getAllContests(++this.currentPage, this.pageSize);
     }
   }
