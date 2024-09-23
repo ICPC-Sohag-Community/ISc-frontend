@@ -19,7 +19,7 @@ export class SessionsHOCComponent implements OnInit {
   router = inject(Router);
   allSessions!: Sessions;
   currentPage: number = 1;
-  pageSize: number = 15;
+  pageSize: number = 10;
   keyword: string = '';
   isLoading = signal<boolean>(false);
   showModal: boolean = false;
@@ -27,10 +27,10 @@ export class SessionsHOCComponent implements OnInit {
   dataRequest: any[] = [];
 
   ngOnInit() {
-    this.getAllContests(this.currentPage, this.pageSize);
+    this.getAllSessions(this.currentPage, this.pageSize);
   }
 
-  getAllContests(
+  getAllSessions(
     currentPage: number,
     pageSize: number,
     keyword?: string
@@ -65,7 +65,7 @@ export class SessionsHOCComponent implements OnInit {
     if (confirmed && this.selectedItemId !== null) {
       this.dataRequest = [];
       this.casheService.clearCache();
-      this.getAllContests(this.allSessions?.currentPage, this.pageSize);
+      this.getAllSessions(this.allSessions?.currentPage, this.pageSize);
     }
     this.showModal = false;
   }
@@ -76,10 +76,12 @@ export class SessionsHOCComponent implements OnInit {
 
   loadMoreData(event: any): void {
     const element = event.target;
+    const bottomThreshold = 5;
     const atBottom =
-      element.scrollHeight - element.scrollTop === element.clientHeight;
+      element.scrollTop + element.clientHeight >=
+      element.scrollHeight - bottomThreshold;
     if (atBottom && !this.isLoading() && this.allSessions?.hasNextPage) {
-      this.getAllContests(++this.currentPage, this.pageSize);
+      this.getAllSessions(++this.currentPage, this.pageSize);
     }
   }
 }

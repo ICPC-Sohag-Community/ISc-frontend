@@ -19,7 +19,7 @@ export class ContestsHOCComponent implements OnInit {
   router = inject(Router);
   allContests!: Contests;
   currentPage: number = 1;
-  pageSize: number = 20;
+  pageSize: number = 10;
   keyword: string = '';
   isLoading = signal<boolean>(false);
   showModal: boolean = false;
@@ -41,8 +41,8 @@ export class ContestsHOCComponent implements OnInit {
       .subscribe({
         next: (res) => {
           if (res.statusCode === 200) {
-            console.log(res);
             this.allContests = res;
+            console.log(this.allContests);
             this.dataRequest.push(this.allContests);
 
             this.isLoading.update((v) => (v = false));
@@ -79,9 +79,8 @@ export class ContestsHOCComponent implements OnInit {
   loadMoreData(event: any): void {
     const element = event.target;
     const atBottom =
-      element.scrollHeight - element.scrollTop === element.clientHeight;
+      element.scrollHeight - element.scrollTop <= element.clientHeight + 4;
     if (atBottom && !this.isLoading() && this.allContests?.hasNextPage) {
-      console.log('ss');
       this.getAllContests(++this.currentPage, this.pageSize);
     }
   }

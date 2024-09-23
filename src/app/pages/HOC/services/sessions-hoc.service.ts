@@ -30,4 +30,24 @@ export class SessionsHOCService {
       `${environment.BASE_URL}/api/Head/sessions/${id}`
     );
   }
+
+  getOneSession(id: number): Observable<ResponseHeader> {
+    return this.http.get<any>(
+      `${environment.BASE_URL}/api/Head/sessions/${id}`
+    );
+  }
+
+  createSession(formData: any): Observable<ResponseHeader> {
+    return this.http.post<any>(
+      `${environment.BASE_URL}/api/Head/sessions`,
+      formData
+    );
+  }
+
+  updateSession(info: any): Observable<ResponseHeader> {
+    return this.http.put<any>(
+      `${environment.BASE_URL}/api/Head/sessions`,
+      info
+    );
+  }
 }
