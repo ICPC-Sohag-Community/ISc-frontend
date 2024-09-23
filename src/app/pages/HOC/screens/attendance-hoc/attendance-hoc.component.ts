@@ -64,14 +64,17 @@ export class AttendanceHOCComponent implements OnInit {
 
   loadMoreData(event: any): void {
     const element = event.target;
+    const bottomThreshold = 5;
     const atBottom =
-      element.scrollHeight - element.scrollTop === element.clientHeight;
+      element.scrollTop + element.clientHeight >=
+      element.scrollHeight - bottomThreshold;
     if (atBottom && !this.isLoading() && this.allTraniees?.hasNextPage) {
       this.getAllAttendances(++this.currentPage, this.pageSize);
     }
   }
 
   onHover(rowIndex: number, colIndex: number) {
+    console.log(rowIndex, colIndex);
     this.hoveredRow = rowIndex;
     this.hoveredCol = colIndex;
   }

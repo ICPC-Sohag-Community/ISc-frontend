@@ -38,7 +38,7 @@ export class SheetsHOCComponent implements OnInit {
   allSheets!: SheetsHoc;
   sheetId: number = 0;
   currentPage: number = 1;
-  pageSize: number = 15;
+  pageSize: number = 10;
   keyword: string = '';
   isLoading = signal<boolean>(false);
   showModal: boolean = false;
@@ -129,8 +129,10 @@ export class SheetsHOCComponent implements OnInit {
 
   loadMoreData(event: any): void {
     const element = event.target;
+    const bottomThreshold = 5;
     const atBottom =
-      element.scrollHeight - element.scrollTop === element.clientHeight;
+      element.scrollTop + element.clientHeight >=
+      element.scrollHeight - bottomThreshold;
     if (atBottom && !this.isLoading() && this.allSheets?.hasNextPage) {
       this.getAllSheets(++this.currentPage, this.pageSize);
     }

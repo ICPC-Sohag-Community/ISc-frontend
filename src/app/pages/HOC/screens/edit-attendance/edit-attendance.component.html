@@ -28,12 +28,17 @@
     </div>
   </div>
   } @else {
-  <div class="max-h-[31rem] pb-4 overflow-auto scroll-host-table">
+  <div
+    style="max-height: calc(100vh - 280px)"
+    class="pb-2 overflow-auto pe-4 scroll-host-table"
+  >
     <table class="min-w-full text-center bg-transparent rounded-lg">
       <thead class="text-lg">
         <tr class="border-b border-black bg-white text-[#6B7088]">
           <th class="p-4 text-left rounded-lg whitespace-nowrap">Name</th>
-          <th class="p-4 text-right whitespace-nowrap pe-12">Attendance</th>
+          <th class="p-4 text-right rounded-lg whitespace-nowrap pe-12">
+            Attendance
+          </th>
         </tr>
       </thead>
       <tbody>
