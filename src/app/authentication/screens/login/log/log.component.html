@@ -9,9 +9,11 @@
     <input
       required
       name="userName"
+      
+      [(ngModel)]="user"
       formControlName="userName"
       [ngClass]="
-        loginForm.controls['userName'].errors && submitted
+        userData && submitted
           ? 'border-red-400 placeholder:text-red-500'
           : 'border-gray-300 focus:border-primaryAdmin'
       "
@@ -26,11 +28,12 @@
       <input
         autocomplete="new-password"
         name="password"
+        [(ngModel)]="pass"
         formControlName="password"
         type="password"
         placeholder="Password"
         [ngClass]="
-          loginForm.controls['password'].errors && submitted
+          userData && submitted
             ? 'border-red-400 placeholder:text-red-500'
             : 'border-gray-300 focus:border-primaryAdmin'
         "
@@ -62,9 +65,9 @@
         <a routerLink="/login/forget">Forgot password ?</a>
     </div>
     
-    @if (submitted && (loginForm.controls['userName'].errors ||loginForm.controls['password'].errors) ) {
+    @if (submitted  ) {
         <div>
-          @if (loginForm.controls['userName'].errors || userData) {
+          @if (userData) {
             <div class="text-[#DC3545] text-center text-sm mt-3">
                 Username or password you entered is incorrect
             </div>

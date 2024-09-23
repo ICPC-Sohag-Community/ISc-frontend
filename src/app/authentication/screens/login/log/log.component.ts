@@ -58,7 +58,8 @@ export class LogComponent {
   //   this.passwordFieldType =
   //     this.passwordFieldType === 'password' ? 'text' : 'password';
   // }
-
+user:any = '';
+pass:any = '';
   onLogin() {
     this.submitted = true;
     this.loginForm.value.rememberMe = (<HTMLInputElement>document.getElementById('rememberMe')).checked?true:false;
@@ -85,6 +86,8 @@ export class LogComponent {
         } else {
           this.isLoading = false;
           this.userData = true;
+          this.pass = ''
+          this.user = ''
           this.authService.setIsAuth(false);
         }
       },
