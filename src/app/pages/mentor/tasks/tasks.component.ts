@@ -258,6 +258,10 @@ add(id: string,trainee: any, f:String , l:String) {
 
       this.isShow = !this.isShow
     }
+    if(id == 'add'){
+      document.getElementById('names')?.classList.add("hidden");
+      this.isShow = false;
+    }
   }
   get(id:any){
     this.isLoading = true;
