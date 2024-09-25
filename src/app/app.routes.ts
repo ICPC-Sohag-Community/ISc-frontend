@@ -56,6 +56,7 @@ import { LayoutPublicComponent } from './layouts/layout_public/layout-public.com
 import { HomePublicComponent } from './pages/public/screens/home-public/home-public.component';
 import { BlankComponent } from './pages/mentor/blank/blank.component';
 import { CampsPublicComponent } from './pages/public/screens/camps-public/camps-public.component';
+import { FormsCampsPublicComponent } from './pages/public/screens/forms-camps-public/forms-camps-public.component';
 
 
 
@@ -114,6 +115,11 @@ export const routes: Routes = [
       {
         path: 'camps',
         component: CampsPublicComponent,
+        title: 'Guest / Camps - ICPC',
+      },
+      {
+        path: 'Registration',
+        component: FormsCampsPublicComponent,
         title: 'Guest / Camps - ICPC',
       },
     ],

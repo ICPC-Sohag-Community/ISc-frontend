@@ -21,7 +21,7 @@ export class FeedbackComponent {
     // Swiper configuration options
     config1: SwiperOptions = {
       slidesPerView: 3, // Number of slides visible at a time
-      spaceBetween: 80, // Space between slides
+      spaceBetween: 110, // Space between slides
       navigation: false, // Disable built-in navigation
       pagination: { clickable: false }, // Disable clickable pagination
       scrollbar: false, // Disable scrollbar
