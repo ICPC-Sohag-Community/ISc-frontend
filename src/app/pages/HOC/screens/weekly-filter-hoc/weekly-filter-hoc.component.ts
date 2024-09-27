@@ -2,22 +2,26 @@ import { NgClass } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { WeeklyFilterService } from '../../services/weekly-filter.service';
 import { CasheService } from '../../../../shared/services/cashe.service';
+import { UsersOther, UsersWeekly } from '../../model/weekly';
+import { ConfirmDeleteHocComponent } from '../../components/confirm-delete-hoc/confirm-delete-hoc.component';
 
 @Component({
   selector: 'app-weekly-filter-hoc',
   standalone: true,
-  imports: [NgClass],
+  imports: [NgClass, ConfirmDeleteHocComponent],
   templateUrl: './weekly-filter-hoc.component.html',
   styleUrl: './weekly-filter-hoc.component.scss',
 })
 export class WeeklyFilterHOCComponent implements OnInit {
   weeklyFilterService = inject(WeeklyFilterService);
   casheService = inject(CasheService);
-  filterData: any;
-  otherData: any;
+  filterData!: UsersWeekly[];
+  otherData!: UsersOther[];
   isLoading = signal<boolean>(false);
   activeTab: string = 'tab1';
-  selectedIds: number[] = [];
+  selectedUsers: Set<string> = new Set();
+  showModal: boolean = false;
+  selectedItemId: string | null = null;
 
   ngOnInit() {
     this.getToFilter();
@@ -26,9 +30,9 @@ export class WeeklyFilterHOCComponent implements OnInit {
   getToFilter(): void {
     this.isLoading.set(true);
     this.weeklyFilterService.getToFilter().subscribe({
-      next: (res) => {
-        if (res.statusCode === 200) {
-          this.filterData = res;
+      next: ({ data, statusCode }) => {
+        if (statusCode === 200) {
+          this.filterData = data;
           this.isLoading.update((v) => (v = false));
         } else {
           this.isLoading.update((v) => (v = false));
@@ -41,30 +45,75 @@ export class WeeklyFilterHOCComponent implements OnInit {
     });
   }
 
-  toggleItem(id: number, event: Event): void {
-    const isChecked = (event.target as HTMLInputElement).checked;
-    if (isChecked) {
-      if (!this.selectedIds.includes(id)) {
-        this.selectedIds.push(id);
-      }
+  getOthers(traineesIds: any): void {
+    this.isLoading.set(true);
+    this.weeklyFilterService.getOthers(traineesIds).subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.otherData = data;
+          this.isLoading.update((v) => (v = false));
+        } else {
+          this.isLoading.update((v) => (v = false));
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this.isLoading.update((v) => (v = false));
+      },
+    });
+  }
+
+  toggleSelection(userId: string) {
+    if (this.selectedUsers.has(userId)) {
+      this.selectedUsers.delete(userId);
     } else {
-      this.selectedIds = this.selectedIds.filter(
-        (selectedId) => selectedId !== id
-      );
+      this.selectedUsers.add(userId);
     }
-    console.log(this.selectedIds);
+  }
+
+  isSelected(userId: string): boolean {
+    return this.selectedUsers.has(userId);
+  }
+
+  removeUnselectedUsers(): void {
+    console.log(this.selectedUsers);
+    const traineesId = Array.from(this.selectedUsers);
+    this.weeklyFilterService.getOthers(traineesId).subscribe({
+      next: ({ statusCode }) => {
+        if (statusCode === 200) {
+          this.filterData = this.filterData.filter((user) =>
+            this.selectedUsers.has(user.id)
+          );
+          this.selectedUsers.clear();
+        } else {
+          console.log('error');
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+
+  showConfirmDelete(id: string) {
+    this.selectedItemId = id;
+    this.showModal = true;
+  }
+
+  handleClose(confirmed: boolean) {
+    console.log(confirmed);
+    if (confirmed && this.selectedItemId !== null) {
+      const idsOfTrainees = this.filterData.map((t) => t.id);
+      this.getOthers(idsOfTrainees);
+    }
+    this.showModal = false;
   }
 
   selectTab(tab: string) {
     this.activeTab = tab;
-
     if (this.activeTab !== 'tab1') {
-      // this.staffArchiveWithPagination(
-      //   1,
-      //   10,
-      //   this.keywordSearch,
-      //   this.sortbyNum
-      // );
+      const idsOfTrainees = this.filterData.map((t) => t.id);
+      this.getOthers(idsOfTrainees);
     } else {
       this.getToFilter();
     }
