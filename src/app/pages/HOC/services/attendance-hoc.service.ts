@@ -1,10 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { CasheService } from '../../../shared/services/cashe.service';
 import { ResponseHeader } from '../../../shared/model/responseHeader';
-import { SessionAttendance } from '../model/attenances-hoc';
 @Injectable({
   providedIn: 'root',
 })

@@ -50,7 +50,6 @@ export class StaffLeaderComponent implements OnInit {
     });
 
     this.staffWithPagination(1, 10, this.keywordSearch, this.sortbyNum);
-    // this.getStaffById('0b645888-170b-49d5-80c4-653fd4612377');
   }
 
   staffWithPagination(
