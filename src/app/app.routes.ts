@@ -28,8 +28,6 @@ import { SheetsTraineeComponent } from './pages/Trainee/screens/sheets-trainee/s
 import { ContestTraineeComponent } from './pages/Trainee/screens/contest-trainee/contest-trainee.component';
 import { LoginLayoutComponent } from './layouts/login/login-layout/login-layout.component';
 
-
-
 import { ReportsLeaderComponent } from './pages/Leader/screens/reports-leader/reports-leader.component';
 import { RequestsLeaderComponent } from './pages/Leader/screens/requests-leader/requests-leader.component';
 
@@ -58,8 +56,6 @@ import { BlankComponent } from './pages/mentor/blank/blank.component';
 import { CampsPublicComponent } from './pages/public/screens/camps-public/camps-public.component';
 import { FormsCampsPublicComponent } from './pages/public/screens/forms-camps-public/forms-camps-public.component';
 
-
-
 export const routes: Routes = [
   // Trainee Pages
   {
@@ -71,8 +67,8 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo:'home',
-        pathMatch:'full'
+        redirectTo: 'home',
+        pathMatch: 'full',
       },
       {
         path: 'home',
@@ -96,26 +92,28 @@ export const routes: Routes = [
       },
     ],
   },
+
+  // Main Home Page
   {
-    path: 'guest',
+    path: '',
     title: 'ICPC',
     component: LayoutPublicComponent,
-
+    canActivate: [rolesGuard],
     children: [
       {
         path: '',
-        redirectTo:'home',
-        pathMatch:'full'
+        redirectTo: '',
+        pathMatch: 'full',
       },
       {
-        path: 'home',
+        path: '',
         component: HomePublicComponent,
-        title: 'Guest / Home - ICPC',
+        title: 'Home - ICPC',
       },
       {
         path: 'camps',
         component: CampsPublicComponent,
-        title: 'Guest / Camps - ICPC',
+        title: 'Camps - ICPC',
       },
       {
         path: 'Registration',
@@ -354,9 +352,6 @@ export const routes: Routes = [
     component: OtpComponent,
     canActivate: [authGuardLoggdIn],
     title: 'OTP',
-    children: [
-
-    ],
-  }
-]
-
+    children: [],
+  },
+];
