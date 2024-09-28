@@ -1,28 +1,9 @@
 import { NgClass } from '@angular/common';
-import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AssignHocService } from '../../services/assign-hoc.service';
+import { Mentor, Trainee } from '../../model/assign-hoc';
 
-interface Trainee {
-  id: string;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  photoUrl: string;
-  college: number;
-  gender: number;
-  grade: number;
-}
-
-interface Mentor {
-  id: string;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  college: number;
-  grade: number;
-  trainees: Trainee[];
-}
 @Component({
   selector: 'app-assign-hoc',
   standalone: true,
@@ -41,6 +22,7 @@ export class AssignHOCComponent implements OnInit {
   keywordSearch: string = '';
   sortbyNum: number = 0 | 1 | 2;
   focusOrder: boolean = false;
+  isSelectedMentor: boolean = false;
 
   ngOnInit() {
     this.getAllAssignMentors();
@@ -48,7 +30,13 @@ export class AssignHOCComponent implements OnInit {
   }
 
   handleSelectMentor(mentor: any): void {
-    this.selectedMentor = mentor;
+    this.isSelectedMentor = !this.isSelectedMentor;
+    if (this.isSelectedMentor) {
+      this.selectedMentor = mentor;
+    } else {
+      this.selectedMentor = null;
+    }
+    console.log(this.selectedMentor);
   }
 
   getAllAssignTrainees(SortBy?: number, KeyWord?: string): void {
@@ -74,7 +62,6 @@ export class AssignHOCComponent implements OnInit {
     this.assignHocService.getAllAssignMentors().subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
-          console.log(this.allMentor);
           this.allMentor = data;
           this.isLoading2.update((v) => (v = false));
         } else {
@@ -137,15 +124,5 @@ export class AssignHOCComponent implements OnInit {
   onSearchInput(event: any): void {
     this.keywordSearch = event.target.value;
     this.getAllAssignTrainees(this.sortbyNum, this.keywordSearch);
-  }
-
-  @HostListener('document:click', ['$event'])
-  handleClickOutside(event: Event) {
-    const clickedElement = event.target as HTMLElement;
-
-    const mentorTable = document.querySelector('.mentor-table');
-    if (mentorTable && !mentorTable.contains(clickedElement)) {
-      this.selectedMentor = null;
-    }
   }
 }

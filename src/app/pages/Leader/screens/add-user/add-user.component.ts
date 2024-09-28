@@ -134,6 +134,7 @@ export class AddUserComponent implements OnInit {
         if (statusCode === 200) {
           debugger;
           alert('done');
+          this.selectedCamp = '';
           this.formDir.resetForm();
           this.isLoading = false;
         } else if (errors) {

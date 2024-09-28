@@ -134,16 +134,12 @@
           @for (mentor of allMentor; track $index) {
           <tr
             (click)="handleSelectMentor(mentor)"
-            [ngClass]="
-              selectedMentor?.id === mentor.id ? 'border-2 border-blue-500' : ''
-            "
+            [ngClass]="isSelectedMentor ? 'border-2 border-blue-500' : ''"
             class="my-6 text-base font-medium text-black bg-white rounded-lg"
           >
             <td
               [ngClass]="
-                selectedMentor?.id === mentor.id
-                  ? 'border-2 border-r-0 border-blue-500'
-                  : ''
+                isSelectedMentor ? 'border-2 border-r-0 border-blue-500' : ''
               "
               class="p-4 rounded-s-lg"
             >
@@ -157,7 +153,7 @@
             <td
               [ngClass]="{
                   '!visible border-2 border-l-0 border-blue-500': selectedMentor === mentor,
-                  'pt-[53px] ': selectedMentor === mentor && mentor.trainees.length === 0,
+                  'pt-[53px] ': isSelectedMentor && mentor.trainees.length === 0,
               }"
               class="flex items-center invisible justify-end p-4 py-[22px] rounded-e-lg gap-x-2"
             >
