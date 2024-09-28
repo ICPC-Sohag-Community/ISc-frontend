@@ -46,10 +46,15 @@ export class LogComponent {
     });
   }
 
+
   togglePasswordVisibility(): void {
     this.passwordFieldType =
       this.passwordFieldType === 'password' ? 'text' : 'password';
   }
+
+
+user:any = '';
+pass:any = '';
 
   onLogin() {
     this.submitted = true;
@@ -76,6 +81,7 @@ export class LogComponent {
         } else {
           this.isLoading = false;
           this.userData = true;
+
           this.error = message;
           this.authService.setIsAuth(false);
         }

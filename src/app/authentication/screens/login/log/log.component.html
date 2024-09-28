@@ -9,9 +9,11 @@
     <input
       required
       name="userName"
+      
+      [(ngModel)]="user"
       formControlName="userName"
       [ngClass]="
-        loginForm.controls['userName'].errors && submitted
+        userData && submitted
           ? 'border-red-400 placeholder:text-red-500'
           : 'border-gray-300 focus:border-primaryAdmin'
       "
@@ -26,11 +28,12 @@
       <input
         autocomplete="new-password"
         name="password"
+        [(ngModel)]="pass"
         formControlName="password"
         type="password"
         [placeholder]="passwordFieldType"
         [ngClass]="
-          loginForm.controls['password'].errors && submitted
+          userData && submitted
             ? 'border-red-400 placeholder:text-red-500'
             : 'border-gray-300 focus:border-primaryAdmin'
         "
@@ -67,7 +70,6 @@
             fill="white"
           />
         </svg>
-
         }
       </button>
     </div>
