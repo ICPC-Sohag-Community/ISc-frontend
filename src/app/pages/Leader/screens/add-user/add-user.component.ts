@@ -17,6 +17,7 @@ import {
 import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { DashboardService } from '../../services/dashboard.service';
 import { NgClass } from '@angular/common';
+import { CasheService } from '../../../../shared/services/cashe.service';
 
 @Component({
   selector: 'app-add-user',
@@ -27,6 +28,7 @@ import { NgClass } from '@angular/common';
 })
 export class AddUserComponent implements OnInit {
   dashboardService = inject(DashboardService);
+  casheService = inject(CasheService);
   fb = inject(FormBuilder);
   allRoles: { id: number; name: string }[] = [];
   allCollega: { id: number; name: string }[] = [];
@@ -117,12 +119,17 @@ export class AddUserComponent implements OnInit {
     formdata.append('BirthDate', this.addUserForm.value.birthDate);
     formdata.append('PhoneNumber', this.addUserForm.value.phoneNumber);
     formdata.append('College', this.addUserForm.value.college);
-    formdata.append('CodeForceHandle', this.addUserForm.value.codeForceHandle); ///
+    formdata.append('CodeForceHandle', this.addUserForm.value.codeForceHandle);
     formdata.append('Grade', this.addUserForm.value.grade);
     formdata.append('Gender', this.addUserForm.value.gender);
-    formdata.append('ProfileImage', this.imgFile);
     if (this.addUserForm.value.vjudgeHandle !== null) {
       formdata.append('VjudgeHandle', this.addUserForm.value.vjudgeHandle); ///
+    }
+    if (
+      this.addUserForm.value.ProfileImage !== null ||
+      this.addUserForm.value.ProfileImage !== undefined
+    ) {
+      formdata.append('ProfileImage', this.imgFile);
     }
     formdata.append('CampId', this.addUserForm.value.campId);
     formdata.append('Role', this.addUserForm.value.role);
@@ -132,8 +139,8 @@ export class AddUserComponent implements OnInit {
     this.dashboardService.createAccount(formdata).subscribe({
       next: ({ statusCode, message, errors }) => {
         if (statusCode === 200) {
-          debugger;
           alert('done');
+          this.casheService.clearCache();
           this.selectedCamp = '';
           this.formDir.resetForm();
           this.isLoading = false;
@@ -245,7 +252,6 @@ export class AddUserComponent implements OnInit {
   }
 
   toggleDropdownC(collegaSelect: NgSelectComponent) {
-    debugger;
     if (this.foucsCollega) {
       collegaSelect.close();
     } else {
@@ -254,7 +260,6 @@ export class AddUserComponent implements OnInit {
     this.foucsCollega = !this.foucsCollega;
   }
   toggleDropdownR(roleSelect: NgSelectComponent) {
-    debugger;
     if (this.foucsRole) {
       roleSelect.close();
     } else {

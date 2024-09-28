@@ -43,7 +43,6 @@ export class AuthService {
       .pipe(
         tap(({ statusCode, data }: ResponseHeader) => {
           if (statusCode === 200) {
-            debugger;
             this.doLoggedUser(data);
           }
         })
