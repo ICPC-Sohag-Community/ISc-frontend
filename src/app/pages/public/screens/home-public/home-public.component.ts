@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { FoundersComponent } from "../../Components/Home-Components/founders/founders.component";
 import { CoachesComponent } from "../../Components/Home-Components/coaches/coaches.component";
 import { FeedbackComponent } from "../../Components/Home-Components/feedback/feedback.component";
+import { RouterLink } from '@angular/router';
+import { HomeService } from '../../Services/home.service';
 
 declare var $: any;
 
@@ -19,12 +21,36 @@ declare var $: any;
     CommonModule,
     FoundersComponent,
     CoachesComponent,
-    FeedbackComponent
+    FeedbackComponent,
+    RouterLink,
+    CommonModule
 ],
   templateUrl: './home-public.component.html',
   styleUrls: ['./home-public.component.scss']
 })
 export class HomePublicComponent  {
+  public homeService = inject(HomeService);
+
+  show:boolean=true
+
+  hidden():void{
+    this.show=!this.show
+  }
+  ngOnInit(): void {
+    this.getBoolean()
+  }
+
+
+  getBoolean():void{
+    this.homeService.anyOpenCamps().subscribe({
+      next:({statusCode,data})=>{
+        if(statusCode===200){
+          this.show=data
+        }
+      }
+    })
+  }
+
 
 }
 

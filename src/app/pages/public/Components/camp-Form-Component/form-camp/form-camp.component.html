@@ -3,20 +3,20 @@
     <img ngSrc="assets/img_public/Register_img/Decore.svg" width="700" height="700"  class="w-full">
   </div>
   <div class="content">
-    <form class="reg-form">
+    <form class="reg-form"  [formGroup]="registerForm">
       <h2>Personal Information</h2>
 
       <div class="form-elment">
         <label for="FN">First name <sup>*</sup></label>
-        <input type="text" id="FN">
+        <input type="text" id="FN" formControlName="FirstName">
       </div>
       <div class="form-elment">
         <label for="MN">Middle name <sup>*</sup></label>
-        <input type="text" id="MN">
+        <input type="text" id="MN" formControlName="MiddleName">
       </div>
       <div class="form-elment">
         <label for="LN">Last name <sup>*</sup></label>
-        <input type="text" id="LN">
+        <input type="text" id="LN" formControlName="LastName">
       </div>
       <div class="form-elment">
         <div class="flex flex-col">
@@ -25,13 +25,13 @@
             <input
               #startDateInput
               type="text"
-              formControlName="startDate"
-              class="relative block w-full px-4 cursor-pointer py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+              formControlName="BirthDate"
+              class="rblock w-full px-4 cursor-pointer py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
               readonly
             />
             <div
               #calendar
-              class="absolute left-0 z-[1200] hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
+              class="absolute left-0 z-[1200] hidden p-4 mt-2 w-[370px] bg-white border border-gray-200 rounded-md shadow-lg"
             >
               <div class="flex items-center justify-between mb-2">
                 <button
@@ -94,7 +94,7 @@
       </div>
       <div class="form-elment">
         <label for="ID">National Id <sup>*</sup></label>
-        <input type="text" id="ID">
+        <input type="text" id="ID" formControlName="NationalId">
       </div>
       <div class="form-elment">
         <label for="sex">Gender<sup>*</sup></label>
@@ -105,12 +105,13 @@
               [closeOnSelect]="true"
               bindLabel="name"
               bindValue="id"
+              formControlName="Gender"
               placeholder="Select gender"
               (click)="toggleDropdownGender(genderSelect)"
               class="relative block text-lg h-[44px] mt-[12px] text-black border w-[93%] border-[#00000033] rounded-lg appearance-none focus:outline-none"
             >
-              <ng-option [value]="1">Male</ng-option>
-              <ng-option [value]="2"> Female </ng-option>
+              <ng-option [value]="0">Male</ng-option>
+              <ng-option [value]="1"> Female </ng-option>
             </ng-select>
             <button
               (click)="toggleDropdownGender(genderSelect)"
@@ -139,13 +140,15 @@
       </div>
       <div class="form-elment">
         <label for="PI">Profile Image</label>
-        <input type="file" id="PI" class="hidden">
+        <input type="file" id="PI" class="hidden" (change)="onFileSelected($event)" accept="image/*"/>
        <div class="border rounded-lg h-[44px] mt-[12px] flex items-center justify-between w-[93%] border-[#00000033] px-2">
-        <span class="bg-[#3c8fc5] px-2 py-1 text-white rounded-lg">
-          selected img
-        </span>
+        <div>
+          <span class="bg-[#3c8fc5] px-2 py-1 text-white rounded-lg" *ngIf="fileName">
+            {{fileName}}
+          </span>
+        </div>
         <label for="PI" class="flex bg-[#3D91C7] w-fit px-2 py-1 rounded-lg text-white logo items-center cursor-pointer">
-          <img src="assets/img_public/Register_img/send-square.svg" class="mr-2">Choose file
+          <img src="../../../../../../assets/img_public/Register_img/send-square.svg" class="mr-2">Choose file
         </label>
         </div>
       </div>
@@ -157,14 +160,18 @@
               #collageSelect
               [closeOnSelect]="true"
               bindLabel="name"
-              bindValue="id"
               placeholder="Select Collage"
+              formControlName="College"
               (click)="toggleDropdownC(collageSelect)"
               class="relative block text-lg h-[44px] mt-[12px] text-black border w-[93%] border-[#00000033] rounded-lg appearance-none focus:outline-none"
             >
-              <ng-option [value]="1">Alexandria</ng-option>
-              <ng-option [value]="2"> Damanhour </ng-option>
-              <ng-option [value]="3"> Sohag </ng-option>
+              <ng-option [value]="0">Computer and Ai</ng-option>
+              <ng-option [value]="1"> EELU </ng-option>
+              <ng-option [value]="2"> Science </ng-option>
+              <ng-option [value]="3"> Engineering </ng-option>
+              <ng-option [value]="4"> Commerce </ng-option>
+              <ng-option [value]="5"> Law </ng-option>
+              <ng-option [value]="6"> Others </ng-option>
             </ng-select>
             <button
               (click)="toggleDropdownC(collageSelect)"
@@ -192,7 +199,7 @@
         </div>
       </div>
       <div class="form-elment">
-        <label for="grade">Grade<sup>*</sup></label>
+        <label for="grade">Year<sup>*</sup></label>
         <div class="flex flex-col basis-1/3">
           <div class="relative">
             <ng-select
@@ -201,14 +208,15 @@
               bindLabel="name"
               bindValue="id"
               placeholder="Select Grade"
+              formControlName="Grade"
               (click)="toggleDropdownG(gradeSelect)"
               class="relative block text-lg h-[44px] mt-[12px] text-black border w-[93%] border-[#00000033] rounded-lg appearance-none focus:outline-none"
             >
-              <ng-option [value]="1">A</ng-option>
-              <ng-option [value]="2">B</ng-option>
-              <ng-option [value]="3">C</ng-option>
-              <ng-option [value]="3">D</ng-option>
-              <ng-option [value]="3">F</ng-option>
+              <ng-option [value]="1">First</ng-option>
+              <ng-option [value]="2">Second</ng-option>
+              <ng-option [value]="3">Third</ng-option>
+              <ng-option [value]="4">Forth</ng-option>
+              <ng-option [value]="5">Fifth</ng-option>
             </ng-select>
             <button
               (click)="toggleDropdownG(gradeSelect)"
@@ -240,35 +248,35 @@
 
       <div class="form-elment">
         <label for="EM">Email<sup>*</sup></label>
-        <input type="text" id="EM">
+        <input type="text" id="EM" formControlName="Email">
       </div>
       <div class="form-elment">
         <label for="PN">Phone number<sup>*</sup></label>
-        <input type="tel" id="PN">
+        <input type="tel" id="PN" formControlName="PhoneNumber">
       </div>
       <div class="form-elment">
         <label for="FBL">Facebook Link</label>
-        <input type="url" id="FBL">
+        <input type="url" id="FBL" formControlName="FacebookLink">
       </div>
       <div class="form-elment OTP">
           <label for="OTP">OTP <sup>*</sup></label>
           <div class="flex items-center">
-            <input type="text" id="OTP" class="custom-input">
+            <input type="text" id="OTP" formControlName="otp">
         </div>
       </div>
       <div class="otp-btn self-end">
-        <button class="w-fit mb-[12px] bg-[#3D91C7] px-5 py-2 text-white rounded-lg">Send OTP</button>
+        <button class="w-fit mb-[12px] bg-[#3D91C7] px-5 py-2 text-white rounded-lg" (click)="sendOTP()">Send OTP</button>
       </div>
 
       <h2>Online Profiles</h2>
 
       <div class="form-elment">
         <label for="codeH">CodeForce Handle<sup>*</sup></label>
-        <input type="text" id="codeH">
+        <input type="text" id="codeH" formControlName="CodeForceHandle">
       </div>
       <div class="form-elment">
         <label for="vjH">Vjudge Handle</label>
-        <input type="text" id="vjH">
+        <input type="text" id="vjH" formControlName="VjudgeHandle">
       </div>
 
       <h2>Additional Information</h2>
@@ -282,13 +290,13 @@
               bindLabel="name"
               bindValue="id"
               placeholder="Select camp"
+              formControlName="CampId"
               (click)="toggleDropdownCamp(campSelect)"
               class="relative block text-lg h-[44px] mt-[12px] text-black border w-[93%] border-[#00000033] rounded-lg appearance-none focus:outline-none"
             >
-              <ng-option [value]="1">Camp 1</ng-option>
-              <ng-option [value]="2">Camp 2</ng-option>
-              <ng-option [value]="3">Camp 3</ng-option>
-              <ng-option [value]="4">Camp 4</ng-option>
+              @for (camp of allCamps; track $index) {
+              <ng-option [value]="camp.id">{{camp.name}}</ng-option>
+              }
             </ng-select>
             <button
               (click)="toggleDropdownCamp(campSelect)"
@@ -325,11 +333,12 @@
               bindLabel="name"
               bindValue="id"
               placeholder="Select lap"
+              formControlName="HasLaptop"
               (click)="toggleDropdownL(lapSelect)"
               class="relative block text-lg h-[44px] mt-[12px] text-black border w-[93%] border-[#00000033] rounded-lg appearance-none focus:outline-none"
             >
-              <ng-option [value]="1">Yes</ng-option>
-              <ng-option [value]="2">No</ng-option>
+              <ng-option [value]="true">Yes</ng-option>
+              <ng-option [value]="false">No</ng-option>
             </ng-select>
             <button
               (click)="toggleDropdownL(lapSelect)"
@@ -360,9 +369,13 @@
         <label for="comment">Any Comment</label>
         <textarea type="text" id="comment" cols="180" rows="5"
         class="focus:outline-none border w-[62.7%] min-h-40 max-h-40 rounded-lg border-[#00000033] p-1 mt-3"
+        formControlName="Comment"
         ></textarea>
       </div>
-      <button type="submit" class="bg-[#3D91C7] py-[7px] px-[85px] rounded-lg text-white mx-auto mt-16">Apply now</button>
+      <button type="submit" (click)="onSubmit()" class="bg-[#3D91C7] py-[7px] px-[85px] rounded-lg text-white mx-auto mt-16">Apply now</button>
     </form>
+    <p class="text-[#2fca2f] text-center mt-2" *ngIf="show">{{succssesMessage}}</p>
+    <p class="text-[#ca342f] text-center mt-2" *ngIf="show">{{errorMessage}}</p>
+
   </div>
 </section>
