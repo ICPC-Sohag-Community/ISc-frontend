@@ -17,7 +17,7 @@
          </button>
        </div>
        <!-- Swiper Component -->
-       <swiper [config]="config1" (swiper)="onSwiper($event)">
+       <swiper [config]="config1" (swiper)="onSwiper($event)" [pagination]="false">
          <!-- Loop through incoming contests and create a slide for each -->
          <ng-template swiperSlide >
 

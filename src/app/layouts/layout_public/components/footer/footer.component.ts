@@ -9,4 +9,10 @@ import { Component } from '@angular/core';
 })
 export class FooterComponent {
 
+
+
+
+  openUrl(url:string):void{
+    window.open(url)
+  }
 }
