@@ -3,12 +3,14 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
+import { ResponseHeader } from '../../shared/model/responseHeader';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   http = inject(HttpClient);
+  router = inject(Router);
 
   // Varibles
   currentUser = signal<any>(null);
@@ -18,7 +20,7 @@ export class AuthService {
   private readonly IS_AUTH = 'IS_AUTH';
   private readonly CURRENT_USER = 'CURRENT_USER';
 
-  constructor(private router: Router) {
+  constructor() {
     const savedIsAuth = localStorage.getItem(this.IS_AUTH);
     this.isAuth.set(savedIsAuth ? JSON.parse(savedIsAuth) : false);
 
@@ -32,49 +34,34 @@ export class AuthService {
 
   // Login Fun.
   loginUser(userBody: {
-    userNameuserName: string;
+    username: string;
     password: string;
     rememberMe: boolean;
   }): Observable<any> {
     return this.http
       .post<any>(`${environment.BASE_URL}/api/Auth/login`, userBody)
       .pipe(
-        tap((res: any) => {
-          if (res.statusCode === 200) {
-           if(userBody.rememberMe){
-            this.doLoggedUser(res.data.token, res.data);
-           }
-           else{
-            this.setCurrentUser(res.data);
-            this.setTokenrem(res.data.token);
-           }
+        tap(({ statusCode, data }: ResponseHeader) => {
+          if (statusCode === 200) {
+            debugger;
+            this.doLoggedUser(data);
           }
         })
       );
   }
 
   // fun to store token of the user in localStorage and user data
-  private doLoggedUser(token: string, userData: any) {
-    this.setToken(token);
+  doLoggedUser(userData: any) {
+    this.setToken(userData.token);
     this.setCurrentUser(userData);
   }
 
   getToken(): string {
-    const tokenKey = 'JWT_TOKEN'; // Define the key used to store the token
-    
-    const token = localStorage.getItem(tokenKey) || sessionStorage.getItem(tokenKey);
-    
-    return token ? token : ''; // If token is null or undefined, return an empty string
+    return localStorage.getItem(this.JWT_TOKEN) || '';
   }
-  
 
   private setToken(token: string): void {
     localStorage.setItem(this.JWT_TOKEN, token);
-    sessionStorage.setItem(this.JWT_TOKEN, token);
-  }
-  private setTokenrem(token: string): void {
-    
-    sessionStorage.setItem(this.JWT_TOKEN, token);
   }
 
   // Is LoggedIn
@@ -107,36 +94,9 @@ export class AuthService {
 
   // LogOut Fun.
   logout() {
-    // localStorage.removeItem(this.JWT_TOKEN);
-    // localStorage.removeItem(this.CURRENT_USER);
+    localStorage.removeItem(this.JWT_TOKEN);
+    localStorage.removeItem(this.CURRENT_USER);
     this.setIsAuth(false);
-    localStorage.clear();
-    this.router.navigateByUrl('/login');
-  }
-
-  // Register Fun.
-  createUser(userBody: any): Observable<any> {
-    return this.http.post<any>(
-      `${environment.BASE_URL}/api/Authentication/Register`,
-      userBody
-    );
-  }
-
-  sendConfirmationEmail(email: any): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const params = new HttpParams().set('email', email);
-    return this.http.post(
-      `${environment.BASE_URL}/api/Authentication/SendConfirmationEmail`,
-      null,
-      { headers: headers, params: params }
-    );
-  }
-  checkEmailConfirmOtp(email: string, otp: number): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const params = new HttpParams().set('email', email).set('otp', otp);
-    return this.http.get<any>(
-      `${environment.BASE_URL}/api/Authentication/CheckEmailConfirmOtp`,
-      { headers: headers, params: params }
-    );
+    this.router.navigateByUrl('/');
   }
 }

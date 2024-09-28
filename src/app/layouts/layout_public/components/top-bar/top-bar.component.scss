@@ -1,5 +1,5 @@
-li{
-  a{
+li {
+  a {
     font-family: Inter;
     font-size: 1rem;
     font-weight: 800;
@@ -8,20 +8,19 @@ li{
     color: white;
   }
 }
-.login-btn{
+.login-btn {
   font-family: Inter;
   font-size: 17px;
   font-weight: 700;
   line-height: 20.57px;
   text-align: left;
-  // border: 4px solid;
-  // border-image-source: linear-gradient(90deg, #3D91C7 0%, #E69C24 50%, #EF4A50 100%);
-//   border-image-slice:1;
-//   position: relative;
-//   background: linear-gradient(rgba(0, 0, 0, 0.303), rgba(0, 0, 0, 0.314)) padding-box,
-//    linear-gradient(90deg, #3D91C7 0%, #E69C24 50%, #EF4A50 100%) border-box;
-// border-radius: 10px;
-// border: 4px solid transparent;
+  border-image-slice: 1;
+
+  background: linear-gradient(#474847 0 0) padding-box,
+    linear-gradient(90deg, #3d91c7 0%, #e69c24 50%, #ef4a50 100%) border-box;
+
+  // border-radius: 10px;
+  border: 4px solid transparent;
+  border-radius: 15px;
+  overflow: hidden;
 }
-
-
