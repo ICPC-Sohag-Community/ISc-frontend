@@ -46,15 +46,11 @@ export class LogComponent {
     });
   }
 
-
   togglePasswordVisibility(): void {
     this.passwordFieldType =
       this.passwordFieldType === 'password' ? 'text' : 'password';
+    console.log(this.passwordFieldType);
   }
-
-
-user:any = '';
-pass:any = '';
 
   onLogin() {
     this.submitted = true;

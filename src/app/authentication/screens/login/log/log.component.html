@@ -9,8 +9,6 @@
     <input
       required
       name="userName"
-      
-      [(ngModel)]="user"
       formControlName="userName"
       [ngClass]="
         userData && submitted
@@ -26,12 +24,12 @@
       class="relative focus:outline-white justify-between flex py-2 px-3 border border-white rounded-[12px]"
     >
       <input
+        [type]="passwordFieldType"
         autocomplete="new-password"
         name="password"
-        [(ngModel)]="pass"
         formControlName="password"
         type="password"
-        [placeholder]="passwordFieldType"
+        placeholder="password"
         [ngClass]="
           userData && submitted
             ? 'border-red-400 placeholder:text-red-500'
