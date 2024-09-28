@@ -110,8 +110,8 @@
               (click)="toggleDropdownGender(genderSelect)"
               class="relative block text-lg h-[44px] mt-[12px] text-black border w-[93%] border-[#00000033] rounded-lg appearance-none focus:outline-none"
             >
-              <ng-option [value]="1">Male</ng-option>
-              <ng-option [value]="2"> Female </ng-option>
+              <ng-option [value]="0">Male</ng-option>
+              <ng-option [value]="1"> Female </ng-option>
             </ng-select>
             <button
               (click)="toggleDropdownGender(genderSelect)"
@@ -148,7 +148,7 @@
           </span>
         </div>
         <label for="PI" class="flex bg-[#3D91C7] w-fit px-2 py-1 rounded-lg text-white logo items-center cursor-pointer">
-          <img src="assets/img_public/Register_img/send-square.svg" class="mr-2">Choose file
+          <img src="../../../../../../assets/img_public/Register_img/send-square.svg" class="mr-2">Choose file
         </label>
         </div>
       </div>
@@ -374,5 +374,8 @@
       </div>
       <button type="submit" (click)="onSubmit()" class="bg-[#3D91C7] py-[7px] px-[85px] rounded-lg text-white mx-auto mt-16">Apply now</button>
     </form>
+    <p class="text-[#2fca2f] text-center mt-2" *ngIf="show">{{succssesMessage}}</p>
+    <p class="text-[#ca342f] text-center mt-2" *ngIf="show">{{errorMessage}}</p>
+
   </div>
 </section>

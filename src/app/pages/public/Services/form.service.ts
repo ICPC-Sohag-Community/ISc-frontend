@@ -18,15 +18,10 @@ export class FormService {
         'Content-Type':'application/json'
       })
       return this.http.post(environment.BASE_URL + `/api/Auth/sendConfirmOtp`,
-        JSON.stringify(model),
+             JSON.stringify(model),
              {headers:myHeaders})
     }
     applyForm(model:any):Observable<any>{
-      // const myHeaders = new HttpHeaders({
-      //   'Content-Type':'text/plain'
-      // })
-      // console.log(model);
-
       return this.http.post(environment.BASE_URL + `/api/Auth/traineeRegister`,
              model)
     }

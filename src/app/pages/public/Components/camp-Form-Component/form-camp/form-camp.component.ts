@@ -49,7 +49,11 @@ export class FormCampComponent {
   selectedDayEnd: number | null | any = null;
   selectedDate: number | null | any = null;
   fileName: string = '';
-  allCamps:Camp[]=[]
+  succssesMessage: string = '';
+  errorMessage: string = '';
+  allCamps:Camp[]=[];
+  selectedFile: File | null = null;
+
 
 
   genderTerm: boolean = false;
@@ -57,6 +61,8 @@ export class FormCampComponent {
   gradeTerm: boolean = false;
   campTerm: boolean = false;
   lapTerm: boolean = false;
+  show: boolean = false;
+
 
   registerForm:FormGroup= new FormGroup({
     FirstName:new FormControl(null,[Validators.required]),
@@ -97,16 +103,12 @@ export class FormCampComponent {
   }
 
   onSubmit() {
-    console.log(this.registerForm.value);
-
     if (this.registerForm.valid) {
       const formData = new FormData();
 
-      // Loop through all the form controls and append them to the FormData object
       Object.keys(this.registerForm.controls).forEach((key) => {
       const value = this.registerForm.get(key)?.value;
 
-      // Check if the field is a file input, handle it separately
       if (key === 'Photo' && value) {
         formData.append(key, value); // Assuming `value` is a File object
       } else {
@@ -115,27 +117,27 @@ export class FormCampComponent {
     });
 
       this._form.applyForm(formData).subscribe({
-        next:({statusCode,data})=>{
+        next:({statusCode,data,message})=>{
           if(statusCode===200){
-            console.log();
-
+            this.registerForm.reset(null)
+            this.succssesMessage=message
+            this.show=!this.show
+          }
+          else if(statusCode===400){
+            this.errorMessage=message
+            this.show=!this.show
           }
         }
       })
-    } else {
-      console.log('Form is invalid');
     }
   }
 
   sendOTP():void{
-    // console.log(typeof JSON.parse(this.registerForm.get('Email')?.value));
-
     if(this.registerForm.get('Email')?.valid)
     {
       this._form.sendOtp(this.registerForm.get('Email')?.value).subscribe({
         next:({statusCode,data})=>{
           if (statusCode===200) {
-
           }
         }
       })
@@ -232,6 +234,12 @@ export class FormCampComponent {
     const file: File = event.target.files[0];
     if (file) {
       this.fileName = this.formatFileName(file.name);
+    }
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      this.registerForm.patchValue({ Photo: this.selectedFile }); 
+
     }
   }
   formatFileName(name: string): string {
