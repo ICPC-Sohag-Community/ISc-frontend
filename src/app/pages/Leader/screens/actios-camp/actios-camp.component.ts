@@ -389,12 +389,13 @@ export class ActiosCampComponent implements OnInit {
     const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
     const dayOfMonth = String(day).padStart(2, '0');
 
-    const formattedDate = `${year}-${month}-${dayOfMonth}`;
     if (name === 'start') {
+      const formattedDate = `${year}-${month}-${dayOfMonth}`;
       this.selectedDay = day;
       this.campForm.get('startDate')?.setValue(formattedDate);
       this.calendar.nativeElement.classList.add('hidden');
     } else {
+      const formattedDate = `${year}-${month}-${dayOfMonth}`;
       this.selectedDayEnd = day;
       this.campForm.get('endDate')?.setValue(formattedDate);
       this.calendar2.nativeElement.classList.add('hidden');
