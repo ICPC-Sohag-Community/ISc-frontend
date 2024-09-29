@@ -72,7 +72,8 @@ export class ActiosCampComponent implements OnInit {
   nameForm!: FormGroup;
   campForm!: FormGroup;
   campName: string = '';
-
+  errorMessages: any = [];
+  errorMessage: string = '';
   foucsTerm: boolean = false;
 
   submitted: boolean = false;
@@ -222,12 +223,12 @@ export class ActiosCampComponent implements OnInit {
   craeteNewCamp(): void {
     this.campForm.get('name')?.setValue(this.selectedCamp);
     this.submitted = true;
+    debugger;
     if (this.campForm.invalid) {
-      console.log('error');
+      this.displayFormErrors();
       return;
     }
     this.isLoading = true;
-    console.log(this.campForm.value);
     if (this.id === 0) {
       this.campLeaderService.createCamp(this.campForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
@@ -235,13 +236,12 @@ export class ActiosCampComponent implements OnInit {
             this.selectedCamp = '';
             this.isLoading = false;
             this.casheService.clearCache();
-
             this.router.navigate(['/leader/camps']);
-          } else if (errors) {
-            console.log(errors);
-            alert(errors);
+          } else if (statusCode === 400) {
+            this.errorMessage = message;
+            this.isLoading = false;
           } else {
-            alert(message);
+            this.handleApiErrors(errors);
             this.isLoading = false;
           }
         },
@@ -259,11 +259,11 @@ export class ActiosCampComponent implements OnInit {
               this.isLoading = false;
               this.casheService.clearCache();
               this.router.navigate(['/leader/camps']);
-            } else if (errors) {
-              console.log(errors);
-              alert(errors);
+            } else if (statusCode === 400) {
+              this.errorMessage = message;
+              this.isLoading = false;
             } else {
-              alert(message);
+              this.handleApiErrors(errors);
               this.isLoading = false;
             }
           },
@@ -273,6 +273,52 @@ export class ActiosCampComponent implements OnInit {
           },
         });
     }
+  }
+
+  removeErrorM() {
+    this.errorMessage = '';
+  }
+
+  handleApiErrors(errors: any) {
+    debugger;
+
+    this.errorMessages = [];
+    if (errors) {
+      this.errorMessages = errors;
+    } else {
+      this.errorMessages.push(
+        'An unknown error occurred. Please try again later.'
+      );
+    }
+    this.errorMessages.forEach((error: any, index: number) => {
+      setTimeout(() => {
+        this.removeError(index);
+      }, 3000);
+    });
+  }
+
+  removeError(index: number) {
+    this.errorMessages.splice(index, 1);
+  }
+
+  displayFormErrors() {
+    this.errorMessages = [];
+
+    Object.keys(this.campForm.controls).forEach((field) => {
+      const control = this.campForm.get(field);
+
+      if (control?.invalid) {
+        if (control.errors?.['required']) {
+          this.errorMessages.push(`${field} is required`);
+        }
+      }
+    });
+    console.log(this.errorMessages);
+    this.errorMessages.forEach((error: any, index: number) => {
+      setTimeout(() => {
+        this.removeError(index);
+      }, 3000);
+    });
   }
 
   fetchAllMentors(): void {
@@ -327,12 +373,14 @@ export class ActiosCampComponent implements OnInit {
   }
 
   changeMonth(monthChange: number, name: string) {
+    debugger;
+
     if (name === 'start') {
-      this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
-      this.renderCalendar(this.dateStart, name);
+      this.currentDate.setMonth(this.currentDate.getMonth() + monthChange);
+      this.renderCalendar(this.currentDate, name);
     } else {
-      this.dateEnd.setMonth(this.dateEnd.getMonth() + monthChange);
-      this.renderCalendar(this.dateEnd, name);
+      this.currentDate.setMonth(this.currentDate.getMonth() + monthChange);
+      this.renderCalendar(this.currentDate, name);
     }
   }
 
