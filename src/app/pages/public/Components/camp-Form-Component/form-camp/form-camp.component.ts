@@ -1,29 +1,40 @@
 import { CommonModule, NgOptimizedImage, SlicePipe } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { NgSelectModule,NgSelectComponent } from '@ng-select/ng-select';
+import { NgSelectModule, NgSelectComponent } from '@ng-select/ng-select';
 import { FormService } from '../../../Services/form.service';
 import { Camp } from '../../../model/camp';
 
 @Component({
   selector: 'app-form-camp',
   standalone: true,
-  imports: [NgOptimizedImage,CommonModule, ReactiveFormsModule,
+  imports: [
+    NgOptimizedImage,
+    CommonModule,
+    ReactiveFormsModule,
     NgSelectModule,
     RouterLink,
-    SlicePipe],
+    SlicePipe,
+  ],
   templateUrl: './form-camp.component.html',
   styleUrl: './form-camp.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   encapsulation: ViewEncapsulation.None,
 })
 export class FormCampComponent {
-
-
-  constructor(private _form:FormService){}
-
-
+  constructor(private _form: FormService) {}
 
   @ViewChild('calendar') calendar!: ElementRef;
   @ViewChild('collageSelect') collageSelect!: NgSelectComponent;
@@ -31,9 +42,6 @@ export class FormCampComponent {
   @ViewChild('genderSelect') genderSelect!: NgSelectComponent;
   @ViewChild('campSelect') campSelect!: NgSelectComponent;
   @ViewChild('lapSelect') lapSelect!: NgSelectComponent;
-
-
-
 
   currentDate = new Date();
   daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -51,10 +59,8 @@ export class FormCampComponent {
   fileName: string = '';
   succssesMessage: string = '';
   errorMessage: string = '';
-  allCamps:Camp[]=[];
+  allCamps: Camp[] = [];
   selectedFile: File | null = null;
-
-
 
   genderTerm: boolean = false;
   collageTerm: boolean = false;
@@ -63,43 +69,51 @@ export class FormCampComponent {
   lapTerm: boolean = false;
   show: boolean = false;
 
-
-  registerForm:FormGroup= new FormGroup({
-    FirstName:new FormControl(null,[Validators.required]),
-    MiddleName:new FormControl(null,[Validators.required]),
-    LastName:new FormControl(null,[Validators.required]),
-    NationalId:new FormControl(null,[Validators.required,Validators.maxLength(14),Validators.minLength(14)]),
-    BirthDate:new FormControl(null,[Validators.required]),
-    Grade:new FormControl(null,[Validators.required]),
-    College:new FormControl(null,[Validators.required]),
-    Gender:new FormControl(null,[Validators.required]),
-    CodeForceHandle:new FormControl(null,[Validators.required]),
-    FacebookLink:new FormControl(null),
-    VjudgeHandle:new FormControl(null),
-    Email:new FormControl(null,[Validators.required,Validators.email]),
-    PhoneNumber:new FormControl(null,[Validators.required,Validators.maxLength(11),Validators.minLength(11)]),
-    Photo:new FormControl(null),
-    Comment:new FormControl(null),
-    HasLaptop:new FormControl(null,[Validators.required]),
-    otp:new FormControl(null,[Validators.required]),
-    CampId:new FormControl(null,[Validators.required]),
-  })
+  registerForm: FormGroup = new FormGroup({
+    FirstName: new FormControl(null, [Validators.required]),
+    MiddleName: new FormControl(null, [Validators.required]),
+    LastName: new FormControl(null, [Validators.required]),
+    NationalId: new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(14),
+      Validators.minLength(14),
+    ]),
+    BirthDate: new FormControl(null, [Validators.required]),
+    Grade: new FormControl(null, [Validators.required]),
+    College: new FormControl(null, [Validators.required]),
+    Gender: new FormControl(null, [Validators.required]),
+    CodeForceHandle: new FormControl(null, [Validators.required]),
+    FacebookLink: new FormControl(null),
+    VjudgeHandle: new FormControl(null),
+    Email: new FormControl(null, [Validators.required, Validators.email]),
+    PhoneNumber: new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(11),
+      Validators.minLength(11),
+    ]),
+    Photo: new FormControl(null),
+    Comment: new FormControl(null),
+    HasLaptop: new FormControl(null, [Validators.required]),
+    otp: new FormControl(null, [Validators.required]),
+    CampId: new FormControl(null, [Validators.required]),
+  });
 
   ngOnInit(): void {
     this.renderCalendar(this.currentDate, 'start');
     this.dateStart = new Date();
     this.selectedDay = this.dateStart.getDate();
-    this.fechAllCamps()
+    debugger;
+    this.fechAllCamps();
   }
 
-  fechAllCamps():void{
+  fechAllCamps(): void {
     this._form.getCamps().subscribe({
-      next:({statusCode,data})=>{
-        if(statusCode===200){
-          this.allCamps=data;
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.allCamps = data;
         }
-      }
-    })
+      },
+    });
   }
 
   onSubmit() {
@@ -107,55 +121,43 @@ export class FormCampComponent {
       const formData = new FormData();
 
       Object.keys(this.registerForm.controls).forEach((key) => {
-      const value = this.registerForm.get(key)?.value;
+        const value = this.registerForm.get(key)?.value;
 
-      if (key === 'Photo' && value) {
-        formData.append(key, value); // Assuming `value` is a File object
-      } else {
-        formData.append(key, value);
-      }
-    });
+        if (key === 'Photo' && value) {
+          formData.append(key, value); // Assuming `value` is a File object
+        } else {
+          formData.append(key, value);
+        }
+      });
 
       this._form.applyForm(formData).subscribe({
-        next:({statusCode,data,message})=>{
-          if(statusCode===200){
-            this.registerForm.reset(null)
-            this.succssesMessage=message
-            this.show=!this.show
+        next: ({ statusCode, data, message }) => {
+          if (statusCode === 200) {
+            this.registerForm.reset(null);
+            this.succssesMessage = message;
+            this.show = !this.show;
+          } else if (statusCode === 400) {
+            this.errorMessage = message;
+            this.show = !this.show;
           }
-          else if(statusCode===400){
-            this.errorMessage=message
-            this.show=!this.show
-          }
-        }
-      })
+        },
+      });
     }
   }
 
-  sendOTP():void{
-    if(this.registerForm.get('Email')?.valid)
-    {
+  sendOTP(): void {
+    if (this.registerForm.get('Email')?.valid) {
       this._form.sendOtp(this.registerForm.get('Email')?.value).subscribe({
-        next:({statusCode,data})=>{
-          if (statusCode===200) {
+        next: ({ statusCode, data }) => {
+          if (statusCode === 200) {
           }
-        }
-      })
+        },
+      });
     }
   }
-
-
-
-
-
-
-
-
-
-
 
   toggleCalendar() {
-      this.calendar.nativeElement.classList.toggle('hidden');
+    this.calendar.nativeElement.classList.toggle('hidden');
   }
   renderCalendar(date: Date, name: string = 'start') {
     const newDate = new Date(date);
@@ -164,14 +166,14 @@ export class FormCampComponent {
     const firstDay = new Date(year, month, 1).getDay();
     const lastDate = new Date(year, month + 1, 0).getDate();
 
-      this.startDays = [];
-      this.startMonthYear = newDate.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
-      for (let i = 1; i <= lastDate; i++) {
-        this.startDays.push(i);
-      }
+    this.startDays = [];
+    this.startMonthYear = newDate.toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric',
+    });
+    for (let i = 1; i <= lastDate; i++) {
+      this.startDays.push(i);
+    }
   }
   selectDate(day: number, name: string) {
     const year = this.currentDate.getFullYear();
@@ -179,15 +181,13 @@ export class FormCampComponent {
     const dayOfMonth = String(day).padStart(2, '0');
 
     const formattedDate = `${year}-${month}-${dayOfMonth}`;
-      this.selectedDay = day;
-      this.registerForm.get('BirthDate')?.setValue(formattedDate);
-      this.calendar.nativeElement.classList.add('hidden');
-
+    this.selectedDay = day;
+    this.registerForm.get('BirthDate')?.setValue(formattedDate);
+    this.calendar.nativeElement.classList.add('hidden');
   }
   changeMonth(monthChange: number) {
-      this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
-      this.renderCalendar(this.dateStart, 'start');
-
+    this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
+    this.renderCalendar(this.dateStart, 'start');
   }
   toggleDropdownGender(genderSelect: NgSelectComponent) {
     if (this.genderTerm) {
@@ -238,8 +238,7 @@ export class FormCampComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
-      this.registerForm.patchValue({ Photo: this.selectedFile }); 
-
+      this.registerForm.patchValue({ Photo: this.selectedFile });
     }
   }
   formatFileName(name: string): string {
