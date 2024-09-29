@@ -51,10 +51,6 @@ export class ChartDashboardComponent implements OnInit, AfterViewInit {
         const centerX = left + width / 2;
         const centerY = top + height / 2;
 
-        const meta = chart.getDatasetMeta(0).data[0] as any;
-        const cutout = (chart.config.options as any).cutout || '85%';
-        const cutoutRadius = (meta.outerRadius * parseFloat(cutout)) / 100;
-
         ctx.save();
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -134,7 +130,7 @@ export class ChartDashboardComponent implements OnInit, AfterViewInit {
       plugins: [
         this.createDoughnutBackgroundPlugin('#d0e5f2'),
         this.createCenterTextPlugin(
-          String(this.percentageMales),
+          this.percentageMales ? String(this.percentageMales) : '0',
           'bold 24px Arial',
           'black'
         ),
@@ -181,7 +177,7 @@ export class ChartDashboardComponent implements OnInit, AfterViewInit {
       plugins: [
         this.createDoughnutBackgroundPlugin('#f9e7ca'),
         this.createCenterTextPlugin(
-          String(this.percentagefemales),
+          this.percentagefemales ? String(this.percentagefemales) : '0',
           'bold 24px Arial',
           'black'
         ),
