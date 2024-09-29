@@ -9,6 +9,7 @@ import {
 import { ContestsHocService } from '../../services/contests-hoc.service';
 import { SessionsHOCService } from '../../services/sessions-hoc.service';
 import { SheetsHOCService } from '../../services/sheets-hoc.service';
+import { WeeklyFilterService } from '../../services/weekly-filter.service';
 
 @Component({
   selector: 'app-confirm-delete-hoc',
@@ -21,7 +22,8 @@ export class ConfirmDeleteHocComponent {
   contestsHocService = inject(ContestsHocService);
   sessionsHOCService = inject(SessionsHOCService);
   sheetsHOCService = inject(SheetsHOCService);
-  @Input() itemId: number | null = null;
+  weeklyFilterService = inject(WeeklyFilterService);
+  @Input() itemId: number | null | any = null;
   @Input() lable?: string = '';
   @Output() closeModal = new EventEmitter<boolean>();
   isLoading = signal<boolean>(false);
@@ -43,6 +45,8 @@ export class ConfirmDeleteHocComponent {
         this.deleteSession(this.itemId);
       } else if (this.lable === 'sheet') {
         this.deleteSheet(this.itemId);
+      } else {
+        this.deleteTraineeOthers(this.itemId);
       }
     }
   }
@@ -91,6 +95,26 @@ export class ConfirmDeleteHocComponent {
   deleteSheet(id: number) {
     this.isLoading.set(true);
     this.sheetsHOCService.deleteSheet(id).subscribe({
+      next: ({ message, statusCode }) => {
+        if (statusCode === 200) {
+          this.isLoading.update((v) => (v = false));
+          this.isDeleted = true;
+        } else {
+          this.isDeleted = false;
+          this.isLoading.update((v) => (v = false));
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this.isDeleted = false;
+        this.isLoading.update((v) => (v = false));
+      },
+    });
+  }
+
+  deleteTraineeOthers(id: number) {
+    this.isLoading.set(true);
+    this.weeklyFilterService.filterTrainee(id).subscribe({
       next: ({ message, statusCode }) => {
         if (statusCode === 200) {
           this.isLoading.update((v) => (v = false));

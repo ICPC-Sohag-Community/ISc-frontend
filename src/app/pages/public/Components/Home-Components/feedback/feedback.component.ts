@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { SwiperModule } from 'swiper/angular';
 import SwiperCore, { SwiperOptions } from 'swiper';
 import Swiper, { Navigation } from 'swiper';
+import { HomeService } from '../../../Services/home.service';
+import { FeedBack } from '../../../model/feedback';
 
 @Component({
   selector: 'app-feedback',
@@ -13,7 +15,39 @@ import Swiper, { Navigation } from 'swiper';
 })
 export class FeedbackComponent {
 
+
+  private _home = inject (HomeService)
+  feedBack:FeedBack[]=[]
+
   stars:number[]=[1,2,3,4,5]
+
+
+
+  ngOnInit(): void {
+    this.getFeedBacks()
+  }
+
+
+  getFeedBacks():void{
+    this._home.getFeedBacks().subscribe({
+      next:({statusCode,data})=>{
+        if(statusCode===200){
+          this.feedBack=data
+        }
+      }
+    })
+  }
+
+
+
+
+
+
+
+
+
+
+
 
   // Reference to Swiper instance
   private swiper?: SwiperCore;
@@ -21,7 +55,7 @@ export class FeedbackComponent {
     // Swiper configuration options
     config1: SwiperOptions = {
       slidesPerView: 3, // Number of slides visible at a time
-      spaceBetween: 80, // Space between slides
+      spaceBetween: 110, // Space between slides
       navigation: false, // Disable built-in navigation
       pagination: { clickable: false }, // Disable clickable pagination
       scrollbar: false, // Disable scrollbar

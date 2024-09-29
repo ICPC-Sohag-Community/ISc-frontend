@@ -25,14 +25,14 @@
   } @else {
   <div
     style="max-height: calc(100vh - 180px)"
-    class="overflow-y-auto scroll-host-table"
+    class="overflow-y-auto pe-2 scroll-host-table"
     (scroll)="loadMoreData($event)"
   >
     <table class="min-w-full text-center table-auto">
       <thead class="sticky top-0 bg-[#f4f5f8]">
         <tr class="bg-transparent text-[#6B7088]">
           <th class="p-4 text-left">Name</th>
-          <th class="p-4">Link</th>
+          <th class="p-4">Chief of Context</th>
           <th class="p-4">Start Date</th>
           <th class="p-4">End Date</th>
           <th class="p-4">Problems Count</th>
@@ -46,15 +46,16 @@
         <tr
           class="my-6 bg-white text-[#6B7088] text-center text-base font-medium rounded-lg"
         >
-          <td class="p-4 text-left rounded-s-lg">{{ item.name }}</td>
-          <td class="p-4">
+          <td class="p-4 text-left rounded-s-lg">
             <a
               [href]="item.link"
               target="_blank"
-              class="flex items-center justify-center"
+              class="flex items-center justify-start gap-x-2 whitespace-nowrap hover:text-activeLink"
             >
+              <span>{{ item.name }}</span>
+
               <svg
-                class="size-6 hover:text-activeLink"
+                class="size-5 hover:text-activeLink"
                 viewBox="0 0 30 30"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -68,6 +69,9 @@
                 />
               </svg>
             </a>
+          </td>
+          <td class="p-4">
+            {{ item.chiefOfContest }}
           </td>
           <td class="p-4">
             {{ item.startTime | date : "MM/dd/yyyy hh:mm a" }}
@@ -100,7 +104,7 @@
 
           <td
             (click)="showConfirmDelete(item.id)"
-            class="px-4 py-2 cursor-pointer"
+            class="px-4 py-2 cursor-pointer rounded-e-lg"
           >
             <svg
               class="flex justify-center w-full hover:fill-red-500 size-5 fill-[#6B7088]"

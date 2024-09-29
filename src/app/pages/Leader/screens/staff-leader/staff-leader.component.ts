@@ -40,6 +40,7 @@ export class StaffLeaderComponent implements OnInit {
   deletedRoles: any[] = [];
   startPageIndex: number = 0;
   maxVisiblePages: number = 4;
+  focusOrder: boolean = false;
 
   searchForm!: FormGroup;
   ngOnInit() {
@@ -49,7 +50,6 @@ export class StaffLeaderComponent implements OnInit {
     });
 
     this.staffWithPagination(1, 10, this.keywordSearch, this.sortbyNum);
-    // this.getStaffById('0b645888-170b-49d5-80c4-653fd4612377');
   }
 
   staffWithPagination(
@@ -221,5 +221,12 @@ export class StaffLeaderComponent implements OnInit {
     if ((event.target as HTMLElement).classList.contains('fixed')) {
       this.handleClose();
     }
+  }
+
+  focusSelect(): void {
+    this.focusOrder = true;
+  }
+  blurSelect(): void {
+    this.focusOrder = true;
   }
 }

@@ -5,13 +5,15 @@ import { AuthService } from '../services/auth.service';
 export const rolesGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
+  debugger;
   const userInfo = JSON.parse(localStorage.getItem('CURRENT_USER') || '{}');
   const { routeConfig } = route;
   const authService = inject(AuthService);
   const { path } = routeConfig as Route;
 
+  debugger;
   const roles = userInfo.roles;
-  if (path === '' && !authService.isAuth()) {
+  if ((path === '' || path === '/registration') && !authService.isAuth()) {
     return true;
   }
 

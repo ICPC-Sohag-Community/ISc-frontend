@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, authGuardLoggdIn } from './authentication/guard/auth.guard';
+import { authGuard } from './authentication/guard/auth.guard';
 import { rolesGuard } from './authentication/guard/roles.guard';
 // import { LoginComponent } from './authentication/screens/login/login.component';
 import { LayoutLeaderComponent } from './layouts/layout_leader/layout-leader.component';
@@ -28,8 +28,6 @@ import { SheetsTraineeComponent } from './pages/Trainee/screens/sheets-trainee/s
 import { ContestTraineeComponent } from './pages/Trainee/screens/contest-trainee/contest-trainee.component';
 import { LoginLayoutComponent } from './layouts/login/login-layout/login-layout.component';
 
-
-
 import { ReportsLeaderComponent } from './pages/Leader/screens/reports-leader/reports-leader.component';
 import { RequestsLeaderComponent } from './pages/Leader/screens/requests-leader/requests-leader.component';
 
@@ -55,8 +53,8 @@ import { LogComponent } from './authentication/screens/login/log/log.component';
 import { LayoutPublicComponent } from './layouts/layout_public/layout-public.component';
 import { HomePublicComponent } from './pages/public/screens/home-public/home-public.component';
 import { BlankComponent } from './pages/mentor/blank/blank.component';
-
-
+import { CampsPublicComponent } from './pages/public/screens/camps-public/camps-public.component';
+import { FormsCampsPublicComponent } from './pages/public/screens/forms-camps-public/forms-camps-public.component';
 
 export const routes: Routes = [
   // Trainee Pages
@@ -69,8 +67,8 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo:'home',
-        pathMatch:'full'
+        redirectTo: 'home',
+        pathMatch: 'full',
       },
       {
         path: 'home',
@@ -94,21 +92,28 @@ export const routes: Routes = [
       },
     ],
   },
+
+  // Main Home Page
   {
-    path: 'guest',
+    path: '',
     title: 'ICPC',
     component: LayoutPublicComponent,
-
+    canActivate: [rolesGuard],
     children: [
       {
         path: '',
-        redirectTo:'home',
-        pathMatch:'full'
+        component: HomePublicComponent,
+        title: 'Home - ICPC',
       },
       {
-        path: 'home',
-        component: HomePublicComponent,
-        title: 'Guest / Home - ICPC',
+        path: 'camps',
+        component: CampsPublicComponent,
+        title: 'Camps - ICPC',
+      },
+      {
+        path: 'registration',
+        component: FormsCampsPublicComponent,
+        title: 'Camps - ICPC',
       },
     ],
   },
@@ -317,7 +322,7 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginLayoutComponent,
-    canActivate: [authGuardLoggdIn],
+    // canActivate: [authGuardLoggdIn],
     title: 'Login',
     children: [
       {
@@ -340,11 +345,8 @@ export const routes: Routes = [
   {
     path: 'otp/:email',
     component: OtpComponent,
-    canActivate: [authGuardLoggdIn],
+    // canActivate: [authGuardLoggdIn],
     title: 'OTP',
-    children: [
-
-    ],
-  }
-]
-
+    children: [],
+  },
+];

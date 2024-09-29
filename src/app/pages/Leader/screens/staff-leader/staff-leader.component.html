@@ -41,6 +41,8 @@
           formControlName="sortNumber"
           (change)="sortStaff($event)"
           placeholder="Sort By"
+          (open)="focusSelect()"
+          (close)="blurSelect()"
           class="relative block w-40 h-10 my-2 !text-white appearance-none rounded-xl !placeholder:text-white bg-mainblue cursor-none focus:outline-none"
         >
           <ng-option [value]="0">Faculty</ng-option>
@@ -50,7 +52,8 @@
         <svg
           width="24"
           height="24"
-          class="absolute top-[14px] left-32 text-white transition-transform"
+          [ngClass]="{ 'rotate-180': focusOrder }"
+          class="absolute z-[1100] top-[14px] left-32 text-white transition-transform"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -168,7 +171,7 @@
       ' bg-black bg-opacity-50 visible': showSideInfo,
       'invisible cursor-default': !showSideInfo && hideSideInfo
     }"
-    class="flex z-[150] items-center fixed justify-end inset-0 !m-0"
+    class="flex z-[1200] items-center fixed justify-end inset-0 !m-0"
   >
     <div
       [ngClass]="showSideInfo ? 'translate-x-0' : 'translate-x-full'"

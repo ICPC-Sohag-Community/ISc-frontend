@@ -82,11 +82,10 @@
 .ng-select,
 .ng-select:focus {
   outline: none;
-  cursor: none;
+  cursor: pointer;
 }
 
 .ng-select .ng-select-container .ng-value-container .ng-input > input {
-  cursor: none;
   display: none;
 }
 
@@ -128,10 +127,10 @@
 
 .ng-select .ng-select-container {
   height: 100% !important;
+  border: none;
 }
-@import "./app/pages/Leader/Components/system-filter/system-filter.component.scss";
 
-.ng-select span.ng-value-label[ng-reflect-escape="true"],
+.ng-select span.ng-value-label,
 .campName {
   background-color: #3c8fc5;
   color: white;
@@ -149,4 +148,8 @@
 .ng-select .ng-select-container .ng-value-container .ng-placeholder {
   font-size: 18px;
   font-weight: 500;
+  color: white;
+}
+.ng-select .ng-arrow-wrapper {
+  display: none;
 }

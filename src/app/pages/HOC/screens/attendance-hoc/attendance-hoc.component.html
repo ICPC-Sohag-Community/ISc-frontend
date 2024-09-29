@@ -59,11 +59,11 @@
         >
           <td
             [ngClass]="{
-              'bg-blue-200': hoveredRow === rowIndex
+              '!bg-blue-200': hoveredRow === rowIndex
             }"
             (mouseover)="onHover(rowIndex, 0)"
             (mouseleave)="onLeave()"
-            class="sticky left-0 z-10 p-4 font-bold text-left bg-white rounded-s-lg whitespace-nowrap"
+            class="sticky left-0 z-[5] p-4 font-bold text-left bg-white rounded-s-lg whitespace-nowrap"
           >
             {{ item.name }}
           </td>

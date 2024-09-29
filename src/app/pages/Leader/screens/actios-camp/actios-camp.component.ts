@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { NgClass, SlicePipe } from '@angular/common';
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -10,19 +10,27 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { CampLeaderService } from '../../services/camp-leader.service';
+import { CasheService } from '../../../../shared/services/cashe.service';
 
 @Component({
   selector: 'app-actios-camp',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSelectModule, NgClass, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    NgSelectModule,
+    NgClass,
+    RouterLink,
+    SlicePipe,
+  ],
   templateUrl: './actios-camp.component.html',
   styleUrl: './actios-camp.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -30,6 +38,7 @@ import { CampLeaderService } from '../../services/camp-leader.service';
 })
 export class ActiosCampComponent implements OnInit {
   campLeaderService = inject(CampLeaderService);
+  casheService = inject(CasheService);
   fb = inject(FormBuilder);
   elementRef = inject(ElementRef);
   router = inject(Router);
@@ -38,27 +47,34 @@ export class ActiosCampComponent implements OnInit {
   @ViewChild('endDateInput') endDateInput!: ElementRef;
   @ViewChild('calendar') calendar!: ElementRef;
   @ViewChild('calendar2') calendar2!: ElementRef;
+  @ViewChild('termSelect') termSelect!: NgSelectComponent;
+  @ViewChild('mentorsSelect') mentorsSelect!: NgSelectComponent;
+  @ViewChild('hocSelect') hocSelect!: NgSelectComponent;
 
   selectedDay: number | null | any = null;
   selectedDayEnd: number | null | any = null;
   currentDate = new Date();
   daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  days: number[] = [];
-  monthYear: string = '';
+  startDays: number[] = [];
+  endDays: number[] = [];
+  startMonthYear: string = '';
+  endMonthYear: string = '';
+  dateStart!: Date;
+  dateEnd!: Date;
+  dropdownOpen: boolean = false;
+  dropdownOpenH: boolean = false;
 
-  allMentors: { id: number; fullName: string }[] = [];
-  allHeadsOfCamp: { id: number; fullName: string; isInCamp: boolean }[] = [];
+  allMentors: { id: string; fullName: string; isInCamp?: boolean }[] = [];
+  allHeadsOfCamp: { id: string; fullName: string; isInCamp: boolean }[] = [];
   allCamps: { name: string }[] = [];
-  allTerms: { id: number; name: string }[] = [];
   selectedCamp: string = '';
   isCampsActive: boolean = false;
   nameForm!: FormGroup;
   campForm!: FormGroup;
   campName: string = '';
-
+  errorMessages: any = [];
+  errorMessage: string = '';
   foucsTerm: boolean = false;
-  foucsHoc: boolean = false;
-  foucsMen: boolean = false;
 
   submitted: boolean = false;
   isLoading: boolean = false;
@@ -68,18 +84,26 @@ export class ActiosCampComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.id = parseInt(params['id']);
-      if (this.id > 0) {
-        this.getOneCamp(this.id);
-      }
     });
+    if (this.id > 0) {
+      this.getOneCamp(this.id);
+    } else {
+      this.fetchAllMentors();
+      this.fetchAllHeadsOfCamp();
+      this.renderCalendar(this.currentDate, 'start');
+      this.renderCalendar(this.currentDate, 'end');
+    }
     this.campForm = this.fb.group({
       id: [''],
       name: [null, [Validators.required]],
       term: [null, [Validators.required]],
-      headsIds: [null, [Validators.required]],
-      mentorsIds: [null, [Validators.required]],
-      openForRegister: [true, [Validators.required]],
-      durationInWeeks: [null, [Validators.required]],
+      headsIds: [null],
+      mentorsIds: [null],
+      openForRegister: [false, [Validators.required]],
+      durationInWeeks: [
+        null,
+        [Validators.required, this.positiveNumberValidator],
+      ],
       endDate: [null, [Validators.required]],
       startDate: [null, [Validators.required]],
     });
@@ -88,28 +112,15 @@ export class ActiosCampComponent implements OnInit {
       name: ['', [Validators.required]],
     });
 
-    this.allTerms = [
-      {
-        id: 1,
-        name: 'First Term',
-      },
-      {
-        id: 2,
-        name: 'Second Term',
-      },
-      {
-        id: 3,
-        name: 'Summer',
-      },
-      {
-        id: 4,
-        name: 'MidYear',
-      },
-    ];
-    this.fetchAllMentors();
-    this.fetchAllHeadsOfCamp();
     this.fetchAllCamp();
-    this.renderCalendar(this.currentDate);
+  }
+
+  positiveNumberValidator(control: AbstractControl) {
+    const value = control.value;
+    if (value !== null && value < 0) {
+      return { negativeNumber: true };
+    }
+    return null;
   }
 
   selectCamp(item: any): void {
@@ -144,8 +155,9 @@ export class ActiosCampComponent implements OnInit {
     }
     const name = this.nameForm.value.name;
     this.campLeaderService.addCamp(name).subscribe({
-      next: ({ statusCode, message, errors }) => {
+      next: ({ statusCode }) => {
         if (statusCode === 200) {
+          this.selectedCamp = name;
           this.allCamps.unshift({ name });
           this.nameForm.reset();
         }
@@ -156,6 +168,21 @@ export class ActiosCampComponent implements OnInit {
     });
   }
 
+  toggleDropdownC(event: MouseEvent) {
+    event.stopPropagation();
+    this.isCampsActive = !this.isCampsActive;
+  }
+
+  @HostListener('window:click', ['$event'])
+  closeDropdown(event: Event) {
+    const targetElement = event.target as HTMLElement;
+    const dropdownElement = document.querySelector('.relative.flex.flex-col');
+
+    if (dropdownElement && !dropdownElement.contains(targetElement)) {
+      this.isCampsActive = false;
+    }
+  }
+
   getOneCamp(id: number): void {
     this.isLoading = true;
     this.campLeaderService.getOneCamp(id).subscribe({
@@ -163,8 +190,14 @@ export class ActiosCampComponent implements OnInit {
         if (statusCode == 200) {
           this.isLoading = false;
           this.selectedCamp = data.name;
-          this.selectedDay = new Date(data.startDate).getDate();
-          this.selectedDayEnd = new Date(data.endDate).getDate();
+          this.renderCalendar(data.startDate, 'start');
+          this.renderCalendar(data.endDate, 'end');
+          this.dateStart = new Date(data.startDate);
+          this.dateEnd = new Date(data.endDate);
+          this.selectedDay = this.dateStart.getDate();
+          this.selectedDayEnd = this.dateEnd.getDate();
+          this.allMentors = data.mentorsOfCamp;
+          this.allHeadsOfCamp = data.headsOfCamp;
           this.campForm.patchValue({
             id: data.id,
             name: data.name,
@@ -173,11 +206,14 @@ export class ActiosCampComponent implements OnInit {
             term: data.term,
             durationInWeeks: data.durationInWeeks,
             openForRegister: data.openForRegister,
-            headsIds: data.mentorsOfCamp.map((m: any) => m.id),
-            mentorsIds: data.headsOfCamp.map((m: any) => m.id),
+            headsIds: this.allHeadsOfCamp
+              .filter((item: any) => item.inCamp)
+              .map((item: any) => item.id),
+            mentorsIds: this.allMentors
+              .filter((item: any) => item.inCamp)
+              .map((item: any) => item.id),
           });
         } else {
-          // this.toastr.error(msg);
           this.isLoading = false;
         }
       },
@@ -187,25 +223,25 @@ export class ActiosCampComponent implements OnInit {
   craeteNewCamp(): void {
     this.campForm.get('name')?.setValue(this.selectedCamp);
     this.submitted = true;
+    debugger;
     if (this.campForm.invalid) {
-      console.log('error');
+      this.displayFormErrors();
       return;
     }
     this.isLoading = true;
-    console.log(this.campForm.value);
     if (this.id === 0) {
       this.campLeaderService.createCamp(this.campForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
-            alert('done');
-            this.campForm.reset();
             this.selectedCamp = '';
             this.isLoading = false;
-          } else if (errors) {
-            console.log(errors);
-            alert(errors);
+            this.casheService.clearCache();
+            this.router.navigate(['/leader/camps']);
+          } else if (statusCode === 400) {
+            this.errorMessage = message;
+            this.isLoading = false;
           } else {
-            alert(message);
+            this.handleApiErrors(errors);
             this.isLoading = false;
           }
         },
@@ -220,13 +256,14 @@ export class ActiosCampComponent implements OnInit {
         .subscribe({
           next: ({ statusCode, message, errors }) => {
             if (statusCode === 200) {
-              this.router.navigate(['/leader/camps']);
               this.isLoading = false;
-            } else if (errors) {
-              console.log(errors);
-              alert(errors);
+              this.casheService.clearCache();
+              this.router.navigate(['/leader/camps']);
+            } else if (statusCode === 400) {
+              this.errorMessage = message;
+              this.isLoading = false;
             } else {
-              alert(message);
+              this.handleApiErrors(errors);
               this.isLoading = false;
             }
           },
@@ -236,6 +273,52 @@ export class ActiosCampComponent implements OnInit {
           },
         });
     }
+  }
+
+  removeErrorM() {
+    this.errorMessage = '';
+  }
+
+  handleApiErrors(errors: any) {
+    debugger;
+
+    this.errorMessages = [];
+    if (errors) {
+      this.errorMessages = errors;
+    } else {
+      this.errorMessages.push(
+        'An unknown error occurred. Please try again later.'
+      );
+    }
+    this.errorMessages.forEach((error: any, index: number) => {
+      setTimeout(() => {
+        this.removeError(index);
+      }, 3000);
+    });
+  }
+
+  removeError(index: number) {
+    this.errorMessages.splice(index, 1);
+  }
+
+  displayFormErrors() {
+    this.errorMessages = [];
+
+    Object.keys(this.campForm.controls).forEach((field) => {
+      const control = this.campForm.get(field);
+
+      if (control?.invalid) {
+        if (control.errors?.['required']) {
+          this.errorMessages.push(`${field} is required`);
+        }
+      }
+    });
+    console.log(this.errorMessages);
+    this.errorMessages.forEach((error: any, index: number) => {
+      setTimeout(() => {
+        this.removeError(index);
+      }, 3000);
+    });
   }
 
   fetchAllMentors(): void {
@@ -281,15 +364,6 @@ export class ActiosCampComponent implements OnInit {
     });
   }
 
-  @HostListener('document:click', ['$event.target'])
-  public onClick(targetElement: HTMLElement) {
-    const clickedInside = this.elementRef.nativeElement.contains(targetElement);
-    console.log(clickedInside);
-    if (!clickedInside) {
-      this.isCampsActive = false;
-    }
-  }
-
   toggleCalendar(name: string) {
     if (name === 'start') {
       this.calendar.nativeElement.classList.toggle('hidden');
@@ -298,9 +372,16 @@ export class ActiosCampComponent implements OnInit {
     }
   }
 
-  changeMonth(monthChange: number) {
-    this.currentDate.setMonth(this.currentDate.getMonth() + monthChange);
-    this.renderCalendar(this.currentDate);
+  changeMonth(monthChange: number, name: string) {
+    debugger;
+
+    if (name === 'start') {
+      this.currentDate.setMonth(this.currentDate.getMonth() + monthChange);
+      this.renderCalendar(this.currentDate, name);
+    } else {
+      this.currentDate.setMonth(this.currentDate.getMonth() + monthChange);
+      this.renderCalendar(this.currentDate, name);
+    }
   }
 
   selectDate(day: number, name: string) {
@@ -308,36 +389,54 @@ export class ActiosCampComponent implements OnInit {
     const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
     const dayOfMonth = String(day).padStart(2, '0');
 
-    const formattedDate = `${year}-${month}-${dayOfMonth}`;
     if (name === 'start') {
+      const formattedDate = `${year}-${month}-${dayOfMonth}`;
       this.selectedDay = day;
       this.campForm.get('startDate')?.setValue(formattedDate);
       this.calendar.nativeElement.classList.add('hidden');
     } else {
+      const formattedDate = `${year}-${month}-${dayOfMonth}`;
       this.selectedDayEnd = day;
       this.campForm.get('endDate')?.setValue(formattedDate);
       this.calendar2.nativeElement.classList.add('hidden');
     }
   }
 
-  renderCalendar(date: Date) {
-    const month = date.getMonth();
-    const year = date.getFullYear();
+  renderCalendar(date: Date, name?: string) {
+    const newDate = new Date(date);
+    const month = newDate.getMonth();
+    const year = newDate.getFullYear();
     const firstDay = new Date(year, month, 1).getDay();
     const lastDate = new Date(year, month + 1, 0).getDate();
 
-    this.days = [];
-    this.monthYear = date.toLocaleDateString('en-US', {
-      month: 'long',
-      year: 'numeric',
-    });
+    if (name === 'start') {
+      this.startDays = [];
+      this.startMonthYear = newDate.toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric',
+      });
 
-    for (let i = 0; i < firstDay; i++) {
-      this.days.push(0);
-    }
+      for (let i = 0; i < firstDay; i++) {
+        this.startDays.push(0);
+      }
 
-    for (let i = 1; i <= lastDate; i++) {
-      this.days.push(i);
+      for (let i = 1; i <= lastDate; i++) {
+        this.startDays.push(i);
+      }
+    } else {
+      this.endDays = [];
+      this.endMonthYear = newDate.toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric',
+      });
+
+      for (let i = 0; i < firstDay; i++) {
+        this.endDays.push(0);
+      }
+
+      for (let i = 1; i <= lastDate; i++) {
+        this.endDays.push(i);
+      }
     }
   }
 
@@ -355,29 +454,51 @@ export class ActiosCampComponent implements OnInit {
     ) {
       this.calendar2.nativeElement.classList.add('hidden');
     }
+    if (this.termSelect.dropdownPanel === undefined) {
+      this.foucsTerm = false;
+    }
+    if (this.mentorsSelect.dropdownPanel === undefined) {
+      this.dropdownOpen = false;
+    }
+    if (this.hocSelect.dropdownPanel === undefined) {
+      this.dropdownOpenH = false;
+    }
   }
 
-  handleOpen() {
-    this.foucsTerm = false;
+  toggleDropdown(mentorsSelect: NgSelectComponent) {
+    if (this.dropdownOpen) {
+      mentorsSelect.close();
+    } else {
+      mentorsSelect.open();
+    }
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+  onItemClick(mentorsSelect: NgSelectComponent) {
+    setTimeout(() => {
+      mentorsSelect.open();
+    });
   }
 
-  handleClose(): void {
-    this.foucsTerm = true;
+  toggleDropdownH(hocSelect: NgSelectComponent) {
+    if (this.dropdownOpenH) {
+      hocSelect.close();
+    } else {
+      hocSelect.open();
+    }
+    this.dropdownOpenH = !this.dropdownOpenH;
+  }
+  onItemClickH(hocSelect: NgSelectComponent) {
+    setTimeout(() => {
+      hocSelect.open();
+    });
   }
 
-  handleOpenH() {
-    this.foucsHoc = false;
-  }
-
-  handleCloseH(): void {
-    this.foucsHoc = true;
-  }
-
-  handleOpenM() {
-    this.foucsMen = false;
-  }
-
-  handleCloseM(): void {
-    this.foucsMen = true;
+  toggleDropdownT(termSelect: NgSelectComponent) {
+    if (this.foucsTerm) {
+      termSelect.close();
+    } else {
+      termSelect.open();
+    }
+    this.foucsTerm = !this.foucsTerm;
   }
 }

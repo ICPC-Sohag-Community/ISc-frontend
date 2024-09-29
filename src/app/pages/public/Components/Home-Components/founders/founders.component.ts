@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component } from '@angular/core';
 
 
 @Component({
   selector: 'app-founders',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,NgOptimizedImage],
   templateUrl: './founders.component.html',
   styleUrls: ['./founders.component.scss']
 })

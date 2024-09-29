@@ -1,1 +1,322 @@
-<p>actions-contests works!</p>
+<div class="w-full p-4 space-y-4 sm:p-6 sm:ps-4 sm:space-y-6">
+  <form
+    [formGroup]="contestForm"
+    (ngSubmit)="actionsContext()"
+    class="w-full py-8 bg-white px-14 rounded-xl"
+  >
+    <div class="flex flex-col gap-y-4">
+      <h2 class="w-full pb-6 text-3xl font-bold border-b-2">
+        @if (id === 0) { Add Contest }@else { Edit Contest }
+      </h2>
+
+      <div class="flex items-center justify-between w-full ps-4">
+        <div class="flex flex-col basis-1/2">
+          <label class="text-lg">Name</label>
+          <div class="relative">
+            <input
+              type="text"
+              formControlName="name"
+              class="relative block w-[450px] my-2 p-3 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+              placeholder="Name"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col basis-1/2">
+          <label class="text-lg">Contest Link</label>
+          <div class="relative">
+            <input
+              type="text"
+              formControlName="link"
+              class="relative block w-[450px] my-2 p-3 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+              placeholder="Contest Link"
+            />
+          </div>
+        </div>
+      </div>
+      <!-- Dates -->
+      <div class="flex items-center justify-between w-full mt-2 ps-4">
+        <div class="flex flex-col basis-1/2">
+          <label class="text-lg">Start Date</label>
+          <div class="relative w-[450px]">
+            <input
+              #startDateInput
+              type="text"
+              placeholder="Select Start Date"
+              formControlName="startTime"
+              class="relative block w-full px-4 cursor-pointer py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+              readonly
+              (click)="toggleCalendar('start')"
+            />
+            <div
+              #calendar
+              class="absolute left-0 z-[1200] hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
+            >
+              <div class="flex items-center justify-between mb-2">
+                <button
+                  type="button"
+                  (click)="changeMonth(-1, 'start')"
+                  class="focus:outline-none"
+                >
+                  &lt;
+                </button>
+                <span class="font-semibold text-gray-700">{{
+                  startMonthYear
+                }}</span>
+                <button
+                  type="button"
+                  (click)="changeMonth(1, 'start')"
+                  class="focus:outline-none"
+                >
+                  &gt;
+                </button>
+              </div>
+              <div class="grid grid-cols-7 text-sm text-center text-gray-500">
+                @for (day of daysOfWeek; track $index) {
+                <div>
+                  {{ day }}
+                </div>
+
+                }
+              </div>
+              <div class="grid grid-cols-7 mt-2 text-sm text-center">
+                @for (day of startDays; track $index) {
+                <ng-container>
+                  <div
+                    [ngClass]="{
+                      'bg-activeLink text-white hover:text-black':
+                        selectedDay == day
+                    }"
+                    class="p-3 border cursor-pointer hover:bg-gray-200"
+                    (click)="selectDate(day, 'start')"
+                  >
+                    {{ day }}
+                  </div>
+                </ng-container>
+                }
+              </div>
+            </div>
+            <svg
+              class="absolute transition-transform top-4 size-8 right-4"
+              viewBox="0 0 40 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M31.6654 6.66683H28.332V5.00016C28.332 4.55814 28.1564 4.13421 27.8439 3.82165C27.5313 3.50909 27.1074 3.3335 26.6654 3.3335C26.2233 3.3335 25.7994 3.50909 25.4869 3.82165C25.1743 4.13421 24.9987 4.55814 24.9987 5.00016V6.66683H14.9987V5.00016C14.9987 4.55814 14.8231 4.13421 14.5105 3.82165C14.198 3.50909 13.7741 3.3335 13.332 3.3335C12.89 3.3335 12.4661 3.50909 12.1535 3.82165C11.841 4.13421 11.6654 4.55814 11.6654 5.00016V6.66683H8.33203C7.00595 6.66683 5.73418 7.19361 4.7965 8.1313C3.85882 9.06898 3.33203 10.3407 3.33203 11.6668V31.6668C3.33203 32.9929 3.85882 34.2647 4.7965 35.2024C5.73418 36.14 7.00595 36.6668 8.33203 36.6668H31.6654C32.9914 36.6668 34.2632 36.14 35.2009 35.2024C36.1386 34.2647 36.6654 32.9929 36.6654 31.6668V11.6668C36.6654 10.3407 36.1386 9.06898 35.2009 8.1313C34.2632 7.19361 32.9914 6.66683 31.6654 6.66683ZM33.332 31.6668C33.332 32.1089 33.1564 32.5328 32.8439 32.8453C32.5313 33.1579 32.1074 33.3335 31.6654 33.3335H8.33203C7.89 33.3335 7.46608 33.1579 7.15352 32.8453C6.84096 32.5328 6.66536 32.1089 6.66536 31.6668V20.0002H33.332V31.6668ZM33.332 16.6668H6.66536V11.6668C6.66536 11.2248 6.84096 10.8009 7.15352 10.4883C7.46608 10.1758 7.89 10.0002 8.33203 10.0002H11.6654V11.6668C11.6654 12.1089 11.841 12.5328 12.1535 12.8453C12.4661 13.1579 12.89 13.3335 13.332 13.3335C13.7741 13.3335 14.198 13.1579 14.5105 12.8453C14.8231 12.5328 14.9987 12.1089 14.9987 11.6668V10.0002H24.9987V11.6668C24.9987 12.1089 25.1743 12.5328 25.4869 12.8453C25.7994 13.1579 26.2233 13.3335 26.6654 13.3335C27.1074 13.3335 27.5313 13.1579 27.8439 12.8453C28.1564 12.5328 28.332 12.1089 28.332 11.6668V10.0002H31.6654C32.1074 10.0002 32.5313 10.1758 32.8439 10.4883C33.1564 10.8009 33.332 11.2248 33.332 11.6668V16.6668Z"
+                fill="#D9D9D9"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div class="flex flex-col basis-1/2">
+          <label class="text-lg">End Date</label>
+          <div class="relative w-[450px]">
+            <input
+              #endDateInput
+              type="text"
+              placeholder="Select End Date"
+              formControlName="endTime"
+              class="relative block cursor-pointer w-full px-4 py-2.5 my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+              readonly
+              (click)="toggleCalendar('end')"
+            />
+
+            <div
+              #calendar2
+              class="absolute left-0 z-[1200] hidden p-4 mt-2 w-[450px] bg-white border border-gray-200 rounded-md shadow-lg"
+            >
+              <div class="flex items-center justify-between mb-2">
+                <button
+                  type="button"
+                  (click)="changeMonth(-1, 'end')"
+                  class="focus:outline-none"
+                >
+                  &lt;
+                </button>
+                <span class="font-semibold text-gray-700">{{
+                  endMonthYear
+                }}</span>
+                <button
+                  type="button"
+                  (click)="changeMonth(1, 'end')"
+                  class="focus:outline-none"
+                >
+                  &gt;
+                </button>
+              </div>
+              <div class="grid grid-cols-7 text-sm text-center text-gray-500">
+                @for (day of daysOfWeek; track $index) {
+                <div>{{ day }}</div>
+
+                }
+              </div>
+              <div class="grid grid-cols-7 mt-2 text-sm text-center">
+                @for (day of endDays; track $index) {
+                <ng-container>
+                  <div
+                    [ngClass]="{
+                      'bg-activeLink text-white hover:text-black':
+                        selectedDayEnd === day
+                    }"
+                    class="p-3 border cursor-pointer hover:bg-gray-200"
+                    (click)="selectDate(day, 'end')"
+                  >
+                    {{ day }}
+                  </div>
+                </ng-container>
+                }
+              </div>
+            </div>
+            <svg
+              class="absolute transition-transform top-4 size-8 right-4"
+              viewBox="0 0 40 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M31.6654 6.66683H28.332V5.00016C28.332 4.55814 28.1564 4.13421 27.8439 3.82165C27.5313 3.50909 27.1074 3.3335 26.6654 3.3335C26.2233 3.3335 25.7994 3.50909 25.4869 3.82165C25.1743 4.13421 24.9987 4.55814 24.9987 5.00016V6.66683H14.9987V5.00016C14.9987 4.55814 14.8231 4.13421 14.5105 3.82165C14.198 3.50909 13.7741 3.3335 13.332 3.3335C12.89 3.3335 12.4661 3.50909 12.1535 3.82165C11.841 4.13421 11.6654 4.55814 11.6654 5.00016V6.66683H8.33203C7.00595 6.66683 5.73418 7.19361 4.7965 8.1313C3.85882 9.06898 3.33203 10.3407 3.33203 11.6668V31.6668C3.33203 32.9929 3.85882 34.2647 4.7965 35.2024C5.73418 36.14 7.00595 36.6668 8.33203 36.6668H31.6654C32.9914 36.6668 34.2632 36.14 35.2009 35.2024C36.1386 34.2647 36.6654 32.9929 36.6654 31.6668V11.6668C36.6654 10.3407 36.1386 9.06898 35.2009 8.1313C34.2632 7.19361 32.9914 6.66683 31.6654 6.66683ZM33.332 31.6668C33.332 32.1089 33.1564 32.5328 32.8439 32.8453C32.5313 33.1579 32.1074 33.3335 31.6654 33.3335H8.33203C7.89 33.3335 7.46608 33.1579 7.15352 32.8453C6.84096 32.5328 6.66536 32.1089 6.66536 31.6668V20.0002H33.332V31.6668ZM33.332 16.6668H6.66536V11.6668C6.66536 11.2248 6.84096 10.8009 7.15352 10.4883C7.46608 10.1758 7.89 10.0002 8.33203 10.0002H11.6654V11.6668C11.6654 12.1089 11.841 12.5328 12.1535 12.8453C12.4661 13.1579 12.89 13.3335 13.332 13.3335C13.7741 13.3335 14.198 13.1579 14.5105 12.8453C14.8231 12.5328 14.9987 12.1089 14.9987 11.6668V10.0002H24.9987V11.6668C24.9987 12.1089 25.1743 12.5328 25.4869 12.8453C25.7994 13.1579 26.2233 13.3335 26.6654 13.3335C27.1074 13.3335 27.5313 13.1579 27.8439 12.8453C28.1564 12.5328 28.332 12.1089 28.332 11.6668V10.0002H31.6654C32.1074 10.0002 32.5313 10.1758 32.8439 10.4883C33.1564 10.8009 33.332 11.2248 33.332 11.6668V16.6668Z"
+                fill="#D9D9D9"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between w-full mt-2 ps-4">
+        <div class="flex flex-col basis-1/2">
+          <label class="text-lg">Community</label>
+          <div class="relative w-[450px]">
+            <ng-select
+              #community
+              [closeOnSelect]="true"
+              bindLabel="name"
+              bindValue="id"
+              formControlName="community"
+              placeholder="Community"
+              (click)="toggleDropdownC(community)"
+              class="relative block text-lg w-full my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+            >
+              <ng-option [value]="1"> Sohag </ng-option>
+              <ng-option [value]="2"> Assuit </ng-option>
+            </ng-select>
+            <button (click)="toggleDropdownC(community)" type="button">
+              <svg
+                [ngClass]="foucsTerm ? 'rotate-180' : ''"
+                class="absolute transition-transform top-4 z-[1100] size-8 right-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
+                  stroke="#A8A8A8"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="flex flex-col basis-1/2">
+          <label class="text-lg">Codeforce Id</label>
+          <div class="relative">
+            <input
+              type="text"
+              formControlName="codeForceId"
+              class="relative block w-[450px] my-2 p-3 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+              placeholder="Codeforce Id"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between w-full mt-2 ps-4">
+        <div class="flex flex-col w-[450px]">
+          <label class="text-lg">Problems Count</label>
+          <div class="relative">
+            <button
+              (click)="decrease()"
+              type="button"
+              class="absolute inset-y-0 z-20 left-4"
+            >
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 40 40"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M29.9987 21.6634H9.9987C9.55667 21.6634 9.13275 21.4878 8.82019 21.1753C8.50763 20.8627 8.33203 20.4388 8.33203 19.9967C8.33203 19.5547 8.50763 19.1308 8.82019 18.8182C9.13275 18.5057 9.55667 18.3301 9.9987 18.3301H29.9987C30.4407 18.3301 30.8647 18.5057 31.1772 18.8182C31.4898 19.1308 31.6654 19.5547 31.6654 19.9967C31.6654 20.4388 31.4898 20.8627 31.1772 21.1753C30.8647 21.4878 30.4407 21.6634 29.9987 21.6634Z"
+                  fill="#D9D9D9"
+                />
+              </svg>
+            </button>
+            <input
+              type="text"
+              formControlName="problemCount"
+              readonly
+              class="relative block text-center text-xl w-full my-2 p-3 text-[#00000040] caret-transparent bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+            />
+            <button
+              (click)="increase()"
+              type="button"
+              class="absolute inset-y-0 right-4"
+            >
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 40 40"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M29.9987 21.6634H21.6654V29.9967C21.6654 30.4388 21.4898 30.8627 21.1772 31.1753C20.8646 31.4878 20.4407 31.6634 19.9987 31.6634C19.5567 31.6634 19.1327 31.4878 18.8202 31.1753C18.5076 30.8627 18.332 30.4388 18.332 29.9967V21.6634H9.9987C9.55667 21.6634 9.13275 21.4878 8.82019 21.1753C8.50763 20.8627 8.33203 20.4388 8.33203 19.9967C8.33203 19.5547 8.50763 19.1308 8.82019 18.8182C9.13275 18.5057 9.55667 18.3301 9.9987 18.3301H18.332V9.99674C18.332 9.55472 18.5076 9.13079 18.8202 8.81823C19.1327 8.50567 19.5567 8.33008 19.9987 8.33008C20.4407 8.33008 20.8646 8.50567 21.1772 8.81823C21.4898 9.13079 21.6654 9.55472 21.6654 9.99674V18.3301H29.9987C30.4407 18.3301 30.8647 18.5057 31.1772 18.8182C31.4898 19.1308 31.6654 19.5547 31.6654 19.9967C31.6654 20.4388 31.4898 20.8627 31.1772 21.1753C30.8647 21.4878 30.4407 21.6634 29.9987 21.6634Z"
+                  fill="#D9D9D9"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="flex flex-col basis-1/2">
+          <label class="text-lg">Chief Of Contest</label>
+          <div class="relative">
+            <input
+              type="text"
+              formControlName="chiefOfContest"
+              class="relative block w-[450px] my-2 p-3 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+              placeholder="Chief Of Contest"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end w-11/12 mt-20 gap-x-8">
+      <button
+        routerLink="/head_of_camp/contests"
+        type="button"
+        class="px-6 py-1.5 text-xl text-[#6B7088] border rounded-lg w-fit bg-white"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="px-6 py-1.5 text-xl bg-white border rounded-lg text-activeLink w-fit"
+      >
+        @if (isLoading) {
+        <div class="flex items-center justify-center w-full bg-opacity-60">
+          <div class="flex items-center justify-center">
+            <div
+              class="w-8 h-8 border-4 border-blue-600 border-dashed rounded-full animate-spin"
+            ></div>
+          </div>
+        </div>
+        }@else { Save }
+      </button>
+    </div>
+  </form>
+</div>

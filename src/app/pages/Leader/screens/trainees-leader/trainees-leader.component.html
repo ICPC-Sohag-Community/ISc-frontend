@@ -50,7 +50,7 @@
         <svg
           width="24"
           height="24"
-          class="absolute top-[14px] left-32 text-white transition-transform"
+          class="absolute top-[14px] z-[1100] left-32 text-white transition-transform"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -164,7 +164,7 @@
       ' bg-black bg-opacity-50 visible': showSideInfo,
       'invisible cursor-default': !showSideInfo && hideSideInfo
     }"
-    class="flex z-[150] items-center fixed justify-end inset-0 !m-0"
+    class="flex z-[1200] items-center fixed justify-end inset-0 !m-0"
   >
     <div
       [ngClass]="showSideInfo ? 'translate-x-0' : 'translate-x-full'"
@@ -172,8 +172,8 @@
     >
       <span
         (click)="handleClose()"
-        class="absolute text-3xl font-semibold text-white transition-colors cursor-pointer top-3 right-8 hover:text-red-500"
-        >_</span
+        class="absolute text-3xl font-semibold text-gray-500 transition-colors cursor-pointer top-3 right-8 hover:text-red-500"
+        >__</span
       >
       @if (selectedTraineeId) { @if (isLoadingForSide) {
       <div class="bg-opacity-60">

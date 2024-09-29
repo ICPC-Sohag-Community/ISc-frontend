@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgClass } from '@angular/common';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
@@ -33,42 +33,33 @@ export class LogComponent {
   loginForm!: FormGroup;
   submitted = false;
   error: string = '';
-  userData:boolean = false;
+  userData: boolean = false;
   isLoading: boolean = false;
   passwordFieldType: string = 'password';
   password: string = '';
-  hide = false;
-  show() {
-    if (!this.hide) {
-      document.getElementById('pass')?.setAttribute('type', 'text');
-    } else {
-      document.getElementById('pass')?.setAttribute('type', 'password');
-    }
-    this.hide = !this.hide;
-  }
+
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       userName: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      rememberMe: [(<HTMLInputElement>document.getElementById('rememberMe')).checked?true:false, [Validators.required]], 
+      rememberMe: [false],
     });
   }
 
-  // togglePasswordVisibility(): void {
-  //   this.passwordFieldType =
-  //     this.passwordFieldType === 'password' ? 'text' : 'password';
-  // }
-user:any = '';
-pass:any = '';
+  togglePasswordVisibility(): void {
+    this.passwordFieldType =
+      this.passwordFieldType === 'password' ? 'text' : 'password';
+    console.log(this.passwordFieldType);
+  }
+
   onLogin() {
     this.submitted = true;
-    this.loginForm.value.rememberMe = (<HTMLInputElement>document.getElementById('rememberMe')).checked?true:false;
-   
+    if (this.loginForm.invalid) {
+      return;
+    }
     this.isLoading = true;
-
     this.authService.loginUser(this.loginForm.value).subscribe({
-      
-      next: ({ statusCode, data, msg }) => {
+      next: ({ statusCode, data, message }) => {
         if (statusCode === 200) {
           if (data.roles[0] === 'Leader') {
             this.router.navigate(['/leader']);
@@ -86,13 +77,13 @@ pass:any = '';
         } else {
           this.isLoading = false;
           this.userData = true;
-          this.pass = ''
-          this.user = ''
+
+          this.error = message;
           this.authService.setIsAuth(false);
         }
       },
       error: (err) => {
-        this.error = err.error.msg;
+        console.log(err);
         this.isLoading = false;
       },
     });
