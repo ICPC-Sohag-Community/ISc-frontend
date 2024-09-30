@@ -45,8 +45,8 @@
                 <div  class="font-semibold text-gray-700 flex items-center">
                 <label for="year">
                   {{
-                    startMonthYear
-                  }}
+                    monthYear
+                  }} {{selectedYear}}
                 </label>
                 <div>
                   <select id="year" class=" h-20 border-0 outline-none max-w-5 max-h-3" (change)="selectYear($event.target)">
