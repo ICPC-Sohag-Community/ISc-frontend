@@ -1,6 +1,17 @@
 import { CommonModule, NgOptimizedImage, SlicePipe } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgSelectModule, NgSelectComponent } from '@ng-select/ng-select';
 import { FormService } from '../../../Services/form.service';
@@ -35,7 +46,9 @@ export class FormCampComponent {
   @ViewChild('campSelect') campSelect!: NgSelectComponent;
   @ViewChild('lapSelect') lapSelect!: NgSelectComponent;
 
+
   // Date-related properties
+
   currentDate = new Date();
   daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   startDays: number[] = [];
@@ -63,7 +76,9 @@ export class FormCampComponent {
   selectedYear: any;
   allYears: number[] = [];
 
+
   // Form terms state properties
+
   genderTerm: boolean = false;
   collageTerm: boolean = false;
   gradeTerm: boolean = false;
@@ -71,12 +86,16 @@ export class FormCampComponent {
   lapTerm: boolean = false;
   show: boolean = false;
 
+
   // Reactive form definition
+
   registerForm: FormGroup = new FormGroup({
     FirstName: new FormControl(null, [Validators.required]),
     MiddleName: new FormControl(null, [Validators.required]),
     LastName: new FormControl(null, [Validators.required]),
+
     NationalId: new FormControl(null, [Validators.required, Validators.maxLength(14), Validators.minLength(14)]),
+
     BirthDate: new FormControl(null, [Validators.required]),
     Grade: new FormControl(null, [Validators.required]),
     College: new FormControl(null, [Validators.required]),
@@ -85,6 +104,7 @@ export class FormCampComponent {
     FacebookLink: new FormControl(null),
     VjudgeHandle: new FormControl(null),
     Email: new FormControl(null, [Validators.required, Validators.email]),
+
     PhoneNumber: new FormControl(null, [Validators.required, Validators.maxLength(11), Validators.minLength(11)]),
     Photo: new FormControl(null),
     Comment: new FormControl(null),
@@ -93,12 +113,17 @@ export class FormCampComponent {
     CampId: new FormControl(null, [Validators.required]),
   });
 
+
   // Lifecycle hook for initialization
+
   ngOnInit(): void {
     this.renderCalendar(this.currentDate, 'start');
     this.dateStart = new Date();
     this.selectedDay = this.dateStart.getDate();
     // this.fetchAllCamps() // Uncomment to fetch all camps
+  }
+
+
   }
 
   // Fetch all camps (currently commented out)
@@ -130,7 +155,9 @@ export class FormCampComponent {
 
       // Submit form data through the FormService
       this._form.applyForm(formData).subscribe({
+
         next: ({statusCode, data, message}) => {
+
           if (statusCode === 200) {
             this.registerForm.reset(null);
             this.succssesMessage = message;
@@ -144,20 +171,19 @@ export class FormCampComponent {
     }
   }
 
-  // Send OTP for email verification
+  // Send OTP for email verification  
+
   sendOTP(): void {
     if (this.registerForm.get('Email')?.valid) {
       this._form.sendOtp(this.registerForm.get('Email')?.value).subscribe({
-        next: ({statusCode, data}) => {
+        next: ({ statusCode, data }) => {
           if (statusCode === 200) {
-            // Handle success case (if needed)
           }
-        }
+        },
       });
     }
   }
 
-  // Toggle calendar visibility
   toggleCalendar() {
     this.calendar.nativeElement.classList.toggle('hidden');
   }
@@ -189,6 +215,7 @@ export class FormCampComponent {
       month: 'long',
       year: 'numeric',
     });
+
     this.endYear = newDate.toLocaleDateString('en-US', {
       year: 'numeric'
     });
@@ -210,6 +237,7 @@ export class FormCampComponent {
     this.selectedDay = day;
     this.registerForm.get('BirthDate')?.setValue(formattedDate);
     this.calendar.nativeElement.classList.add('hidden');
+
   }
 
   // Select a year from the dropdown
@@ -221,9 +249,8 @@ export class FormCampComponent {
   changeYear(yearChange: any) {
     this.selectedYear = yearChange;
     this.dateStart.setFullYear(yearChange);
-    this.renderCalendar(this.dateStart, 'start');
   }
-
+  
   // Change the month displayed in the calendar
   changeMonth(monthChange: number) {
     this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
@@ -288,7 +315,6 @@ export class FormCampComponent {
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
       this.registerForm.patchValue({ Photo: this.selectedFile });
-
     }
  }
  formatFileName(name: string): string {

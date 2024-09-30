@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, authGuardLoggdIn } from './authentication/guard/auth.guard';
+import { authGuard } from './authentication/guard/auth.guard';
 import { rolesGuard } from './authentication/guard/roles.guard';
 // import { LoginComponent } from './authentication/screens/login/login.component';
 import { LayoutLeaderComponent } from './layouts/layout_leader/layout-leader.component';
@@ -102,11 +102,6 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '',
-        pathMatch: 'full',
-      },
-      {
-        path: '',
         component: HomePublicComponent,
         title: 'Home - ICPC',
       },
@@ -118,7 +113,7 @@ export const routes: Routes = [
       {
         path: 'registration',
         component: FormsCampsPublicComponent,
-        title: 'Guest / Camps - ICPC',
+        title: 'Camps - ICPC',
       },
     ],
   },
@@ -327,7 +322,7 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginLayoutComponent,
-    canActivate: [authGuardLoggdIn],
+    // canActivate: [authGuardLoggdIn],
     title: 'Login',
     children: [
       {
@@ -350,7 +345,7 @@ export const routes: Routes = [
   {
     path: 'otp/:email',
     component: OtpComponent,
-    canActivate: [authGuardLoggdIn],
+    // canActivate: [authGuardLoggdIn],
     title: 'OTP',
     children: [],
   },

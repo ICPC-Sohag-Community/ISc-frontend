@@ -25,6 +25,13 @@ export class SheetsHOCService {
     );
   }
 
+  updateSheetsOrder(info: any): Observable<ResponseHeader> {
+    return this.http.put<any>(
+      `${environment.BASE_URL}/api/Head/updateSheetsOrder`,
+      info
+    );
+  }
+
   deleteSheet(id: number): Observable<ResponseHeader> {
     return this.http.delete<any>(
       `${environment.BASE_URL}/api/Head/sheets/${id}`
