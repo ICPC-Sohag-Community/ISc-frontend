@@ -16,46 +16,19 @@ export const rolesGuard: CanActivateFn = (route, state) => {
   }
   debugger;
 
-  if (roles.includes('Leader')) {
-    if (path !== 'leader') {
-      router.navigate(['/leader']);
-    }
+  if (path === 'leader' && roles.includes('Leader')) {
+    return true;
+  }
+  if (path === 'head_of_camp' && roles.includes('Head_Of_Camp')) {
+    return true;
+  }
+  if (path === 'mentor' && roles.includes('Mentor')) {
     return true;
   }
 
-  if (roles.includes('Head_Of_Camp')) {
-    if (path !== 'head_of_camp') {
-      router.navigate(['/head_of_camp']);
-    }
+  if (path === 'trainee' && roles.includes('Trainee')) {
     return true;
   }
-
-  if (roles.includes('Mentor')) {
-    if (path !== 'mentor') {
-      router.navigate(['/mentor']);
-    }
-    return true;
-  }
-
-  if (roles.includes('Trainee')) {
-    if (path !== 'trainee') {
-      router.navigate(['/trainee']);
-    }
-    return true;
-  }
-  // if (path === 'leader' && roles.includes('Leader')) {
-  //   return true;
-  // }
-  // if (path === 'head_of_camp' && roles.includes('Head_Of_Camp')) {
-  //   return true;
-  // }
-  // if (path === 'mentor' && roles.includes('Mentor')) {
-  //   return true;
-  // }
-
-  // if (path === 'trainee' && roles.includes('Trainee')) {
-  //   return true;
-  // }
 
   router.navigateByUrl(
     roles.includes('Leader')
