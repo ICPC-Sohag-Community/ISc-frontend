@@ -163,9 +163,12 @@ export class FormCampComponent {
   }
 
   // Set available years for the dropdown
-  setYears(endYears: any): void {
+  setYears(): void {
     let years = [];
-    for (let i = 1950; i <= endYears; i++) {
+    const newDate = new Date();
+    const year = newDate.getFullYear();
+
+    for (let i = 1950; i <= year; i++) {
       years.push(i);
     }
     this.allYears = years;
@@ -189,7 +192,7 @@ export class FormCampComponent {
     this.endYear = newDate.toLocaleDateString('en-US', {
       year: 'numeric'
     });
-    this.setYears(this.endYear);
+    this.setYears();
 
     // Populate startDays with the dates of the month
     for (let i = 1; i <= lastDate; i++) {
