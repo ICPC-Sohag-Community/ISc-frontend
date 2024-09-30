@@ -116,7 +116,7 @@ export const routes: Routes = [
         title: 'Camps - ICPC',
       },
       {
-        path: 'Registration',
+        path: 'registration',
         component: FormsCampsPublicComponent,
         title: 'Guest / Camps - ICPC',
       },
