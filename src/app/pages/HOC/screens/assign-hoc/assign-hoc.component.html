@@ -5,49 +5,51 @@
   <div class="flex flex-col px-12 pt-4 pb-8 bg-white rounded-xl">
     <h2 class="pb-4 text-2xl font-bold border-b-2">Assign Trainees</h2>
 
-    <div class="flex items-center justify-between px-2 mt-4">
-      <h1 class="text-xl font-bold">Trainees</h1>
-      <input
-        class="w-[280px] px-3 py-2.5 pl-4 leading-tight text-gray-800 transition-colors ring-1 ring-gray-300 rounded-lg appearance-none hover:ring-gray-400 focus:outline-none focus:ring-mainblue focus:border-mainblue focus:shadow-outline"
-        id="searchInput"
-        type="text"
-        (keyup)="onSearchInput($event)"
-        placeholder="Search for Trainees"
-      />
-      <div class="relative">
-        <ng-select
-          [closeOnSelect]="true"
-          bindLabel="name"
-          bindValue="id"
-          formControlName="sortNumber"
-          (change)="sortTrainee($event)"
-          placeholder="Sort By"
-          class="relative block w-40 h-10 my-2 !text-white appearance-none rounded-xl !placeholder:text-white bg-mainblue cursor-none focus:outline-none"
-        >
-          <ng-option [value]="0">Grade</ng-option>
-          <ng-option [value]="1">College</ng-option>
-          <ng-option [value]="2">Gender</ng-option>
-        </ng-select>
-        <svg
-          width="24"
-          height="24"
-          [ngClass]="{ 'rotate-180': focusOrder }"
-          class="absolute z-[1100] top-[14px] left-32 text-white transition-transform"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
-            stroke="#fff"
-            stroke-width="1.5"
-            stroke-miterlimit="10"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+    <div class="flex items-center px-2 mt-4 gap-x-10">
+      <div class="w-[65%] flex items-center justify-between">
+        <h1 class="text-xl font-bold">Trainees</h1>
+        <input
+          class="w-[280px] px-3 py-2.5 pl-4 leading-tight text-gray-800 transition-colors ring-1 ring-gray-300 rounded-lg appearance-none hover:ring-gray-400 focus:outline-none focus:ring-mainblue focus:border-mainblue focus:shadow-outline"
+          id="searchInput"
+          type="text"
+          (keyup)="onSearchInput($event)"
+          placeholder="Search for Trainees"
+        />
+        <div class="relative">
+          <ng-select
+            [closeOnSelect]="true"
+            bindLabel="name"
+            bindValue="id"
+            formControlName="sortNumber"
+            (change)="sortTrainee($event)"
+            placeholder="Sort By"
+            class="relative block w-40 h-10 my-2 !text-white appearance-none rounded-xl !placeholder:text-white bg-mainblue cursor-none focus:outline-none"
+          >
+            <ng-option [value]="0">Grade</ng-option>
+            <ng-option [value]="1">College</ng-option>
+            <ng-option [value]="2">Gender</ng-option>
+          </ng-select>
+          <svg
+            width="24"
+            height="24"
+            [ngClass]="{ 'rotate-180': focusOrder }"
+            class="absolute z-[1100] top-[14px] left-32 text-white transition-transform"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
+              stroke="#fff"
+              stroke-width="1.5"
+              stroke-miterlimit="10"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
       </div>
-      <h1 class="text-xl font-bold pe-72">Mentors</h1>
+      <h1 class="text-xl font-bold">Mentors</h1>
     </div>
   </div>
 
@@ -134,31 +136,37 @@
           @for (mentor of allMentor; track $index) {
           <tr
             (click)="handleSelectMentor(mentor)"
-            [ngClass]="isSelectedMentor ? 'border-2 border-blue-500' : ''"
+            [ngClass]="
+              mentor.id === selectedMentor?.id ? 'border-2 border-blue-500' : ''
+            "
             class="my-6 text-base font-medium text-black bg-white rounded-lg"
           >
             <td
               [ngClass]="
-                isSelectedMentor ? 'border-2 border-r-0 border-blue-500' : ''
+                mentor.id === selectedMentor?.id
+                  ? 'border-2 border-r-0 border-blue-500'
+                  : ''
               "
               class="p-4 rounded-s-lg"
             >
-              <div class="flex flex-col text-[#6B7088]">
-                <span class="text-lg"> {{ mentor.firstName }} </span>
-                <span class="text-xs">
-                  {{ mentor.college }} | {{ mentor.grade }}
-                </span>
+              <div class="h-full text-[#6B7088]">
+                <p>{{ mentor.firstName }} {{ mentor.middleName }}</p>
+                <p class="text-xs">{{ mentor.college }} | {{ mentor.grade }}</p>
               </div>
             </td>
             <td
               [ngClass]="{
                   '!visible border-2 border-l-0 border-blue-500': selectedMentor === mentor,
-                  'pt-[53px] ': isSelectedMentor && mentor.trainees.length === 0,
+                  'pt-[54px] ': mentor.id === selectedMentor?.id && mentor.trainees.length === 0,
               }"
-              class="flex items-center invisible justify-end p-4 py-[22px] rounded-e-lg gap-x-2"
+              class="flex items-center invisible flex-wrap w-[14.5rem] gap-y-2 justify-end p-4 py-[22px] rounded-e-lg gap-x-2"
             >
-              @for (trainee of mentor.trainees.slice(0, 3); track $index) {
-              <div class="relative inline-block">
+              @for (trainee of mentor.trainees; track $index) {
+              <div
+                (mouseenter)="handleHoverShow(trainee.id)"
+                (mouseleave)="handleHoverHide()"
+                class="relative inline-block cursor-pointer"
+              >
                 <img
                   [src]="trainee.photoUrl"
                   [alt]="trainee.firstName"
@@ -170,12 +178,15 @@
                 >
                   X
                 </button>
+                @if (isHover && tranieeId === trainee.id) {
+                <p
+                  class="absolute px-2 py-1 text-xs font-semibold text-black bg-white border-2 rounded-md shadow-md -top-8 -right-12 min-w-max"
+                >
+                  {{ trainee.firstName }} {{ trainee.middleName }}
+                  {{ trainee.lastName }}
+                </p>
+                }
               </div>
-              } @if (mentor.trainees.length > 3) {
-
-              <span class="text-sm text-gray-600">
-                + {{ mentor.trainees.length - 3 }} more
-              </span>
               }
             </td>
           </tr>

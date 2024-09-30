@@ -102,7 +102,6 @@ export class FormCampComponent {
     this.renderCalendar(this.currentDate, 'start');
     this.dateStart = new Date();
     this.selectedDay = this.dateStart.getDate();
-    debugger;
     this.fechAllCamps();
   }
 
