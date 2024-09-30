@@ -34,7 +34,6 @@ import { Camp } from '../../../model/camp';
   encapsulation: ViewEncapsulation.None,
 })
 export class FormCampComponent {
-
   // Constructor to inject the FormService
   constructor(private _form: FormService) {}
 
@@ -46,13 +45,11 @@ export class FormCampComponent {
   @ViewChild('campSelect') campSelect!: NgSelectComponent;
   @ViewChild('lapSelect') lapSelect!: NgSelectComponent;
 
-
   // Date-related properties
-
   currentDate = new Date();
   daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   startDays: number[] = [];
-  startMonthYear: string = '';
+  monthYear: string = '';
   endMonthYear: string = '';
   endDays: number[] = [];
   dateStart!: Date;
@@ -73,12 +70,10 @@ export class FormCampComponent {
   selectedFile: File | null = null;
   years: number[] = [];
   endYear: any;
-  selectedYear: any;
+  selectedYear: any=2024;
   allYears: number[] = [];
 
-
   // Form terms state properties
-
   genderTerm: boolean = false;
   collageTerm: boolean = false;
   gradeTerm: boolean = false;
@@ -86,16 +81,12 @@ export class FormCampComponent {
   lapTerm: boolean = false;
   show: boolean = false;
 
-
   // Reactive form definition
-
   registerForm: FormGroup = new FormGroup({
     FirstName: new FormControl(null, [Validators.required]),
     MiddleName: new FormControl(null, [Validators.required]),
     LastName: new FormControl(null, [Validators.required]),
-
     NationalId: new FormControl(null, [Validators.required, Validators.maxLength(14), Validators.minLength(14)]),
-
     BirthDate: new FormControl(null, [Validators.required]),
     Grade: new FormControl(null, [Validators.required]),
     College: new FormControl(null, [Validators.required]),
@@ -104,7 +95,6 @@ export class FormCampComponent {
     FacebookLink: new FormControl(null),
     VjudgeHandle: new FormControl(null),
     Email: new FormControl(null, [Validators.required, Validators.email]),
-
     PhoneNumber: new FormControl(null, [Validators.required, Validators.maxLength(11), Validators.minLength(11)]),
     Photo: new FormControl(null),
     Comment: new FormControl(null),
@@ -113,17 +103,12 @@ export class FormCampComponent {
     CampId: new FormControl(null, [Validators.required]),
   });
 
-
   // Lifecycle hook for initialization
-
   ngOnInit(): void {
     this.renderCalendar(this.currentDate, 'start');
     this.dateStart = new Date();
     this.selectedDay = this.dateStart.getDate();
     // this.fetchAllCamps() // Uncomment to fetch all camps
-  }
-
-
   }
 
   // Fetch all camps (currently commented out)
@@ -155,9 +140,7 @@ export class FormCampComponent {
 
       // Submit form data through the FormService
       this._form.applyForm(formData).subscribe({
-
         next: ({statusCode, data, message}) => {
-
           if (statusCode === 200) {
             this.registerForm.reset(null);
             this.succssesMessage = message;
@@ -171,8 +154,7 @@ export class FormCampComponent {
     }
   }
 
-  // Send OTP for email verification  
-
+  // Send OTP for email verification
   sendOTP(): void {
     if (this.registerForm.get('Email')?.valid) {
       this._form.sendOtp(this.registerForm.get('Email')?.value).subscribe({
@@ -211,9 +193,8 @@ export class FormCampComponent {
     const lastDate = new Date(year, month + 1, 0).getDate();
 
     this.startDays = [];
-    this.startMonthYear = newDate.toLocaleDateString('en-US', {
+    this.monthYear = newDate.toLocaleDateString('en-US', {
       month: 'long',
-      year: 'numeric',
     });
 
     this.endYear = newDate.toLocaleDateString('en-US', {
@@ -237,7 +218,6 @@ export class FormCampComponent {
     this.selectedDay = day;
     this.registerForm.get('BirthDate')?.setValue(formattedDate);
     this.calendar.nativeElement.classList.add('hidden');
-
   }
 
   // Select a year from the dropdown
@@ -250,7 +230,7 @@ export class FormCampComponent {
     this.selectedYear = yearChange;
     this.dateStart.setFullYear(yearChange);
   }
-  
+
   // Change the month displayed in the calendar
   changeMonth(monthChange: number) {
     this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
@@ -287,6 +267,16 @@ export class FormCampComponent {
     this.gradeTerm = !this.gradeTerm;
   }
 
+  // Toggle the camp dropdown
+  toggleDropdownCamp(campSelect: NgSelectComponent) {
+    if (this.campTerm) {
+      campSelect.close();
+    } else {
+      campSelect.open();
+    }
+    this.campTerm = !this.campTerm;
+  }
+
   // Toggle the lap dropdown
   toggleDropdownL(lapSelect: NgSelectComponent) {
     if (this.lapTerm) {
@@ -297,38 +287,17 @@ export class FormCampComponent {
     this.lapTerm = !this.lapTerm;
   }
 
-  // Toggle the camp dropdown
-  toggleDropdownCamp(campSelect: NgSelectComponent) {
-    if (this.campTerm) {
-      campSelect.close();
-    } else {
-      campSelect.open();
-    }
-    this.campTerm = !this.campTerm;
+  // Reset the form
+  resetForm(): void {
+    this.registerForm.reset();
   }
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.fileName = this.formatFileName(file.name);
-    }
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-      this.registerForm.patchValue({ Photo: this.selectedFile });
-    }
- }
- formatFileName(name: string): string {
-    const words = name.split(' ');
-    if (words.length > 3) {
-      return `${words.slice(0, 3).join(' ')} ...`;
-    }
-    return name;
- }
 
-  // Remove selected file
-  removeFile() {
-    this.selectedFile = null;
-    this.fileName = '';
-    this.registerForm.get('Photo')?.setValue(null);
+  // Handle file selection
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+    this.fileName = this.selectedFile ? this.selectedFile.name : '';
+    this.registerForm.patchValue({
+      Photo: this.selectedFile,
+    });
   }
 }
