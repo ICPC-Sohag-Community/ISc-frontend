@@ -32,38 +32,23 @@ export class ActionsContestsComponent implements OnInit {
   contestsHocService = inject(ContestsHocService);
   casheService = inject(CasheService);
   fb = inject(FormBuilder);
-  elementRef = inject(ElementRef);
   router = inject(Router);
   route = inject(ActivatedRoute);
-  @ViewChild('startDateInput') startDateInput!: ElementRef;
-  @ViewChild('endDateInput') endDateInput!: ElementRef;
-  @ViewChild('calendar') calendar!: ElementRef;
-  @ViewChild('calendar2') calendar2!: ElementRef;
   @ViewChild('community') community!: NgSelectComponent;
-  selectedDay: number | null | any = null;
-  selectedDayEnd: number | null | any = null;
-  currentDate = new Date();
-  daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  startDays: number[] = [];
-  endDays: number[] = [];
-  startMonthYear: string = '';
-  endMonthYear: string = '';
-  dateStart!: Date;
-  dateEnd!: Date;
   foucsTerm: boolean = false;
   id: number = 0;
   submitted: boolean = false;
   isLoading: boolean = false;
   contestForm!: FormGroup;
+  errorMessages: any = [];
+  errorMessage: string = '';
+
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.id = parseInt(params['id']);
     });
     if (this.id > 0) {
       this.getOneContest(this.id);
-    } else {
-      this.renderCalendar(this.currentDate, 'start');
-      this.renderCalendar(this.currentDate, 'end');
     }
     this.contestForm = this.fb.group({
       id: [''],
@@ -77,6 +62,7 @@ export class ActionsContestsComponent implements OnInit {
       startTime: [null, [Validators.required]],
     });
   }
+
   positiveNumberValidator(control: AbstractControl) {
     const value = control.value;
     if (value !== null && value < 0) {
@@ -104,13 +90,6 @@ export class ActionsContestsComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode == 200) {
           this.isLoading = false;
-          this.renderCalendar(data.startTime, 'start');
-          this.renderCalendar(data.endTime, 'end');
-          this.dateStart = new Date(data.startTime);
-          this.dateEnd = new Date(data.endTime);
-          console.log(this.dateStart, this.dateEnd);
-          this.selectedDay = this.dateStart.getDate();
-          this.selectedDayEnd = this.dateEnd.getDate();
           this.contestForm.patchValue({
             id: data.id,
             name: data.name,
@@ -140,14 +119,14 @@ export class ActionsContestsComponent implements OnInit {
       this.contestsHocService.createContest(this.contestForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
-            this.isLoading = false;
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/contests']);
-          } else if (errors) {
-            console.log(errors);
-            alert(errors);
+            this.isLoading = false;
+          } else if (statusCode === 400) {
+            this.errorMessage = message;
+            this.isLoading = false;
           } else {
-            alert(message);
+            this.handleApiErrors(errors);
             this.isLoading = false;
           }
         },
@@ -163,11 +142,11 @@ export class ActionsContestsComponent implements OnInit {
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/contests']);
             this.isLoading = false;
-          } else if (errors) {
-            console.log(errors);
-            alert(errors);
+          } else if (statusCode === 400) {
+            this.errorMessage = message;
+            this.isLoading = false;
           } else {
-            alert(message);
+            this.handleApiErrors(errors);
             this.isLoading = false;
           }
         },
@@ -179,112 +158,47 @@ export class ActionsContestsComponent implements OnInit {
     }
   }
 
-  toggleCalendar(name: string) {
-    if (name === 'start') {
-      this.calendar.nativeElement.classList.toggle('hidden');
-    } else {
-      this.calendar2.nativeElement.classList.toggle('hidden');
-    }
+  removeErrorM() {
+    this.errorMessage = '';
   }
 
-  changeMonth(monthChange: number, name: string) {
-    if (name === 'start') {
-      this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
-      this.renderCalendar(this.dateStart, name);
+  handleApiErrors(errors: any) {
+    this.errorMessages = [];
+    if (errors) {
+      this.errorMessages = errors;
     } else {
-      this.dateEnd.setMonth(this.dateEnd.getMonth() + monthChange);
-      this.renderCalendar(this.dateEnd, name);
+      this.errorMessages.push(
+        'An unknown error occurred. Please try again later.'
+      );
     }
+    this.errorMessages.forEach((error: any, index: number) => {
+      setTimeout(() => {
+        this.removeError(index);
+      }, 3000);
+    });
   }
 
-  selectDate(day: number, name: string) {
-    // const month2 = this.currentDate.toLocaleString('default', {
-    //   month: 'long',
-    // });
-    // const year2 = this.currentDate.getFullYear();
-    // const theDate = `${day} ${month2} ${year2}`;
-    // console.log(theDate);
-
-    // // Format the time as "2024 2:42 AM"
-    // const hours2 = this.currentDate.getHours() % 12 || 12;
-    // const minutes2 = String(this.currentDate.getMinutes()).padStart(2, '0');
-    // const ampm = this.currentDate.getHours() >= 12 ? 'PM' : 'AM';
-    // const formattedTime = `${hours2}:${minutes2} ${ampm}`;
-    // console.log(formattedTime);
-
-    const year = this.currentDate.getFullYear();
-    const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
-    const hours = String(this.currentDate.getHours()).padStart(2, '0');
-    const minutes = String(this.currentDate.getMinutes()).padStart(2, '0');
-
-    const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
-
-    if (name === 'start') {
-      this.selectedDay = day;
-      this.contestForm.get('startTime')?.setValue(formattedDate);
-      this.calendar.nativeElement.classList.add('hidden');
-    } else {
-      this.selectedDayEnd = day;
-      this.contestForm.get('endTime')?.setValue(formattedDate);
-      this.calendar2.nativeElement.classList.add('hidden');
-    }
+  removeError(index: number) {
+    this.errorMessages.splice(index, 1);
   }
 
-  renderCalendar(date: Date, name?: string) {
-    const newDate = new Date(date);
-    const month = newDate.getMonth();
-    const year = newDate.getFullYear();
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
+  displayFormErrors() {
+    this.errorMessages = [];
 
-    if (name === 'start') {
-      this.startDays = [];
-      this.startMonthYear = newDate.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
+    Object.keys(this.contestForm.controls).forEach((field) => {
+      const control = this.contestForm.get(field);
 
-      for (let i = 0; i < firstDay; i++) {
-        this.startDays.push(0);
+      if (control?.invalid) {
+        if (control.errors?.['required']) {
+          this.errorMessages.push(`${field} is required`);
+        }
       }
-
-      for (let i = 1; i <= lastDate; i++) {
-        this.startDays.push(i);
-      }
-    } else {
-      this.endDays = [];
-      this.endMonthYear = newDate.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
-
-      for (let i = 0; i < firstDay; i++) {
-        this.endDays.push(0);
-      }
-
-      for (let i = 1; i <= lastDate; i++) {
-        this.endDays.push(i);
-      }
-    }
-  }
-
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    if (
-      !this.startDateInput.nativeElement.contains(event.target) &&
-      !this.calendar.nativeElement.contains(event.target)
-    ) {
-      this.calendar.nativeElement.classList.add('hidden');
-    }
-    if (
-      !this.endDateInput.nativeElement.contains(event.target) &&
-      !this.calendar2.nativeElement.contains(event.target)
-    ) {
-      this.calendar2.nativeElement.classList.add('hidden');
-    }
-    if (this.community.dropdownPanel === undefined) {
-      this.foucsTerm = false;
-    }
+    });
+    this.errorMessages.forEach((error: any, index: number) => {
+      setTimeout(() => {
+        this.removeError(index);
+      }, 3000);
+    });
   }
 
   toggleDropdownC(community: NgSelectComponent) {

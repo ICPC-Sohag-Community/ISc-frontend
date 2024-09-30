@@ -28,28 +28,14 @@ export class ActionsSessionsComponent implements OnInit {
   sessionsHOCService = inject(SessionsHOCService);
   casheService = inject(CasheService);
   fb = inject(FormBuilder);
-  elementRef = inject(ElementRef);
   router = inject(Router);
   route = inject(ActivatedRoute);
-  @ViewChild('startDateInput') startDateInput!: ElementRef;
-  @ViewChild('endDateInput') endDateInput!: ElementRef;
-  @ViewChild('calendar') calendar!: ElementRef;
-  @ViewChild('calendar2') calendar2!: ElementRef;
-  selectedDay: number | null | any = null;
-  selectedDayEnd: number | null | any = null;
-  currentDate = new Date();
-  daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  startDays: number[] = [];
-  endDays: number[] = [];
-  startMonthYear: string = '';
-  endMonthYear: string = '';
-  dateStart!: Date;
-  dateEnd!: Date;
   id: number = 0;
   submitted: boolean = false;
   isLoading: boolean = false;
   sessionForm!: FormGroup;
-  error: any;
+  errorMessages: any = [];
+  errorMessage: string = '';
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -57,9 +43,6 @@ export class ActionsSessionsComponent implements OnInit {
     });
     if (this.id > 0) {
       this.getOneSession(this.id);
-    } else {
-      this.renderCalendar(this.currentDate, 'start');
-      this.renderCalendar(this.currentDate, 'end');
     }
     this.sessionForm = this.fb.group({
       id: [''],
@@ -78,12 +61,6 @@ export class ActionsSessionsComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode == 200) {
           this.isLoading = false;
-          this.renderCalendar(data.startDate, 'start');
-          this.renderCalendar(data.endDate, 'end');
-          this.dateStart = new Date(data.startDate);
-          this.dateEnd = new Date(data.endDate);
-          this.selectedDay = this.dateStart.getDate();
-          this.selectedDayEnd = this.dateEnd.getDate();
           this.sessionForm.patchValue({
             id: data.id,
             instructorName: data.instructorName,
@@ -111,14 +88,14 @@ export class ActionsSessionsComponent implements OnInit {
       this.sessionsHOCService.createSession(this.sessionForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
-            this.isLoading = false;
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/sessions']);
-          } else if (errors) {
-            console.log(errors);
+            this.isLoading = false;
+          } else if (statusCode === 400) {
+            this.errorMessage = message;
+            this.isLoading = false;
           } else {
-            this.error = message;
-            console.log(this.error);
+            this.handleApiErrors(errors);
             this.isLoading = false;
           }
         },
@@ -134,11 +111,11 @@ export class ActionsSessionsComponent implements OnInit {
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/sessions']);
             this.isLoading = false;
-          } else if (errors) {
-            console.log(errors);
-            alert(errors);
+          } else if (statusCode === 400) {
+            this.errorMessage = message;
+            this.isLoading = false;
           } else {
-            alert(message);
+            this.handleApiErrors(errors);
             this.isLoading = false;
           }
         },
@@ -150,108 +127,46 @@ export class ActionsSessionsComponent implements OnInit {
     }
   }
 
-  toggleCalendar(name: string) {
-    if (name === 'start') {
-      this.calendar.nativeElement.classList.toggle('hidden');
-    } else {
-      this.calendar2.nativeElement.classList.toggle('hidden');
-    }
+  removeErrorM() {
+    this.errorMessage = '';
   }
 
-  changeMonth(monthChange: number, name: string) {
-    if (name === 'start') {
-      this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
-      this.renderCalendar(this.dateStart, name);
+  handleApiErrors(errors: any) {
+    this.errorMessages = [];
+    if (errors) {
+      this.errorMessages = errors;
     } else {
-      this.dateEnd.setMonth(this.dateEnd.getMonth() + monthChange);
-      this.renderCalendar(this.dateEnd, name);
+      this.errorMessages.push(
+        'An unknown error occurred. Please try again later.'
+      );
     }
+    this.errorMessages.forEach((error: any, index: number) => {
+      setTimeout(() => {
+        this.removeError(index);
+      }, 3000);
+    });
   }
 
-  selectDate(day: number, name: string) {
-    // const month2 = this.currentDate.toLocaleString('default', {
-    //   month: 'long',
-    // });
-    // const year2 = this.currentDate.getFullYear();
-    // const theDate = `${day} ${month2} ${year2}`;
-    // console.log(theDate);
-
-    // // Format the time as "2024 2:42 AM"
-    // const hours2 = this.currentDate.getHours() % 12 || 12;
-    // const minutes2 = String(this.currentDate.getMinutes()).padStart(2, '0');
-    // const ampm = this.currentDate.getHours() >= 12 ? 'PM' : 'AM';
-    // const formattedTime = `${hours2}:${minutes2} ${ampm}`;
-    // console.log(formattedTime);
-
-    const year = this.currentDate.getFullYear();
-    const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
-    const hours = String(this.currentDate.getHours()).padStart(2, '0');
-    const minutes = String(this.currentDate.getMinutes()).padStart(2, '0');
-
-    const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
-
-    if (name === 'start') {
-      this.selectedDay = day;
-      this.sessionForm.get('startDate')?.setValue(formattedDate);
-      this.calendar.nativeElement.classList.add('hidden');
-    } else {
-      this.selectedDayEnd = day;
-      this.sessionForm.get('endDate')?.setValue(formattedDate);
-      this.calendar2.nativeElement.classList.add('hidden');
-    }
+  removeError(index: number) {
+    this.errorMessages.splice(index, 1);
   }
 
-  renderCalendar(date: Date, name?: string) {
-    const newDate = new Date(date);
-    const month = newDate.getMonth();
-    const year = newDate.getFullYear();
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
+  displayFormErrors() {
+    this.errorMessages = [];
 
-    if (name === 'start') {
-      this.startDays = [];
-      this.startMonthYear = newDate.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
+    Object.keys(this.sessionForm.controls).forEach((field) => {
+      const control = this.sessionForm.get(field);
 
-      for (let i = 0; i < firstDay; i++) {
-        this.startDays.push(0);
+      if (control?.invalid) {
+        if (control.errors?.['required']) {
+          this.errorMessages.push(`${field} is required`);
+        }
       }
-
-      for (let i = 1; i <= lastDate; i++) {
-        this.startDays.push(i);
-      }
-    } else {
-      this.endDays = [];
-      this.endMonthYear = newDate.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
-
-      for (let i = 0; i < firstDay; i++) {
-        this.endDays.push(0);
-      }
-
-      for (let i = 1; i <= lastDate; i++) {
-        this.endDays.push(i);
-      }
-    }
-  }
-
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    if (
-      !this.startDateInput.nativeElement.contains(event.target) &&
-      !this.calendar.nativeElement.contains(event.target)
-    ) {
-      this.calendar.nativeElement.classList.add('hidden');
-    }
-    if (
-      !this.endDateInput.nativeElement.contains(event.target) &&
-      !this.calendar2.nativeElement.contains(event.target)
-    ) {
-      this.calendar2.nativeElement.classList.add('hidden');
-    }
+    });
+    this.errorMessages.forEach((error: any, index: number) => {
+      setTimeout(() => {
+        this.removeError(index);
+      }, 3000);
+    });
   }
 }

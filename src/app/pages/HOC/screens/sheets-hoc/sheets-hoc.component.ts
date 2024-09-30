@@ -38,7 +38,7 @@ export class SheetsHOCComponent implements OnInit {
   allSheets!: SheetsHoc;
   sheetId: number = 0;
   currentPage: number = 1;
-  pageSize: number = 10;
+  pageSize: number = 8;
   keyword: string = '';
   isLoading = signal<boolean>(false);
   showModal: boolean = false;
@@ -68,7 +68,7 @@ export class SheetsHOCComponent implements OnInit {
         next: (res) => {
           if (res.statusCode === 200) {
             this.allSheets = res;
-            this.dataRequest.push(this.allSheets);
+            this.dataRequest.push(res);
             this.isLoading.update((v) => (v = false));
           } else {
             this.isLoading.update((v) => (v = false));
@@ -87,7 +87,6 @@ export class SheetsHOCComponent implements OnInit {
       return;
     }
     this.formMaterial.get('sheetId')?.setValue(this.sheetId);
-    console.log(this.formMaterial.value);
     this.isLoadingMaterialAdd.set(true);
     this.sheetsHOCService
       .addMaterialToSheet(this.formMaterial.value)
@@ -224,23 +223,55 @@ export class SheetsHOCComponent implements OnInit {
   }
 
   dropSheet(event: CdkDragDrop<any[]>) {
-    // console.log(event);
-    moveItemInArray(this.dataRequest, event.previousIndex, event.currentIndex);
-    this.dataRequest.forEach((item, index) => {
-      item.data.forEach((d: any, i: any) => {
-        // item.materialOrder = index + 1;
+    let sheetOrderCounter = 1;
+
+    this.dataRequest.forEach((item) => {
+      // Loop through each sheet in the data array of the current item
+      item.data.forEach((sheet: any) => {
+        sheet.sheetOrder = sheetOrderCounter++; // Set the sheetOrder and increment the counter
       });
     });
-    // const extractedData = this.materailsSheet.map((item) => {
-    //   return {
-    //     materialId: item.id,
-    //     order: item.materialOrder,
-    //   };
-    // });
-    // const info = {
-    //   sheetId: sheetId,
-    //   materials: extractedData,
-    // };
-    // this.updateOrdersMaterails(info);
+
+    console.log(this.dataRequest);
+
+    const flattenedData = this.dataRequest.flatMap((item) => item.data);
+
+    // console.log(mergedDates);
+    moveItemInArray(flattenedData, event.previousIndex, event.currentIndex);
+
+    flattenedData.forEach((sheet: any, index: number) => {
+      sheet.sheetOrder = index + 1;
+    });
+
+    console.log(flattenedData);
+    const extractedData = flattenedData.map((sheet: any) => ({
+      id: sheet.id,
+      orderId: sheet.sheetOrder,
+    }));
+
+    const info = {
+      id: event.item.data.sheetId,
+      sheets: extractedData,
+    };
+    console.log(info);
+    this.updateSheetsOrder(info);
+  }
+
+  updateSheetsOrder(info: any): void {
+    this.sheetsHOCService.updateSheetsOrder(info).subscribe({
+      next: ({ statusCode }) => {
+        if (statusCode === 200) {
+          this.dataRequest = [];
+          this.casheService.clearCache();
+          this.currentPage = 1;
+          this.getAllSheets(this.currentPage, this.pageSize);
+        } else {
+          console.log('error');
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 }
