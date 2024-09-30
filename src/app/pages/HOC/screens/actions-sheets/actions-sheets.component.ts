@@ -35,27 +35,29 @@ export class ActionsSheetsComponent implements OnInit {
   elementRef = inject(ElementRef);
   router = inject(Router);
   route = inject(ActivatedRoute);
-  @ViewChild('startDateInput') startDateInput!: ElementRef;
-  @ViewChild('endDateInput') endDateInput!: ElementRef;
-  @ViewChild('calendar') calendar!: ElementRef;
-  @ViewChild('calendar2') calendar2!: ElementRef;
+  // @ViewChild('startDateInput') startDateInput!: ElementRef;
+  // @ViewChild('endDateInput') endDateInput!: ElementRef;
+  // @ViewChild('calendar') calendar!: ElementRef;
+  // @ViewChild('calendar2') calendar2!: ElementRef;
   @ViewChild('community') community!: NgSelectComponent;
   @ViewChild('status') status!: NgSelectComponent;
-  selectedDay: number | null | any = null;
-  selectedDayEnd: number | null | any = null;
-  currentDate = new Date();
-  daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  startDays: number[] = [];
-  endDays: number[] = [];
-  startMonthYear: string = '';
-  endMonthYear: string = '';
-  dateStart!: Date;
-  dateEnd!: Date;
+  // selectedDay: number | null | any = null;
+  // selectedDayEnd: number | null | any = null;
+  // currentDate = new Date();
+  // daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  // startDays: number[] = [];
+  // endDays: number[] = [];
+  // startMonthYear: string = '';
+  // endMonthYear: string = '';
+  // dateStart!: Date;
+  // dateEnd!: Date;
   dropdownOpen: boolean = false;
   dropdownOpenS: boolean = false;
   sheetForm!: FormGroup;
   submitted: boolean = false;
   isLoading: boolean = false;
+  errorMessages: any = [];
+  errorMessage: string = '';
   id: number = 0;
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -63,10 +65,11 @@ export class ActionsSheetsComponent implements OnInit {
     });
     if (this.id > 0) {
       this.getOneSheet(this.id);
-    } else {
-      this.renderCalendar(this.currentDate, 'start');
-      this.renderCalendar(this.currentDate, 'end');
     }
+    // else {
+    //   this.renderCalendar(this.currentDate, 'start');
+    //   this.renderCalendar(this.currentDate, 'end');
+    // }
     this.sheetForm = this.fb.group({
       id: [''],
       name: [null, [Validators.required]],
@@ -87,12 +90,12 @@ export class ActionsSheetsComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode == 200) {
           this.isLoading = false;
-          this.renderCalendar(data.startDate, 'start');
-          this.renderCalendar(data.endDate, 'end');
-          this.dateStart = new Date(data.startDate);
-          this.dateEnd = new Date(data.endDate);
-          this.selectedDay = this.dateStart.getDate();
-          this.selectedDayEnd = this.dateEnd.getDate();
+          // this.renderCalendar(data.startDate, 'start');
+          // this.renderCalendar(data.endDate, 'end');
+          // this.dateStart = new Date(data.startDate);
+          // this.dateEnd = new Date(data.endDate);
+          // this.selectedDay = this.dateStart.getDate();
+          // this.selectedDayEnd = this.dateEnd.getDate();
           this.sheetForm.patchValue({
             id: data.id,
             name: data.name,
@@ -126,11 +129,11 @@ export class ActionsSheetsComponent implements OnInit {
             this.isLoading = false;
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/sheets']);
-          } else if (errors) {
-            console.log(errors);
-            alert(errors);
+          } else if (statusCode === 400) {
+            this.errorMessage = message;
+            this.isLoading = false;
           } else {
-            alert(message);
+            this.handleApiErrors(errors);
             this.isLoading = false;
           }
         },
@@ -146,11 +149,11 @@ export class ActionsSheetsComponent implements OnInit {
             this.isLoading = false;
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/sheets']);
-          } else if (errors) {
-            console.log(errors);
-            alert(errors);
+          } else if (statusCode === 400) {
+            this.errorMessage = message;
+            this.isLoading = false;
           } else {
-            alert(message);
+            this.handleApiErrors(errors);
             this.isLoading = false;
           }
         },
@@ -162,100 +165,143 @@ export class ActionsSheetsComponent implements OnInit {
     }
   }
 
-  toggleCalendar(name: string) {
-    if (name === 'start') {
-      this.calendar.nativeElement.classList.toggle('hidden');
+  removeErrorM() {
+    this.errorMessage = '';
+  }
+
+  handleApiErrors(errors: any) {
+    this.errorMessages = [];
+    if (errors) {
+      this.errorMessages = errors;
     } else {
-      this.calendar2.nativeElement.classList.toggle('hidden');
+      this.errorMessages.push(
+        'An unknown error occurred. Please try again later.'
+      );
     }
+    this.errorMessages.forEach((error: any, index: number) => {
+      setTimeout(() => {
+        this.removeError(index);
+      }, 3000);
+    });
   }
 
-  changeMonth(monthChange: number, name: string) {
-    if (name === 'start') {
-      this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
-      this.renderCalendar(this.dateStart, name);
-    } else {
-      this.dateEnd.setMonth(this.dateEnd.getMonth() + monthChange);
-      this.renderCalendar(this.dateEnd, name);
-    }
+  removeError(index: number) {
+    this.errorMessages.splice(index, 1);
   }
 
-  selectDate(day: number, name: string) {
-    const year = this.currentDate.getFullYear();
-    const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
-    const dayOfMonth = String(day).padStart(2, '0');
+  displayFormErrors() {
+    this.errorMessages = [];
 
-    const formattedDate = `${year}-${month}-${dayOfMonth}`;
-    if (name === 'start') {
-      this.selectedDay = day;
-      this.sheetForm.get('startDate')?.setValue(formattedDate);
-      this.calendar.nativeElement.classList.add('hidden');
-    } else {
-      this.selectedDayEnd = day;
-      this.sheetForm.get('endDate')?.setValue(formattedDate);
-      this.calendar2.nativeElement.classList.add('hidden');
-    }
-  }
+    Object.keys(this.sheetForm.controls).forEach((field) => {
+      const control = this.sheetForm.get(field);
 
-  renderCalendar(date: Date, name?: string) {
-    const newDate = new Date(date);
-    const month = newDate.getMonth();
-    const year = newDate.getFullYear();
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
-
-    if (name === 'start') {
-      this.startDays = [];
-      this.startMonthYear = newDate.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
-
-      for (let i = 0; i < firstDay; i++) {
-        this.startDays.push(0);
+      if (control?.invalid) {
+        if (control.errors?.['required']) {
+          this.errorMessages.push(`${field} is required`);
+        }
       }
-
-      for (let i = 1; i <= lastDate; i++) {
-        this.startDays.push(i);
-      }
-    } else {
-      this.endDays = [];
-      this.endMonthYear = newDate.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
-
-      for (let i = 0; i < firstDay; i++) {
-        this.endDays.push(0);
-      }
-
-      for (let i = 1; i <= lastDate; i++) {
-        this.endDays.push(i);
-      }
-    }
+    });
+    this.errorMessages.forEach((error: any, index: number) => {
+      setTimeout(() => {
+        this.removeError(index);
+      }, 3000);
+    });
   }
 
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    if (
-      !this.startDateInput.nativeElement.contains(event.target) &&
-      !this.calendar.nativeElement.contains(event.target)
-    ) {
-      this.calendar.nativeElement.classList.add('hidden');
-    }
-    if (
-      !this.endDateInput.nativeElement.contains(event.target) &&
-      !this.calendar2.nativeElement.contains(event.target)
-    ) {
-      this.calendar2.nativeElement.classList.add('hidden');
-    }
-    if (this.community.dropdownPanel === undefined) {
-      this.dropdownOpen = false;
-    }
-    if (this.status.dropdownPanel === undefined) {
-      this.dropdownOpenS = false;
-    }
-  }
+  // toggleCalendar(name: string) {
+  //   if (name === 'start') {
+  //     this.calendar.nativeElement.classList.toggle('hidden');
+  //   } else {
+  //     this.calendar2.nativeElement.classList.toggle('hidden');
+  //   }
+  // }
+
+  // changeMonth(monthChange: number, name: string) {
+  //   if (name === 'start') {
+  //     this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
+  //     this.renderCalendar(this.dateStart, name);
+  //   } else {
+  //     this.dateEnd.setMonth(this.dateEnd.getMonth() + monthChange);
+  //     this.renderCalendar(this.dateEnd, name);
+  //   }
+  // }
+
+  // selectDate(day: number, name: string) {
+  //   const year = this.currentDate.getFullYear();
+  //   const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
+  //   const dayOfMonth = String(day).padStart(2, '0');
+
+  //   const formattedDate = `${year}-${month}-${dayOfMonth}`;
+  //   if (name === 'start') {
+  //     this.selectedDay = day;
+  //     this.sheetForm.get('startDate')?.setValue(formattedDate);
+  //     this.calendar.nativeElement.classList.add('hidden');
+  //   } else {
+  //     this.selectedDayEnd = day;
+  //     this.sheetForm.get('endDate')?.setValue(formattedDate);
+  //     this.calendar2.nativeElement.classList.add('hidden');
+  //   }
+  // }
+
+  // renderCalendar(date: Date, name?: string) {
+  //   const newDate = new Date(date);
+  //   const month = newDate.getMonth();
+  //   const year = newDate.getFullYear();
+  //   const firstDay = new Date(year, month, 1).getDay();
+  //   const lastDate = new Date(year, month + 1, 0).getDate();
+
+  //   if (name === 'start') {
+  //     this.startDays = [];
+  //     this.startMonthYear = newDate.toLocaleDateString('en-US', {
+  //       month: 'long',
+  //       year: 'numeric',
+  //     });
+
+  //     for (let i = 0; i < firstDay; i++) {
+  //       this.startDays.push(0);
+  //     }
+
+  //     for (let i = 1; i <= lastDate; i++) {
+  //       this.startDays.push(i);
+  //     }
+  //   } else {
+  //     this.endDays = [];
+  //     this.endMonthYear = newDate.toLocaleDateString('en-US', {
+  //       month: 'long',
+  //       year: 'numeric',
+  //     });
+
+  //     for (let i = 0; i < firstDay; i++) {
+  //       this.endDays.push(0);
+  //     }
+
+  //     for (let i = 1; i <= lastDate; i++) {
+  //       this.endDays.push(i);
+  //     }
+  //   }
+  // }
+
+  // @HostListener('document:click', ['$event'])
+  // onClickOutside(event: MouseEvent) {
+  //   if (
+  //     !this.startDateInput.nativeElement.contains(event.target) &&
+  //     !this.calendar.nativeElement.contains(event.target)
+  //   ) {
+  //     this.calendar.nativeElement.classList.add('hidden');
+  //   }
+  //   if (
+  //     !this.endDateInput.nativeElement.contains(event.target) &&
+  //     !this.calendar2.nativeElement.contains(event.target)
+  //   ) {
+  //     this.calendar2.nativeElement.classList.add('hidden');
+  //   }
+  //   if (this.community.dropdownPanel === undefined) {
+  //     this.dropdownOpen = false;
+  //   }
+  //   if (this.status.dropdownPanel === undefined) {
+  //     this.dropdownOpenS = false;
+  //   }
+  // }
 
   toggleDropdown() {
     if (this.dropdownOpen) {

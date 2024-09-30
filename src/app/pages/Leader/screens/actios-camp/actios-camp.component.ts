@@ -51,16 +51,20 @@ export class ActiosCampComponent implements OnInit {
   @ViewChild('mentorsSelect') mentorsSelect!: NgSelectComponent;
   @ViewChild('hocSelect') hocSelect!: NgSelectComponent;
 
-  selectedDay: number | null | any = null;
-  selectedDayEnd: number | null | any = null;
-  currentDate = new Date();
-  daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  startDays: number[] = [];
-  endDays: number[] = [];
-  startMonthYear: string = '';
-  endMonthYear: string = '';
-  dateStart!: Date;
-  dateEnd!: Date;
+  // selectedDay: number | null | any = null;
+  // selectedDayEnd: number | null | any = null;
+  // currentDate = new Date();
+  // daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  // startDays: number[] = [];
+  // endDays: number[] = [];
+  // startMonthYear: string = '';
+  // endMonthYear: string = '';
+  // dateStart!: Date;
+  // dateEnd!: Date;
+  // monthInNumS: string = '';
+  // monthInNumE: string = '';
+  // yearInNumS: string = '';
+  // yearInNumE: string = '';
   dropdownOpen: boolean = false;
   dropdownOpenH: boolean = false;
 
@@ -72,7 +76,8 @@ export class ActiosCampComponent implements OnInit {
   nameForm!: FormGroup;
   campForm!: FormGroup;
   campName: string = '';
-
+  errorMessages: any = [];
+  errorMessage: string = '';
   foucsTerm: boolean = false;
 
   submitted: boolean = false;
@@ -89,8 +94,8 @@ export class ActiosCampComponent implements OnInit {
     } else {
       this.fetchAllMentors();
       this.fetchAllHeadsOfCamp();
-      this.renderCalendar(this.currentDate, 'start');
-      this.renderCalendar(this.currentDate, 'end');
+      // this.renderCalendar(this.currentDate, 'start');
+      // this.renderCalendar(this.currentDate, 'end');
     }
     this.campForm = this.fb.group({
       id: [''],
@@ -189,12 +194,12 @@ export class ActiosCampComponent implements OnInit {
         if (statusCode == 200) {
           this.isLoading = false;
           this.selectedCamp = data.name;
-          this.renderCalendar(data.startDate, 'start');
-          this.renderCalendar(data.endDate, 'end');
-          this.dateStart = new Date(data.startDate);
-          this.dateEnd = new Date(data.endDate);
-          this.selectedDay = this.dateStart.getDate();
-          this.selectedDayEnd = this.dateEnd.getDate();
+          // this.renderCalendar(data.startDate, 'start');
+          // this.renderCalendar(data.endDate, 'end');
+          // this.dateStart = new Date(data.startDate);
+          // this.dateEnd = new Date(data.endDate);
+          // this.selectedDay = this.dateStart.getDate();
+          // this.selectedDayEnd = this.dateEnd.getDate();
           this.allMentors = data.mentorsOfCamp;
           this.allHeadsOfCamp = data.headsOfCamp;
           this.campForm.patchValue({
@@ -223,11 +228,10 @@ export class ActiosCampComponent implements OnInit {
     this.campForm.get('name')?.setValue(this.selectedCamp);
     this.submitted = true;
     if (this.campForm.invalid) {
-      console.log('error');
+      this.displayFormErrors();
       return;
     }
     this.isLoading = true;
-    console.log(this.campForm.value);
     if (this.id === 0) {
       this.campLeaderService.createCamp(this.campForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
@@ -235,13 +239,12 @@ export class ActiosCampComponent implements OnInit {
             this.selectedCamp = '';
             this.isLoading = false;
             this.casheService.clearCache();
-
             this.router.navigate(['/leader/camps']);
-          } else if (errors) {
-            console.log(errors);
-            alert(errors);
+          } else if (statusCode === 400) {
+            this.errorMessage = message;
+            this.isLoading = false;
           } else {
-            alert(message);
+            this.handleApiErrors(errors);
             this.isLoading = false;
           }
         },
@@ -259,11 +262,11 @@ export class ActiosCampComponent implements OnInit {
               this.isLoading = false;
               this.casheService.clearCache();
               this.router.navigate(['/leader/camps']);
-            } else if (errors) {
-              console.log(errors);
-              alert(errors);
+            } else if (statusCode === 400) {
+              this.errorMessage = message;
+              this.isLoading = false;
             } else {
-              alert(message);
+              this.handleApiErrors(errors);
               this.isLoading = false;
             }
           },
@@ -273,6 +276,49 @@ export class ActiosCampComponent implements OnInit {
           },
         });
     }
+  }
+
+  removeErrorM() {
+    this.errorMessage = '';
+  }
+
+  handleApiErrors(errors: any) {
+    this.errorMessages = [];
+    if (errors) {
+      this.errorMessages = errors;
+    } else {
+      this.errorMessages.push(
+        'An unknown error occurred. Please try again later.'
+      );
+    }
+    this.errorMessages.forEach((error: any, index: number) => {
+      setTimeout(() => {
+        this.removeError(index);
+      }, 3000);
+    });
+  }
+
+  removeError(index: number) {
+    this.errorMessages.splice(index, 1);
+  }
+
+  displayFormErrors() {
+    this.errorMessages = [];
+
+    Object.keys(this.campForm.controls).forEach((field) => {
+      const control = this.campForm.get(field);
+
+      if (control?.invalid) {
+        if (control.errors?.['required']) {
+          this.errorMessages.push(`${field} is required`);
+        }
+      }
+    });
+    this.errorMessages.forEach((error: any, index: number) => {
+      setTimeout(() => {
+        this.removeError(index);
+      }, 3000);
+    });
   }
 
   fetchAllMentors(): void {
@@ -318,103 +364,116 @@ export class ActiosCampComponent implements OnInit {
     });
   }
 
-  toggleCalendar(name: string) {
-    if (name === 'start') {
-      this.calendar.nativeElement.classList.toggle('hidden');
-    } else {
-      this.calendar2.nativeElement.classList.toggle('hidden');
-    }
-  }
+  // toggleCalendar(name: string) {
+  //   if (name === 'start') {
+  //     this.calendar.nativeElement.classList.toggle('hidden');
+  //   } else {
+  //     this.calendar2.nativeElement.classList.toggle('hidden');
+  //   }
+  // }
 
-  changeMonth(monthChange: number, name: string) {
-    if (name === 'start') {
-      this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
-      this.renderCalendar(this.dateStart, name);
-    } else {
-      this.dateEnd.setMonth(this.dateEnd.getMonth() + monthChange);
-      this.renderCalendar(this.dateEnd, name);
-    }
-  }
+  // changeMonth(monthChange: number, name: string) {
+  //   if (name === 'start') {
+  //     this.currentDate.setMonth(this.currentDate.getMonth() + monthChange);
+  //     this.renderCalendar(this.currentDate, name);
+  //   } else {
+  //     this.currentDate.setMonth(this.currentDate.getMonth() + monthChange);
+  //     this.renderCalendar(this.currentDate, name);
+  //   }
+  // }
 
-  selectDate(day: number, name: string) {
-    const year = this.currentDate.getFullYear();
-    const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
-    const dayOfMonth = String(day).padStart(2, '0');
+  // selectDate(day: number, month: string, year: string, name: string) {
+  //   // const year = this.currentDate.getFullYear();
+  //   // const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
+  //   const dayOfMonth = String(day).padStart(2, '0');
 
-    const formattedDate = `${year}-${month}-${dayOfMonth}`;
-    if (name === 'start') {
-      this.selectedDay = day;
-      this.campForm.get('startDate')?.setValue(formattedDate);
-      this.calendar.nativeElement.classList.add('hidden');
-    } else {
-      this.selectedDayEnd = day;
-      this.campForm.get('endDate')?.setValue(formattedDate);
-      this.calendar2.nativeElement.classList.add('hidden');
-    }
-  }
+  //   if (name === 'start') {
+  //     const formattedDate = `${year}-${month}-${dayOfMonth}`;
+  //     this.selectedDay = day;
+  //     this.campForm.get('startDate')?.setValue(formattedDate);
+  //     this.calendar.nativeElement.classList.add('hidden');
+  //   } else {
+  //     const formattedDate = `${year}-${month}-${dayOfMonth}`;
+  //     this.selectedDayEnd = day;
+  //     this.campForm.get('endDate')?.setValue(formattedDate);
+  //     this.calendar2.nativeElement.classList.add('hidden');
+  //   }
+  // }
 
-  renderCalendar(date: Date, name?: string) {
-    const newDate = new Date(date);
-    const month = newDate.getMonth();
-    const year = newDate.getFullYear();
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
+  // renderCalendar(date: Date, name?: string) {
+  //   const newDate = new Date(date);
+  //   const month = newDate.getMonth();
+  //   const year = newDate.getFullYear();
+  //   const firstDay = new Date(year, month, 1).getDay();
+  //   const lastDate = new Date(year, month + 1, 0).getDate();
 
-    if (name === 'start') {
-      this.startDays = [];
-      this.startMonthYear = newDate.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
+  //   if (name === 'start') {
+  //     this.startDays = [];
+  //     this.startMonthYear = newDate.toLocaleDateString('en-US', {
+  //       month: 'long',
+  //       year: 'numeric',
+  //     });
+  //     this.monthInNumS = newDate.toLocaleDateString('en-US', {
+  //       month: 'numeric',
+  //     });
+  //     this.yearInNumS = newDate.toLocaleDateString('en-US', {
+  //       year: 'numeric',
+  //     });
 
-      for (let i = 0; i < firstDay; i++) {
-        this.startDays.push(0);
-      }
+  //     for (let i = 0; i < firstDay; i++) {
+  //       this.startDays.push(0);
+  //     }
 
-      for (let i = 1; i <= lastDate; i++) {
-        this.startDays.push(i);
-      }
-    } else {
-      this.endDays = [];
-      this.endMonthYear = newDate.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
+  //     for (let i = 1; i <= lastDate; i++) {
+  //       this.startDays.push(i);
+  //     }
+  //   } else {
+  //     this.endDays = [];
+  //     this.endMonthYear = newDate.toLocaleDateString('en-US', {
+  //       month: 'long',
+  //       year: 'numeric',
+  //     });
+  //     this.monthInNumE = newDate.toLocaleDateString('en-US', {
+  //       month: 'numeric',
+  //     });
+  //     this.yearInNumE = newDate.toLocaleDateString('en-US', {
+  //       year: 'numeric',
+  //     });
 
-      for (let i = 0; i < firstDay; i++) {
-        this.endDays.push(0);
-      }
+  //     for (let i = 0; i < firstDay; i++) {
+  //       this.endDays.push(0);
+  //     }
 
-      for (let i = 1; i <= lastDate; i++) {
-        this.endDays.push(i);
-      }
-    }
-  }
+  //     for (let i = 1; i <= lastDate; i++) {
+  //       this.endDays.push(i);
+  //     }
+  //   }
+  // }
 
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    if (
-      !this.startDateInput.nativeElement.contains(event.target) &&
-      !this.calendar.nativeElement.contains(event.target)
-    ) {
-      this.calendar.nativeElement.classList.add('hidden');
-    }
-    if (
-      !this.endDateInput.nativeElement.contains(event.target) &&
-      !this.calendar2.nativeElement.contains(event.target)
-    ) {
-      this.calendar2.nativeElement.classList.add('hidden');
-    }
-    if (this.termSelect.dropdownPanel === undefined) {
-      this.foucsTerm = false;
-    }
-    if (this.mentorsSelect.dropdownPanel === undefined) {
-      this.dropdownOpen = false;
-    }
-    if (this.hocSelect.dropdownPanel === undefined) {
-      this.dropdownOpenH = false;
-    }
-  }
+  // @HostListener('document:click', ['$event'])
+  // onClickOutside(event: MouseEvent) {
+  //   if (
+  //     !this.startDateInput.nativeElement.contains(event.target) &&
+  //     !this.calendar.nativeElement.contains(event.target)
+  //   ) {
+  //     this.calendar.nativeElement.classList.add('hidden');
+  //   }
+  //   if (
+  //     !this.endDateInput.nativeElement.contains(event.target) &&
+  //     !this.calendar2.nativeElement.contains(event.target)
+  //   ) {
+  //     this.calendar2.nativeElement.classList.add('hidden');
+  //   }
+  //   if (this.termSelect.dropdownPanel === undefined) {
+  //     this.foucsTerm = false;
+  //   }
+  //   if (this.mentorsSelect.dropdownPanel === undefined) {
+  //     this.dropdownOpen = false;
+  //   }
+  //   if (this.hocSelect.dropdownPanel === undefined) {
+  //     this.dropdownOpenH = false;
+  //   }
+  // }
 
   toggleDropdown(mentorsSelect: NgSelectComponent) {
     if (this.dropdownOpen) {
