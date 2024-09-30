@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './authentication/guard/auth.guard';
+import { authGuard, authGuardLoggdIn } from './authentication/guard/auth.guard';
 import { rolesGuard } from './authentication/guard/roles.guard';
-// import { LoginComponent } from './authentication/screens/login/login.component';
 import { LayoutLeaderComponent } from './layouts/layout_leader/layout-leader.component';
 import { DashboardComponent } from './pages/Leader/screens/dashboard/dashboard.component';
 import { LayoutTraineeComponent } from './layouts/layout_trainee/layout-trainee.component';
@@ -9,7 +8,6 @@ import { HomeTraineeComponent } from './pages/Trainee/screens/home-trainee/home-
 
 import { AddUserComponent } from './pages/Leader/screens/add-user/add-user.component';
 
-import { MentornavComponent } from './layouts/mentor/mentornav/mentornav.component';
 import { MentorLayoutComponent } from './layouts/mentor/mentor-layout/mentor-layout.component';
 import { TraineesComponent } from './pages/mentor/trainees/trainees.component';
 import { AttendanceComponent } from './pages/mentor/attendance/attendance.component';
@@ -322,7 +320,7 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginLayoutComponent,
-    // canActivate: [authGuardLoggdIn],
+    canActivate: [authGuardLoggdIn],
     title: 'Login',
     children: [
       {

@@ -13,110 +13,8 @@ import { Mentor, Trainee } from '../../model/assign-hoc';
 })
 export class AssignHOCComponent implements OnInit {
   assignHocService = inject(AssignHocService);
-  allTrainees: Trainee[] = [
-    {
-      id: 'string',
-      firstName: 'string',
-      middleName: 'string',
-      lastName: 'string',
-      photoUrl: './../../../../../assets/img/user.jpeg',
-      college: 4,
-      gender: 1,
-      grade: 4,
-    },
-  ];
-  allMentor: Mentor[] = [
-    {
-      id: 'string',
-      firstName: 'string',
-      middleName: 'string',
-      lastName: 'string',
-      college: 4,
-      grade: 4,
-      trainees: [
-        {
-          id: 'striang',
-          firstName: 'string',
-          middleName: 'string',
-          lastName: 'string',
-          photoUrl: './../../../../../assets/img/user.jpeg',
-          college: 4,
-          gender: 1,
-          grade: 4,
-        },
-        {
-          id: 'stqring',
-          firstName: 'string',
-          middleName: 'string',
-          lastName: 'string',
-          photoUrl: './../../../../../assets/img/user.jpeg',
-          college: 4,
-          gender: 1,
-          grade: 4,
-        },
-        {
-          id: 'strfing',
-          firstName: 'string',
-          middleName: 'string',
-          lastName: 'string',
-          photoUrl: './../../../../../assets/img/user.jpeg',
-          college: 4,
-          gender: 1,
-          grade: 4,
-        },
-        {
-          id: 'strving',
-          firstName: 'string',
-          middleName: 'string',
-          lastName: 'string',
-          photoUrl: './../../../../../assets/img/user.jpeg',
-          college: 4,
-          gender: 1,
-          grade: 4,
-        },
-        {
-          id: 'strling',
-          firstName: 'string',
-          middleName: 'string',
-          lastName: 'string',
-          photoUrl: './../../../../../assets/img/user.jpeg',
-          college: 4,
-          gender: 1,
-          grade: 4,
-        },
-        {
-          id: 'struing',
-          firstName: 'string',
-          middleName: 'string',
-          lastName: 'string',
-          photoUrl: './../../../../../assets/img/user.jpeg',
-          college: 4,
-          gender: 1,
-          grade: 4,
-        },
-        {
-          id: 'striing',
-          firstName: 'string',
-          middleName: 'string',
-          lastName: 'string',
-          photoUrl: './../../../../../assets/img/user.jpeg',
-          college: 4,
-          gender: 1,
-          grade: 4,
-        },
-        {
-          id: 'strping',
-          firstName: 'string',
-          middleName: 'string',
-          lastName: 'string',
-          photoUrl: './../../../../../assets/img/user.jpeg',
-          college: 4,
-          gender: 1,
-          grade: 4,
-        },
-      ],
-    },
-  ];
+  allTrainees: Trainee[] = [];
+  allMentor: Mentor[] = [];
   selectedMentor: Mentor | null = null;
   selectedTraineeId: string = '';
   isLoading = signal<boolean>(false);
@@ -150,7 +48,7 @@ export class AssignHOCComponent implements OnInit {
     this.assignHocService.getAllAssignTrainees(SortBy, KeyWord).subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
-          // this.allTrainees = data;
+          this.allTrainees = data;
           this.isLoading.update((v) => (v = false));
         } else {
           this.isLoading.update((v) => (v = false));
@@ -168,7 +66,7 @@ export class AssignHOCComponent implements OnInit {
     this.assignHocService.getAllAssignMentors().subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
-          // this.allMentor = data;
+          this.allMentor = data;
           this.isLoading2.update((v) => (v = false));
         } else {
           this.isLoading2.update((v) => (v = false));
