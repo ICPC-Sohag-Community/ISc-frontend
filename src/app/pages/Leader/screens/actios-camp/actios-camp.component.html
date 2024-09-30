@@ -51,7 +51,7 @@
                   placeholder="Add Camp"
                   formControlName="name"
                   class="w-full h-full px-2 py-3 pt-4 border-b outline-none pe-4 border-activeLink"
-                  (keydown.enter)="onAddCamp()"
+                  (keydown.enter)="onAddCamp($event)"
                 />
               </li>
               @for (camp of allCamps; track camp.name; let last = $last) {

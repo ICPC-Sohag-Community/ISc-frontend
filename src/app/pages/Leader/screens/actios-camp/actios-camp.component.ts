@@ -138,6 +138,9 @@ export class ActiosCampComponent implements OnInit {
     this.campLeaderService.deleteCampFormDropdown(campName).subscribe({
       next: ({ statusCode }) => {
         if (statusCode === 200) {
+          if (campName === this.selectedCamp) {
+            this.selectedCamp = '';
+          }
           this.allCamps = this.allCamps.filter(
             (camp) => camp.name !== campName
           );
@@ -153,11 +156,14 @@ export class ActiosCampComponent implements OnInit {
     });
   }
 
-  onAddCamp(): void {
+  onAddCamp(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
+
+    keyboardEvent.preventDefault();
     if (this.nameForm.invalid) {
       return;
     }
-    const name = this.nameForm.value.name;
+    const name = this.nameForm.get('name')?.value;
     this.campLeaderService.addCamp(name).subscribe({
       next: ({ statusCode }) => {
         if (statusCode === 200) {
@@ -181,8 +187,17 @@ export class ActiosCampComponent implements OnInit {
   closeDropdown(event: Event) {
     const targetElement = event.target as HTMLElement;
     const dropdownElement = document.querySelector('.relative.flex.flex-col');
-
+    const inputElement = document.querySelector(
+      '.relative.flex.items-center.ps-2 input'
+    );
+    const deleteIcon = targetElement.closest('.delete-icon');
     if (dropdownElement && !dropdownElement.contains(targetElement)) {
+      if (inputElement && inputElement.contains(targetElement)) {
+        return;
+      }
+      if (deleteIcon) {
+        return;
+      }
       this.isCampsActive = false;
     }
   }
