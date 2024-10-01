@@ -273,20 +273,20 @@ export class RequestsLeaderComponent implements OnInit {
       campId: this.campId,
       requestsId: this.selectedIds,
     };
-    // this.requestsLeaderService.traineeRequestsSubmit(info).subscribe({
-    //   next: ({ statusCode }) => {
-    //     if (statusCode === 200) {
-    //       this.showSubmitModel = true;
-    //       this.isLoadingSubmit.update((v) => (v = false));
-    //     } else {
-    //       this.isLoadingSubmit.update((v) => (v = false));
-    //     }
-    //   },
-    //   error: (err) => {
-    //     console.log(err);
+    this.requestsLeaderService.traineeRequestsSubmit(info).subscribe({
+      next: ({ statusCode }) => {
+        if (statusCode === 200) {
+          this.showSubmitModel = true;
+          this.isLoadingSubmit.update((v) => (v = false));
+        } else {
+          this.isLoadingSubmit.update((v) => (v = false));
+        }
+      },
+      error: (err) => {
+        console.log(err);
 
-    //     this.isLoadingSubmit.update((v) => (v = false));
-    //   },
-    // });
+        this.isLoadingSubmit.update((v) => (v = false));
+      },
+    });
   }
 }
