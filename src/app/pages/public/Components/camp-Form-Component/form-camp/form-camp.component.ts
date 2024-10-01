@@ -110,25 +110,26 @@ export class FormCampComponent {
     this.renderCalendar(this.currentDate, 'start');
     this.dateStart = new Date();
     this.selectedDay = this.dateStart.getDate();
-    // this.fetchAllCamps() // Uncomment to fetch all camps
+    this.fetchAllCamps() // Uncomment to fetch all camps
   }
 
   // Fetch all camps (currently commented out)
-  // fetchAllCamps(): void {
-  //   this._form.getCamps().subscribe({
-  //     next: ({statusCode, data}) => {
-  //       if (statusCode === 200) {
-  //         this.allCamps = data;
-  //       }
-  //     }
-  //   });
-  // }
+  fetchAllCamps(): void {
+    this._form.getCamps().subscribe({
+      next: ({statusCode, data}) => {
+        if (statusCode === 200) {
+          this.allCamps = data;
+        }
+      }
+    });
+  }
 
   // Form submission handler
   onSubmit() {
     if (this.registerForm.valid) {
       this.messageOTP=''
       const myForm = this.filterNullValues(this.registerForm)
+
 
       const formData = new FormData();
 
@@ -137,7 +138,7 @@ export class FormCampComponent {
         const value = this.registerForm.get(key)?.value;
 
         if (key === 'Photo' && value) {
-          formData.append(key, value); // Assuming `value` is a File object
+          formData.append(key, value);
         } else {
           formData.append(key, value);
         }

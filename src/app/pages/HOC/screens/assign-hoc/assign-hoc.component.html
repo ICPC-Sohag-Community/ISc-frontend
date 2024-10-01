@@ -86,7 +86,9 @@
             <td class="flex items-center p-4 rounded-s-lg gap-x-2">
               <div class="w-8 h-8">
                 <img
-                  [src]="item.photoUrl"
+                  [src]="
+                    item.photoUrl || './../../../../../assets/img/user.jpeg'
+                  "
                   [alt]="item.firstName"
                   class="object-cover w-full h-full rounded-full"
                 />
@@ -149,7 +151,7 @@
               "
               class="p-4 rounded-s-lg"
             >
-              <div class="h-full text-[#6B7088]">
+              <div class="h-full text-[15px] text-[#6B7088]">
                 <p>{{ mentor.firstName }} {{ mentor.middleName }}</p>
                 <p class="text-xs">{{ mentor.college }} | {{ mentor.grade }}</p>
               </div>
@@ -159,7 +161,7 @@
                   '!visible border-2 border-l-0 border-blue-500': selectedMentor === mentor,
                   'pt-[54px] ': mentor.id === selectedMentor?.id && mentor.trainees.length === 0,
               }"
-              class="flex items-center invisible flex-wrap w-[14.2rem] gap-y-2 justify-end p-4 py-[22px] rounded-e-lg gap-x-2"
+              class="flex items-center invisible flex-wrap w-[14rem] gap-y-2 justify-end p-4 py-[22px] rounded-e-lg gap-x-2"
             >
               @for (trainee of mentor.trainees; track $index) {
               <div
@@ -168,7 +170,9 @@
                 class="relative inline-block cursor-pointer"
               >
                 <img
-                  [src]="trainee.photoUrl"
+                  [src]="
+                    trainee.photoUrl || './../../../../../assets/img/user.jpeg'
+                  "
                   [alt]="trainee.firstName"
                   class="object-cover border border-gray-300 rounded-full w-9 h-9"
                 />

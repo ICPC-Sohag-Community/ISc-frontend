@@ -11,6 +11,7 @@ export class RequestsLeaderService {
   http = inject(HttpClient);
   casheService = inject(CasheService);
 
+  // get date
   traineesRegisterations(settingsRequest: any): Observable<any> {
     return this.http.post<any>(
       `${environment.BASE_URL}/api/Leader/traineesRegisterations`,
@@ -23,12 +24,22 @@ export class RequestsLeaderService {
       `${environment.BASE_URL}/api/Leader/openedCampsRegister`
     );
   }
+
+  // delete
   deleteRequests(ids: any): Observable<ResponseHeader> {
     return this.http.delete<any>(
       `${environment.BASE_URL}/api/Leader/traineeRegisteration`,
       {
         body: ids,
       }
+    );
+  }
+
+  // Submit
+  traineeRequestsSubmit(info: any): Observable<ResponseHeader> {
+    return this.http.post<any>(
+      `${environment.BASE_URL}/api/Leader/traineeregisteration`,
+      info
     );
   }
 }
