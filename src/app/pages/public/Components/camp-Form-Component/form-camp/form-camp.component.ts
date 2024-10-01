@@ -66,6 +66,7 @@ export class FormCampComponent {
   fileName: string = '';
   succssesMessage: string = '';
   errorMessage: string = '';
+  messageOTP: string = '';
   allCamps: Camp[] = [];
   selectedFile: File | null = null;
   years: number[] = [];
@@ -80,6 +81,7 @@ export class FormCampComponent {
   campTerm: boolean = false;
   lapTerm: boolean = false;
   show: boolean = false;
+  showLoader: boolean = false;
 
   // Reactive form definition
   registerForm: FormGroup = new FormGroup({
@@ -125,10 +127,13 @@ export class FormCampComponent {
   // Form submission handler
   onSubmit() {
     if (this.registerForm.valid) {
+      this.messageOTP=''
+      const myForm = this.filterNullValues(this.registerForm)
+
       const formData = new FormData();
 
       // Append form data to FormData object
-      Object.keys(this.registerForm.controls).forEach((key) => {
+      Object.keys(myForm).forEach((key) => {
         const value = this.registerForm.get(key)?.value;
 
         if (key === 'Photo' && value) {
@@ -137,7 +142,9 @@ export class FormCampComponent {
           formData.append(key, value);
         }
       });
-
+      this.succssesMessage=''
+      this.errorMessage=''
+      this.show=true
       // Submit form data through the FormService
       this._form.applyForm(formData).subscribe({
         next: ({statusCode, data, message}) => {
@@ -154,12 +161,34 @@ export class FormCampComponent {
     }
   }
 
+  filterNullValues(form: FormGroup): { [key: string]: any } {
+    const filteredData: { [key: string]: any } = {};
+
+    Object.keys(form.value).forEach(key => {
+      const value = form.get(key)?.value;
+
+      if (value !== null && value !== undefined) {
+        filteredData[key] = value;
+      }
+    });
+
+    return filteredData;
+  }
+
   // Send OTP for email verification
   sendOTP(): void {
+    this.messageOTP=''
     if (this.registerForm.get('Email')?.valid) {
+      this.showLoader=true
       this._form.sendOtp(this.registerForm.get('Email')?.value).subscribe({
-        next: ({ statusCode, data }) => {
+        next: ({ statusCode, data , Message }) => {
           if (statusCode === 200) {
+            this.showLoader=false
+            this.messageOTP='OTP Sended'
+          }
+          else
+          {
+            this.messageOTP=Message
           }
         },
       });
