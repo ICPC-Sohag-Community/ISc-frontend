@@ -94,6 +94,7 @@ export class RequestsLeaderComponent implements OnInit {
 
   chooseCamp(item: any): void {
     this.campId = item.id;
+    this.dataRequest = [];
     this.settingsFilterRequest = {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
@@ -102,6 +103,7 @@ export class RequestsLeaderComponent implements OnInit {
       filters: this.filters,
     };
     this.showFilterModel = false;
+    this.casheService.clearCache();
     this.traineesRegisterations(this.settingsFilterRequest);
   }
 
@@ -127,7 +129,6 @@ export class RequestsLeaderComponent implements OnInit {
     } else {
       this.selectedIds = [];
     }
-    console.log(this.selectedIds);
   }
 
   toggleItem(id: number, event: Event): void {
@@ -141,7 +142,6 @@ export class RequestsLeaderComponent implements OnInit {
         (selectedId) => selectedId !== id
       );
     }
-    console.log(this.selectedIds);
   }
 
   areAllItemsSelected(): boolean {
@@ -269,20 +269,24 @@ export class RequestsLeaderComponent implements OnInit {
 
   submitRequests() {
     this.isLoadingSubmit.set(true);
-    this.requestsLeaderService.deleteRequests(this.selectedIds).subscribe({
-      next: ({ statusCode }) => {
-        if (statusCode === 200) {
-          this.showSubmitModel = true;
-          this.isLoadingSubmit.update((v) => (v = false));
-        } else {
-          this.isLoadingSubmit.update((v) => (v = false));
-        }
-      },
-      error: (err) => {
-        console.log(err);
+    const info = {
+      campId: this.campId,
+      requestsId: this.selectedIds,
+    };
+    // this.requestsLeaderService.traineeRequestsSubmit(info).subscribe({
+    //   next: ({ statusCode }) => {
+    //     if (statusCode === 200) {
+    //       this.showSubmitModel = true;
+    //       this.isLoadingSubmit.update((v) => (v = false));
+    //     } else {
+    //       this.isLoadingSubmit.update((v) => (v = false));
+    //     }
+    //   },
+    //   error: (err) => {
+    //     console.log(err);
 
-        this.isLoadingSubmit.update((v) => (v = false));
-      },
-    });
+    //     this.isLoadingSubmit.update((v) => (v = false));
+    //   },
+    // });
   }
 }

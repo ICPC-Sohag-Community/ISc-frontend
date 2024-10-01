@@ -117,13 +117,14 @@ export class FormCampComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
+      debugger;
       const formData = new FormData();
 
       Object.keys(this.registerForm.controls).forEach((key) => {
         const value = this.registerForm.get(key)?.value;
 
         if (key === 'Photo' && value) {
-          formData.append(key, value); // Assuming `value` is a File object
+          formData.append(key, value);
         } else {
           formData.append(key, value);
         }

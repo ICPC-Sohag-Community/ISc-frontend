@@ -231,13 +231,16 @@
         class="flex items-center px-8 py-2 disabled:cursor-not-allowed font-semibold text-white rounded-full gap-x-2 bg-[#52B788]"
       >
         @if (isLoadingSubmit()) {
-        <div
-          class="w-4 h-4 border-4 border-purple-800 border-dashed rounded-full animate-spin border-t-transparent"
-        ></div>
+        <div class="flex items-center justify-center w-full bg-opacity-60">
+          <div class="flex items-center justify-center">
+            <div
+              class="w-6 h-6 border-4 border-blue-600 border-dashed rounded-full animate-spin"
+            ></div>
+          </div>
+        </div>
         }@else {
 
         <span class="border-e-2 pe-2">Submit</span>
-        }
         <svg
           width="20"
           height="14"
@@ -253,6 +256,7 @@
             stroke-linejoin="round"
           />
         </svg>
+        }
       </button>
       <button
         (click)="showConfirmDelete()"
