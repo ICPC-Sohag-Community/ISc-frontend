@@ -14,8 +14,6 @@ export const rolesGuard: CanActivateFn = (route, state) => {
   if (path === '' && !authService.isAuth()) {
     return true;
   }
-  debugger;
-
   if (path === 'leader' && roles.includes('Leader')) {
     return true;
   }
