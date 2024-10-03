@@ -126,6 +126,7 @@ export class FormCampComponent {
 
   // Form submission handler
   onSubmit() {
+
     if (this.registerForm.valid) {
       this.messageOTP=''
       const myForm = this.filterNullValues(this.registerForm)
