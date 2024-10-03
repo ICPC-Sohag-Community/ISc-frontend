@@ -17,5 +17,5 @@ export interface UsersOther {
   email: string;
   codeForceHandle: string;
   absenceCount: number;
-  weeklySolvingPrecent: number;
+  solvingPrecent: number;
 }
