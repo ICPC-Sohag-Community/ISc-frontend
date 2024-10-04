@@ -44,6 +44,9 @@ this.campName = name;
   campName:any = localStorage.getItem("cName")?localStorage.getItem("cName"): 'Select Camp';
   show() {
     this.isShow = !this.isShow;
+    if(this.isShow){
+      this.get();
+    }
     }
     isShow = false;
     get() {
@@ -63,12 +66,7 @@ this.campName = name;
     }
     trainees:any;
     train(id:any, name:any) {
-      
-      this.service.trainees(id).subscribe((response: ResponseHeader) => {
-        if (response.isSuccess) {
-          this.trainees = response.data;
-          
-          localStorage.setItem("trainees" , JSON.stringify(this.trainees));
+             
           this.change(id, name);
           localStorage.setItem("camp" , this.campid);
           
@@ -77,11 +75,25 @@ this.campName = name;
           this.get();
           
           this.refreshRouterOutlet();
-        } else {
-          this.trainees =  null;
-          console.error('Error:', response.message);
-        }
-      });
+      // this.service.trainees(id).subscribe((response: ResponseHeader) => {
+      //   if (response.isSuccess) {
+      //     this.trainees = response.data;
+          
+      //     localStorage.setItem("trainees" , JSON.stringify(this.trainees));
+      //     this.change(id, name);
+      //     localStorage.setItem("camp" , this.campid);
+          
+      //     localStorage.setItem("cName" , this.campName);
+      //     this.campName = localStorage.getItem("cName")?localStorage.getItem("cName"): 'Select Camp';
+      //     this.get();
+          
+      //     this.refreshRouterOutlet();
+      //   } else {
+      //     this.trainees =  null;
+      //     console.error('Error:', response.message);
+      //   }
+      // });
+
       this.isShow = !this.isShow;
     }
     @HostListener('document:click', ['$event'])
