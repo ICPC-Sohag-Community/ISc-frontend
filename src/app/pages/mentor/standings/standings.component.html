@@ -9,18 +9,18 @@
   />
   } @else {
 <table class="w-[calc(100vw-64px)] m-auto border-spacing-y-4 border-spacing-x-0 border-separate">
-    <thead class=" text-gray-600 text-sm leading-normal text-center">
+    <thead class=" text-gray-600 text-md leading-normal text-center">
       <tr>
-        <th class="px-6  rounded-l-lg py-3 text-left">Achievers</th>
-        <th class="px-6  py-3 text-left">Handle</th>
-        <th class="px-6   py-3 text-left">Mentor</th>
-        <th class="px-6   py-3 text-left">Solve</th>
+        <th class="px-6  rounded-l-lg py-3 text-center">Achievers</th>
+        <th class="px-6  py-3 text-center">Handle</th>
+        <th class="px-6   py-3 text-center">Mentor</th>
+        <th class="px-6   py-3 text-center">Solve</th>
         <th class="px-6  rounded-r-lg py-3 text-center" colspan="1">Points</th>
       </tr>
     </thead>
     
-    <tbody class="text-sm font-light">
-      <tr *ngFor="let item of stand?.achivers , let i = index" class=" text-white rounded-lg my-2"[ngClass]="{
+    <tbody class="text-md font-light">
+      <tr *ngFor="let item of stand?.achivers , let i = index" class=" text-white text-center rounded-lg my-2"[ngClass]="{
         'bg-[#41B253]': item.solvedProblems/stand.totalProblems > 85 ,
         'bg-[#CCA827]': item.solvedProblems/stand.totalProblems >= 60,
         'bg-[#E44449]': item.solvedProblems/stand.totalProblems >= 0
@@ -30,9 +30,9 @@
            {{item.codeForceHandle}}
         </td>
         <td class="px-6 py-4">{{item.mentorName}}</td>
-        <td class="px-6 py-4 text-left">{{item.solvedProblems}} / {{stand.totalProblems}}</td>
+        <td class="px-6 py-4 text-center">{{item.solvedProblems}} / {{stand.totalProblems}}</td>
         <td class="px-6 py-4 rounded-r-lg text-center">
-          <div class="flex justify-center">
+          <div class="flex justify-center items-center">
             <button (click)="change(i,item.id , false , item.points)" class="px-2 rounded-md text-lg text-black mx-2 bg-white">-</button> 
           
             

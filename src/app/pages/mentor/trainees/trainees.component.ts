@@ -34,10 +34,21 @@ export class TraineesComponent {
   constructor(private renderer: Renderer2 , private serv:TraineesService){
     
 this.isLoading = true;
-  
-    if(localStorage.getItem("camp")){
-      this.camps = localStorage.getItem("trainees");
-      this.camps = JSON.parse(this.camps)
+  let campid = localStorage.getItem("camp");
+    if(campid){
+      this.serv.trainees(campid).subscribe((response: ResponseHeader) => {
+        if (response.isSuccess) {
+          this.camps = response.data;
+          
+          
+
+        } else {
+          this.camps =  null;
+          console.error('Error:', response.message);
+        }
+      });
+      // this.camps = localStorage.getItem("trainees");
+      // this.camps = JSON.parse(this.camps)
       this.isLoading = false;
     }
     else {
