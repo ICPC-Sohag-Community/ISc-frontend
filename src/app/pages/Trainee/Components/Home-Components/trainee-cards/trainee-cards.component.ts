@@ -84,7 +84,6 @@ export class TraineeCardsComponent {
         this.second=data.remainTime.seconds
         this.startCountdown()
 
-
       }
     });
   }
@@ -94,6 +93,7 @@ export class TraineeCardsComponent {
     this.homeService.nextSession.subscribe({
       next: (data) => {
           this.nextSession = data; // Update the state with fetched data
+
 
       }
     });
@@ -170,7 +170,9 @@ export class TraineeCardsComponent {
 
   // Opens a given URL in a new browser tab
   public openLink(url: string): void {
-    window.open(url, '_blank');
+    if(typeof url == 'string'){
+      window.open(url, '_blank');
+    }
   }
 }
 

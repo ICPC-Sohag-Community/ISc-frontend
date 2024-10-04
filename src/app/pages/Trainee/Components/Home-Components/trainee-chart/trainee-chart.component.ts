@@ -29,10 +29,9 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.createChart();
   }
 
-  createChart(): void {
+  createChart(solved:number,minToSolve:number,total:number): void {
     const ctx = document.getElementById('myDoughnutChart') as HTMLCanvasElement;
 
     this.chart = new Chart(ctx, {
@@ -41,25 +40,25 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
         datasets: [
           {
             label: 'Solved Problems',
-            data: [this.solvedProblems],
+            data: [solved],
             backgroundColor: ['#00AC47'],
             borderColor: 'transparent',
             borderWidth: 0,
             borderRadius: 12,
-            circumference: (this.solvedProblems / this.AllProblems) * 360,
+            circumference: (solved / total) * 360,
           },
           {
             label: 'Minimum Problems',
-            data: [this.minimumProblems],
+            data: [minToSolve],
             backgroundColor: ['#EF4A50'],
             borderColor: 'transparent',
             borderWidth: 0,
             borderRadius: 12,
-            circumference: (this.minimumProblems / this.AllProblems) * 360,
+            circumference:  (minToSolve / total)  * 360,
           },
           {
             label: 'All Problems',
-            data: [this.AllProblems],
+            data: [total],
             backgroundColor: ['#E5E5E5'],
             borderColor: 'transparent',
             borderWidth: 0,
@@ -164,14 +163,17 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
     this._homeService.TraineeSheetProgress().subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
-          // this.minimumProblems = data.minimumPrecent;
-          // this.solvedProblems = data.solvedPrecent;
-          // this.AllProblems =data.allPrecent;
+          this.minimumProblems = data.minimumPrecent;
+          this.solvedProblems = data.solvedProblemsCount;
+          this.AllProblems = data.totalProblemsCount;
+          this.minimumProblems=this.roundIfHasDecimal(((data.minimumPrecent / 100 ) * data.totalProblemsCount));
+          this.createChart(data.solvedProblemsCount,this.minimumProblems, data.totalProblemsCount);
+
         }
       },
     });
   }
-  roundUpIfHasDecimal(num: number): number {
-    return Math.ceil(num);
+  roundIfHasDecimal(num: number): number {
+    return Math.round(num);
   }
 }
