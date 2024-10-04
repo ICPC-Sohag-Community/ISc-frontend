@@ -26,7 +26,7 @@
           <!-- Mentor Description -->
           <div class="my-3 text-[14px] sm:text-xl font-bold">
             <p class="long-text line-clamp-2 sm:line-clamp-none">
-              I'm ChatGPT, an AI language model developed by OpenAI. My role is to assist with information, answer questions, and engage in conversations. Trained on diverse data, I aim to provide useful and accurate responses. I'm here to help with a variety of topics and make our interactions engaging.
+              {{mentorData.about}}
             </p>
             <p *ngIf="responsive.isSmallScreen" class="underline text-center cursor-pointer" (click)="toggleText()">
               <span *ngIf="showMore">

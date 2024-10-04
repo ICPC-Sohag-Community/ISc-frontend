@@ -23,12 +23,12 @@
                       <!-- Display the Start Date -->
                       <span class="flex items-center mb-2 gap-3">
                         <i class="fa-regular fa-clock"></i>
-                        <small>Start in {{ sheet.date | formatDate }}</small>
+                        <small>Start in {{ sheet.startDate | formatDate }}</small>
                       </span>
                       <!-- Display the End Date -->
                       <span class="flex items-center gap-3">
                         <i class="fa-solid fa-clock-rotate-left"></i>
-                        <small>Ended in {{ sheet.date | formatDate}}</small>
+                        <small>Ended in {{ sheet.endDate | formatDate}}</small>
                       </span>
                     </div>
                     <!-- Problem Count Badge -->
