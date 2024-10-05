@@ -35,48 +35,68 @@ isLoading:boolean = false;
   }
  
   updateTitle(data : any, dat:any , end:any): void {
-    
+    this.errors= [];
     const dateObj = new Date();
     const date = new Date(dat.value);
     // Check if inputElement is not null and has a value
    const off = date.getTimezoneOffset();
-    let e = new Date(end.value);
-    e.setMinutes(e.getMinutes() + off);
-    e.toISOString();
-    let s = new Date(dat.value);
-    s.setMinutes(s.getMinutes() + off);
-    s.toISOString();
+    let e:Date;
+    let s:Date;
     let task = {
       "taskId": this.ed.taskId,
       "title":  data.value,
-      "startTime":  s.toISOString(),
-      "endTime":  e.toISOString(),
+      "startTime":  '',
+      "endTime": '',
       "traineeId":  this.ed.traineeId
     }
-    this.serv.updTask(task).subscribe((d:ResponseHeader)=>{
-      if (d.isSuccess) {
-        this.ed.title = data.value;
-        this.ed.startTime =s.toISOString();
-        this.ed.endTime = e.toISOString();
-       
-          this.show('edit')
+    if(!dat.value){
+      this.errors.push('Set Start Date');
+    //    s = new Date(dat.value);
+    // s.setMinutes(s.getMinutes() + off);
+    // s.toISOString();
+    }
+    else{
+      s = new Date(dat.value);
+      s.setMinutes(s.getMinutes() + off);
+      s.toISOString();
+      task.startTime = s.toISOString();
+    }
+    if(!end.value){
+      this.errors.push('Set End Date')
+    }
+    else{
+      e = new Date(end.value);
+      e.setMinutes(e.getMinutes() + off);
+      e.toISOString();
+      task.endTime = e.toISOString();
+    }
+    if(dat.value && end.value){
+      this.serv.updTask(task).subscribe((d:ResponseHeader)=>{
+        if (d.isSuccess) {
+          this.ed.title = data.value;
+          this.ed.startTime =s.toISOString();
+          this.ed.endTime = e.toISOString();
+         
+            this.show('edit')
+          
+        }
+        else{
+          this.errors = [];
         
-      }
-      else{
-        this.errors = [];
-      
-         for (const field in d.errors) {
-            if (d.errors.hasOwnProperty(field)) {
-              // Check if d.errors[field] is an array before using join
-              if (Array.isArray(d.errors[field])) {
-                this.errors.push(` ${d.errors[field].join(', ')}`);
-              } else {
-                this.errors.push(` ${d.errors[field]}`); // Directly push if not an array
+           for (const field in d.errors) {
+              if (d.errors.hasOwnProperty(field)) {
+                // Check if d.errors[field] is an array before using join
+                if (Array.isArray(d.errors[field])) {
+                  this.errors.push(` ${d.errors[field].join(', ')}`);
+                } else {
+                  this.errors.push(` ${d.errors[field]}`); // Directly push if not an array
+                }
               }
             }
-          }
-      }
-    })
+        }
+      })
+    }
+    
     }
   err:any[] = [];
   errors:any = [];
@@ -87,12 +107,17 @@ isLoading:boolean = false;
     let en: string | null = null;
   
     // Validate and convert input times if provided
-    if (startTime.value && endTime.value) {
-      start = new Date(startTime.value);
-      st = start.toISOString().replace('Z', ''); // Convert to string without 'Z'
+    if ( endTime.value) {
+     
   
       end = new Date(endTime.value);
       en = end.toISOString().replace('Z', ''); // Convert to string without 'Z'
+    }
+    if (startTime.value ) {
+      start = new Date(startTime.value);
+      st = start.toISOString().replace('Z', ''); // Convert to string without 'Z'
+  
+     
     }
   
     // Prepare the base data for the task creation
@@ -320,6 +345,7 @@ getFullPath(route: ActivatedRoute): string {
     if(id == 'add'){
       document.getElementById('names')?.classList.add("hidden");
       this.isShow = false;
+      
     }
   }
   get(id:any){
@@ -404,7 +430,7 @@ getFullPath(route: ActivatedRoute): string {
 onClickOutside(event: MouseEvent): void {
   const target = event.target as HTMLElement;
   // Check if the click was outside the dropdown and the related button
-  if (!target.closest('.relative') && !target.closest('.dropdown')) {
+  if (!target.closest('.relative') ) {
     const dropdowns = document.querySelectorAll('.dropdown');
     dropdowns.forEach(dropdown => dropdown.classList.add('hidden'));
   }

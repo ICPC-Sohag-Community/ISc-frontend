@@ -37,7 +37,7 @@
             </div>
           
             <!-- Dropdown Menu -->
-            <div  id="{{'to'+i}}" class="dropdown hidden origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div  id="{{'to'+i}}" (click)="show('to'+i)"  class="dropdown hidden origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div class="py-1">
                
                 <button (click)="edit(item)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
@@ -54,8 +54,33 @@
             
         </div>
         <p class="text-sm">• {{item.title}}</p>
-        <p class="text-sm text-gray-500 ">Start Time: {{item.startTime | utcToLocal}}</p>
-        <p class="text-sm text-gray-500 ">End Time: {{item.endTime | utcToLocal}}</p>
+        <div class="flex justify-around mt-3">
+          <div>
+            <p class="text-sm text-gray-500 ">Start Time: {{item.startTime | utcToLocal}}</p>
+            <p class="text-sm text-gray-500 ">End Time: {{item.endTime | utcToLocal}}</p>
+          </div>
+          <div *ngIf="item.status == 0" class="bg-[#979797] text-[12px] rounded-lg text-white flex items-center px-2 py-1 justify-between gap-2">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="6" cy="6" r="5.5" stroke="white"/>
+              </svg>
+              TO DO
+          </div>
+          <div *ngIf="item.status == 1" class="bg-[#3D91C7] text-[10px] rounded-[10px] text-white flex items-center px-2 justify-between gap-1">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5.00098 2.36046C5.00098 2.23646 5.00098 2.17396 5.02948 2.12296C5.05571 2.07938 5.09461 2.04485 5.14098 2.02396C5.19498 2.00196 5.24998 2.00896 5.35998 2.02196C5.85249 2.0814 6.32258 2.26205 6.72815 2.54773C7.13371 2.83341 7.46211 3.21521 7.68392 3.65895C7.90574 4.10268 8.01405 4.59449 7.99917 5.09036C7.98428 5.58622 7.84667 6.07065 7.59863 6.50028C7.3506 6.92991 6.9999 7.29132 6.57792 7.55217C6.15595 7.81301 5.67588 7.96514 5.18069 7.99493C4.6855 8.02472 4.19065 7.93125 3.74044 7.72288C3.29024 7.51451 2.89873 7.19775 2.60098 6.80096C2.53448 6.71196 2.50098 6.66746 2.49348 6.60996C2.4883 6.55921 2.49877 6.50808 2.52348 6.46346C2.55348 6.41346 2.60698 6.38246 2.71448 6.32046L4.82098 5.10446C4.88648 5.06646 4.91948 5.04746 4.94298 5.02096C4.96361 4.99716 4.97956 4.96968 4.98998 4.93996C5.00098 4.90646 5.00098 4.86846 5.00098 4.79246V2.36046Z" fill="white"/>
+              <path d="M5 9.25C7.34721 9.25 9.25 7.34721 9.25 5C9.25 2.65279 7.34721 0.75 5 0.75C2.65279 0.75 0.75 2.65279 0.75 5C0.75 7.34721 2.65279 9.25 5 9.25Z" stroke="white"/>
+              </svg>              
+              IN PROGRESS
+          </div>
+          <div *ngIf="item.status == 2" class="bg-[#52B788] text-[12px] rounded-[10px] text-white flex items-center px-3 justify-between gap-1">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="6" cy="6" r="5.5" stroke="white"/>
+              <circle cx="5.99979" cy="5.99979" r="4.10526" fill="white"/>
+              </svg>                            
+              DONE
+          </div>
+        </div>
+        
       </div>
       </div>
       <!-- Repeat the task card structure for more tasks -->
@@ -86,7 +111,7 @@
               </div>
             
               <!-- Dropdown Menu -->
-              <div id="{{'in'+i}}" class="hidden dropdown origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div id="{{'in'+i}}" (click)="show('in'+i)" class="hidden dropdown origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div class="py-1">
                 
                   <button (click)="edit(item)"  class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
@@ -103,8 +128,32 @@
               
           </div>
           <p class="text-sm">• {{item.title}}</p>
-          <p class="text-sm text-gray-500 ">Start Time: {{item.startTime | utcToLocal}}</p>
-          <p class="text-sm text-gray-500 ">End Time: {{item.endTime | utcToLocal}}</p>
+          <div class="flex justify-around mt-3">
+            <div>
+              <p class="text-sm text-gray-500 ">Start Time: {{item.startTime | utcToLocal}}</p>
+              <p class="text-sm text-gray-500 ">End Time: {{item.endTime | utcToLocal}}</p>
+            </div>
+            <div *ngIf="item.status == 0" class="bg-[#979797] text-[12px] rounded-lg text-white flex items-center px-2 py-1 justify-between gap-2">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="6" cy="6" r="5.5" stroke="white"/>
+                </svg>
+                TO DO
+            </div>
+            <div *ngIf="item.status == 1" class="bg-[#3D91C7] text-[10px] rounded-[10px] text-white flex items-center px-2 justify-between gap-1">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.00098 2.36046C5.00098 2.23646 5.00098 2.17396 5.02948 2.12296C5.05571 2.07938 5.09461 2.04485 5.14098 2.02396C5.19498 2.00196 5.24998 2.00896 5.35998 2.02196C5.85249 2.0814 6.32258 2.26205 6.72815 2.54773C7.13371 2.83341 7.46211 3.21521 7.68392 3.65895C7.90574 4.10268 8.01405 4.59449 7.99917 5.09036C7.98428 5.58622 7.84667 6.07065 7.59863 6.50028C7.3506 6.92991 6.9999 7.29132 6.57792 7.55217C6.15595 7.81301 5.67588 7.96514 5.18069 7.99493C4.6855 8.02472 4.19065 7.93125 3.74044 7.72288C3.29024 7.51451 2.89873 7.19775 2.60098 6.80096C2.53448 6.71196 2.50098 6.66746 2.49348 6.60996C2.4883 6.55921 2.49877 6.50808 2.52348 6.46346C2.55348 6.41346 2.60698 6.38246 2.71448 6.32046L4.82098 5.10446C4.88648 5.06646 4.91948 5.04746 4.94298 5.02096C4.96361 4.99716 4.97956 4.96968 4.98998 4.93996C5.00098 4.90646 5.00098 4.86846 5.00098 4.79246V2.36046Z" fill="white"/>
+                <path d="M5 9.25C7.34721 9.25 9.25 7.34721 9.25 5C9.25 2.65279 7.34721 0.75 5 0.75C2.65279 0.75 0.75 2.65279 0.75 5C0.75 7.34721 2.65279 9.25 5 9.25Z" stroke="white"/>
+                </svg>              
+                IN PROGRESS
+            </div>
+            <div *ngIf="item.status == 2" class="bg-[#52B788] text-[12px] rounded-[10px] text-white flex items-center px-3 justify-between gap-1">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="6" cy="6" r="5.5" stroke="white"/>
+                <circle cx="5.99979" cy="5.99979" r="4.10526" fill="white"/>
+                </svg>                            
+                DONE
+            </div>
+          </div>
         </div>
       <!-- Repeat the task card structure for more tasks -->
         </div>
@@ -135,7 +184,7 @@
             </div>
           
             <!-- Dropdown Menu -->
-            <div  id="{{'done'+i}}" class="dropdown hidden origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div  id="{{'done'+i}}" (click)="show('done'+i)" class="dropdown hidden origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div class="py-1">
                
                 <button (click)="edit(item)"   class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
@@ -152,8 +201,32 @@
             
         </div>
         <p class="text-sm">• {{item.title}}</p>
-        <p class="text-sm text-gray-500 ">Start Time: {{item.startTime | utcToLocal}}</p>
-        <p class="text-sm text-gray-500 ">End Time: {{item.endTime | utcToLocal}}</p>
+        <div class="flex justify-around mt-3">
+          <div>
+            <p class="text-sm text-gray-500 ">Start Time: {{item.startTime | utcToLocal}}</p>
+            <p class="text-sm text-gray-500 ">End Time: {{item.endTime | utcToLocal}}</p>
+          </div>
+          <div *ngIf="item.status == 0" class="bg-[#979797] text-[12px] rounded-lg text-white flex items-center px-2 py-1 justify-between gap-2">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="6" cy="6" r="5.5" stroke="white"/>
+              </svg>
+              TO DO
+          </div>
+          <div *ngIf="item.status == 1" class="bg-[#3D91C7] text-[10px] rounded-[10px] text-white flex items-center px-2 justify-between gap-1">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5.00098 2.36046C5.00098 2.23646 5.00098 2.17396 5.02948 2.12296C5.05571 2.07938 5.09461 2.04485 5.14098 2.02396C5.19498 2.00196 5.24998 2.00896 5.35998 2.02196C5.85249 2.0814 6.32258 2.26205 6.72815 2.54773C7.13371 2.83341 7.46211 3.21521 7.68392 3.65895C7.90574 4.10268 8.01405 4.59449 7.99917 5.09036C7.98428 5.58622 7.84667 6.07065 7.59863 6.50028C7.3506 6.92991 6.9999 7.29132 6.57792 7.55217C6.15595 7.81301 5.67588 7.96514 5.18069 7.99493C4.6855 8.02472 4.19065 7.93125 3.74044 7.72288C3.29024 7.51451 2.89873 7.19775 2.60098 6.80096C2.53448 6.71196 2.50098 6.66746 2.49348 6.60996C2.4883 6.55921 2.49877 6.50808 2.52348 6.46346C2.55348 6.41346 2.60698 6.38246 2.71448 6.32046L4.82098 5.10446C4.88648 5.06646 4.91948 5.04746 4.94298 5.02096C4.96361 4.99716 4.97956 4.96968 4.98998 4.93996C5.00098 4.90646 5.00098 4.86846 5.00098 4.79246V2.36046Z" fill="white"/>
+              <path d="M5 9.25C7.34721 9.25 9.25 7.34721 9.25 5C9.25 2.65279 7.34721 0.75 5 0.75C2.65279 0.75 0.75 2.65279 0.75 5C0.75 7.34721 2.65279 9.25 5 9.25Z" stroke="white"/>
+              </svg>              
+              IN PROGRESS
+          </div>
+          <div *ngIf="item.status == 2" class="bg-[#52B788] text-[12px] rounded-[10px] text-white flex items-center px-3 justify-between gap-1">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="6" cy="6" r="5.5" stroke="white"/>
+              <circle cx="5.99979" cy="5.99979" r="4.10526" fill="white"/>
+              </svg>                            
+              DONE
+          </div>
+        </div>
       </div>
     </div>
       <!-- Repeat the task card structure for more tasks -->
