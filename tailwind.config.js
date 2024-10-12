@@ -23,6 +23,9 @@ module.exports = {
           "50%": { transform: "scale(1.1)" },
         },
       },
+      fontFamily: {
+        dm: ["DM Sans", "sans-serif"],
+      },
     },
   },
   plugins: [],
