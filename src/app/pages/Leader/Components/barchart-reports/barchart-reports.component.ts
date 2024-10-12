@@ -88,12 +88,26 @@ export class BarchartReportsComponent
             beginAtZero: true,
             ticks: {
               stepSize: 25,
+              callback: (tickValue: string | number) => {
+                if (typeof tickValue === 'number') {
+                  return `${tickValue}%`;
+                }
+                return tickValue;
+              },
             },
           },
         },
         plugins: {
           legend: {
             display: false,
+          },
+          tooltip: {
+            callbacks: {
+              label: (context: any) => {
+                let value = context.raw;
+                return `${value}%`;
+              },
+            },
           },
         },
       },

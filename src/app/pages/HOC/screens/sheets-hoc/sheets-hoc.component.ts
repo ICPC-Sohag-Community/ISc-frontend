@@ -38,7 +38,7 @@ export class SheetsHOCComponent implements OnInit {
   allSheets!: SheetsHoc;
   sheetId: number = 0;
   currentPage: number = 1;
-  pageSize: number = 8;
+  pageSize: number = 15;
   keyword: string = '';
   isLoading = signal<boolean>(false);
   showModal: boolean = false;

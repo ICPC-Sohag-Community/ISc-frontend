@@ -40,9 +40,7 @@
           </th>
           @for (s of allSesions; track s.id; let colIndex = $index) {
           <th
-            [ngClass]="{
-              'bg-blue-200': hoveredCol === colIndex
-            }"
+            [ngClass]="hoveredCol === colIndex ? 'bg-blue-200' : 'bg-white'"
             class="p-4 font-extrabold whitespace-nowrap"
           >
             {{ s.topic }}

@@ -67,6 +67,7 @@ export class EditAttendanceComponent implements OnInit {
 
   onTabClick(sessionId: number): void {
     this.activeTab = sessionId;
+    this.sessionId = sessionId;
     console.log(sessionId);
     this.getAttendanceBySessionId(sessionId);
   }

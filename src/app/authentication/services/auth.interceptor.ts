@@ -1,6 +1,7 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
+import { catchError, Observable, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (req.url.includes('/api/Auth/login')) {
@@ -9,14 +10,24 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const authService = inject(AuthService);
   const JWT_TOKEN = authService.getToken();
-  // if(authService.getToken() == ''){
-  //   authService.logout()
-  // }
-  req = req.clone({
-    setHeaders: {
-      Authorization: JWT_TOKEN ? `Bearer ${JWT_TOKEN}` : '',
-    },
-  });
+  // req = req.clone({
+  //   setHeaders: {
+  //     Authorization: JWT_TOKEN ? `Bearer ${JWT_TOKEN}` : '',
+  //   },
+  // });
+  const clonedRequest = JWT_TOKEN
+    ? req.clone({
+        setHeaders: { Authorization: `Bearer ${JWT_TOKEN}` },
+      })
+    : req;
 
-  return next(req);
+  return next(clonedRequest).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 401 || error.status === 403) {
+        authService.logout();
+      }
+
+      return throwError(() => new Error(error.message || 'Server error'));
+    })
+  );
 };

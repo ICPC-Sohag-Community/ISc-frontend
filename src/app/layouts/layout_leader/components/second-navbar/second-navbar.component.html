@@ -97,7 +97,14 @@
         <!-- Dropdown -->
         <div class="relative inline-flex">
           <div class="flex items-center">
-            <div class="relative">
+            <div
+              [routerLink]="
+                currentPath.includes('leader')
+                  ? ['/profile/leader']
+                  : ['/profile/head_of_camp']
+              "
+              class="relative cursor-pointer"
+            >
               <img
                 class="object-cover w-10 h-10 rounded-full"
                 [src]="

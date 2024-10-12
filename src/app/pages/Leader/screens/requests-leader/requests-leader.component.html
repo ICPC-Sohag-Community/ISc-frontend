@@ -182,7 +182,16 @@
             <td class="p-4">{{ item.email }}</td>
             <td class="p-4">{{ item.phoneNumber }}</td>
             <td class="p-4 whitespace-nowrap">{{ item.nationalId }}</td>
-            <td class="p-4">{{ item.facebookLink }}</td>
+            <td class="p-4">
+              @if (item.facebookLink) {
+              <a
+                [href]="item.facebookLink"
+                target="_blank"
+                class="transition-colors hover:text-activeLink"
+                >Profile</a
+              >
+              }
+            </td>
             <td class="p-4 whitespace-nowrap">{{ item.birthDate }}</td>
             <td class="p-4 whitespace-nowrap">{{ item.vjudge }}</td>
           </tr>
@@ -223,23 +232,22 @@
     }
   </div>
 
-  <div class="flex items-center justify-end pe-10">
+  <div class="flex items-center justify-end pe-16">
     <div class="flex items-center gap-x-6">
+      @if (isLoadingSubmit()) {
+      <div class="flex items-center justify-center w-full bg-opacity-60">
+        <div class="flex items-center justify-center">
+          <div
+            class="w-6 h-6 border-4 border-blue-600 border-dashed rounded-full animate-spin"
+          ></div>
+        </div>
+      </div>
+      }@else {
       <button
         (click)="submitRequests()"
         [disabled]="selectedIds.length === 0"
         class="flex items-center px-8 py-2 disabled:cursor-not-allowed font-semibold text-white rounded-full gap-x-2 bg-[#52B788]"
       >
-        @if (isLoadingSubmit()) {
-        <div class="flex items-center justify-center w-full bg-opacity-60">
-          <div class="flex items-center justify-center">
-            <div
-              class="w-6 h-6 border-4 border-blue-600 border-dashed rounded-full animate-spin"
-            ></div>
-          </div>
-        </div>
-        }@else {
-
         <span class="border-e-2 pe-2">Submit</span>
         <svg
           width="20"
@@ -256,8 +264,8 @@
             stroke-linejoin="round"
           />
         </svg>
-        }
       </button>
+      }
       <button
         (click)="showConfirmDelete()"
         [disabled]="selectedIds.length === 0"

@@ -289,7 +289,6 @@ export class ArchiveLeaderComponent implements OnInit {
 
   selectTab(tab: string) {
     this.activeTab = tab;
-
     if (this.activeTab !== 'tab1') {
       this.staffArchiveWithPagination(
         1,

@@ -243,6 +243,7 @@ export class ActiosCampComponent implements OnInit {
     this.campForm.get('name')?.setValue(this.selectedCamp);
     this.submitted = true;
     if (this.campForm.invalid) {
+      this.isLoading = false;
       this.displayFormErrors();
       return;
     }
