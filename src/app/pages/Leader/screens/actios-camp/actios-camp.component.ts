@@ -466,30 +466,18 @@ export class ActiosCampComponent implements OnInit {
   //   }
   // }
 
-  // @HostListener('document:click', ['$event'])
-  // onClickOutside(event: MouseEvent) {
-  //   if (
-  //     !this.startDateInput.nativeElement.contains(event.target) &&
-  //     !this.calendar.nativeElement.contains(event.target)
-  //   ) {
-  //     this.calendar.nativeElement.classList.add('hidden');
-  //   }
-  //   if (
-  //     !this.endDateInput.nativeElement.contains(event.target) &&
-  //     !this.calendar2.nativeElement.contains(event.target)
-  //   ) {
-  //     this.calendar2.nativeElement.classList.add('hidden');
-  //   }
-  //   if (this.termSelect.dropdownPanel === undefined) {
-  //     this.foucsTerm = false;
-  //   }
-  //   if (this.mentorsSelect.dropdownPanel === undefined) {
-  //     this.dropdownOpen = false;
-  //   }
-  //   if (this.hocSelect.dropdownPanel === undefined) {
-  //     this.dropdownOpenH = false;
-  //   }
-  // }
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (this.termSelect.dropdownPanel === undefined) {
+      this.foucsTerm = false;
+    }
+    if (this.mentorsSelect.dropdownPanel === undefined) {
+      this.dropdownOpen = false;
+    }
+    if (this.hocSelect.dropdownPanel === undefined) {
+      this.dropdownOpenH = false;
+    }
+  }
 
   toggleDropdown(mentorsSelect: NgSelectComponent) {
     if (this.dropdownOpen) {

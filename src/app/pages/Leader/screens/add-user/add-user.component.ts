@@ -31,15 +31,15 @@ export class AddUserComponent implements OnInit {
   casheService = inject(CasheService);
   fb = inject(FormBuilder);
   allRoles: { id: number; name: string }[] = [];
-  allCollega: { id: number; name: string }[] = [];
+  allCollege: { id: number; name: string }[] = [];
   allCamps: { id: number; name: string }[] = [];
   error: any = [];
   selectedRole: string = '';
   selectedCamp: string = '';
-  selectedCollega: string = '';
+  selectedCollege: string = '';
   uploadedFileName: string = '';
   isShow: boolean = false;
-  foucsCollega: boolean = false;
+  foucsCollege: boolean = false;
   foucsRole: boolean = false;
   submitted: boolean = false;
   isLoading: boolean = false;
@@ -47,7 +47,7 @@ export class AddUserComponent implements OnInit {
   addUserForm!: FormGroup;
   @ViewChild('formControl') formControls!: QueryList<ElementRef>;
   @ViewChild(FormGroupDirective) formDir!: FormGroupDirective;
-  @ViewChild('collegaSelect') collegaSelect!: NgSelectComponent;
+  @ViewChild('collegeSelect') collegeSelect!: NgSelectComponent;
   @ViewChild('roleSelect') roleSelect!: NgSelectComponent;
 
   ngOnInit(): void {
@@ -70,7 +70,7 @@ export class AddUserComponent implements OnInit {
     });
     this.fetchAllRoles();
     this.fetchAllCamps();
-    this.allCollega = [
+    this.allCollege = [
       { id: 0, name: 'Computer and Ai' },
       { id: 1, name: 'EELU' },
       { id: 2, name: 'Science' },
@@ -209,10 +209,10 @@ export class AddUserComponent implements OnInit {
     this.foucsRole = false;
   }
 
-  handleSelectCollega(item: any) {
-    this.selectedCollega = item.id;
+  handleSelectCollege(item: any) {
+    this.selectedCollege = item.id;
     if (item.id) {
-      this.foucsCollega = false;
+      this.foucsCollege = false;
     }
   }
 
@@ -251,13 +251,13 @@ export class AddUserComponent implements OnInit {
     });
   }
 
-  toggleDropdownC(collegaSelect: NgSelectComponent) {
-    if (this.foucsCollega) {
-      collegaSelect.close();
+  toggleDropdownC(collegeSelect: NgSelectComponent) {
+    if (this.foucsCollege) {
+      collegeSelect.close();
     } else {
-      collegaSelect.open();
+      collegeSelect.open();
     }
-    this.foucsCollega = !this.foucsCollega;
+    this.foucsCollege = !this.foucsCollege;
   }
   toggleDropdownR(roleSelect: NgSelectComponent) {
     if (this.foucsRole) {
@@ -270,8 +270,8 @@ export class AddUserComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
-    if (this.collegaSelect.dropdownPanel === undefined) {
-      this.foucsCollega = false;
+    if (this.collegeSelect.dropdownPanel === undefined) {
+      this.foucsCollege = false;
     }
     if (this.roleSelect.dropdownPanel === undefined) {
       this.foucsRole = false;
