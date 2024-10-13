@@ -37,8 +37,8 @@ export class ProfileDetailsComponent implements OnInit {
   errorMessage: string = '';
   successMessage: string = '';
   phoneMessage: string = '';
-  isMessageSuccess: boolean = false;
-  isMessageSuccessId: boolean = false;
+  isMessageSuccess: boolean = true;
+  isMessageSuccessId: boolean = true;
   idMessage: string = '';
   @ViewChild('term') term!: NgSelectComponent;
   @ViewChild('college') college!: NgSelectComponent;
@@ -66,7 +66,7 @@ export class ProfileDetailsComponent implements OnInit {
       ],
       grade: [null, [Validators.required]],
       college: [null, [Validators.required]],
-      facebook: [''],
+      facebookLink: [''],
       birthDate: ['', [Validators.required]],
     });
     this.profileForm.disable();
@@ -150,6 +150,7 @@ export class ProfileDetailsComponent implements OnInit {
 
       return;
     }
+    debugger;
     this.leaderProfileService
       .updateLeaderProfile(this.profileForm.value)
       .subscribe({
@@ -158,6 +159,8 @@ export class ProfileDetailsComponent implements OnInit {
             this.isLoading = false;
             this.successMessage = message;
             this.isEditMode = false;
+            this.phoneMessage = '';
+            this.idMessage = '';
           } else if (statusCode === 400) {
             this.errorMessage = message;
             this.isLoading = false;
@@ -237,7 +240,7 @@ export class ProfileDetailsComponent implements OnInit {
             lastName: data.lastName,
             phoneNumber: data.phoneNumber,
             nationalId: data.nationalId,
-            facebook: data.facebook,
+            facebookLink: data.facebookLink,
             college: data.college,
             grade: data.grade,
             birthDate: data.birthDate,
