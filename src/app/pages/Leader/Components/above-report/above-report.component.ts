@@ -33,7 +33,7 @@ export class AboveReportComponent
   private isViewInitialized = false;
   private chart: Chart | undefined;
   private genderChart: Chart | undefined;
-  private collegaChart: Chart | undefined;
+  private collegeChart: Chart | undefined;
   private yearChart: Chart | undefined;
 
   ngAfterViewInit(): void {
@@ -241,8 +241,8 @@ export class AboveReportComponent
       return;
     }
 
-    if (this.collegaChart) {
-      this.collegaChart.destroy();
+    if (this.collegeChart) {
+      this.collegeChart.destroy();
     }
 
     const ctx = this.collegePieCanvas.nativeElement.getContext('2d');
@@ -251,16 +251,16 @@ export class AboveReportComponent
       return;
     }
 
-    const lableCollega = this.reportInfo?.traineesColleges.map(
+    const lableCollege = this.reportInfo?.traineesColleges.map(
       (y: any) => y.college
     );
-    const dataCollega = this.reportInfo?.traineesColleges.map((y: any) =>
+    const dataCollege = this.reportInfo?.traineesColleges.map((y: any) =>
       Math.round(y.precentage)
     );
     const data =
       this.reportInfo?.traineesColleges.length === 0
         ? [1, 1, 1, 1, 1, 1]
-        : dataCollega;
+        : dataCollege;
     const labels =
       this.reportInfo?.traineesColleges.length === 0
         ? [
@@ -271,9 +271,9 @@ export class AboveReportComponent
             'Science',
             'Commerce',
           ]
-        : lableCollega;
+        : lableCollege;
 
-    this.collegaChart = new Chart(ctx, {
+    this.collegeChart = new Chart(ctx, {
       type: 'pie',
       data: {
         labels: labels,
@@ -386,8 +386,8 @@ export class AboveReportComponent
     if (this.genderChart) {
       this.genderChart.destroy();
     }
-    if (this.collegaChart) {
-      this.collegaChart.destroy();
+    if (this.collegeChart) {
+      this.collegeChart.destroy();
     }
     if (this.yearChart) {
       this.yearChart.destroy();

@@ -1,6 +1,7 @@
 import { NgClass } from '@angular/common';
 import {
   Component,
+  HostListener,
   inject,
   OnInit,
   ViewChild,
@@ -29,9 +30,9 @@ export class ProfileDetailsComponent implements OnInit {
   isEditMode = false;
   profileForm!: FormGroup;
   isLoading: boolean = false;
-  allCollega: { id: number; name: string }[] = [];
+  allCollege: { id: number; name: string }[] = [];
   foucsTerm: boolean = false;
-  foucsCollega: boolean = false;
+  foucsCollege: boolean = false;
   errorMessages: any = [];
   errorMessage: string = '';
   successMessage: string = '';
@@ -40,7 +41,7 @@ export class ProfileDetailsComponent implements OnInit {
   isMessageSuccessId: boolean = false;
   idMessage: string = '';
   @ViewChild('term') term!: NgSelectComponent;
-  @ViewChild('collega') collega!: NgSelectComponent;
+  @ViewChild('college') college!: NgSelectComponent;
 
   ngOnInit(): void {
     this.profileForm = this.fb.group({
@@ -71,7 +72,7 @@ export class ProfileDetailsComponent implements OnInit {
     this.profileForm.disable();
 
     this.getGeneralProfile();
-    this.allCollega = [
+    this.allCollege = [
       { id: 0, name: 'Computer and Ai' },
       { id: 1, name: 'EELU' },
       { id: 2, name: 'Science' },
@@ -84,11 +85,13 @@ export class ProfileDetailsComponent implements OnInit {
 
   toggleEditMode() {
     this.isEditMode = !this.isEditMode;
-
     if (this.isEditMode) {
       this.profileForm.enable();
     } else {
       this.profileForm.disable();
+      this.phoneMessage = '';
+      this.idMessage = '';
+      this.getGeneralProfile();
     }
   }
 
@@ -109,6 +112,8 @@ export class ProfileDetailsComponent implements OnInit {
           console.log(err);
         },
       });
+    } else {
+      this.phoneMessage = '';
     }
   }
   vaildationId(): void {
@@ -128,6 +133,8 @@ export class ProfileDetailsComponent implements OnInit {
           console.log(err);
         },
       });
+    } else {
+      this.idMessage = '';
     }
   }
 
@@ -242,6 +249,16 @@ export class ProfileDetailsComponent implements OnInit {
     });
   }
 
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (this.term.dropdownPanel === undefined) {
+      this.foucsTerm = false;
+    }
+    if (this.college.dropdownPanel === undefined) {
+      this.foucsCollege = false;
+    }
+  }
+
   toggleDropdownTerm() {
     if (this.foucsTerm) {
       this.term.close();
@@ -250,12 +267,12 @@ export class ProfileDetailsComponent implements OnInit {
     }
     this.foucsTerm = !this.foucsTerm;
   }
-  toggleDropdownCollega() {
-    if (this.foucsCollega) {
-      this.collega.close();
+  toggleDropdownCollege() {
+    if (this.foucsCollege) {
+      this.college.close();
     } else {
-      this.collega.open();
+      this.college.open();
     }
-    this.foucsCollega = !this.foucsCollega;
+    this.foucsCollege = !this.foucsCollege;
   }
 }

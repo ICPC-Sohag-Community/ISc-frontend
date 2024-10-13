@@ -250,15 +250,15 @@
           >
           <div class="relative">
             <ng-select
-              #collegaSelect
+              #collegeSelect
               id="college"
-              [items]="allCollega"
+              [items]="allCollege"
               [closeOnSelect]="true"
               bindLabel="name"
               bindValue="id"
               formControlName="college"
               #formControl
-              (click)="toggleDropdownC(collegaSelect)"
+              (click)="toggleDropdownC(collegeSelect)"
               [ngClass]="
                 addUserForm.controls['college'].errors && submitted
                   ? 'border-rose-600 '
@@ -268,10 +268,10 @@
             >
             </ng-select>
             <svg
-              (click)="toggleDropdownC(collegaSelect)"
+              (click)="toggleDropdownC(collegeSelect)"
               width="24"
               height="24"
-              [ngClass]="foucsCollega ? 'rotate-180' : ''"
+              [ngClass]="foucsCollege ? 'rotate-180' : ''"
               class="absolute top-[14px] z-[1100] cursor-pointer transition-transform left-[220px]"
               viewBox="0 0 24 24"
               fill="none"

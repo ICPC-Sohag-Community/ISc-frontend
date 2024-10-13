@@ -116,7 +116,7 @@
         </div>
         <div class="flex items-center justify-between w-full mb-4">
           <div class="flex flex-col basis-1/2">
-            <label class="font-semibold">Mobile Phone</label>
+            <label class="font-semibold">Mobile Number</label>
             <div class="relative">
               <input
                 type="text"
@@ -125,6 +125,8 @@
                 class="relative block w-[430px] my-1 p-3 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
                 placeholder="Mobile Phone"
                 [class.font-bold]="!isEditMode"
+                [class.border]="!isMessageSuccess && phoneMessage"
+                [class.border-red-500]="!isMessageSuccess && phoneMessage"
                 [class.font-medium]="isEditMode"
                 [readonly]="!isEditMode"
               />
@@ -214,23 +216,23 @@
       <h2 class="mb-2 text-3xl font-semibold px-14">Academic Information</h2>
       <div class="flex items-center justify-between w-full px-14">
         <div class="flex flex-col basis-1/2">
-          <label class="font-semibold">Collega</label>
+          <label class="font-semibold">College</label>
           <div class="relative w-[430px]">
             <ng-select
-              #collega
-              [items]="allCollega"
+              #college
+              [items]="allCollege"
               [closeOnSelect]="true"
               bindLabel="name"
               bindValue="id"
               formControlName="college"
               placeholder="College"
-              (click)="toggleDropdownCollega()"
+              (click)="toggleDropdownCollege()"
               class="relative block text-lg w-full my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
             >
             </ng-select>
-            <button (click)="toggleDropdownCollega()" type="button">
+            <button (click)="toggleDropdownCollege()" type="button">
               <svg
-                [ngClass]="foucsCollega && isEditMode ? 'rotate-180' : ''"
+                [ngClass]="foucsCollege && isEditMode ? 'rotate-180' : ''"
                 class="absolute transition-transform top-5 z-[1100] size-6 right-4"
                 viewBox="0 0 24 24"
                 fill="none"
@@ -262,10 +264,11 @@
               [ngClass]="!isEditMode ? '!font-bold' : 'font-medium'"
               class="relative block text-lg w-full my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
             >
-              <ng-option [value]="1"> First Term </ng-option>
-              <ng-option [value]="2"> Second Term </ng-option>
-              <ng-option [value]="3"> Summer </ng-option>
-              <ng-option [value]="4"> Mid Year </ng-option>
+              <ng-option [value]="1"> First Year </ng-option>
+              <ng-option [value]="2"> Second year </ng-option>
+              <ng-option [value]="3"> Third year </ng-option>
+              <ng-option [value]="4"> Fourth year </ng-option>
+              <ng-option [value]="5"> Fifth year </ng-option>
             </ng-select>
             <button (click)="toggleDropdownTerm()" type="button">
               <svg
