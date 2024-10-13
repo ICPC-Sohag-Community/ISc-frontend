@@ -107,6 +107,8 @@
                 formControlName="birthDate"
                 class="relative block w-[430px] my-1 p-3 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
                 placeholder="Birth Date"
+                [class.border]="!isMessageSuccessId && idMessage"
+                [class.border-red-500]="!isMessageSuccessId && idMessage"
                 [class.font-bold]="!isEditMode"
                 [class.font-medium]="isEditMode"
                 [readonly]="!isEditMode"
@@ -200,7 +202,7 @@
             <div class="relative">
               <input
                 type="text"
-                formControlName="facebook"
+                formControlName="facebookLink"
                 class="relative block w-[430px] my-1 p-3 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
                 placeholder="Facebook Link"
                 [class.font-bold]="!isEditMode"
