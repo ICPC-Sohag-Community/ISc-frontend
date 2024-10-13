@@ -221,7 +221,7 @@ export class ProfileDetailsComponent implements OnInit {
         }
       }
     });
-    this.errorMessages.forEach((error: any, index: number) => {
+    this.errorMessages.forEach((index: number) => {
       setTimeout(() => {
         this.removeError(index);
       }, 3000);
