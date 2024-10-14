@@ -1,14 +1,10 @@
 <div
-  id="hs-application-sidebar"
-  class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform w-[400px] h-full hidden fixed inset-y-0 start-0 z-[20] bg-white lg:block lg:translate-x-0 lg:end-auto lg:bottom-0"
-  tabindex="-1"
+  class="w-[400px] mt-20 hidden fixed inset-y-0 start-0 z-[20] bg-white lg:block lg:translate-x-0 lg:end-auto lg:bottom-0"
 >
-  <!-- Content -->
-  <div
-    class="h-full font-dm overflow-y-auto flex flex-col justify-start pt-10 items-center [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300"
+  <aside
+    class="h-full font-dm overflow-y-auto flex flex-col justify-start items-center [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300"
   >
     <div class="px-5 py-10">
-      <!-- Logo -->
       <a
         class="flex-none inline-block focus:outline-none focus:opacity-80"
         aria-label="Preline"
@@ -24,14 +20,13 @@
           class="object-cover border-2 rounded-full"
         />
       </a>
-      <!-- End Logo -->
     </div>
     <nav class="flex flex-col flex-wrap w-full ps-10">
       <ul class="flex flex-col gap-y-2">
         <li>
           <a
-            class="flex items-center py-1.5 gap-x-3.5 text-2xl tracking-wide text-sidebarColor hover:text-activeLink transition-colors"
-            routerLink="/profile/leader"
+            class="flex items-center py-1.5 gap-x-3.5 text-2xl tracking-wide text-sidebarColor hover:text-profileTColor transition-colors"
+            routerLink="/profile/trainee"
             routerLinkActive="activeLink"
             ariaCurrentWhenActive="page"
             [routerLinkActiveOptions]="{ exact: true }"
@@ -68,8 +63,8 @@
         </li>
         <li>
           <a
-            class="flex items-center gap-x-3.5 py-1.5 text-2xl tracking-wide text-sidebarColor hover:text-activeLink transition-colors"
-            routerLink="settings"
+            class="flex items-center gap-x-3.5 py-1.5 text-2xl tracking-wide text-sidebarColor hover:text-profileTColor transition-colors"
+            routerLink="trainee/account"
             routerLinkActive="activeLink"
             ariaCurrentWhenActive="page"
           >
@@ -99,31 +94,7 @@
             Account
           </a>
         </li>
-        <li>
-          <button
-            type="button"
-            (click)="authService.logout()"
-            class="flex items-center gap-x-3.5 py-1.5 text-2xl tracking-wide text-sidebarColor hover:text-activeLink transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-8"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
-              />
-            </svg>
-
-            Log out
-          </button>
-        </li>
       </ul>
     </nav>
-  </div>
+  </aside>
 </div>

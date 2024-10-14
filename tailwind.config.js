@@ -13,6 +13,7 @@ module.exports = {
         mainRed: "#e44449",
         mainYellow: "#cca827",
         mainblue: "#3D91C7",
+        profileTColor: "#e69c24",
       },
       animation: {
         pop: "popBtn 1s  infinite",

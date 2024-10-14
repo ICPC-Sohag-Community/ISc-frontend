@@ -127,7 +127,11 @@
           </div>
 
           <!-- User Avatar -->
-          <div *ngIf="!responsive.isSmallScreen" class="relative">
+          <div
+            routerLink="/profile/trainee"
+            *ngIf="!responsive.isSmallScreen"
+            class="relative cursor-pointer"
+          >
             <img
               class="object-cover w-10 h-10 rounded-full"
               [src]="

@@ -14,21 +14,20 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
-import { LeaderProfileService } from '../../services/leader-profile.service';
+import { ProfileTraineeService } from '../../services/profile-trainee.service';
 import { ValidationProfileService } from '../../../../shared/services/validation-profile.service';
 
 @Component({
-  selector: 'app-profile-details',
+  selector: 'app-profile-trainee',
   standalone: true,
   imports: [ReactiveFormsModule, NgSelectModule, NgClass],
-  templateUrl: './profile-details.component.html',
-  styleUrl: './profile-details.component.scss',
+  templateUrl: './profile-trainee.component.html',
+  styleUrl: './profile-trainee.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class ProfileDetailsComponent implements OnInit {
-  leaderProfileService = inject(LeaderProfileService);
+export class ProfileTraineeComponent implements OnInit {
+  profileTraineeService = inject(ProfileTraineeService);
   validationProfileService = inject(ValidationProfileService);
-
   fb = inject(FormBuilder);
   isEditMode = false;
   profileForm!: FormGroup;
@@ -71,6 +70,9 @@ export class ProfileDetailsComponent implements OnInit {
       college: [null, [Validators.required]],
       facebookLink: [''],
       birthDate: ['', [Validators.required]],
+      campName: [''],
+      creationDate: [''],
+      attendanceCount: [''],
     });
     this.profileForm.disable();
 
@@ -96,6 +98,34 @@ export class ProfileDetailsComponent implements OnInit {
       this.idMessage = '';
       this.getGeneralProfile();
     }
+  }
+
+  getGeneralProfile(): void {
+    this.isLoading = true;
+    this.profileTraineeService.traineeProfile().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode == 200) {
+          this.isLoading = false;
+          this.profileForm.patchValue({
+            firstName: data.firstName,
+            middleName: data.middleName,
+            lastName: data.lastName,
+            birthDate: data.birthDate,
+            phoneNumber: data.phoneNumber,
+            nationalId: data.nationalId,
+            facebookLink: data.facebookLink,
+            college: data.college,
+            grade: data.grade,
+            campName: data.campName,
+            // photoUrl: data.photoUrl,
+            creationDate: data.creationDate,
+            attendanceCount: data.attendanceCount,
+          });
+        } else {
+          this.isLoading = false;
+        }
+      },
+    });
   }
 
   vaildationPhone(): void {
@@ -153,8 +183,8 @@ export class ProfileDetailsComponent implements OnInit {
 
       return;
     }
-    this.leaderProfileService
-      .updateLeaderProfile(this.profileForm.value)
+    this.profileTraineeService
+      .updateTraineeProfile(this.profileForm.value)
       .subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
@@ -229,30 +259,6 @@ export class ProfileDetailsComponent implements OnInit {
       setTimeout(() => {
         this.removeError(index);
       }, 3000);
-    });
-  }
-
-  getGeneralProfile(): void {
-    this.isLoading = true;
-    this.leaderProfileService.generalLeaderProfile().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode == 200) {
-          this.isLoading = false;
-          this.profileForm.patchValue({
-            firstName: data.firstName,
-            middleName: data.middleName,
-            lastName: data.lastName,
-            phoneNumber: data.phoneNumber,
-            nationalId: data.nationalId,
-            facebookLink: data.facebookLink,
-            college: data.college,
-            grade: data.grade,
-            birthDate: data.birthDate,
-          });
-        } else {
-          this.isLoading = false;
-        }
-      },
     });
   }
 

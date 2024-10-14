@@ -6,17 +6,18 @@ import { ResponseHeader } from '../../../shared/model/responseHeader';
 @Injectable({
   providedIn: 'root',
 })
-export class LeaderProfileService {
+export class ProfileTraineeService {
   http = inject(HttpClient);
 
-  generalLeaderProfile(): Observable<ResponseHeader> {
+  traineeProfile(): Observable<ResponseHeader> {
     return this.http.get<any>(
-      `${environment.BASE_URL}/api/User/generalProfile`
+      `${environment.BASE_URL}/api/User/traineeProfile`
     );
   }
-  updateLeaderProfile(info: any): Observable<ResponseHeader> {
+
+  updateTraineeProfile(info: any): Observable<ResponseHeader> {
     return this.http.put<ResponseHeader>(
-      `${environment.BASE_URL}/api/User/updateProfile`,
+      `${environment.BASE_URL}/api/User/updateTraineeProfile`,
       info
     );
   }
