@@ -49,7 +49,6 @@ export class LogComponent {
   togglePasswordVisibility(): void {
     this.passwordFieldType =
       this.passwordFieldType === 'password' ? 'text' : 'password';
-    console.log(this.passwordFieldType);
   }
 
   onLogin() {

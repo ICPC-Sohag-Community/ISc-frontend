@@ -107,8 +107,6 @@
                 formControlName="birthDate"
                 class="relative block w-[430px] my-1 p-3 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
                 placeholder="Birth Date"
-                [class.border]="!isMessageSuccessId && idMessage"
-                [class.border-red-500]="!isMessageSuccessId && idMessage"
                 [class.font-bold]="!isEditMode"
                 [class.font-medium]="isEditMode"
                 [readonly]="!isEditMode"
@@ -118,14 +116,14 @@
         </div>
         <div class="flex items-center justify-between w-full mb-4">
           <div class="flex flex-col basis-1/2">
-            <label class="font-semibold">Mobile Number</label>
+            <label class="font-semibold">Phone Number</label>
             <div class="relative">
               <input
                 type="text"
                 formControlName="phoneNumber"
                 (keyup)="vaildationPhone()"
                 class="relative block w-[430px] my-1 p-3 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
-                placeholder="Mobile Phone"
+                placeholder="Phone Number"
                 [class.font-bold]="!isEditMode"
                 [class.border]="!isMessageSuccess && phoneMessage"
                 [class.border-red-500]="!isMessageSuccess && phoneMessage"
@@ -167,6 +165,8 @@
                 placeholder="National ID"
                 [class.font-bold]="!isEditMode"
                 [class.font-medium]="isEditMode"
+                [class.border]="!isMessageSuccessId && idMessage"
+                [class.border-red-500]="!isMessageSuccessId && idMessage"
                 [readonly]="!isEditMode"
               />
             </div>
