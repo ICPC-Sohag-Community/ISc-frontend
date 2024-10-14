@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AuthService } from '../../../../../authentication/services/auth.service';
 import { NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../../../authentication/services/auth.service';
 
 @Component({
   selector: 'app-sidebar-profile',
@@ -13,10 +13,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 export class SidebarProfileComponent implements OnInit {
   authService = inject(AuthService);
   currentUser: any;
-  role: any;
 
   isShow: boolean = false;
-  // menu_show: boolean = true;
 
   show_menu(): void {
     this.isShow = !this.isShow;
@@ -24,6 +22,5 @@ export class SidebarProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.authService.currentUser();
-    // this.role = this.authService.currentUser().roleDto.roleName;
   }
 }

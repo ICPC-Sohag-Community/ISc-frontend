@@ -9,13 +9,13 @@ import {
 import { ValidationProfileService } from '../../../../shared/services/validation-profile.service';
 
 @Component({
-  selector: 'app-leader-settings',
+  selector: 'app-profile-trainee-account',
   standalone: true,
   imports: [ReactiveFormsModule, NgClass],
-  templateUrl: './leader-settings.component.html',
-  styleUrl: './leader-settings.component.scss',
+  templateUrl: './profile-trainee-account.component.html',
+  styleUrl: './profile-trainee-account.component.scss',
 })
-export class LeaderSettingsComponent implements OnInit {
+export class ProfileTraineeAccountComponent implements OnInit {
   validationProfileService = inject(ValidationProfileService);
   fb = inject(FormBuilder);
   isEditEmail: boolean = false;

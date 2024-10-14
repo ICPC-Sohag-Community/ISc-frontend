@@ -56,6 +56,9 @@ import { FormsCampsPublicComponent } from './pages/public/screens/forms-camps-pu
 import { LayoutProfileComponent } from './layouts/layout_profile/layout-profile/layout-profile.component';
 import { ProfileDetailsComponent } from './pages/leader_profile/screens/profile-details/profile-details.component';
 import { LeaderSettingsComponent } from './pages/leader_profile/screens/leader-settings/leader-settings.component';
+import { LayoutProfileTraineeComponent } from './layouts/layout_profile/layout-profile-trainee/layout-profile-trainee.component';
+import { ProfileTraineeComponent } from './pages/trainee-profile/screens/profile-trainee/profile-trainee.component';
+import { ProfileTraineeAccountComponent } from './pages/trainee-profile/screens/profile-trainee-account/profile-trainee-account.component';
 
 export const routes: Routes = [
   // Trainee Pages
@@ -352,7 +355,8 @@ export const routes: Routes = [
     children: [],
   },
 
-  // Profile Page
+  // Profile Pages
+  //leader and HOC
   {
     path: 'profile',
     component: LayoutProfileComponent,
@@ -363,12 +367,29 @@ export const routes: Routes = [
         component: ProfileDetailsComponent,
       },
       {
-        path: 'settings',
+        path: 'leader/settings',
         component: LeaderSettingsComponent,
       },
       {
         path: 'head_of_camp',
         component: ProfileDetailsComponent,
+      },
+    ],
+  },
+
+  // Trainee
+  {
+    path: 'profile',
+    component: LayoutProfileTraineeComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'trainee',
+        component: ProfileTraineeComponent,
+      },
+      {
+        path: 'trainee/account',
+        component: ProfileTraineeAccountComponent,
       },
     ],
   },
