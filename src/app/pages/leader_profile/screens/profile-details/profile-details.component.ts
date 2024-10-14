@@ -96,8 +96,8 @@ export class ProfileDetailsComponent implements OnInit {
   }
 
   vaildationPhone(): void {
-    let phoneNumber = this.profileForm.get('phoneNumber')?.value.length;
-    if (phoneNumber > 10) {
+    let phoneNumber = this.profileForm.get('phoneNumber')?.value;
+    if (phoneNumber.length > 10) {
       this.leaderProfileService.validatePhoneNumber(phoneNumber).subscribe({
         next: ({ statusCode, message }) => {
           if (statusCode === 200) {
@@ -117,8 +117,8 @@ export class ProfileDetailsComponent implements OnInit {
     }
   }
   vaildationId(): void {
-    let nationalId = this.profileForm.get('nationalId')?.value.length;
-    if (nationalId > 13) {
+    let nationalId = this.profileForm.get('nationalId')?.value;
+    if (nationalId.length > 13) {
       this.leaderProfileService.validateNationalId(nationalId).subscribe({
         next: ({ statusCode, message }) => {
           if (statusCode === 200) {
@@ -150,7 +150,6 @@ export class ProfileDetailsComponent implements OnInit {
 
       return;
     }
-    debugger;
     this.leaderProfileService
       .updateLeaderProfile(this.profileForm.value)
       .subscribe({
