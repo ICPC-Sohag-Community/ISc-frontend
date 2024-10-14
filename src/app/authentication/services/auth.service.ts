@@ -96,6 +96,8 @@ export class AuthService {
     localStorage.removeItem(this.JWT_TOKEN);
     localStorage.removeItem(this.CURRENT_USER);
     this.setIsAuth(false);
+    localStorage.clear();
     this.router.navigateByUrl('/');
+    
   }
 }

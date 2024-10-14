@@ -8,14 +8,18 @@ import { DatePickerComponent } from '../component/date-picker/date-picker.compon
 import { UtcDatePipe } from '../../../pipes/utc-date.pipe';
 import { FormsModule } from '@angular/forms';
 
+import { LocaltoutcPipe } from '../../../pipes/localtoutc.pipe';
+import { ActivatedRoute, Router } from '@angular/router';
+
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [FormsModule,UtcDatePipe,MentorHeaderComponent, CommonModule, UtcToLocalPipe,DatePickerComponent],
+  imports: [FormsModule,UtcDatePipe,MentorHeaderComponent,LocaltoutcPipe, CommonModule, UtcToLocalPipe,DatePickerComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss'
 })
 export class TasksComponent {
+  
   id:any
   // cancel(task : HTMLTextAreaElement){
   //   let x = this.ed.title;
@@ -31,112 +35,173 @@ isLoading:boolean = false;
   }
  
   updateTitle(data : any, dat:any , end:any): void {
-    
+    this.errors= [];
     const dateObj = new Date();
     const date = new Date(dat.value);
     // Check if inputElement is not null and has a value
-   
-    
+   const off = date.getTimezoneOffset();
+    let e:Date;
+    let s:Date;
     let task = {
       "taskId": this.ed.taskId,
       "title":  data.value,
-      "startTime":  dat.value,
-      "endTime":  end.value,
+      "startTime":  '',
+      "endTime": '',
       "traineeId":  this.ed.traineeId
     }
-    this.serv.updTask(task).subscribe((d:ResponseHeader)=>{
-      if (d.isSuccess) {
-        this.ed.title = data.value;
-        this.ed.startTime = dat.value;
-        this.ed.endTime = end.value;
-       
-          this.show('edit')
-        
-      }
-      else{
-        this.errors = [];
-      
-        for (const field in d.errors) {
-
-          if (d.errors.hasOwnProperty(field)) {
-            this.errors.push(`${field}: ${d.errors[field].join(', ')}`);
-          }
+    if(!dat.value){
+      this.errors.push('Set Start Date');
+    //    s = new Date(dat.value);
+    // s.setMinutes(s.getMinutes() + off);
+    // s.toISOString();
+    }
+    else{
+      s = new Date(dat.value);
+      s.setMinutes(s.getMinutes() + off);
+      s.toISOString();
+      task.startTime = s.toISOString();
+    }
+    if(!end.value){
+      this.errors.push('Set End Date')
+    }
+    else{
+      e = new Date(end.value);
+      e.setMinutes(e.getMinutes() + off);
+      e.toISOString();
+      task.endTime = e.toISOString();
+    }
+    if(dat.value && end.value){
+      this.serv.updTask(task).subscribe((d:ResponseHeader)=>{
+        if (d.isSuccess) {
+          this.ed.title = data.value;
+          this.ed.startTime =s.toISOString();
+          this.ed.endTime = e.toISOString();
+         
+            this.show('edit')
+          
         }
-      }
-    })
+        else{
+          this.errors = [];
+        
+           for (const field in d.errors) {
+              if (d.errors.hasOwnProperty(field)) {
+                // Check if d.errors[field] is an array before using join
+                if (Array.isArray(d.errors[field])) {
+                  this.errors.push(` ${d.errors[field].join(', ')}`);
+                } else {
+                  this.errors.push(` ${d.errors[field]}`); // Directly push if not an array
+                }
+              }
+            }
+        }
+      })
+    }
+    
     }
   err:any[] = [];
   errors:any = [];
-create(task: HTMLTextAreaElement ,startTime: HTMLInputElement,endTime: HTMLInputElement ) {
-  let start :any;
-  let st :any;
-  let end :any;
-  let en :any;
-  let flag = false;
-  if(startTime.value && endTime.value){
-     start = startTime.value? new Date(startTime.value): null;
-   st = start?start.toISOString().replace('Z', '') : null;
-   end = new Date(endTime.value);
-   en = end?end.toISOString().replace('Z', '') : null;
-  }
-let data = {
-  "title":task.value,
-  "startTime": st,
-  "endTime": en,
-  "traineesIds": this.trainTask,
-  "campId":Number(localStorage.getItem("camp")) 
-}
-
-this.crError = [];
-this.taskNo.forEach(element => {
-  if(element != null){
-    data = {
-      "title":element,
-      "startTime": st,
-  "endTime": en,
-      "traineesIds":this.trainTask ,
-      "campId":Number(localStorage.getItem("camp"))
+  async create(task: HTMLTextAreaElement, startTime: HTMLInputElement, endTime: HTMLInputElement) {
+    let start: Date | null = null;
+    let st: string | null = null;
+    let end: Date | null = null;
+    let en: string | null = null;
+  
+    // Validate and convert input times if provided
+    if ( endTime.value) {
+     
+  
+      end = new Date(endTime.value);
+      en = end.toISOString().replace('Z', ''); // Convert to string without 'Z'
     }
-    if(st && en && this.chars.length != 0 && this.taskNo.length != 0){
-    this.serv.addTask(data).subscribe((d:ResponseHeader)=>{
-      if(!d.isSuccess){
-        
-        this.crError.push('All fields are required');
-        for (const field in d.errors) {
-
-          if (d.errors.hasOwnProperty(field)) {
-            this.crError.push(`${field}: ${d.errors[field].join(', ')}`);
+    if (startTime.value ) {
+      start = new Date(startTime.value);
+      st = start.toISOString().replace('Z', ''); // Convert to string without 'Z'
+  
+     
+    }
+  
+    // Prepare the base data for the task creation
+    const baseData = {
+      title: task.value,
+      startTime: st,
+      endTime: en,
+      traineesIds: this.trainTask,
+      campId: Number(localStorage.getItem('camp')),
+    };
+  
+    // Use a Set to avoid duplicate error messages
+    const errorSet = new Set<string>();
+  
+    // Clear previous errors
+    this.crError = [];
+  
+    // Track how many tasks were processed
+    let successfulTasks = 0;
+  
+    // Loop through the taskNo array and create each task
+    for (let i = 0; i < this.taskNo.length; i++) {
+      if (this.taskNo[i] != null) {
+        // Prepare individual task data
+        const data = {
+          title: this.taskNo[i] ? this.taskNo[i] : '',
+          startTime: st ? st : '1970-01-01T00:00',
+          endTime: en ? en : '1970-01-01T00:00',
+          traineesIds: this.trainTask ? this.trainTask : '',
+          campId: Number(localStorage.getItem('camp')),
+        };
+  
+        // Await the response for each task
+        const response = await this.addTaskAsync(data);
+  
+        if (!response.isSuccess) {
+          // Collect errors for this task and avoid duplicates
+          for (const field in response.errors) {
+            if (response.errors.hasOwnProperty(field)) {
+              if (Array.isArray(response.errors[field])) {
+                response.errors[field].forEach((errMsg:any) => errorSet.add(`${errMsg}`));
+              } else {
+                errorSet.add(`${response.errors[field]}`);
+              }
+            }
           }
+        } else {
+          successfulTasks++; // Increment successful task count
         }
-        
       }
-      else{
-        
-        this.get(localStorage.getItem("camp"));
-        this.show('add');
-        this.taskNo = [];
-        this.chars = [];
-        this.trainTask = [];
-        
-        // window.location.reload();
-        
-      }
-      })  
     }
-    else if (!st || !en || this.chars.length == 0 || this.taskNo.length == 0){
-      this.crError.push('All fields are required');
+  
+    // Check for missing trainees and tasks
+    if (this.chars.length == 0) {
+      errorSet.add('Please add at least one trainee.');
     }
-    
-    
-    
+    if (this.taskNo.length == 0) {
+      errorSet.add('Add at least one task.');
+    }
+  
+    // If there are any errors, add them to `this.crError`
+    if (errorSet.size > 0) {
+      this.crError = Array.from(errorSet);
+    } else {
+      // If no errors, refresh data and reset state
+      this.get(localStorage.getItem('camp'));
+      this.show('add');
+      this.taskNo = [];
+      this.chars = [];
+      this.trainTask = [];
+    }
   }
   
-});
-if(this.taskNo.length == 0)
- 
-    this.crError.push('All fields are required');
+  // Create a wrapper function for `addTask` to use with `await`
+  addTaskAsync(data: any): Promise<ResponseHeader> {
+    return new Promise((resolve) => {
+      this.serv.addTask(data).subscribe((response: ResponseHeader) => {
+        resolve(response);
+      });
+    });
+  }
   
-}
+  
+  
 crError: any[] = [];
 del(id:any){
   let data = {
@@ -144,8 +209,11 @@ del(id:any){
   }
   
   this.serv.del(id).subscribe((d:ResponseHeader)=>{
-    ;
-    document.getElementById(id)?.remove()
+    
+   if(d.isSuccess){
+    document.getElementById( 'D' + id)?.remove();
+    this.refreshRouterOutlet();
+   }
   })
 }
 taskNo:any[] = [];
@@ -225,13 +293,29 @@ add(id: string,trainee: any, f:String , l:String) {
  }
  
 }
-  constructor(private serv : TasksService){
+getFullPath(route: ActivatedRoute): string {
+  let path = route.snapshot.url.map(segment => segment.path).join('/');
+
+  // Recursively add paths from child routes if they exist
+  if (route.firstChild) {
+    path += '/' + this.getFullPath(route.firstChild);
+  }
+  return path;
+}
+ refreshRouterOutlet() {
+    this.router.navigateByUrl('/mentor/blank' , { skipLocationChange: true }).then(() => {
+      
+      this.router.navigate(['mentor/' + this.getFullPath(this.activatedRoute)]);
+    });
+  }
+  constructor(private serv : TasksService ,  private router: Router, private activatedRoute: ActivatedRoute){
 
    if(localStorage.getItem("camp")){
       this.get(localStorage.getItem("camp"));
       this.train(localStorage.getItem("camp"));
+      this.assig();
       this.id = 1
-      this.assig()
+      
     }
     else{
       this.tasks = null;
@@ -261,6 +345,7 @@ add(id: string,trainee: any, f:String , l:String) {
     if(id == 'add'){
       document.getElementById('names')?.classList.add("hidden");
       this.isShow = false;
+      
     }
   }
   get(id:any){
@@ -345,7 +430,7 @@ add(id: string,trainee: any, f:String , l:String) {
 onClickOutside(event: MouseEvent): void {
   const target = event.target as HTMLElement;
   // Check if the click was outside the dropdown and the related button
-  if (!target.closest('.relative') && !target.closest('.dropdown')) {
+  if (!target.closest('.relative') ) {
     const dropdowns = document.querySelectorAll('.dropdown');
     dropdowns.forEach(dropdown => dropdown.classList.add('hidden'));
   }
@@ -354,7 +439,11 @@ getStat(start:any , end:any){
 let d = new Date();
 start = new Date(start)
 end = new Date(end)
+const timezoneOffset = d.getTimezoneOffset(); // This is in minutes
 
+// Adjust the start and end dates by adding the timezone offset
+start.setMinutes(start.getMinutes() - timezoneOffset);
+end.setMinutes(end.getMinutes() - timezoneOffset);
 if(d.getTime()>= start.getTime() && d.getTime()<= end.getTime()){
 return 1;
 }

@@ -107,7 +107,7 @@ export class FormCampComponent {
 
   // Lifecycle hook for initialization
   ngOnInit(): void {
-    this.renderCalendar(this.currentDate, 'start');
+    // this.renderCalendar(this.currentDate, 'start');
     this.dateStart = new Date();
     this.selectedDay = this.dateStart.getDate();
     this.fetchAllCamps() // Uncomment to fetch all camps
@@ -126,6 +126,7 @@ export class FormCampComponent {
 
   // Form submission handler
   onSubmit() {
+
     if (this.registerForm.valid) {
       this.messageOTP=''
       const myForm = this.filterNullValues(this.registerForm)
@@ -185,7 +186,7 @@ export class FormCampComponent {
         next: ({ statusCode, data , Message }) => {
           if (statusCode === 200) {
             this.showLoader=false
-            this.messageOTP='OTP Sended'
+            this.messageOTP='OTP Sent'
           }
           else
           {
@@ -196,76 +197,76 @@ export class FormCampComponent {
     }
   }
 
-  toggleCalendar() {
-    this.calendar.nativeElement.classList.toggle('hidden');
-  }
+  // toggleCalendar() {
+  //   this.calendar.nativeElement.classList.toggle('hidden');
+  // }
 
   // Set available years for the dropdown
-  setYears(): void {
-    let years = [];
-    const newDate = new Date();
-    const year = newDate.getFullYear();
+  // setYears(): void {
+  //   let years = [];
+  //   const newDate = new Date();
+  //   const year = newDate.getFullYear();
 
-    for (let i = 1950; i <= year; i++) {
-      years.push(i);
-    }
-    this.allYears = years;
-  }
+  //   for (let i = 1950; i <= year; i++) {
+  //     years.push(i);
+  //   }
+  //   this.allYears = years;
+  // }
 
   // Render the calendar for a specific date
-  renderCalendar(date: Date, name: string = 'start') {
-    const newDate = new Date(date);
-    const month = newDate.getMonth();
-    const year = newDate.getFullYear();
+  // renderCalendar(date: Date, name: string = 'start') {
+  //   const newDate = new Date(date);
+  //   const month = newDate.getMonth();
+  //   const year = newDate.getFullYear();
 
-    // Calculate the first day of the month and the last date of the month
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
+  //   // Calculate the first day of the month and the last date of the month
+  //   const firstDay = new Date(year, month, 1).getDay();
+  //   const lastDate = new Date(year, month + 1, 0).getDate();
 
-    this.startDays = [];
-    this.monthYear = newDate.toLocaleDateString('en-US', {
-      month: 'long',
-    });
+  //   this.startDays = [];
+  //   this.monthYear = newDate.toLocaleDateString('en-US', {
+  //     month: 'long',
+  //   });
 
-    this.endYear = newDate.toLocaleDateString('en-US', {
-      year: 'numeric'
-    });
-    this.setYears();
+  //   this.endYear = newDate.toLocaleDateString('en-US', {
+  //     year: 'numeric'
+  //   });
+  //   this.setYears();
 
-    // Populate startDays with the dates of the month
-    for (let i = 1; i <= lastDate; i++) {
-      this.startDays.push(i);
-    }
-  }
+  //   // Populate startDays with the dates of the month
+  //   for (let i = 1; i <= lastDate; i++) {
+  //     this.startDays.push(i);
+  //   }
+  // }
 
   // Select a date from the calendar
-  selectDate(day: number, name: string) {
-    const year = this.selectedYear;
-    const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
-    const dayOfMonth = String(day).padStart(2, '0');
+  // selectDate(day: number, name: string) {
+  //   const year = this.selectedYear;
+  //   const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
+  //   const dayOfMonth = String(day).padStart(2, '0');
 
-    const formattedDate = `${year}-${month}-${dayOfMonth}`;
-    this.selectedDay = day;
-    this.registerForm.get('BirthDate')?.setValue(formattedDate);
-    this.calendar.nativeElement.classList.add('hidden');
-  }
+  //   const formattedDate = `${year}-${month}-${dayOfMonth}`;
+  //   this.selectedDay = day;
+  //   this.registerForm.get('BirthDate')?.setValue(formattedDate);
+  //   this.calendar.nativeElement.classList.add('hidden');
+  // }
 
   // Select a year from the dropdown
-  selectYear(event: any): void {
-    event.value == null ? this.changeYear(2024) : this.changeYear(event.value);
-  }
+  // selectYear(event: any): void {
+  //   event.value == null ? this.changeYear(2024) : this.changeYear(event.value);
+  // }
 
   // Change the selected year and re-render the calendar
-  changeYear(yearChange: any) {
-    this.selectedYear = yearChange;
-    this.dateStart.setFullYear(yearChange);
-  }
+  // changeYear(yearChange: any) {
+  //   this.selectedYear = yearChange;
+  //   this.dateStart.setFullYear(yearChange);
+  // }
 
   // Change the month displayed in the calendar
-  changeMonth(monthChange: number) {
-    this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
-    this.renderCalendar(this.dateStart, 'start');
-  }
+  // changeMonth(monthChange: number) {
+  //   this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
+  //   this.renderCalendar(this.dateStart, 'start');
+  // }
 
   // Toggle the gender dropdown
   toggleDropdownGender(genderSelect: NgSelectComponent) {

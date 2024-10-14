@@ -101,7 +101,12 @@ edi(id:any){
         
         for (const field in d.errors) {
           if (d.errors.hasOwnProperty(field)) {
-            this.edError.push(`${field}: ${d.errors[field].join(', ')}`);
+            // Check if d.errors[field] is an array before using join
+            if (Array.isArray(d.errors[field])) {
+              this.edError.push(` ${d.errors[field].join(', ')}`);
+            } else {
+              this.edError.push(` ${d.errors[field]}`); // Directly push if not an array
+            }
           }
         }
       }
@@ -148,6 +153,9 @@ edError:any[] = [];
     this.error = false;
     this.err = [];
     document.getElementById(id)?.classList.toggle("hidden");
+    if(id == 'add'){
+      document.getElementById('focus')?.focus();
+    }
     
   }
   handleClick(event: Event) {
@@ -190,16 +198,35 @@ edError:any[] = [];
       this.err.push(`enter a valid Date`);
       this.error = true
     }
-    else{
+     if(this.title == ''){
+      this.err.push(`Title must not be empty`);
+      this.error = true
+    }
+     if(this.link == ''){
+      this.err.push(`Link must not be empty`);
+      this.error = true
+    }
+    let time:Date =  new Date();
+    let meet = new Date(this.date);
+    if(meet< time){
+      this.err.push('Date Must Be in Future');
+    }
+    else if(this.link && this.title && this.date){
       this.serv.addPractice(data).subscribe((d:ResponseHeader)=>{
-      
+        console.log(data);
         if(!d.isSuccess){
+          // this.err.push('Date Must Be in Future');
          this.error = true
          for (const field in d.errors) {
-           if (d.errors.hasOwnProperty(field)) {
-             this.err.push(`${field}: ${d.errors[field].join(', ')}`);
-           }
-         }
+          if (d.errors.hasOwnProperty(field)) {
+            // Check if d.errors[field] is an array before using join
+            if (Array.isArray(d.errors[field])) {
+              this.err.push(` ${d.errors[field].join(', ')}`);
+            } else {
+              this.err.push(` ${d.errors[field]}`); // Directly push if not an array
+            }
+          }
+        }
        }
        else{
         

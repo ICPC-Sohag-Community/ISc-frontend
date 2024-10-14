@@ -14,7 +14,10 @@ export class LocalTimePipe implements PipeTransform {
 
     // Convert the UTC date to the local time zone
     const options: Intl.DateTimeFormatOptions = {
-      hour: '2-digit',
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
       minute: '2-digit',
       hour12: true,  // Use 12-hour clock with AM/PM
     };
