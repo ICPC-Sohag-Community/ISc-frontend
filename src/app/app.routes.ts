@@ -53,6 +53,8 @@ import { HomePublicComponent } from './pages/public/screens/home-public/home-pub
 import { BlankComponent } from './pages/mentor/blank/blank.component';
 import { CampsPublicComponent } from './pages/public/screens/camps-public/camps-public.component';
 import { FormsCampsPublicComponent } from './pages/public/screens/forms-camps-public/forms-camps-public.component';
+import { ProfileComponent } from './pages/mentor/profile/profile.component';
+
 import { LayoutProfileComponent } from './layouts/layout_profile/layout-profile/layout-profile.component';
 import { ProfileDetailsComponent } from './pages/leader_profile/screens/profile-details/profile-details.component';
 import { LeaderSettingsComponent } from './pages/leader_profile/screens/leader-settings/leader-settings.component';
@@ -314,6 +316,16 @@ export const routes: Routes = [
         path: 'practice',
         component: PracticeComponent,
         title: 'mentor / Practice - ICPC',
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        title: 'mentor / Profile - ICPC',
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        title: 'mentor / Profile - ICPC',
       },
       {
         path: 'blank',

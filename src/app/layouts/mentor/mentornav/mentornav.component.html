@@ -81,8 +81,9 @@
         />
       </svg>
     </button> -->
+   
     <img
-      class="aspect-ratio-img"
+      class="aspect-ratio-img cursor-pointer"
       style="
         width: 2.5rem;
         height: 2.5rem;
@@ -92,6 +93,7 @@
       "
       [src]="currentUser.photoUrl || './../../../../../assets/img/user.jpeg'"
       alt="Avatar"
+      [routerLink]="['/mentor/profile']"
     />
 
     <div>
