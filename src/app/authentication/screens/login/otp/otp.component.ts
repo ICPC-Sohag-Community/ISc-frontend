@@ -51,6 +51,7 @@ check = false;
       // Focus on the next input if it exists
       if (/^[0-9]$/.test(event.key)  ){
         nextInput?.focus();
+        
       }
     
   }
@@ -65,6 +66,8 @@ check = false;
         }
         else{
           this.check = true;
+          
+
           this.isLoading = false;
         }
       })
@@ -73,5 +76,8 @@ check = false;
       this.isLoading = false;
       this.len = true;
     }
+  }
+  empty(inp : HTMLInputElement){
+    inp.value = ''
   }
 }

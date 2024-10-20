@@ -101,7 +101,7 @@ export class TraineeCardsComponent {
 
   // Formats event start and end dates into a human-readable string
   // Example: (startDate, endDate) -> "Thursday 22/08 Starting from 10:00 AM to 04:00 PM"
-  public formatEventDates(startDate: string, endDate: string, detailed: boolean): string {
+  public formatEventDates(startDate: string|null, endDate: string|null, detailed: boolean): string {
     if (startDate && endDate) {
         const start = new Date(startDate);
         const end = new Date(endDate);

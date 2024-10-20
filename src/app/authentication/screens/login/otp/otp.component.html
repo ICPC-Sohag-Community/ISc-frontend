@@ -35,25 +35,32 @@
 
   <!-- OTP Input Section -->
   <div class="flex space-x-2 mb-4">
-    <input
+    <input 
+    [disabled] = 'isLoading'
       #input1
       type="number"
+      (focus)="empty(input1)"
       (keyup)="moveToNext($event, input2)"
       #a
       max="9"
       min="0"
-      class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+      class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 " style="-webkit-appearance: none;"
     />
-    <input
+    <input 
+    [disabled] = 'isLoading'
       #input2
       type="number"
+      (focus)="empty(input2)"
       (keyup)="moveToNext($event, input3)"
       #b
       max="9"
       min="0"
       class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
     />
-    <input
+    <input 
+    [disabled] = 'isLoading'
+    [maxLength]="1"
+    (focus)="empty(input3)"
       #input3
       type="number"
       (keyup)="moveToNext($event, input4)"
@@ -62,10 +69,13 @@
       min="0"
       class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
     />
-    <input
+    <input 
+    [disabled] = 'isLoading'
       #input4
+      (focus)="empty(input4)"
       type="number"
       #d
+      (keyup)="get(email, a.value + b.value + c.value + d.value)"
       max="9"
       min="0"
       class="w-12 h-12 text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -77,7 +87,7 @@
   <div *ngIf="len" class="text-[#DC3545] text-center text-sm mt-3">
     The OTP is at least 4 numbers
   </div>
-  <button
+  <!-- <button
     (click)="get(email, a.value + b.value + c.value + d.value)"
     class="flex justify-center items-center text-white px-6 py-2 text-center rounded-xl mt-5 mb-1 bg-gradient-to-r from-[#3D91C7] via-[#3591C9] to-[#63ABFD]"
   >
@@ -89,7 +99,15 @@
       loading="lazy"
     />
     } @else { Send OTP }
-  </button>
+  </button> -->
+  @if (isLoading) {
+    <img
+      class="w-8 h-8 animate-spin text-purple-950"
+      src="https://www.svgrepo.com/show/474682/loading.svg"
+      alt="Loading icon"
+      loading="lazy"
+    />
+    }
   <!-- Resend Section -->
   <p class="text-gray-600">
     Don’t receive the email?

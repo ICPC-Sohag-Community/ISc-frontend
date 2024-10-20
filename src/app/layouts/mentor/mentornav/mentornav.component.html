@@ -81,9 +81,11 @@
     />
       </svg>
     </button> -->
+   
     <img
       routerLink="/profile/mentor"
       class="aspect-ratio-img"
+
       style="
         width: 2.5rem;
         height: 2.5rem;
@@ -94,6 +96,7 @@
       "
       [src]="currentUser.photoUrl || './../../../../../assets/img/user.jpeg'"
       alt="Avatar"
+      [routerLink]="['/mentor/profile']"
     />
 
     <div>
