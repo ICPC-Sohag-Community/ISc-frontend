@@ -323,13 +323,11 @@
         <div class="flex flex-col basis-1/2">
           <label class="font-semibold">Join Date</label>
           <div class="relative">
-            <input
-              type="text"
-              formControlName="creationDate"
+            <div
               class="relative block w-[430px] font-bold my-1 p-3 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
-              placeholder="Join date"
-              readonly
-            />
+            >
+              {{ profileForm.get("creationDate")?.value | date : "YYY-LL-dd" }}
+            </div>
           </div>
         </div>
         <div class="flex flex-col basis-1/2"></div>
@@ -475,8 +473,8 @@
         type="button"
         [ngClass]="
           errorMessage
-            ? 'text-green-800 hover:text-green-500'
-            : 'text-red-800 hover:text-red-500'
+            ? ' text-red-800 hover:text-red-500'
+            : 'text-green-800 hover:text-green-500'
         "
         class="ml-4 focus:outline-none"
       >

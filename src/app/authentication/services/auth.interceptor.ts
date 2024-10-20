@@ -10,23 +10,17 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const authService = inject(AuthService);
   const JWT_TOKEN = authService.getToken();
-  // req = req.clone({
-  //   setHeaders: {
-  //     Authorization: JWT_TOKEN ? `Bearer ${JWT_TOKEN}` : '',
-  //   },
-  // });
+
   const clonedRequest = JWT_TOKEN
     ? req.clone({
         setHeaders: { Authorization: `Bearer ${JWT_TOKEN}` },
       })
     : req;
-
   return next(clonedRequest).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401 || error.status === 403) {
         authService.logout();
       }
-
       return throwError(() => new Error(error.message || 'Server error'));
     })
   );

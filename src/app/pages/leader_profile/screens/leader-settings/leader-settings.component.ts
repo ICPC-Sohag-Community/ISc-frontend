@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ValidationProfileService } from '../../../../shared/services/validation-profile.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-leader-settings',
@@ -17,6 +18,7 @@ import { ValidationProfileService } from '../../../../shared/services/validation
 })
 export class LeaderSettingsComponent implements OnInit {
   validationProfileService = inject(ValidationProfileService);
+  router = inject(Router);
   fb = inject(FormBuilder);
   isEditEmail: boolean = false;
   isEditUsername: boolean = false;
@@ -51,8 +53,10 @@ export class LeaderSettingsComponent implements OnInit {
   passwordFieldType2: string = 'password';
   passwordFieldType3: string = 'password';
   password: string = '';
+  currentPath: string = '';
 
   ngOnInit() {
+    this.currentPath = this.router.url;
     this.getGeneralProfile();
     this.emailForm = this.fb.group({
       email: ['', Validators.required],
@@ -265,20 +269,12 @@ export class LeaderSettingsComponent implements OnInit {
   matchPassword(): void {
     const confirmPassword = this.passwordForm.get('confirmPassword')?.value;
     const newPassword = this.passwordForm.get('newPassword')?.value;
-    const oldPassword = this.passwordForm.get('oldPassword')?.value;
     if (confirmPassword.length < 6) {
       this.msgPassword = 'Password must be 6 characters minimum';
       this.isSuccessPassword = false;
     } else if (newPassword !== confirmPassword) {
       this.msgPassword = 'The two passwords must be matched';
       this.isSuccessPassword = false;
-    } else if (
-      oldPassword === '' &&
-      newPassword !== '' &&
-      confirmPassword !== ''
-    ) {
-      this.isSuccessPassword = false;
-      this.msgPassword = 'Old Password is required';
     } else {
       this.isSuccessPassword = true;
       this.msgPassword = 'Password is valid';

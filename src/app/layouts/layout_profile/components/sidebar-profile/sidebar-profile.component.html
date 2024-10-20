@@ -1,6 +1,11 @@
 <div
   id="hs-application-sidebar"
-  class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform w-[400px] h-full hidden fixed inset-y-0 start-0 z-[20] bg-white lg:block lg:translate-x-0 lg:end-auto lg:bottom-0"
+  [ngClass]="
+    currentPath.includes('trainee') || currentPath.includes('mentor')
+      ? 'mt-12 bg-transparent'
+      : 'bg-white'
+  "
+  class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform w-[400px] h-full hidden fixed inset-y-0 start-0 z-[20] lg:block lg:translate-x-0 lg:end-auto lg:bottom-0"
 >
   <aside
     class="h-full font-dm overflow-y-auto flex flex-col justify-start pt-10 items-center [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300"
@@ -27,8 +32,20 @@
         <li>
           <a
             class="flex items-center py-1.5 gap-x-3.5 text-2xl tracking-wide text-sidebarColor hover:text-activeLink transition-colors"
-            routerLink="/profile/leader"
-            routerLinkActive="activeLink"
+            [routerLink]="
+              currentPath.includes('leader')
+                ? '/profile/leader'
+                : currentPath.includes('head_of_camp')
+                ? '/profile/head_of_camp'
+                : currentPath.includes('trainee')
+                ? '/profile/trainee'
+                : '/profile/mentor'
+            "
+            [routerLinkActive]="
+              currentPath.includes('trainee')
+                ? 'activeLinkTrainee'
+                : 'activeLink'
+            "
             ariaCurrentWhenActive="page"
             [routerLinkActiveOptions]="{ exact: true }"
           >
@@ -65,8 +82,20 @@
         <li>
           <a
             class="flex items-center gap-x-3.5 py-1.5 text-2xl tracking-wide text-sidebarColor hover:text-activeLink transition-colors"
-            routerLink="leader/settings"
-            routerLinkActive="activeLink"
+            [routerLink]="
+              currentPath.includes('leader')
+                ? '/profile/leader/settings'
+                : currentPath.includes('head_of_camp')
+                ? '/profile/head_of_camp/settings'
+                : currentPath.includes('trainee')
+                ? 'trainee/account'
+                : '/profile/mentor/account'
+            "
+            [routerLinkActive]="
+              currentPath.includes('trainee')
+                ? 'activeLinkTrainee'
+                : 'activeLink'
+            "
             ariaCurrentWhenActive="page"
           >
             <svg
@@ -95,6 +124,48 @@
             Account
           </a>
         </li>
+        @if (currentPath.includes('leader') ||
+        currentPath.includes('head_of_camp')) {
+        <li>
+          <a
+            class="flex items-center gap-x-3.5 py-1.5 text-2xl tracking-wide text-sidebarColor hover:text-activeLink transition-colors"
+            [routerLink]="
+              currentPath.includes('leader')
+                ? '/leader'
+                : currentPath.includes('head_of_camp')
+                ? '/head_of_camp'
+                : currentPath.includes('trainee')
+                ? 'trainee/account'
+                : '/profile/mentor/account'
+            "
+            ariaCurrentWhenActive="page"
+          >
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M24 36V30"
+                stroke="#292D32"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M20.1464 5.6397L6.28639 16.7397C4.72639 17.9797 3.72639 20.5997 4.06639 22.5597L6.72639 38.4797C7.20639 41.3197 9.92639 43.6197 12.8064 43.6197H35.2064C38.0664 43.6197 40.8064 41.2997 41.2864 38.4797L43.9464 22.5597C44.2664 20.5997 43.2664 17.9797 41.7264 16.7397L27.8664 5.6597C25.7264 3.9397 22.2664 3.9397 20.1464 5.6397Z"
+                stroke="#292D32"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+
+            Dashboard
+          </a>
+        </li>
         <li>
           <button
             type="button"
@@ -119,6 +190,7 @@
             Log out
           </button>
         </li>
+        }
       </ul>
     </nav>
   </aside>

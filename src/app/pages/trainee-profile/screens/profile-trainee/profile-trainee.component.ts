@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import {
   Component,
   HostListener,
@@ -20,7 +20,7 @@ import { ValidationProfileService } from '../../../../shared/services/validation
 @Component({
   selector: 'app-profile-trainee',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSelectModule, NgClass],
+  imports: [ReactiveFormsModule, NgSelectModule, NgClass, DatePipe],
   templateUrl: './profile-trainee.component.html',
   styleUrl: './profile-trainee.component.scss',
   encapsulation: ViewEncapsulation.None,

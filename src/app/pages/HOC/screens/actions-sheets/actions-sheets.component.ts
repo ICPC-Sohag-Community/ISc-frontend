@@ -58,6 +58,8 @@ export class ActionsSheetsComponent implements OnInit {
   isLoading: boolean = false;
   errorMessages: any = [];
   errorMessage: string = '';
+  successMessage: string = '';
+
   id: number = 0;
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -126,10 +128,13 @@ export class ActionsSheetsComponent implements OnInit {
       this.sheetsHOCService.createSheet(this.sheetForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
+            this.errorMessage = '';
+            this.successMessage = message;
             this.isLoading = false;
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/sheets']);
           } else if (statusCode === 400) {
+            this.successMessage = '';
             this.errorMessage = message;
             this.isLoading = false;
           } else {
@@ -146,10 +151,13 @@ export class ActionsSheetsComponent implements OnInit {
       this.sheetsHOCService.updateSheet(this.sheetForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
+            this.errorMessage = '';
+            this.successMessage = message;
             this.isLoading = false;
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/sheets']);
           } else if (statusCode === 400) {
+            this.successMessage = '';
             this.errorMessage = message;
             this.isLoading = false;
           } else {

@@ -78,18 +78,21 @@
           stroke-width="1.5"
           stroke-linecap="round"
           stroke-linejoin="round"
-        />
+    />
       </svg>
     </button> -->
    
     <img
-      class="aspect-ratio-img cursor-pointer"
+      routerLink="/profile/mentor"
+      class="aspect-ratio-img"
+
       style="
         width: 2.5rem;
         height: 2.5rem;
         border-radius: 50%;
         object-fit: cover;
         display: block;
+        cursor: pointer;
       "
       [src]="currentUser.photoUrl || './../../../../../assets/img/user.jpeg'"
       alt="Avatar"

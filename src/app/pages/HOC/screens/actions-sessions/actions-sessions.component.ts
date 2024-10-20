@@ -36,6 +36,7 @@ export class ActionsSessionsComponent implements OnInit {
   sessionForm!: FormGroup;
   errorMessages: any = [];
   errorMessage: string = '';
+  successMessage: string = '';
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -88,10 +89,13 @@ export class ActionsSessionsComponent implements OnInit {
       this.sessionsHOCService.createSession(this.sessionForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
+            this.errorMessage = '';
+            this.successMessage = message;
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/sessions']);
             this.isLoading = false;
           } else if (statusCode === 400) {
+            this.successMessage = '';
             this.errorMessage = message;
             this.isLoading = false;
           } else {
@@ -108,10 +112,13 @@ export class ActionsSessionsComponent implements OnInit {
       this.sessionsHOCService.updateSession(this.sessionForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
+            this.errorMessage = '';
+            this.successMessage = message;
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/sessions']);
             this.isLoading = false;
           } else if (statusCode === 400) {
+            this.successMessage = '';
             this.errorMessage = message;
             this.isLoading = false;
           } else {

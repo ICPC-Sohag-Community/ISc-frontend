@@ -14,9 +14,36 @@ export class LeaderProfileService {
       `${environment.BASE_URL}/api/User/generalProfile`
     );
   }
-  updateLeaderProfile(info: any): Observable<ResponseHeader> {
+
+  generalHeadProfile(): Observable<ResponseHeader> {
+    return this.http.get<any>(`${environment.BASE_URL}/api/User/headProfile`);
+  }
+  generalMentorProfile(): Observable<ResponseHeader> {
+    return this.http.get<any>(`${environment.BASE_URL}/api/User/mentorProfile`);
+  }
+
+  updateProfile(info: any): Observable<ResponseHeader> {
     return this.http.put<ResponseHeader>(
       `${environment.BASE_URL}/api/User/updateProfile`,
+      info
+    );
+  }
+
+  updateHeadOfCamp(info: any): Observable<ResponseHeader> {
+    return this.http.put<ResponseHeader>(
+      `${environment.BASE_URL}/api/User/updateHeadOfCamp`,
+      info
+    );
+  }
+  updateMentor(info: any): Observable<ResponseHeader> {
+    return this.http.put<ResponseHeader>(
+      `${environment.BASE_URL}/api/User/updateMentor`,
+      info
+    );
+  }
+  updateTraineeProfile(info: any): Observable<ResponseHeader> {
+    return this.http.put<ResponseHeader>(
+      `${environment.BASE_URL}/api/User/updateTraineeProfile`,
       info
     );
   }

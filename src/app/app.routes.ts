@@ -58,9 +58,8 @@ import { FormsCampsPublicComponent } from './pages/public/screens/forms-camps-pu
 import { LayoutProfileComponent } from './layouts/layout_profile/layout-profile/layout-profile.component';
 import { ProfileDetailsComponent } from './pages/leader_profile/screens/profile-details/profile-details.component';
 import { LeaderSettingsComponent } from './pages/leader_profile/screens/leader-settings/leader-settings.component';
-import { LayoutProfileTraineeComponent } from './layouts/layout_profile/layout-profile-trainee/layout-profile-trainee.component';
 import { ProfileTraineeComponent } from './pages/trainee-profile/screens/profile-trainee/profile-trainee.component';
-import { ProfileTraineeAccountComponent } from './pages/trainee-profile/screens/profile-trainee-account/profile-trainee-account.component';
+import { MentorProfileComponent } from './pages/mentor-profile/mentor-profile.component';
 
 export const routes: Routes = [
   // Trainee Pages
@@ -280,7 +279,7 @@ export const routes: Routes = [
     ],
   },
 
-  // mentor Page
+  // mentor Pages
   {
     path: 'mentor',
     component: MentorLayoutComponent,
@@ -368,31 +367,46 @@ export const routes: Routes = [
       {
         path: 'leader',
         component: ProfileDetailsComponent,
+        title: 'ICPC - Leader / Profile',
       },
       {
         path: 'leader/settings',
         component: LeaderSettingsComponent,
+        title: 'ICPC - Leader / Account',
       },
+      //head_of_camp
       {
         path: 'head_of_camp',
         component: ProfileDetailsComponent,
+        title: 'ICPC - Head Of Camp / Profile',
       },
-    ],
-  },
+      {
+        path: 'head_of_camp/settings',
+        component: LeaderSettingsComponent,
 
-  // Trainee
-  {
-    path: 'profile',
-    component: LayoutProfileTraineeComponent,
-    canActivate: [authGuard],
-    children: [
+        title: 'ICPC - Head Of Camp / Account',
+      },
+      //trainee
       {
         path: 'trainee',
         component: ProfileTraineeComponent,
+        title: 'ICPC - Trainee / Profile',
       },
       {
         path: 'trainee/account',
-        component: ProfileTraineeAccountComponent,
+        component: LeaderSettingsComponent,
+        title: 'ICPC - Trainee / Account',
+      },
+      //trainee
+      {
+        path: 'mentor',
+        component: ProfileDetailsComponent,
+        title: 'ICPC - Mentor / Profile',
+      },
+      {
+        path: 'mentor/account',
+        component: LeaderSettingsComponent,
+        title: 'ICPC - Mentor / Account',
       },
     ],
   },

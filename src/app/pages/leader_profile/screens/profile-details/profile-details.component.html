@@ -16,7 +16,6 @@
         </button>
         <button
           type="submit"
-          (click)="onSubmit()"
           [disabled]="!isEditMode"
           class="px-8 py-1.5 text-xl bg-activeLink border rounded-lg text-white w-fit"
         >
@@ -54,6 +53,27 @@
 
       <h2 class="mb-4 text-3xl font-semibold px-14">Personal Information</h2>
       <div class="border-l-2 px-14">
+        @if (currentPath.includes('head_of_camp') ||
+        currentPath.includes('mentor')) {
+        <div class="flex items-center justify-between w-full mb-4">
+          <div class="flex flex-col basis-full">
+            <label class="font-semibold">About</label>
+            <div class="relative">
+              <textarea
+                name="about"
+                id="about"
+                formControlName="about"
+                placeholder="About"
+                [class.font-bold]="!isEditMode"
+                [class.font-medium]="isEditMode"
+                [readonly]="!isEditMode"
+                class="relative block w-[94%] my-1 p-3 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+                cols="4"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        }
         <div class="flex items-center justify-between w-full mb-4">
           <div class="flex flex-col basis-1/2">
             <label class="font-semibold">First Name</label>
@@ -293,6 +313,47 @@
           </div>
         </div>
       </div>
+      @if (currentPath.includes('head_of_camp')) {
+      <div class="flex items-center justify-between w-full mb-4 px-14">
+        <div class="flex flex-col basis-1/2">
+          <label class="font-semibold">Camp</label>
+          <div
+            class="relative block w-[430px] font-bold my-1 p-3 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
+          >
+            {{ camp }}
+          </div>
+        </div>
+        <div class="flex flex-col basis-1/2"></div>
+      </div>
+      } @if (currentPath.includes('mentor')) {
+      <div class="flex items-center justify-between w-full mb-4 px-14">
+        <div class="flex flex-col basis-1/2">
+          <label class="mb-4 text-lg font-semibold">List of camps</label>
+          <div class="relative">
+            @for (c of camps; track c) {
+            <div class="flex items-center gap-4">
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 28.6666V23.5439L15.18 8.50256L13.6667 6.49723L14.7493 5.69189L16 7.39723L17.2773 5.69189L18.3333 6.49723L16.8467 8.50256L28 23.5426V28.6666H4ZM16 9.63323L5.33333 23.9746V27.3332H9.66667L16 18.4879L22.3333 27.3332H26.6667V23.9732L16 9.63323ZM11.3187 27.3332H20.6827L16 20.7799L11.3187 27.3332Z"
+                  fill="#3D91C7"
+                />
+              </svg>
+              <h3 class="text-lg font-semibold">{{ c }}</h3>
+            </div>
+            }@empty {
+            <p class="text-red-500">No camps yet</p>
+            }
+          </div>
+        </div>
+        <div class="flex flex-col basis-1/2"></div>
+      </div>
+      }
     </div>
   </form>
   <div class="fixed space-y-2 bottom-4 z-[1300] right-8">
@@ -434,8 +495,8 @@
         type="button"
         [ngClass]="
           errorMessage
-            ? 'text-green-800 hover:text-green-500'
-            : 'text-red-800 hover:text-red-500'
+            ? ' text-red-800 hover:text-red-500'
+            : 'text-green-800 hover:text-green-500'
         "
         class="ml-4 focus:outline-none"
       >
