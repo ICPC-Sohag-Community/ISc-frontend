@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { task } from '../model/trinee-home';
 
 @Injectable({
@@ -18,7 +18,6 @@ export class HomeService {
   isLoading: boolean = true;
 
   constructor() {}
-
 
   TraineeCurrentSheet(): Observable<any> {
     return this._HttpClient.get(
@@ -80,7 +79,6 @@ export class HomeService {
   }
 
   loadTasks(): void {
-
     this.TraineeTasks().subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
@@ -100,7 +98,6 @@ export class HomeService {
         if (statusCode === 200) {
           this.nextSession.next(data);
           this.isLoading = false;
-
         }
       },
     });
@@ -125,7 +122,6 @@ export class HomeService {
         if (statusCode === 200) {
           this.currentSheet.next(data);
           this.isLoading = false;
-
         }
       },
     });
