@@ -109,7 +109,6 @@ export class DashboardChartsHocComponent implements OnInit, AfterViewInit {
         options: {
           responsive: true,
           cutout: '70%',
-
           maintainAspectRatio: false,
           plugins: {
             legend: {
