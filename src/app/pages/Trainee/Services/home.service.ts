@@ -1,150 +1,139 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
-import { ResponseHeader } from '../../../shared/model/responseHeader';
-import { task } from '../model/trinee-data';
+import { task } from '../model/trinee-home';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HomeService {
-  // BehaviorSubjects to hold data
-  inComingContest = new BehaviorSubject<any>('null');
-  nextSession = new BehaviorSubject<any>('null');
-  currentSheet = new BehaviorSubject<any>('null');
-  toDo = new BehaviorSubject<task[]>([]);
-  inProgress = new BehaviorSubject<task[]>([]);
-  done = new BehaviorSubject<task[]>([]);
-  heads = new BehaviorSubject<any>('null');
-  mentor = new BehaviorSubject<any>('null');
+  _HttpClient = inject(HttpClient);
+  inProgress: BehaviorSubject<any> = new BehaviorSubject('');
+  done: BehaviorSubject<any> = new BehaviorSubject('');
+  toDo: BehaviorSubject<any> = new BehaviorSubject('');
+  nextSession: BehaviorSubject<any> = new BehaviorSubject('');
+  inComingContest: BehaviorSubject<any> = new BehaviorSubject('');
+  currentSheet: BehaviorSubject<any> = new BehaviorSubject('');
+  isLoading: boolean = true;
 
-  constructor(private httpClient: HttpClient) {
-    this.initializeData();
-  }
+  constructor() {}
 
-  // Initialize all data
-  private initializeData(): void {
-    this.assignInComingContest();
-    this.assignTraineeTasks();
-    this.assignHeads();
-    this.assignMentor();
-    this.assignCurrentSheet();
-    this.assignNextSession();
-  }
 
-  // API Methods
-  private fetchData<T>(url: string): Observable<T> {
-    return this.httpClient.get<T>(`${environment.BASE_URL}${url}`);
-  }
-
-  private updateData<T>(url: string, model: T): Observable<any> {
-    return this.httpClient.put(`${environment.BASE_URL}${url}`, model);
-  }
-
-  // Observable Methods
   TraineeCurrentSheet(): Observable<any> {
-    return this.fetchData('/api/Trainee/currentSheet');
+    return this._HttpClient.get(
+      environment.BASE_URL + `/api/Trainee/currentSheet`
+    );
   }
-
+  TraineeSheetProgress(): Observable<any> {
+    return this._HttpClient.get(
+      environment.BASE_URL + `/api/Trainee/currentSheetProgress`
+    );
+  }
   TraineeIncomingContest(): Observable<any> {
-    return this.fetchData('/api/Trainee/IncomingContest');
+    return this._HttpClient.get(
+      environment.BASE_URL + `/api/Trainee/IncomingContest`
+    );
   }
-
   TraineeNextSession(): Observable<any> {
-    return this.fetchData('/api/Trainee/getNextSession');
+    return this._HttpClient.get(
+      environment.BASE_URL + `/api/Trainee/getNextSession`
+    );
   }
-
+  TraineeCanAddFeedBack(): Observable<any> {
+    return this._HttpClient.get(
+      environment.BASE_URL + `/api/Trainee/canAddFeedback`
+    );
+  }
+  TraineeFeedBack(model: any): Observable<any> {
+    return this._HttpClient.post(
+      environment.BASE_URL + `/api/Trainee/feedback`,
+      model
+    );
+  }
   MentorInfo(): Observable<any> {
-    return this.fetchData('/api/Trainee/mentorInfo');
+    return this._HttpClient.get(
+      environment.BASE_URL + `/api/Trainee/mentorInfo`
+    );
   }
-
-  HeadsInfo(): Observable<any> {
-    return this.fetchData('/api/Trainee/headsInfo');
-  }
-
-  TraineeTasks(): Observable<any> {
-    return this.fetchData('/api/Trainee/tasks');
-  }
-
   QRCode(): Observable<any> {
-    return this.fetchData('/api/Trainee/qrCode');
+    return this._HttpClient.get(environment.BASE_URL + `/api/Trainee/qrCode`);
   }
-
   nextPractice(): Observable<any> {
-    return this.fetchData('/api/Trainee/getNextPractice');
+    return this._HttpClient.get(
+      environment.BASE_URL + `/api/Trainee/getNextPractice`
+    );
   }
-
+  HeadsInfo(): Observable<any> {
+    return this._HttpClient.get(
+      environment.BASE_URL + `/api/Trainee/headsInfo`
+    );
+  }
+  TraineeTasks(): Observable<any> {
+    return this._HttpClient.get(environment.BASE_URL + `/api/Trainee/tasks`);
+  }
   UpdateTraineeTask(model: any): Observable<any> {
-    return this.updateData('/api/Trainee/updatetaskStatus', model);
+    return this._HttpClient.put(
+      environment.BASE_URL + `/api/Trainee/updatetaskStatus`,
+      model
+    );
   }
 
-  // Data Assignment Methods
-  private assignCurrentSheet(): void {
-    this.TraineeCurrentSheet().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
-          this.currentSheet.next(data);
-        }
-      }
-    });
-  }
+  loadTasks(): void {
 
-  private assignInComingContest(): void {
-    this.TraineeIncomingContest().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
-          this.inComingContest.next(data);
-        }
-      }
-    });
-  }
-
-  private assignNextSession(): void {
-    this.TraineeNextSession().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
-          this.nextSession.next(data);
-        }
-      }
-    });
-  }
-
-  private assignMentor(): void {
-    this.MentorInfo().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
-          this.mentor.next(data);
-        }
-      }
-    });
-  }
-
-  private assignHeads(): void {
-    this.HeadsInfo().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode === 200) {
-          this.heads.next(data);
-        }
-      }
-    });
-  }
-
-  public assignTraineeTasks(): void {
     this.TraineeTasks().subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
+          console.log('asdsa');
+
           this.toDo.next(this.getTasksByStatus(data, 0));
           this.inProgress.next(this.getTasksByStatus(data, 1));
           this.done.next(this.getTasksByStatus(data, 2));
         }
-      }
+      },
     });
   }
 
-  // Utility Methods
-  private getTasksByStatus(data: any, status: number): task[] {
-    const statusData = data.find((item: { status: number }) => item.status === status);
+  assignTraineeNextSessionCard(): void {
+    this.TraineeNextSession().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.nextSession.next(data);
+          this.isLoading = false;
+
+        }
+      },
+    });
+  }
+  assignTraineeIncomingContestCard(): void {
+    this.isLoading = true;
+    this.TraineeIncomingContest().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.inComingContest.next(data);
+          this.isLoading = false;
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+      },
+    });
+  }
+  assignTraineeCurrentSheetCard(): void {
+    this.TraineeCurrentSheet().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.currentSheet.next(data);
+          this.isLoading = false;
+
+        }
+      },
+    });
+  }
+  getTasksByStatus(data: any, status: number): task[] {
+    const statusData = data.find(
+      (item: { status: number }) => item.status === status
+    );
     return statusData ? statusData.task : [];
   }
 }

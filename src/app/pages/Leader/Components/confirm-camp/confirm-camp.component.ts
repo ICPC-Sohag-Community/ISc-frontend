@@ -20,7 +20,6 @@ export class ConfirmCampComponent {
   @Input() itemId: number | null = null;
   @Output() closeModal = new EventEmitter<boolean>();
   isLoading = signal<boolean>(false);
-
   isDeleted: boolean = false;
 
   cancel() {

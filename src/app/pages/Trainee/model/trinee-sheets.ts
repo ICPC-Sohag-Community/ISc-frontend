@@ -6,7 +6,8 @@ export interface Sheet {
   problemSolved: number
   minimumPassingPrecent: number
   status: number
-  date: string
+  startDate: string
+  endDate: string
 }
 export interface Matrial {
   id: number

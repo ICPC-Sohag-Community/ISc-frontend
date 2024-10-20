@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { HomeService } from '../../../Services/home.service';
-import { task } from '../../../model/trinee-data';
+import { task } from '../../../model/trinee-home';
 declare var $: any;
 
 @Component({
@@ -18,10 +18,11 @@ export class HomeTasksToDoComponent implements OnInit {
 
   // Arrays to hold tasks based on their status
   todoTasks: task[] = [];
-  // doneTasks: task[] = [];
+
 
   // Lifecycle hook to load tasks when the component initializes
   ngOnInit(): void {
+    this._homeService.loadTasks()
     this.loadToDoTasks();
   }
 
@@ -30,6 +31,7 @@ export class HomeTasksToDoComponent implements OnInit {
     this._homeService.toDo.subscribe({
       next: (response) => {
           this.todoTasks = response
+
       }
     });
   }
@@ -44,7 +46,7 @@ export class HomeTasksToDoComponent implements OnInit {
     this._homeService.UpdateTraineeTask(model).subscribe({
       next: ({ statusCode }) => {
         if (statusCode === 200) {
-          this._homeService.assignTraineeTasks();
+          this._homeService.loadTasks();
         }
       }
     });
@@ -57,18 +59,12 @@ export class HomeTasksToDoComponent implements OnInit {
 
       $('.todo-table').slideToggle(500);
       $('.todo-arrow').toggleClass('rotate');
-
-    // else if (tableClosed === 'progress') {
-    //   $('.progress-table').slideToggle(500);
-    //   $('.progress-arrow').toggleClass('rotate');
-    // } else if (tableClosed === 'done') {
-    //   $('.done-table').slideToggle(500);
-    //   $('.done-arrow').toggleClass('rotate');
-    // }
   }
     // Toggle the visibility of task lists within each category
     toggleList(id: string): void {
       $(`#${id}`).slideToggle(300);
     }
+
+
 
 }

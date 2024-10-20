@@ -1,5 +1,5 @@
-import { ApplicationConfig } from '@angular/core';
-import { provideRouter, withViewTransitions } from '@angular/router';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { provideRouter, RouterModule, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -10,5 +10,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withViewTransitions()),
     provideHttpClient(),
     provideHttpClient(withInterceptors([authInterceptor])),
+    importProvidersFrom(
+      RouterModule.forRoot(routes, {
+        scrollPositionRestoration: 'enabled', // Restore scroll position on back/forward
+        anchorScrolling: 'enabled', // Enable anchor scrolling
+      })
+    ),
   ],
 };

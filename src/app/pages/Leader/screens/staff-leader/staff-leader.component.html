@@ -41,10 +41,12 @@
           formControlName="sortNumber"
           (change)="sortStaff($event)"
           placeholder="Sort By"
+          (open)="focusSelect()"
+          (close)="blurSelect()"
           class="relative block w-40 h-10 my-2 !text-white appearance-none rounded-xl !placeholder:text-white bg-mainblue cursor-none focus:outline-none"
         >
           <ng-option [value]="0">Faculty</ng-option>
-          <ng-option [value]="1">Grade</ng-option>
+          <ng-option [value]="1">Year</ng-option>
           <ng-option [value]="2">Gender</ng-option>
         </ng-select>
         <svg
@@ -68,9 +70,8 @@
     </form>
   </div>
 
-  <!-- table staff -->
   @if( isLoading()) {
-  <div class="fixed z-50 top-[60%] lg:left-[50%] left-[40%] bg-opacity-60">
+  <div class="fixed z-50 top-[60%] left-[50%] bg-opacity-60">
     <div class="flex items-center">
       <div
         class="w-16 h-16 border-8 border-blue-600 border-dashed rounded-full animate-spin"
@@ -162,27 +163,22 @@
   </table>
   }
 
-  <!-- sideBar Info -->
-  <!-- [ngClass]="{
-      'z-[150] bg-black bg-opacity-50': showSideInfo,
-      '-z-10': hideSideInfo && !showSideInfo
-    }" -->
   <div
     (click)="handleOverlayClick($event)"
     [ngClass]="{
       ' bg-black bg-opacity-50 visible': showSideInfo,
       'invisible cursor-default': !showSideInfo && hideSideInfo
     }"
-    class="flex z-[150] items-center fixed justify-end inset-0 !m-0"
+    class="flex z-[1200] items-center fixed justify-end inset-0 !m-0"
   >
     <div
       [ngClass]="showSideInfo ? 'translate-x-0' : 'translate-x-full'"
-      class="relative flex flex-col bg-[#323232] items-center h-screen w-[450px] p-6 transition-transform duration-700 ease-in-out shadow-lg rounded-tl-lg rounded-bl-lg"
+      class="relative flex flex-col overflow-y-auto custom-scrollbar-side bg-[#323232] items-center h-screen w-[450px] p-6 transition-transform duration-700 ease-in-out shadow-lg rounded-tl-lg rounded-bl-lg"
     >
       <span
         (click)="handleClose()"
-        class="absolute text-3xl font-semibold text-white transition-colors cursor-pointer top-3 right-8 hover:text-red-500"
-        >_</span
+        class="absolute text-3xl font-semibold text-gray-500 transition-colors cursor-pointer top-3 right-8 hover:text-red-500"
+        >__</span
       >
       @if (selectedStaffId) { @if (isLoadingForSide) {
       <div class="bg-opacity-60">
@@ -210,9 +206,7 @@
           {{ staffInfo.lastName }}
         </h2>
       </div>
-      <div
-        class="self-start w-full mt-4 overflow-y-scroll text-white custom-scrollbar-side"
-      >
+      <div class="self-start w-full mt-4 text-white h-fit">
         <div class="flex items-center mb-4 gap-x-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -384,7 +378,7 @@
             />
           </svg>
 
-          <span class="text-[#EEEEEE]">Roles:</span>
+          <span class="text-[#EEEEEE] self-start">Roles:</span>
           <app-dropdown-roles
             (staffRequested)="onStaffRequested($event)"
             [selectedStaffId]="selectedStaffId"
@@ -394,26 +388,31 @@
         <div
           class="flex items-center justify-between w-full mb-4 pe-6 ps-4 gap-x-2"
         >
-          <div class="flex items-center gap-x-2">
-            <svg
-              class="size-4"
-              viewBox="0 0 18 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M5 9L8 12L13 6M1 13.8V4.2C1 3.08 1 2.52 1.218 2.092C1.41 1.715 1.715 1.41 2.092 1.218C2.52 1 3.08 1 4.2 1H13.8C14.92 1 15.48 1 15.907 1.218C16.284 1.41 16.59 1.715 16.782 2.092C17 2.519 17 3.079 17 4.197V13.804C17 14.922 17 15.481 16.782 15.908C16.5899 16.2844 16.2836 16.5903 15.907 16.782C15.48 17 14.921 17 13.803 17H4.197C3.079 17 2.519 17 2.092 16.782C1.71569 16.5903 1.40974 16.2843 1.218 15.908C1 15.48 1 14.92 1 13.8Z"
-                stroke="white"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+          <div class="flex items-center w-full gap-x-2">
+            <div class="size-4">
+              <svg
+                class="size-4"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 9L8 12L13 6M1 13.8V4.2C1 3.08 1 2.52 1.218 2.092C1.41 1.715 1.715 1.41 2.092 1.218C2.52 1 3.08 1 4.2 1H13.8C14.92 1 15.48 1 15.907 1.218C16.284 1.41 16.59 1.715 16.782 2.092C17 2.519 17 3.079 17 4.197V13.804C17 14.922 17 15.481 16.782 15.908C16.5899 16.2844 16.2836 16.5903 15.907 16.782C15.48 17 14.921 17 13.803 17H4.197C3.079 17 2.519 17 2.092 16.782C1.71569 16.5903 1.40974 16.2843 1.218 15.908C1 15.48 1 14.92 1 13.8Z"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
 
-            <span>{{ item.role }}</span>
-            @if (item.campName) {
-            <span> - {{ item.campName }}</span>
-            }
+            <div class="flex items-center justify-center gap-x-2">
+              <span>{{ item.role }}</span> @if (item.campName) {
+              <span>-</span>
+              @if (item.campName) {
+              <span class="line-clamp-1">{{ item.campName }}</span>
+              } }
+            </div>
           </div>
           <button (click)="deleteRole(i)">
             <svg
@@ -432,26 +431,31 @@
         <div
           class="flex items-center justify-between w-full mb-4 pe-6 ps-4 gap-x-2"
         >
-          <div class="flex items-center gap-x-2">
-            <svg
-              class="size-4"
-              viewBox="0 0 18 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M5 9L8 12L13 6M1 13.8V4.2C1 3.08 1 2.52 1.218 2.092C1.41 1.715 1.715 1.41 2.092 1.218C2.52 1 3.08 1 4.2 1H13.8C14.92 1 15.48 1 15.907 1.218C16.284 1.41 16.59 1.715 16.782 2.092C17 2.519 17 3.079 17 4.197V13.804C17 14.922 17 15.481 16.782 15.908C16.5899 16.2844 16.2836 16.5903 15.907 16.782C15.48 17 14.921 17 13.803 17H4.197C3.079 17 2.519 17 2.092 16.782C1.71569 16.5903 1.40974 16.2843 1.218 15.908C1 15.48 1 14.92 1 13.8Z"
-                stroke="white"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+          <div class="flex items-center w-full gap-x-2">
+            <div class="size-4">
+              <svg
+                class="size-4"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 9L8 12L13 6M1 13.8V4.2C1 3.08 1 2.52 1.218 2.092C1.41 1.715 1.715 1.41 2.092 1.218C2.52 1 3.08 1 4.2 1H13.8C14.92 1 15.48 1 15.907 1.218C16.284 1.41 16.59 1.715 16.782 2.092C17 2.519 17 3.079 17 4.197V13.804C17 14.922 17 15.481 16.782 15.908C16.5899 16.2844 16.2836 16.5903 15.907 16.782C15.48 17 14.921 17 13.803 17H4.197C3.079 17 2.519 17 2.092 16.782C1.71569 16.5903 1.40974 16.2843 1.218 15.908C1 15.48 1 14.92 1 13.8Z"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
 
-            <span>{{ item.role }}</span>
-            @if (item.campName) {
-            <span> - {{ item.campName }}</span>
-            }
+            <div class="flex items-center justify-center gap-x-2">
+              <span>{{ item.role }}</span> @if (item.campName) {
+              <span>-</span>
+              @if (item.campName) {
+              <span class="line-clamp-1">{{ item.campName }}</span>
+              } }
+            </div>
           </div>
           <button (click)="restoreRole(i)">
             <svg
@@ -525,15 +529,14 @@
     </button>
     }
     <div class="flex items-center space-x-2">
-      @for (page of [].constructor(allStaffInfo.totalPages); track page; let i =
-      $index) {
+      @for (page of getPageRange(); track page; let i = $index) {
       <button
         class="px-3 py-1 font-bold rounded-tr-lg rounded-bl-lg rounded-br-lg text-activeLink"
-        (click)="staffWithPagination(i + 1, 10, keywordSearch, sortbyNum)"
-        [class.bg-blue-500]="allStaffInfo.currentPage === i + 1"
-        [class.text-white]="allStaffInfo.currentPage === i + 1"
+        (click)="gotoPage(page)"
+        [class.bg-[#3d91c7]]="page === allStaffInfo.currentPage"
+        [class.text-white]="page === allStaffInfo.currentPage"
       >
-        {{ i + 1 }}
+        {{ page }}
       </button>
       }
     </div>

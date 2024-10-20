@@ -43,7 +43,10 @@
         <td class="px-4 py-2 text-left rounded-s-lg">{{ item.name }}</td>
         <td class="px-4 py-2">{{ item.startDate }}</td>
         <td class="px-4 py-2">{{ item.endDate }}</td>
-        <td class="px-4 py-2">{{ item.term }}</td>
+        <td class="px-4 py-2">
+          @switch (item.term) { @case (1) { First term } @case (2) { Second term
+          } @case (3) { Summer } @case (4) { Mid year } }
+        </td>
         <td class="px-4 py-2">{{ item.durationInWeeks }}</td>
         <td (click)="goToActionCamp(item.id)" class="px-4 py-2 cursor-pointer">
           <svg
@@ -153,15 +156,14 @@
       Previous
     </button>
     <div class="flex items-center space-x-2">
-      @for (page of [].constructor(allCampsInfo.totalPages); track page; let i =
-      $index) {
+      @for (page of getPageRange(); track page; let i = $index) {
       <button
         class="px-3 py-1 font-bold rounded-tr-lg rounded-bl-lg rounded-br-lg text-activeLink"
-        (click)="fetchAllWithPagination(i + 1, 10)"
-        [class.bg-blue-500]="allCampsInfo.currentPage === i + 1"
-        [class.text-white]="allCampsInfo.currentPage === i + 1"
+        (click)="gotoPage(page)"
+        [class.bg-[#3d91c7]]="page === allCampsInfo.currentPage"
+        [class.text-white]="page === allCampsInfo.currentPage"
       >
-        {{ i + 1 }}
+        {{ page }}
       </button>
       }
     </div>

@@ -13,6 +13,7 @@ module.exports = {
         mainRed: "#e44449",
         mainYellow: "#cca827",
         mainblue: "#3D91C7",
+        profileTColor: "#e69c24",
       },
       animation: {
         pop: "popBtn 1s  infinite",
@@ -22,6 +23,9 @@ module.exports = {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.1)" },
         },
+      },
+      fontFamily: {
+        dm: ["DM Sans", "sans-serif"],
       },
     },
   },

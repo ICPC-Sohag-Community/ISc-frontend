@@ -18,9 +18,11 @@ export class NextContestComponent implements OnInit {
   // Initialize nextContest object with default values
   public nextContest: nextContest = {
   } as nextContest;
+  isLoading:boolean=true
 
   // Lifecycle hook for component initialization
   ngOnInit(): void {
+    // this._contestService.assignContests()
     this.loadContestData(); // Load contest data on initialization
   }
 
@@ -29,6 +31,7 @@ export class NextContestComponent implements OnInit {
     this._contestService.nextContest.subscribe({
       next: (response) => {
         this.nextContest = response; // Update the nextContest object with the response data
+        // this.isLoading=false
       },
     });
   }

@@ -1,0 +1,11 @@
+
+.sections a:hover {
+    color: #3591C9
+}
+.aspect-ratio-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1; /* Adjust ratio as needed */
+    object-fit: cover; /* Or `contain` if you prefer */
+  }
+  

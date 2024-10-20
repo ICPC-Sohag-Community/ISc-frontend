@@ -1,11 +1,11 @@
 import {
   Component,
   ElementRef,
+  HostListener,
   inject,
   OnInit,
   QueryList,
   ViewChild,
-  ViewChildren,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -14,9 +14,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { DashboardService } from '../../services/dashboard.service';
 import { NgClass } from '@angular/common';
+import { CasheService } from '../../../../shared/services/cashe.service';
 
 @Component({
   selector: 'app-add-user',
@@ -27,17 +28,18 @@ import { NgClass } from '@angular/common';
 })
 export class AddUserComponent implements OnInit {
   dashboardService = inject(DashboardService);
+  casheService = inject(CasheService);
   fb = inject(FormBuilder);
   allRoles: { id: number; name: string }[] = [];
-  allCollega: { id: number; name: string }[] = [];
+  allCollege: { id: number; name: string }[] = [];
   allCamps: { id: number; name: string }[] = [];
   error: any = [];
   selectedRole: string = '';
   selectedCamp: string = '';
-  selectedCollega: string = '';
+  selectedCollege: string = '';
   uploadedFileName: string = '';
   isShow: boolean = false;
-  foucsCollega: boolean = false;
+  foucsCollege: boolean = false;
   foucsRole: boolean = false;
   submitted: boolean = false;
   isLoading: boolean = false;
@@ -45,6 +47,8 @@ export class AddUserComponent implements OnInit {
   addUserForm!: FormGroup;
   @ViewChild('formControl') formControls!: QueryList<ElementRef>;
   @ViewChild(FormGroupDirective) formDir!: FormGroupDirective;
+  @ViewChild('collegeSelect') collegeSelect!: NgSelectComponent;
+  @ViewChild('roleSelect') roleSelect!: NgSelectComponent;
 
   ngOnInit(): void {
     this.addUserForm = this.fb.group({
@@ -66,7 +70,7 @@ export class AddUserComponent implements OnInit {
     });
     this.fetchAllRoles();
     this.fetchAllCamps();
-    this.allCollega = [
+    this.allCollege = [
       { id: 0, name: 'Computer and Ai' },
       { id: 1, name: 'EELU' },
       { id: 2, name: 'Science' },
@@ -115,12 +119,17 @@ export class AddUserComponent implements OnInit {
     formdata.append('BirthDate', this.addUserForm.value.birthDate);
     formdata.append('PhoneNumber', this.addUserForm.value.phoneNumber);
     formdata.append('College', this.addUserForm.value.college);
-    formdata.append('CodeForceHandle', this.addUserForm.value.codeForceHandle); ///
+    formdata.append('CodeForceHandle', this.addUserForm.value.codeForceHandle);
     formdata.append('Grade', this.addUserForm.value.grade);
     formdata.append('Gender', this.addUserForm.value.gender);
-    formdata.append('ProfileImage', this.imgFile);
     if (this.addUserForm.value.vjudgeHandle !== null) {
       formdata.append('VjudgeHandle', this.addUserForm.value.vjudgeHandle); ///
+    }
+    if (
+      this.addUserForm.value.ProfileImage !== null ||
+      this.addUserForm.value.ProfileImage !== undefined
+    ) {
+      formdata.append('ProfileImage', this.imgFile);
     }
     formdata.append('CampId', this.addUserForm.value.campId);
     formdata.append('Role', this.addUserForm.value.role);
@@ -130,8 +139,9 @@ export class AddUserComponent implements OnInit {
     this.dashboardService.createAccount(formdata).subscribe({
       next: ({ statusCode, message, errors }) => {
         if (statusCode === 200) {
-          debugger;
           alert('done');
+          this.casheService.clearCache();
+          this.selectedCamp = '';
           this.formDir.resetForm();
           this.isLoading = false;
         } else if (errors) {
@@ -199,19 +209,11 @@ export class AddUserComponent implements OnInit {
     this.foucsRole = false;
   }
 
-  handleSelectCollega(item: any) {
-    this.selectedCollega = item.id;
+  handleSelectCollege(item: any) {
+    this.selectedCollege = item.id;
     if (item.id) {
-      this.foucsCollega = false;
+      this.foucsCollege = false;
     }
-  }
-
-  handleOpen() {
-    this.foucsCollega = false;
-  }
-
-  handleClose(): void {
-    this.foucsCollega = true;
   }
 
   getCampId(camp: any): void {
@@ -221,37 +223,58 @@ export class AddUserComponent implements OnInit {
   }
 
   fetchAllRoles(): void {
-    // this.isLoading.set(true);
     this.dashboardService.roles().subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.allRoles = data;
-          // this.isLoading.update((v) => (v = false));
         } else {
-          // this.isLoading.update((v) => (v = false));
+          console.log('error');
         }
       },
       error: (err) => {
         console.log(err);
-        // this.isLoading.update((v) => (v = false));
       },
     });
   }
   fetchAllCamps(): void {
-    // this.isLoading.set(true);
     this.dashboardService.getAllCamps().subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.allCamps = data;
-          // this.isLoading.update((v) => (v = false));
         } else {
-          // this.isLoading.update((v) => (v = false));
+          console.log('error');
         }
       },
       error: (err) => {
         console.log(err);
-        // this.isLoading.update((v) => (v = false));
       },
     });
+  }
+
+  toggleDropdownC(collegeSelect: NgSelectComponent) {
+    if (this.foucsCollege) {
+      collegeSelect.close();
+    } else {
+      collegeSelect.open();
+    }
+    this.foucsCollege = !this.foucsCollege;
+  }
+  toggleDropdownR(roleSelect: NgSelectComponent) {
+    if (this.foucsRole) {
+      roleSelect.close();
+    } else {
+      roleSelect.open();
+    }
+    this.foucsRole = !this.foucsRole;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (this.collegeSelect.dropdownPanel === undefined) {
+      this.foucsCollege = false;
+    }
+    if (this.roleSelect.dropdownPanel === undefined) {
+      this.foucsRole = false;
+    }
   }
 }

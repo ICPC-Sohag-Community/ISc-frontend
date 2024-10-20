@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import SwiperCore, { SwiperOptions } from 'swiper';
 import Swiper, { Navigation } from 'swiper';
 import { SwiperModule } from 'swiper/angular';
@@ -13,7 +13,7 @@ Swiper.use([Navigation]);
 @Component({
   selector: 'app-ended-carousel',
   standalone: true,
-  imports: [CommonModule, SwiperModule, FormatDatePipe],
+  imports: [CommonModule, SwiperModule, FormatDatePipe,NgOptimizedImage],
   templateUrl: './ended-carousel.component.html',
   styleUrls: ['./ended-carousel.component.scss']
 })
@@ -67,5 +67,8 @@ export class EndedCarouselComponent implements OnInit {
   // Method to navigate to the previous slide
   prevSlide() {
     this.swiper?.slidePrev();
+  }
+  openLink(url:string):void{
+    window.open(url,'_blank')
   }
 }

@@ -1,9 +1,11 @@
 import { NgClass } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
   inject,
+  OnChanges,
   OnInit,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
@@ -18,13 +20,34 @@ import { AuthService } from '../../../../authentication/services/auth.service';
 })
 export class SecondNavbarComponent implements OnInit {
   authService = inject(AuthService);
+  elementRef = inject(ElementRef);
+  cdr = inject(ChangeDetectorRef);
   router = inject(Router);
   isShow: boolean = false;
   currentUser: any;
-  constructor(private elementRef: ElementRef) {}
+  roles: string[] = [];
+  currentPath: string = '';
 
   ngOnInit() {
     this.currentUser = this.authService.currentUser();
+    this.currentPath = this.router.url;
+    this.loadRoles();
+    this.detectLocalStorageChange();
+  }
+  loadRoles(): void {
+    const storedData = JSON.parse(localStorage.getItem('CURRENT_USER') || '{}');
+    this.roles = storedData.roles || [];
+    this.cdr.detectChanges();
+  }
+
+  detectLocalStorageChange(): void {
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = (key: string, value: string): void => {
+      originalSetItem.apply(localStorage, [key, value]);
+      if (key === 'CURRENT_USER') {
+        this.loadRoles();
+      }
+    };
   }
 
   showRoles() {

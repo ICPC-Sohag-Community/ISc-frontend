@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DashboardService } from '../../services/dashboard.service';
 import { StaffLeaderService } from '../../services/staff-leader.service';
 import { RolesService } from '../../services/roles.service';
+import { AuthService } from '../../../../authentication/services/auth.service';
 
 @Component({
   selector: 'app-dropdown-roles',
@@ -25,6 +26,7 @@ export class DropdownRolesComponent implements OnInit {
   @Output() staffRequested = new EventEmitter<string>();
   @Input() selectedStaffId: string = '';
   dashboardService = inject(DashboardService);
+  authService = inject(AuthService);
   staffLeaderService = inject(StaffLeaderService);
   rolesService = inject(RolesService);
   fb = inject(FormBuilder);
@@ -79,6 +81,7 @@ export class DropdownRolesComponent implements OnInit {
       },
     });
   }
+
   fetchAllCamps(): void {
     this.dashboardService.getAllCamps().subscribe({
       next: ({ statusCode, data }) => {
@@ -99,19 +102,16 @@ export class DropdownRolesComponent implements OnInit {
     this.filteredRoles = this.roles.filter((role) =>
       role.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
     if (searchTerm && !this.roles.some((role) => role.name === searchTerm)) {
       this.newRole = { name: searchTerm };
     } else {
       this.newRole = null;
     }
-
     this.dropdownOpen = true;
   }
 
   onAddRole() {
     if (this.newRole) {
-      debugger;
       this.filteredRoles.push(this.newRole);
       this.selectedRole = this.newRole;
       this.addNewRole(this.newRole.name);
@@ -120,6 +120,7 @@ export class DropdownRolesComponent implements OnInit {
       this.dropdownOpen = false;
     }
   }
+
   selectRole(role: any) {
     this.selectedRole = role;
     if (this.selectedRole.name === 'Trainee') {
@@ -153,11 +154,12 @@ export class DropdownRolesComponent implements OnInit {
   }
 
   saveNewRoles(roleInfo: any): void {
-    console.log(roleInfo);
-    debugger;
     this.rolesService.assignToRole(roleInfo).subscribe({
-      next: ({ statusCode, data }) => {
+      next: ({ statusCode }) => {
         if (statusCode === 200) {
+          if (this.authService.currentUser().id === roleInfo.userId) {
+            this.authService.updateUserRoles(roleInfo.role, 'add');
+          }
           this.staffRequested.emit(this.selectedStaffId);
         } else {
           console.log('error');
@@ -170,7 +172,6 @@ export class DropdownRolesComponent implements OnInit {
   }
 
   addNewRole(roleName: string): void {
-    console.log(roleName);
     this.rolesService.addNewRole(roleName).subscribe({
       next: ({ statusCode, data }) => {
         const roleInfo = {
@@ -190,15 +191,9 @@ export class DropdownRolesComponent implements OnInit {
   }
 
   deleteRole(roleName: string) {
-    debugger;
     this.rolesService.removeRoleFromSystem(roleName).subscribe({
       next: ({ statusCode, data }) => {
         this.fetchAllRoles();
-        // const roleInfo = {
-        //   userId: this.selectedStaffId,
-        //   role: roleName,
-        // };
-        // this.saveNewRoles(roleInfo);
         if (statusCode === 200) {
         } else {
           console.log('error');
@@ -212,7 +207,6 @@ export class DropdownRolesComponent implements OnInit {
 
   onDropdownFocus() {
     this.dropdownOpen = true;
-    console.log('dro', this.dropdownOpen);
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -222,8 +216,5 @@ export class DropdownRolesComponent implements OnInit {
       this.dropdownOpen = false;
     }
   }
-
-  closeDropdown() {
-    // setTimeout(() => (this.dropdownOpen = false), 200); // Close the dropdown when focus is lost
-  }
+  closeDropdown(): void {}
 }

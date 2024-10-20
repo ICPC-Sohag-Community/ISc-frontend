@@ -15,26 +15,23 @@ export const authGuard: CanActivateFn = (route, state) => {
 
 // to don't back to /login or /register when logged in
 export const authGuardLoggdIn: CanActivateFn = (route, state) => {
-  const currentUser = JSON.parse(localStorage.getItem('CURRENT_USER') || '{}');
-
+  const userInfo = JSON.parse(localStorage.getItem('CURRENT_USER') || '{}');
+  const roles = userInfo.roles;
   const authService = inject(AuthService);
 
   const router = inject(Router);
-  if (authService.isAuth() && currentUser.roleDto.roleName === 'أدمن') {
-    return router.navigate(['/admin']);
+  if (authService.isAuth() && roles.includes('Leader')) {
+    return router.navigate(['/leader']);
   }
 
-  if (authService.isAuth() && currentUser.roleDto.roleName === 'ولي أمر') {
-    return router.navigate(['/parent']);
+  if (authService.isAuth() && roles.includes('Head_Of_Camp')) {
+    return router.navigate(['/head_of_camp']);
   }
-  if (authService.isAuth() && currentUser.roleDto.roleName === 'مدخل بيانات') {
-    return router.navigate(['/instructor']);
+  if (authService.isAuth() && roles.includes('Mentor')) {
+    return router.navigate(['/mentor']);
   }
-  if (authService.isAuth() && currentUser.roleDto.roleName === 'مدرس') {
-    return router.navigate(['/instructor']);
-  }
-  if (authService.isAuth() && currentUser.roleDto.roleName === 'مشرف مدرسة') {
-    return router.navigate(['/supervisor']);
+  if (authService.isAuth() && roles.includes('Trainee')) {
+    return router.navigate(['/trainee']);
   }
   if (authService.isAuth()) {
     return router.navigate(['/']);

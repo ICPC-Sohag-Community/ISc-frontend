@@ -1,49 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 
 @import "swiper/css/bundle";
+@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
 
-::-webkit-scrollbar,
-.scroll-host::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 12px !important;
 }
 
-::-webkit-scrollbar-track,
-.scroll-host::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: #abd0e7;
   border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb,
-.scroll-host::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: #3d91c7;
   border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover,
-.scroll-host::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
-.custom-scrollbar::-webkit-scrollbar,
-.scroll-host::-webkit-scrollbar {
+.custom-scrollbar::-webkit-scrollbar {
   width: 8px !important;
 }
-.custom-scrollbar::-webkit-scrollbar-track,
-.scroll-host::-webkit-scrollbar-track {
+.custom-scrollbar::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 10px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb,
-.scroll-host::-webkit-scrollbar-thumb {
+.custom-scrollbar::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 10px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover,
-.scroll-host::-webkit-scrollbar-thumb:hover {
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
@@ -55,17 +49,9 @@
   // border: 1;
 }
 
-.ng-value-label,
-.campName {
-  background-color: #3c8fc5;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 8px;
-}
-
 .focus\:outline-none:focus {
   outline: none;
-  border: none;
+  // border: none;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
@@ -96,14 +82,11 @@
 }
 .ng-select,
 .ng-select:focus {
-  height: 38px;
-  border: none;
   outline: none;
-  cursor: none;
+  cursor: pointer;
 }
 
 .ng-select .ng-select-container .ng-value-container .ng-input > input {
-  cursor: none;
   display: none;
 }
 
@@ -111,8 +94,30 @@
   .ng-select-container
   .ng-value-container
   .ng-value {
-  // font-size: 18px;
+  font-size: 18px;
   padding: 0px 0 0px 14px;
+  border: none;
+}
+
+//camp
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-value {
+  padding: 0 !important;
+}
+
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-value {
+  background-color: transparent;
+}
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-value
+  .ng-value-icon.left {
   border: none;
 }
 
@@ -121,9 +126,31 @@
   background-color: transparent;
 }
 
+.ng-select .ng-select-container {
+  height: 100% !important;
+  border: none;
+}
+
+.ng-select span.ng-value-label,
+.campName {
+  background-color: #3c8fc5;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-placeholder {
+  top: 8px !important;
+}
+
 .ng-select .ng-select-container .ng-value-container .ng-placeholder {
-  color: #fff;
   font-size: 18px;
   font-weight: 500;
+  color: white;
 }
-@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
+.ng-select .ng-arrow-wrapper {
+  display: none;
+}

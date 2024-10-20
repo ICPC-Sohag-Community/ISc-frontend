@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { HomeService } from '../../../Services/home.service';
-import { task } from '../../../model/trinee-data';
+import { task } from '../../../model/trinee-home';
 declare var $: any;
 
 @Component({
@@ -38,7 +38,7 @@ export class HomeTasksInProgressComponent {
     this._homeService.UpdateTraineeTask(model).subscribe({
       next: ({ statusCode }) => {
         if (statusCode === 200) {
-          this._homeService.assignTraineeTasks();
+          this._homeService.loadTasks();
         }
       }
     });

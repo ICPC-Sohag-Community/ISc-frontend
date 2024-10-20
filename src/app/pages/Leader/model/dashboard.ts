@@ -15,4 +15,6 @@ export interface dashboardFeedbacks {
   feedback: string;
   photoUrl: any;
   fullName: string;
+  middleName: string;
+  firstName: string;
 }

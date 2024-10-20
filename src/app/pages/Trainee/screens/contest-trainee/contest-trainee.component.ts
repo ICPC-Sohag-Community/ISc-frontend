@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ContestHeaderComponent } from '../../Components/Contests-Components/Contests-header/contest-header.component';
 import { NextContestComponent } from '../../Components/Contests-Components/Next-contest/next-contest.component';
 import { ContestCarouselComponent } from '../../Components/Contests-Components/Contest-Carousel/contest-carousel.component';
 import { EndedCarouselComponent } from '../../Components/Contests-Components/ended-carousel/ended-carousel.component';
+import { ContestService } from '../../Services/contest.service';
 
 @Component({
   selector: 'app-contest-trainee',
@@ -12,11 +13,14 @@ import { EndedCarouselComponent } from '../../Components/Contests-Components/end
   styleUrl: './contest-trainee.component.scss'
 })
 export class ContestTraineeComponent {
-  // isLoading = true; // Initially show the loader
+  public _contestService = inject(ContestService);
 
-  // ngAfterViewInit(): void {
-  //   setTimeout(() => {
-  //     this.isLoading = false;
-  //   }, 700);
-  // }
+
+  ngOnInit(): void {
+    this._contestService.assignContests()
+  }
+
+
+
+
 }

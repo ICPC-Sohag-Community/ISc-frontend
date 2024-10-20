@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "allowedCommonJsDependencies": ["qrcode"],
             "outputPath": "dist/icpc",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -41,7 +42,7 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
+                  "maximumWarning": "5kb",
                   "maximumError": "4kb"
                 }
               ],
