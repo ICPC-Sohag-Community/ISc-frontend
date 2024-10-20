@@ -83,8 +83,6 @@ export class SystemFilterComponent implements OnInit {
     const rowHasValues = (row: any) => {
       return row.sheetId || row.community || row.passingPrecent;
     };
-
-    // 1. Remove the last row if it's empty (only if there are multiple rows)
     const lastRow = formData[formData.length - 1];
     if (formData.length > 1) {
       if (!rowHasValues(lastRow)) {
@@ -93,37 +91,22 @@ export class SystemFilterComponent implements OnInit {
       }
     }
 
-    // 2. Handle form submission based on the first row and remaining data
     const firstRow = formData[0];
     const hasMultipleRows = this.filters.length > 1;
 
-    // If the first row has no values, submit the form
     if (!rowHasValues(firstRow)) {
       this.filters.removeAt(this.filters.length - 1);
-      console.log('Submitting as the first row has no values');
       this.saveFilter.emit(this.filterForm);
-    }
-    // If the first row has values but multiple rows are present, submit
-    else if (
+    } else if (
       rowHasValues(firstRow) &&
       rowHasValues(lastRow) &&
       hasMultipleRows
     ) {
-      console.log(
-        'Submitting as the first row has values and additional rows are added'
-      );
       this.filters.removeAt(this.filters.length - 1);
       this.saveFilter.emit(this.filterForm);
-    }
-    // If only the first row has values and no additional rows, don't submit
-    else {
+    } else {
       console.log('Form not submitted - only the first row has values');
     }
-
-    // if (this.filters.length > 1 && this.filterForm.valid) {
-    //   this.filters.removeAt(this.filters.length - 1);
-    //   this.saveFilter.emit(this.filterForm);
-    // }
   }
 
   setSavedFilters(savedData: any[]) {

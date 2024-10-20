@@ -63,7 +63,6 @@ export class SecondNavbarComponent implements OnInit {
   }
 
   goSpecificRole(role: string): void {
-    console.log(role.toLowerCase());
     this.router.navigate(['/', role.toLowerCase()]);
   }
 }

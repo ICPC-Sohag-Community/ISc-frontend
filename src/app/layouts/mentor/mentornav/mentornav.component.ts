@@ -1,4 +1,3 @@
-
 import { NgClass } from '@angular/common';
 
 import {
@@ -14,9 +13,9 @@ import { AuthService } from '../../../authentication/services/auth.service';
 @Component({
   selector: 'app-mentornav',
   standalone: true,
-  imports: [NgClass,RouterLink,RouterLinkActive],
+  imports: [NgClass, RouterLink, RouterLinkActive],
   templateUrl: './mentornav.component.html',
-  styleUrl: './mentornav.component.scss'
+  styleUrl: './mentornav.component.scss',
 })
 export class MentornavComponent implements OnInit {
   authService = inject(AuthService);
@@ -43,5 +42,8 @@ export class MentornavComponent implements OnInit {
 
   goSpecificRole(role: string): void {
     this.router.navigate(['/', role.toLowerCase()]);
+  }
+  goToProfile(): void {
+    this.router.navigate(['/profile/mentor']);
   }
 }

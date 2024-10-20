@@ -16,7 +16,6 @@ export class ChartDashboardComponent implements OnInit, AfterViewInit {
   percentageMales: number = 50;
   percentagefemales: number = 50;
   ngOnInit() {
-    console.log(this.traineesCount);
     this.percentageMales = Math.round(
       (this.malesCount / this.traineesCount) * 100
     );

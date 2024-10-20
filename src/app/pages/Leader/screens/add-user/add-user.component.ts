@@ -90,7 +90,6 @@ export class AddUserComponent implements OnInit {
             control.nativeElement &&
             control.nativeElement.classList.contains('ng-invalid')
         );
-      console.log(invalidControls);
       if (invalidControls.length > 0) {
         const firstInvalidControl = invalidControls[0].nativeElement;
         firstInvalidControl.focus();
@@ -134,8 +133,6 @@ export class AddUserComponent implements OnInit {
     formdata.append('CampId', this.addUserForm.value.campId);
     formdata.append('Role', this.addUserForm.value.role);
 
-    console.log(this.addUserForm.value);
-
     this.dashboardService.createAccount(formdata).subscribe({
       next: ({ statusCode, message, errors }) => {
         if (statusCode === 200) {
@@ -164,7 +161,6 @@ export class AddUserComponent implements OnInit {
 
   onFileSelected(event: any): void {
     this.imgFile = event.target.files[0];
-    console.log(this.imgFile);
     this.uploadedFileName = this.imgFile.name;
   }
 

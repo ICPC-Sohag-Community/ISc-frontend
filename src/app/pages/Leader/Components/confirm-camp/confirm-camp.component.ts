@@ -40,7 +40,6 @@ export class ConfirmCampComponent {
     this.campLeaderService.deleteCamp(id).subscribe({
       next: ({ message, statusCode }) => {
         if (statusCode === 200) {
-          console.log(message);
           this.isLoading.update((v) => (v = false));
           this.isDeleted = true;
         } else {

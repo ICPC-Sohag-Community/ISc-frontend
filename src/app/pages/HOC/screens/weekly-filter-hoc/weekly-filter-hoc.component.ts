@@ -76,7 +76,6 @@ export class WeeklyFilterHOCComponent implements OnInit {
   }
 
   removeUnselectedUsers(): void {
-    console.log(this.selectedUsers);
     const traineesId = Array.from(this.selectedUsers);
     this.weeklyFilterService.getOthers(traineesId).subscribe({
       next: ({ statusCode }) => {
@@ -101,7 +100,6 @@ export class WeeklyFilterHOCComponent implements OnInit {
   }
 
   handleClose(confirmed: boolean) {
-    console.log(confirmed);
     if (confirmed && this.selectedItemId !== null) {
       const idsOfTrainees = this.filterData.map((t) => t.id);
       this.getOthers(idsOfTrainees);

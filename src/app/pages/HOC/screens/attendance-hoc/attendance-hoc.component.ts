@@ -74,7 +74,6 @@ export class AttendanceHOCComponent implements OnInit {
   }
 
   onHover(rowIndex: number, colIndex: number) {
-    console.log(rowIndex, colIndex);
     this.hoveredRow = rowIndex;
     this.hoveredCol = colIndex;
   }
