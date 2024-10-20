@@ -29,7 +29,6 @@ export class StandingCampComponent implements OnInit {
     this.campLeaderService.standingCamp(campId).subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
-          console.log(data);
           this.achiverCamp = data;
           this.isLoading.update((v) => (v = false));
         } else {

@@ -33,14 +33,6 @@ export class AssignHOCComponent implements OnInit {
 
   handleSelectMentor(mentor: any): void {
     this.selectedMentor = mentor;
-
-    // this.isSelectedMentor = !this.isSelectedMentor;
-    // if (this.isSelectedMentor) {
-    //   this.selectedMentor = mentor;
-    // } else {
-    //   this.selectedMentor = null;
-    // }
-    // console.log(this.selectedMentor);
   }
 
   getAllAssignTrainees(SortBy?: number, KeyWord?: string): void {

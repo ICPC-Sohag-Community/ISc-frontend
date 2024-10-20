@@ -5,7 +5,7 @@ export interface Trainee {
   lastName: string;
   photoUrl: string;
   college: number;
-  gender: number;
+  gender: string;
   grade: number;
 }
 

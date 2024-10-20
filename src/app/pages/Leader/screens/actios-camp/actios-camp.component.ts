@@ -78,6 +78,7 @@ export class ActiosCampComponent implements OnInit {
   campName: string = '';
   errorMessages: any = [];
   errorMessage: string = '';
+  successMessage: string = '';
   foucsTerm: boolean = false;
 
   submitted: boolean = false;
@@ -252,11 +253,14 @@ export class ActiosCampComponent implements OnInit {
       this.campLeaderService.createCamp(this.campForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
+            this.errorMessage = '';
+            this.successMessage = message;
             this.selectedCamp = '';
             this.isLoading = false;
             this.casheService.clearCache();
             this.router.navigate(['/leader/camps']);
           } else if (statusCode === 400) {
+            this.successMessage = '';
             this.errorMessage = message;
             this.isLoading = false;
           } else {
@@ -275,10 +279,13 @@ export class ActiosCampComponent implements OnInit {
         .subscribe({
           next: ({ statusCode, message, errors }) => {
             if (statusCode === 200) {
+              this.errorMessage = '';
+              this.successMessage = message;
               this.isLoading = false;
               this.casheService.clearCache();
               this.router.navigate(['/leader/camps']);
             } else if (statusCode === 400) {
+              this.successMessage = '';
               this.errorMessage = message;
               this.isLoading = false;
             } else {

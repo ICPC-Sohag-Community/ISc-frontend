@@ -16,6 +16,7 @@ import {
 import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { LeaderProfileService } from '../../services/leader-profile.service';
 import { ValidationProfileService } from '../../../../shared/services/validation-profile.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-details',
@@ -28,7 +29,7 @@ import { ValidationProfileService } from '../../../../shared/services/validation
 export class ProfileDetailsComponent implements OnInit {
   leaderProfileService = inject(LeaderProfileService);
   validationProfileService = inject(ValidationProfileService);
-
+  router = inject(Router);
   fb = inject(FormBuilder);
   isEditMode = false;
   profileForm!: FormGroup;
@@ -43,10 +44,21 @@ export class ProfileDetailsComponent implements OnInit {
   isMessageSuccess: boolean = true;
   isMessageSuccessId: boolean = true;
   idMessage: string = '';
+  currentPath: string = '';
+  camps: string[] = [];
+  camp: string = '';
   @ViewChild('term') term!: NgSelectComponent;
   @ViewChild('college') college!: NgSelectComponent;
 
   ngOnInit(): void {
+    this.currentPath = this.router.url;
+    if (this.currentPath.includes('leader')) {
+      this.getGeneralProfile();
+    } else if (this.currentPath.includes('head_of_camp')) {
+      this.generalHeadProfile();
+    } else {
+      this.generalMentorProfile();
+    }
     this.profileForm = this.fb.group({
       firstName: ['', [Validators.required]],
       middleName: ['', [Validators.required]],
@@ -69,12 +81,11 @@ export class ProfileDetailsComponent implements OnInit {
       ],
       grade: [null, [Validators.required]],
       college: [null, [Validators.required]],
-      facebookLink: [''],
+      facebookLink: [null],
       birthDate: ['', [Validators.required]],
     });
-    this.profileForm.disable();
 
-    this.getGeneralProfile();
+    this.profileForm.disable();
     this.allCollege = [
       { id: 0, name: 'Computer and Ai' },
       { id: 1, name: 'EELU' },
@@ -84,6 +95,22 @@ export class ProfileDetailsComponent implements OnInit {
       { id: 5, name: 'Law' },
       { id: 6, name: 'Others' },
     ];
+    this.addFieldsForHead();
+  }
+
+  addFieldsForHead() {
+    if (
+      this.currentPath.includes('head_of_camp') ||
+      this.currentPath.includes('mentor')
+    ) {
+      if (!this.profileForm.get('about')) {
+        this.profileForm.addControl('about', this.fb.control(''));
+      }
+    } else {
+      if (this.profileForm.get('about')) {
+        this.profileForm.removeControl('about');
+      }
+    }
   }
 
   toggleEditMode() {
@@ -94,7 +121,13 @@ export class ProfileDetailsComponent implements OnInit {
       this.profileForm.disable();
       this.phoneMessage = '';
       this.idMessage = '';
-      this.getGeneralProfile();
+      if (this.currentPath.includes('leader')) {
+        this.getGeneralProfile();
+      } else if (this.currentPath.includes('head_of_camp')) {
+        this.generalHeadProfile();
+      } else {
+        this.generalMentorProfile();
+      }
     }
   }
 
@@ -153,8 +186,128 @@ export class ProfileDetailsComponent implements OnInit {
 
       return;
     }
+    if (this.profileForm.get('facebookLink')?.value === '') {
+      this.profileForm.get('facebookLink')?.setValue(null);
+    }
+    debugger;
+    if (this.currentPath.includes('leader')) {
+      this.updateLeaderProfile();
+    } else if (this.currentPath.includes('head_of_camp')) {
+      this.updateHeadOfCamp();
+    } else {
+      this.updateMentor();
+    }
+  }
+
+  getGeneralProfile(): void {
+    this.isLoading = true;
+    this.leaderProfileService.generalLeaderProfile().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode == 200) {
+          this.isLoading = false;
+          this.profileForm.patchValue({
+            firstName: data.firstName,
+            middleName: data.middleName,
+            lastName: data.lastName,
+            phoneNumber: data.phoneNumber,
+            nationalId: data.nationalId,
+            facebookLink: data.facebookLink,
+            college: data.college,
+            grade: data.grade,
+            birthDate: data.birthDate,
+          });
+        } else {
+          this.isLoading = false;
+        }
+      },
+    });
+  }
+  generalHeadProfile(): void {
+    this.isLoading = true;
+    this.leaderProfileService.generalHeadProfile().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode == 200) {
+          this.isLoading = false;
+          this.camp = data.campName;
+          this.profileForm.patchValue({
+            firstName: data.firstName,
+            middleName: data.middleName,
+            lastName: data.lastName,
+            phoneNumber: data.phoneNumber,
+            nationalId: data.nationalId,
+            facebookLink: data.facebookLink,
+            college: data.college,
+            grade: data.grade,
+            birthDate: data.birthDate,
+            about: data.about,
+          });
+        } else {
+          this.isLoading = false;
+        }
+      },
+    });
+  }
+
+  generalMentorProfile(): void {
+    this.isLoading = true;
+    this.leaderProfileService.generalMentorProfile().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode == 200) {
+          this.isLoading = false;
+          this.camps = [...data.camps];
+          console.log(this.camps);
+          this.profileForm.patchValue({
+            firstName: data.firstName,
+            middleName: data.middleName,
+            lastName: data.lastName,
+            phoneNumber: data.phoneNumber,
+            nationalId: data.nationalId,
+            facebookLink: data.facebookLink,
+            college: data.college,
+            grade: data.grade,
+            birthDate: data.birthDate,
+            about: data.about,
+          });
+        } else {
+          this.isLoading = false;
+        }
+      },
+    });
+  }
+
+  // update leader
+  updateLeaderProfile() {
+    this.leaderProfileService.updateProfile(this.profileForm.value).subscribe({
+      next: ({ statusCode, message, errors }) => {
+        if (statusCode === 200) {
+          this.isLoading = false;
+          this.errorMessage = '';
+          this.successMessage = message;
+          this.isEditMode = false;
+          this.phoneMessage = '';
+          this.idMessage = '';
+        } else if (statusCode === 400) {
+          this.successMessage = '';
+          this.errorMessage = message;
+          this.isLoading = false;
+        } else {
+          this.errorMessage = '';
+          this.successMessage = '';
+          this.handleApiErrors(errors);
+          this.isLoading = false;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  // update HOC
+  updateHeadOfCamp() {
     this.leaderProfileService
-      .updateLeaderProfile(this.profileForm.value)
+      .updateHeadOfCamp(this.profileForm.value)
       .subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
@@ -169,6 +322,8 @@ export class ProfileDetailsComponent implements OnInit {
             this.errorMessage = message;
             this.isLoading = false;
           } else {
+            this.errorMessage = '';
+            this.successMessage = '';
             this.handleApiErrors(errors);
             this.isLoading = false;
           }
@@ -178,6 +333,35 @@ export class ProfileDetailsComponent implements OnInit {
           this.isLoading = false;
         },
       });
+  }
+
+  // update Mentor
+  updateMentor() {
+    this.leaderProfileService.updateMentor(this.profileForm.value).subscribe({
+      next: ({ statusCode, message, errors }) => {
+        if (statusCode === 200) {
+          this.isLoading = false;
+          this.errorMessage = '';
+          this.successMessage = message;
+          this.isEditMode = false;
+          this.phoneMessage = '';
+          this.idMessage = '';
+        } else if (statusCode === 400) {
+          this.successMessage = '';
+          this.errorMessage = message;
+          this.isLoading = false;
+        } else {
+          this.errorMessage = '';
+          this.successMessage = '';
+          this.handleApiErrors(errors);
+          this.isLoading = false;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this.isLoading = false;
+      },
+    });
   }
 
   removeErrorM() {
@@ -229,30 +413,6 @@ export class ProfileDetailsComponent implements OnInit {
       setTimeout(() => {
         this.removeError(index);
       }, 3000);
-    });
-  }
-
-  getGeneralProfile(): void {
-    this.isLoading = true;
-    this.leaderProfileService.generalLeaderProfile().subscribe({
-      next: ({ statusCode, data }) => {
-        if (statusCode == 200) {
-          this.isLoading = false;
-          this.profileForm.patchValue({
-            firstName: data.firstName,
-            middleName: data.middleName,
-            lastName: data.lastName,
-            phoneNumber: data.phoneNumber,
-            nationalId: data.nationalId,
-            facebookLink: data.facebookLink,
-            college: data.college,
-            grade: data.grade,
-            birthDate: data.birthDate,
-          });
-        } else {
-          this.isLoading = false;
-        }
-      },
     });
   }
 

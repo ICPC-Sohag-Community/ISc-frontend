@@ -257,13 +257,19 @@
 
     }
   </div>
-  @if (errorMessage) {
+  @if (errorMessage || successMessage) {
   <div class="fixed space-y-2 bottom-4 z-[1300] right-8">
     <div
       (click)="removeErrorM()"
-      class="flex items-center justify-between cursor-pointer max-w-lg px-6 py-4 mx-2 my-4 text-lg bg-[#fae1e3] border-l-[10px] border-[#DC3545] rounded-md"
+      [ngClass]="
+        errorMessage
+          ? 'border-[#DC3545] bg-[#fae1e3]'
+          : 'bg-[#dff2e3] border-[#28A745]'
+      "
+      class="flex items-center justify-between cursor-pointer max-w-lg px-6 py-4 mx-2 my-4 text-lg border-l-[10px] rounded-md"
     >
       <div class="flex items-center pe-8">
+        @if (errorMessage) {
         <svg
           class="w-8 h-8 mr-3"
           viewBox="0 0 40 40"
@@ -292,14 +298,45 @@
             stroke-linejoin="round"
           />
         </svg>
+        }@else {
+        <svg
+          class="w-8 h-8 mr-3"
+          viewBox="0 0 40 40"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M36.6693 18.4671V20.0004C36.6672 23.5945 35.5034 27.0916 33.3515 29.9701C31.1996 32.8487 28.1747 34.9546 24.7282 35.9736C21.2817 36.9926 17.598 36.8703 14.2267 35.6247C10.8554 34.3792 7.97703 32.0773 6.02087 29.0622C4.06471 26.0472 3.13559 22.4805 3.37207 18.8943C3.60854 15.308 4.99795 11.8943 7.33307 9.16221C9.66819 6.43012 12.8239 4.52606 16.3296 3.734C19.8353 2.94194 23.5031 3.30432 26.7859 4.76709"
+            stroke="#28A745"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M36.6667 6.66699L20 23.3503L15 18.3503"
+            stroke="#28A745"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
 
-        <span class="text-red-800"> {{ errorMessage }} </span>
+        }
+
+        <span [ngClass]="errorMessage ? 'text-red-800' : 'text-green-800'">
+          {{ errorMessage || successMessage }}
+        </span>
       </div>
 
       <button
         (click)="removeErrorM()"
         type="button"
-        class="ml-4 text-red-800 hover:text-red-500 focus:outline-none"
+        [ngClass]="
+          errorMessage
+            ? ' text-red-800 hover:text-red-500'
+            : 'text-green-800 hover:text-green-500'
+        "
+        class="ml-4 focus:outline-none"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -307,7 +344,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-5 h-5"
+          class="w-6 h-6"
         >
           <path
             stroke-linecap="round"
