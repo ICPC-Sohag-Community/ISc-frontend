@@ -58,7 +58,6 @@ export class ReportsLeaderComponent implements OnInit {
       next: (res) => {
         if (res.statusCode === 200) {
           this.baseDataReport = res;
-          console.log(this.baseDataReport);
           this.dataReport.push(this.baseDataReport);
           this.isLoading.update((v) => (v = false));
         } else {

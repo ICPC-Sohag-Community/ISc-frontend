@@ -82,8 +82,6 @@ export class HomeService {
     this.TraineeTasks().subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
-          console.log('asdsa');
-
           this.toDo.next(this.getTasksByStatus(data, 0));
           this.inProgress.next(this.getTasksByStatus(data, 1));
           this.done.next(this.getTasksByStatus(data, 2));

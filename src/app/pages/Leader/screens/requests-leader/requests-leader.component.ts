@@ -158,7 +158,6 @@ export class RequestsLeaderComponent implements OnInit {
 
   handleSaveFilter(data: any) {
     this.filters = data.value.filters;
-    console.log(this.filters);
     this.dataRequest = [];
     this.settingsFilterRequest = {
       pageNumber: 1,
@@ -230,7 +229,6 @@ export class RequestsLeaderComponent implements OnInit {
           this.allCamps = data;
         } else {
           this.isLoadingCamp.update((v) => (v = false));
-          console.log(message);
         }
       },
       error: (err) => {

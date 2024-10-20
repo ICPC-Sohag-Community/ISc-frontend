@@ -113,7 +113,6 @@ export class SheetsHOCComponent implements OnInit {
   }
 
   handleClose(confirmed: boolean) {
-    console.log(confirmed);
     if (confirmed && this.selectedItemId !== null) {
       this.dataRequest = [];
       this.casheService.clearCache();
@@ -210,7 +209,6 @@ export class SheetsHOCComponent implements OnInit {
           this.casheService.clearCache();
           this.getMaterailsBySheetId(this.sheetId);
           this.isDeleted = false;
-          console.log(this.sheetId);
         } else {
           this.isDeleted = false;
         }
@@ -231,19 +229,13 @@ export class SheetsHOCComponent implements OnInit {
         sheet.sheetOrder = sheetOrderCounter++; // Set the sheetOrder and increment the counter
       });
     });
-
-    console.log(this.dataRequest);
-
     const flattenedData = this.dataRequest.flatMap((item) => item.data);
 
-    // console.log(mergedDates);
     moveItemInArray(flattenedData, event.previousIndex, event.currentIndex);
 
     flattenedData.forEach((sheet: any, index: number) => {
       sheet.sheetOrder = index + 1;
     });
-
-    console.log(flattenedData);
     const extractedData = flattenedData.map((sheet: any) => ({
       id: sheet.id,
       orderId: sheet.sheetOrder,
@@ -253,7 +245,6 @@ export class SheetsHOCComponent implements OnInit {
       id: event.item.data.sheetId,
       sheets: extractedData,
     };
-    console.log(info);
     this.updateSheetsOrder(info);
   }
 

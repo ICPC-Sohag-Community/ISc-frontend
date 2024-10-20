@@ -56,7 +56,6 @@ export class CampsLeaderComponent implements OnInit {
   }
 
   handleClose(confirmed: boolean) {
-    console.log(confirmed);
     if (confirmed && this.selectedItemId !== null) {
       this.casheService.clearCache();
       this.fetchAllWithPagination(this.allCampsInfo?.currentPage, 10);

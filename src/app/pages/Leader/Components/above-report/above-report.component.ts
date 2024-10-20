@@ -45,8 +45,6 @@ export class AboveReportComponent
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-    console.log(this.reportInfo);
     if (this.isViewInitialized && changes['reportInfo'] && this.reportInfo) {
       this.renderChart();
       this.renderChartForGender();
