@@ -31,6 +31,7 @@ export class TraineesComponent {
     event.stopPropagation();  
     
   }
+  arr:boolean[] = [];
   constructor(private renderer: Renderer2 , private serv:TraineesService){
     
 this.isLoading = true;
@@ -39,7 +40,9 @@ this.isLoading = true;
       this.serv.trainees(campid).subscribe((response: ResponseHeader) => {
         if (response.isSuccess) {
           this.camps = response.data;
-          
+          this.camps.forEach((e: any) => {
+            this.arr.push(false);
+          });
           
 
         } else {
@@ -73,6 +76,7 @@ mb:boolean = false;
     this.id = id;
     this.serv.info(this.activeTrainee.id).subscribe((response: ResponseHeader) => {
       if (response.isSuccess) {
+        this.arr[id] = true;
        this.info = response.data;
        const element = this.renderer.selectRootElement(`#z${id}`, true);
     const element2 = this.renderer.selectRootElement(`#x${id}`, true);
@@ -80,8 +84,10 @@ mb:boolean = false;
     this.renderer.removeClass(element, 'hidden');
     this.renderer.addClass(element2, 'absolute');
     this.renderer.addClass(element2, 'z-40');
-    this.renderer.addClass(element2, 'left-[-40px]');
-    this.renderer.addClass(element2, 'w-[380px]');
+    this.renderer.addClass(element2, 'sm:left-[-40px]');
+    this.renderer.addClass(element2, 'left-[0px]');
+    this.renderer.addClass(element2, 'sm:w-[380px]');
+    this.renderer.addClass(element2, 'w-[95%]');
     this.renderer.addClass(element2, 'top-[-70px]');
     
       } else {
@@ -102,7 +108,9 @@ mb:boolean = false;
     this.renderer.addClass(element, 'hidden');
     this.renderer.removeClass(element2, 'absolute');
     this.renderer.removeClass(element2, 'z-40');
-    this.renderer.removeClass(element2, 'w-[380px]');
+    this.renderer.removeClass(element2, 'sm:w-[380px]');
+    this.renderer.removeClass(element2, 'w-[95%]');
+    this.arr[this.id] = false;
   }
 
  
