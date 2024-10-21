@@ -234,7 +234,7 @@
   </div>
   <!-- Modal Container -->
    <div (click)="show('add')" id="add" class="hidden flex items-center justify-center bg-[#D9D9D9B2] h-[calc(100vh-72px)] w-full fixed top-[72px]">
-        <div (click)="handleClick($event)" class="bg-[#F3F3F3] max-h-[calc(100vh-72px)] overflow-y-auto rounded-lg shadow-lg p-6 min-w-[600px]    ">
+        <div (click)="handleClick($event)" class="bg-[#F3F3F3] max-h-[calc(100vh-72px)] overflow-y-auto rounded-lg shadow-lg p-6 md:w-[600px] w-[90%]   ">
             <!-- Assigned to -->
             <div class="mb-4">
                 
@@ -333,7 +333,7 @@
         </div>
     </div>
     <div (click)="show('edit')" id="edit" class="hidden flex items-center justify-center bg-[#D9D9D9B2] h-[calc(100vh-72px)] w-full fixed top-[72px]">
-      <div (click)="handleClick($event)" class="bg-white rounded-lg shadow-lg w-[500px] p-6 relative">
+      <div (click)="handleClick($event)" class="bg-white rounded-lg shadow-lg md:w-[500px] w-[90%] p-6 relative">
         <!-- Modal Content -->
         <div class="flex items-center mb-4">
             <img src="{{this.ed.photoUrl?? './../../../../../assets/img/user.jpeg'}}" alt="User Image" class="w-10 h-10 rounded-lg mr-3">
