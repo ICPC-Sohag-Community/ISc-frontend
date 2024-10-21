@@ -56,6 +56,17 @@
                 type="submit"
                 class="bg-[#bae2cf] flex justify-center items-center w-9 h-9 rounded-tr-lg rounded-tl-lg rounded-br-lg"
               >
+                @if (isLoading) {
+                <div
+                  class="flex items-center justify-center w-full bg-opacity-60"
+                >
+                  <div class="flex items-center justify-center">
+                    <div
+                      class="w-5 h-5 border-2 border-[#52B788] border-dashed rounded-full animate-spin"
+                    ></div>
+                  </div>
+                </div>
+                }@else {
                 <svg
                   width="22"
                   height="16"
@@ -68,6 +79,7 @@
                     fill="#52B788"
                   />
                 </svg>
+                }
               </button>
               }
               <button
@@ -138,7 +150,7 @@
             @if (!isEditUsername) {
             <button
               type="button"
-              (click)="toggleEditMode('email')"
+              (click)="toggleEditMode('username')"
               class="bg-[#b1d3e9] flex justify-center items-center w-9 h-9 rounded-tr-lg rounded-tl-lg rounded-br-lg"
               [ngClass]="
                 currentPath.includes('trainee')
@@ -172,6 +184,17 @@
                 type="submit"
                 class="bg-[#bae2cf] flex justify-center items-center w-9 h-9 rounded-tr-lg rounded-tl-lg rounded-br-lg"
               >
+                @if (isLoading) {
+                <div
+                  class="flex items-center justify-center w-full bg-opacity-60"
+                >
+                  <div class="flex items-center justify-center">
+                    <div
+                      class="w-5 h-5 border-2 border-[#52B788] border-dashed rounded-full animate-spin"
+                    ></div>
+                  </div>
+                </div>
+                }@else {
                 <svg
                   width="22"
                   height="16"
@@ -184,6 +207,7 @@
                     fill="#52B788"
                   />
                 </svg>
+                }
               </button>
               }
               <button
@@ -252,7 +276,7 @@
 
             <button
               type="button"
-              (click)="toggleEditMode('email')"
+              (click)="toggleEditMode('password')"
               class="bg-[#b1d3e9] flex justify-center items-center w-9 h-9 rounded-tr-lg rounded-tl-lg rounded-br-lg"
               [ngClass]="
                 currentPath.includes('trainee')
@@ -515,7 +539,7 @@
             @if (!isEditCodeforces) {
             <button
               type="button"
-              (click)="toggleEditMode('email')"
+              (click)="toggleEditMode('codeforces')"
               class="bg-[#b1d3e9] flex justify-center items-center w-9 h-9 rounded-tr-lg rounded-tl-lg rounded-br-lg"
               [ngClass]="
                 currentPath.includes('trainee')
@@ -549,6 +573,17 @@
                 type="submit"
                 class="bg-[#bae2cf] flex justify-center items-center w-9 h-9 rounded-tr-lg rounded-tl-lg rounded-br-lg"
               >
+                @if (isLoading) {
+                <div
+                  class="flex items-center justify-center w-full bg-opacity-60"
+                >
+                  <div class="flex items-center justify-center">
+                    <div
+                      class="w-5 h-5 border-2 border-[#52B788] border-dashed rounded-full animate-spin"
+                    ></div>
+                  </div>
+                </div>
+                }@else {
                 <svg
                   width="22"
                   height="16"
@@ -561,6 +596,7 @@
                     fill="#52B788"
                   />
                 </svg>
+                }
               </button>
               }
               <button
@@ -633,7 +669,7 @@
             @if (!isEditVjudge) {
             <button
               type="button"
-              (click)="toggleEditMode('email')"
+              (click)="toggleEditMode('vjudge')"
               class="bg-[#b1d3e9] flex justify-center items-center w-9 h-9 rounded-tr-lg rounded-tl-lg rounded-br-lg"
               [ngClass]="
                 currentPath.includes('trainee')
@@ -667,6 +703,17 @@
                 type="submit"
                 class="bg-[#bae2cf] flex justify-center items-center w-9 h-9 rounded-tr-lg rounded-tl-lg rounded-br-lg"
               >
+                @if (isLoading) {
+                <div
+                  class="flex items-center justify-center w-full bg-opacity-60"
+                >
+                  <div class="flex items-center justify-center">
+                    <div
+                      class="w-5 h-5 border-2 border-[#52B788] border-dashed rounded-full animate-spin"
+                    ></div>
+                  </div>
+                </div>
+                }@else {
                 <svg
                   width="22"
                   height="16"
@@ -679,6 +726,7 @@
                     fill="#52B788"
                   />
                 </svg>
+                }
               </button>
               }
               <button

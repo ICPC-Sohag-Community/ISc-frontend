@@ -51,7 +51,6 @@ export class EditAttendanceComponent implements OnInit {
           this.allSesions = data;
           this.sessionId = this.allSesions[0].id;
           this.getAttendanceBySessionId(this.sessionId);
-
           this.activeTab = this.sessionId;
           this.isLoading.update((v) => (v = false));
         } else {

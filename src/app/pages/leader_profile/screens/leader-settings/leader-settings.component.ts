@@ -103,6 +103,7 @@ export class LeaderSettingsComponent implements OnInit {
   }
 
   toggleEditMode(type: string) {
+    debugger;
     if (type === 'email') {
       this.isEditEmail = !this.isEditEmail;
       if (this.isEditEmail) {
@@ -177,6 +178,7 @@ export class LeaderSettingsComponent implements OnInit {
     if (this.emailForm.invalid || !this.isSuccessEmail) {
       return;
     }
+    this.isLoading = true;
     this.validationProfileService
       .updateEmail(this.emailForm.value.email)
       .subscribe({
@@ -187,6 +189,7 @@ export class LeaderSettingsComponent implements OnInit {
             this.isEditEmail = false;
             this.msgEmail = '';
           } else if (statusCode === 400) {
+            this.isLoading = false;
             this.errorMessage = message;
             this.isLoading = false;
           } else {
@@ -227,6 +230,8 @@ export class LeaderSettingsComponent implements OnInit {
     if (this.usernameForm.invalid || !this.isSuccessUsername) {
       return;
     }
+    this.isLoading = true;
+
     this.validationProfileService
       .updateUsername(this.usernameForm.value.username)
       .subscribe({
@@ -237,6 +242,7 @@ export class LeaderSettingsComponent implements OnInit {
             this.isEditUsername = false;
             this.msgUsername = '';
           } else if (statusCode === 400) {
+            this.isLoading = false;
             this.errorMessage = message;
             this.isLoading = false;
           } else {
@@ -342,6 +348,7 @@ export class LeaderSettingsComponent implements OnInit {
     if (this.codeforcesForm.invalid || !this.isSuccessCodeforces) {
       return;
     }
+    this.isLoading = true;
     this.validationProfileService
       .updateCodeforceHandle(this.codeforcesForm.value.codeforces)
       .subscribe({
@@ -392,6 +399,8 @@ export class LeaderSettingsComponent implements OnInit {
     if (this.vjudgeForm.invalid || !this.isSuccessVjudge) {
       return;
     }
+    this.isLoading = true;
+
     this.validationProfileService
       .updateVjudgeHandle(this.vjudgeForm.value.vjudge)
       .subscribe({
