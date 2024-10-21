@@ -19,9 +19,9 @@
       alt="Loading icon"
     />
     } @else { 
-<div class="grid grid-cols-3 gap-4 p-4">
+<div class="flex flex-wrap justify-center gap-4 p-4">
     <!-- Card -->
-    <div id="{{'d' + item.id}}" *ngFor="let item of stand, let i = index" class="bg-[#E0E0E0] shadow-lg rounded-[8px] p-4 gap-y-3 flex flex-col justify-between">
+    <div id="{{'d' + item.id}}" *ngFor="let item of stand, let i = index" class="bg-[#E0E0E0] sm:w-[400px] w-[90%]  shadow-lg rounded-[8px] p-4 gap-y-3 flex flex-col justify-between">
       <!-- Header -->
       <div class="flex justify-between items-start">
         <h2 class="text-lg font-semibold">{{item.title}}</h2>
@@ -81,21 +81,27 @@
              {{item.note}}
       </p>
       <!-- Link -->
-      <div class="flex items-center bg-gray-100 mt-3 border border-gray-300 rounded-lg px-2 py-1">
-        <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11.3145 7.98742L13.2642 10.1506L15.8862 11.7768L16.3423 8.00108L15.8862 4.31055L13.214 5.73906L11.3145 7.98742Z" fill="#00832D"/>
-            <path d="M0 11.4241V14.6415C0 15.3762 0.61432 15.9726 1.37138 15.9726H4.68624L5.37265 13.5416L4.68624 11.4241L2.41202 10.7578L0 11.4241Z" fill="#0066DA"/>
-            <path d="M4.68624 0L0 4.54854L2.41217 5.21323L4.68624 4.54854L5.36017 2.45984L4.68624 0Z" fill="#E94235"/>
-            <path d="M0 11.4263H4.68624V4.54883H0V11.4263Z" fill="#2684FC"/>
-            <path d="M18.8803 1.92616L15.8867 4.30997V11.7761L18.8928 14.1692C19.3427 14.5113 20.001 14.1994 20.001 13.6443V2.44035C20.001 1.879 19.3271 1.56868 18.8803 1.92616Z" fill="#00AC47"/>
-            <path d="M11.3135 7.98633V11.4243H4.68555V15.9728H14.5139C15.271 15.9728 15.8853 15.3764 15.8853 14.6417V11.7757L11.3135 7.98633Z" fill="#00AC47"/>
-            <path d="M14.5139 0H4.68555V4.54854H11.3135V7.98648L15.8853 4.30961V1.33108C15.8853 0.596268 15.271 0 14.5139 0Z" fill="#FFBA00"/>
-            </svg>            
-        <input #l type="text" value="{{item.meetingLink}}" class="mx-4 bg-transparent focus:border-none focus:outline-0  text-gray-800 flex-grow" readonly>
-        <button (click)="copyToClipboard(this.l.value)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9.24935 18.9577H5.74935C2.49102 18.9577 1.04102 17.5077 1.04102 14.2493V10.7493C1.04102 7.49102 2.49102 6.04102 5.74935 6.04102H9.24935C12.5077 6.04102 13.9577 7.49102 13.9577 10.7493V14.2493C13.9577 17.5077 12.5077 18.9577 9.24935 18.9577ZM5.74935 7.29102C3.16602 7.29102 2.29102 8.16602 2.29102 10.7493V14.2493C2.29102 16.8327 3.16602 17.7077 5.74935 17.7077H9.24935C11.8327 17.7077 12.7077 16.8327 12.7077 14.2493V10.7493C12.7077 8.16602 11.8327 7.29102 9.24935 7.29102H5.74935Z" fill="black"/>
-            <path d="M14.2493 13.9577H13.3327C12.991 13.9577 12.7077 13.6743 12.7077 13.3327V10.7493C12.7077 8.16602 11.8327 7.29102 9.24935 7.29102H6.66602C6.32435 7.29102 6.04102 7.00768 6.04102 6.66602V5.74935C6.04102 2.49102 7.49102 1.04102 10.7493 1.04102H14.2493C17.5077 1.04102 18.9577 2.49102 18.9577 5.74935V9.24935C18.9577 12.5077 17.5077 13.9577 14.2493 13.9577ZM13.9577 12.7077H14.2493C16.8327 12.7077 17.7077 11.8327 17.7077 9.24935V5.74935C17.7077 3.16602 16.8327 2.29102 14.2493 2.29102H10.7493C8.16602 2.29102 7.29102 3.16602 7.29102 5.74935V6.04102H9.24935C12.5077 6.04102 13.9577 7.49101 13.9577 10.7493V12.7077Z" fill="black"/>
-            </svg></button>            
+      <div class="flex items-center justify-between relative bg-gray-100 mt-3 border border-gray-300 rounded-lg px-2 py-1">
+        <div class="flex items-center justify-between w-[300px]">
+            <div class="flex items-center">
+                <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.3145 7.98742L13.2642 10.1506L15.8862 11.7768L16.3423 8.00108L15.8862 4.31055L13.214 5.73906L11.3145 7.98742Z" fill="#00832D"/>
+                    <path d="M0 11.4241V14.6415C0 15.3762 0.61432 15.9726 1.37138 15.9726H4.68624L5.37265 13.5416L4.68624 11.4241L2.41202 10.7578L0 11.4241Z" fill="#0066DA"/>
+                    <path d="M4.68624 0L0 4.54854L2.41217 5.21323L4.68624 4.54854L5.36017 2.45984L4.68624 0Z" fill="#E94235"/>
+                    <path d="M0 11.4263H4.68624V4.54883H0V11.4263Z" fill="#2684FC"/>
+                    <path d="M18.8803 1.92616L15.8867 4.30997V11.7761L18.8928 14.1692C19.3427 14.5113 20.001 14.1994 20.001 13.6443V2.44035C20.001 1.879 19.3271 1.56868 18.8803 1.92616Z" fill="#00AC47"/>
+                    <path d="M11.3135 7.98633V11.4243H4.68555V15.9728H14.5139C15.271 15.9728 15.8853 15.3764 15.8853 14.6417V11.7757L11.3135 7.98633Z" fill="#00AC47"/>
+                    <path d="M14.5139 0H4.68555V4.54854H11.3135V7.98648L15.8853 4.30961V1.33108C15.8853 0.596268 15.271 0 14.5139 0Z" fill="#FFBA00"/>
+                    </svg>            
+                <input #l type="text" value="{{item.meetingLink}}" class="mx-4 sm:w-auto w-[150px]  overflow-x-hidden bg-transparent focus:border-none focus:outline-0  text-gray-800 flex-grow" readonly>
+                
+            </div>
+            <button class="absolute right-2 bg-white  w-[40] flex justify-center items-center text-center" (click)="copyToClipboard(this.l.value)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.24935 18.9577H5.74935C2.49102 18.9577 1.04102 17.5077 1.04102 14.2493V10.7493C1.04102 7.49102 2.49102 6.04102 5.74935 6.04102H9.24935C12.5077 6.04102 13.9577 7.49102 13.9577 10.7493V14.2493C13.9577 17.5077 12.5077 18.9577 9.24935 18.9577ZM5.74935 7.29102C3.16602 7.29102 2.29102 8.16602 2.29102 10.7493V14.2493C2.29102 16.8327 3.16602 17.7077 5.74935 17.7077H9.24935C11.8327 17.7077 12.7077 16.8327 12.7077 14.2493V10.7493C12.7077 8.16602 11.8327 7.29102 9.24935 7.29102H5.74935Z" fill="black"/>
+                <path d="M14.2493 13.9577H13.3327C12.991 13.9577 12.7077 13.6743 12.7077 13.3327V10.7493C12.7077 8.16602 11.8327 7.29102 9.24935 7.29102H6.66602C6.32435 7.29102 6.04102 7.00768 6.04102 6.66602V5.74935C6.04102 2.49102 7.49102 1.04102 10.7493 1.04102H14.2493C17.5077 1.04102 18.9577 2.49102 18.9577 5.74935V9.24935C18.9577 12.5077 17.5077 13.9577 14.2493 13.9577ZM13.9577 12.7077H14.2493C16.8327 12.7077 17.7077 11.8327 17.7077 9.24935V5.74935C17.7077 3.16602 16.8327 2.29102 14.2493 2.29102H10.7493C8.16602 2.29102 7.29102 3.16602 7.29102 5.74935V6.04102H9.24935C12.5077 6.04102 13.9577 7.49101 13.9577 10.7493V12.7077Z" fill="black"/>
+                </svg></button>
+        </div>
+                    
     </div>
     
     </div>
@@ -105,8 +111,8 @@
 }
   <div (click)="show('add')" id="add" class="hidden flex items-center justify-center bg-[#D9D9D9B2] h-[calc(100vh-72px)] w-full fixed top-[72px]">
     
-    <div  (click)="handleClick($event)" class="bg-white rounded-[40px]  px-12 pb-12 pt-12 shadow-lg w-[709px]">
-        <input type="text" class="text-[32px] text-black font-semibold mb-10 focus:outline-none " id="focus" autofocus [(ngModel)]="title" placeholder="Practice Title">
+    <div  (click)="handleClick($event)" class="bg-white rounded-[40px]  px-12 pb-12 pt-12 shadow-lg md:w-[709px] w-[90%]">
+        <input type="text" class="w-[90%] text-[32px] text-black font-semibold mb-10 focus:outline-none  " id="focus" autofocus [(ngModel)]="title" placeholder="Practice Title">
         <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
             <strong class="font-bold">Invalid Data!</strong> <br>
             <div *ngFor="let i of err" class="block ">{{i}}</div>
@@ -118,13 +124,13 @@
            
         </div> -->
         
-        <div class="flex  justify-between items-center">
-            
+        <div class="flex  flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center justify-around gap-6">
                 <label class="block text-sm font-medium text-gray-700 mb-1" for="time">Time</label>
-                <input [(ngModel)]="date" id="time" type="datetime-local" class="block w-[220px]  px-3  border border-[rgba(151,151,151,0.5)] rounded-lg text-gray-700 focus:ring-[rgba(151,151,151,1)] focus:ring-1 focus:outline-none " placeholder="dd/mm/yyyy">
+                <input [(ngModel)]="date" id="time" type="datetime-local" class="block w-[150px] sm:w-[220px]  px-3  border border-[rgba(151,151,151,0.5)] rounded-lg text-gray-700 focus:ring-[rgba(151,151,151,1)] focus:ring-1 focus:outline-none " placeholder="dd/mm/yyyy">
+            </div>
             
-            
-            
+            <div class="flex items-center justify-around gap-6">
                 <label class="block text-sm font-medium text-gray-700 mb-1" for="status">Status</label>
                 <div class="relative">
                     <button 
@@ -140,7 +146,7 @@
                         </svg>
                     </div>
                 </div>
-            
+            </div>
         </div>
 
         <div class="mb-4 flex items-center justify-between mt-4">
@@ -160,8 +166,8 @@
 </div>
 <div (click)="show('edit')" id="edit" class="hidden flex items-center justify-center bg-[#D9D9D9B2] h-[calc(100vh-72px)] w-full fixed top-[72px]">
     
-    <div  (click)="handleClick($event)" class="bg-white rounded-[40px]  px-12 pb-12 pt-12 shadow-lg w-[709px]">
-        <input type="text" class="text-[32px] text-black font-semibold mb-10  focus:outline-none" [(ngModel)]="titleEd" placeholder="Practice Title">
+    <div  (click)="handleClick($event)" class="bg-white rounded-[40px]  px-12 pb-12 pt-12 shadow-lg sm:w-[709px] w-[90%]">
+        <input type="text" class="text-[32px] text-black font-semibold mb-10  focus:outline-none w-[90%]" [(ngModel)]="titleEd" placeholder="Practice Title">
         <div *ngIf="edError.length > 0" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
             <strong class="font-bold">Invalid Data!</strong> <br>
             <div *ngFor="let i of edError" class="block ">{{i}}</div>
@@ -173,13 +179,13 @@
            
         </div> -->
         
-        <div class="flex  justify-between items-center">
-            
+        <div class="flex  flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center justify-around gap-6">
                 <label class="block text-sm font-medium text-gray-700 mb-1" for="time">Time</label>
-                <input [(ngModel)]="dateEd" [value]="dateEd" id="time" type="datetime-local" class="block w-[225px] px-3  border border-[rgba(151,151,151,0.5)] rounded-lg text-gray-700 focus:ring-[rgba(151,151,151,1)] focus:ring-1 focus:outline-none" placeholder="dd/mm/yyyy">
+                <input [(ngModel)]="dateEd" [value]="dateEd" id="time" type="datetime-local" class="block w-[150px] sm:w-[220px] px-3  border border-[rgba(151,151,151,0.5)] rounded-lg text-gray-700 focus:ring-[rgba(151,151,151,1)] focus:ring-1 focus:outline-none" placeholder="dd/mm/yyyy">
+            </div>
             
-            
-            
+            <div class="flex items-center justify-around gap-6">
                 <label class="block text-sm font-medium text-gray-700 mb-1" for="status">Status</label>
                 <div class="relative">
                     <button (click)="statEd()"
@@ -198,7 +204,7 @@
                         </svg>
                     </div>
                 </div>
-            
+            </div>
         </div>
 
         <div class="mb-4 flex items-center justify-between mt-4">
