@@ -283,11 +283,19 @@ export class ActiosCampComponent implements OnInit {
               this.successMessage = message;
               this.isLoading = false;
               this.casheService.clearCache();
+              setTimeout(() => {
+                this.errorMessage = '';
+                this.successMessage = '';
+              }, 3000);
               this.router.navigate(['/leader/camps']);
             } else if (statusCode === 400) {
               this.successMessage = '';
               this.errorMessage = message;
               this.isLoading = false;
+              setTimeout(() => {
+                this.errorMessage = '';
+                this.successMessage = '';
+              }, 3000);
             } else {
               this.handleApiErrors(errors);
               this.isLoading = false;
@@ -303,6 +311,7 @@ export class ActiosCampComponent implements OnInit {
 
   removeErrorM() {
     this.errorMessage = '';
+    this.successMessage = '';
   }
 
   handleApiErrors(errors: any) {
