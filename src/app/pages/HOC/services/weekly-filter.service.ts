@@ -34,7 +34,6 @@ export class WeeklyFilterService {
 
   filterTrainee(traineeId: any): Observable<ResponseHeader> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
     return this.http.delete<any>(
       `${environment.BASE_URL}/api/Head/weeklyFilter/filterTrainee`,
       { headers, body: JSON.stringify(traineeId) }
