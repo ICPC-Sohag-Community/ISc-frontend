@@ -92,6 +92,7 @@ export class WeeklyFilterHOCComponent implements OnInit {
           this.errorMessage = '';
           this.successMessage = message;
           this.selectedUsers.clear();
+          this.casheService.clearCache();
           setTimeout(() => {
             this.errorMessage = '';
             this.successMessage = '';
@@ -136,8 +137,10 @@ export class WeeklyFilterHOCComponent implements OnInit {
     if (this.activeTab !== 'tab1') {
       const idsOfTrainees = this.filterData.map((t) => t.id);
       this.getOthers(idsOfTrainees);
+      this.casheService.clearCache();
     } else {
       this.getToFilter();
+      this.casheService.clearCache();
     }
   }
 }
