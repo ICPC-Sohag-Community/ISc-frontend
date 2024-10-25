@@ -21,8 +21,8 @@ export class StandingCampComponent implements OnInit {
   route = inject(ActivatedRoute);
   achiverCamp!: AchiverCamp;
   isLoading = signal<boolean>(false);
+  isExporting = signal<boolean>(false);
   campId: number = 0;
-  campName: string = '';
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -37,7 +37,6 @@ export class StandingCampComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.achiverCamp = data;
-          this.campName = data.campName;
           this.isLoading.update((v) => (v = false));
         } else {
           this.isLoading.update((v) => (v = false));
@@ -51,14 +50,20 @@ export class StandingCampComponent implements OnInit {
   }
 
   downloadExcel() {
+    this.isExporting.set(true);
     this.exportExcelService.downloadExcelLeader(this.campId).subscribe({
       next: (res: any) => {
         const link = document.createElement('a');
         link.href =
           'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' +
           res.fileContents;
-        link.download = `${this.campName} Trainees Data.xlsx`;
+        link.download = `${this.achiverCamp.campName} Trainees Data.xlsx`;
         link.click();
+        this.isExporting.update((v) => (v = false));
+      },
+      error: (err) => {
+        console.log(err);
+        this.isExporting.update((v) => (v = false));
       },
     });
   }
