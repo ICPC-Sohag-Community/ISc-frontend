@@ -6,7 +6,18 @@
       HALL OF FAME @if (!isLoading()) { “{{ achiverCamp.campName }}” }
     </h2>
     <div (click)="downloadExcel()" class="w-8 cursor-pointer">
+      @if (isExporting()) {
+      <div class="flex items-center justify-center w-full bg-opacity-60">
+        <div class="flex items-center justify-center">
+          <div
+            class="w-8 h-8 border-4 border-blue-600 border-dashed rounded-full animate-spin"
+          ></div>
+        </div>
+      </div>
+      }@else {
+
       <img src="assets/img/excel.png" class="w-full" alt="" />
+      }
     </div>
   </div>
 

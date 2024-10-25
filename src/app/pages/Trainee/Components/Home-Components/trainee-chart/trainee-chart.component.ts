@@ -163,7 +163,11 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
           this.minimumProblems = data.minimumPrecent;
           this.solvedProblems = data.solvedProblemsCount;
           this.AllProblems = data.totalProblemsCount;
-          this.createChart(1, data.minimumPrecent, this.AllProblems);
+          this.createChart(
+            this.solvedProblems,
+            this.minimumProblems,
+            this.AllProblems
+          );
         }
       },
     });
