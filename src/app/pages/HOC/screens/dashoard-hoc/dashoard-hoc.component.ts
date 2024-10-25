@@ -3,6 +3,7 @@ import { DashboardHocService } from '../../services/dashboard-hoc.service';
 import { NgClass } from '@angular/common';
 import { DashboardData, StandingData } from '../../model/dashboarf-hoc';
 import { DashboardChartsHocComponent } from '../../components/dashboard-charts-hoc/dashboard-charts-hoc.component';
+import { ExportExcelService } from '../../../../shared/services/export-excel.service';
 
 @Component({
   selector: 'app-dashoard-hoc',
@@ -13,6 +14,7 @@ import { DashboardChartsHocComponent } from '../../components/dashboard-charts-h
 })
 export class DashoardHOCComponent implements OnInit {
   dashboardHocService = inject(DashboardHocService);
+  exportExcelService = inject(ExportExcelService);
   activeTab: string = 'tab1';
   standingData!: StandingData;
   dashboardData!: DashboardData;
@@ -64,5 +66,18 @@ export class DashoardHOCComponent implements OnInit {
     } else {
       this.getStandingCamp();
     }
+  }
+
+  downloadExcel() {
+    this.exportExcelService.downloadExcelHOC().subscribe({
+      next: (res: any) => {
+        const link = document.createElement('a');
+        link.href =
+          'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' +
+          res.fileContents;
+        link.download = `${this.standingData.campName} Trainees Data.xlsx`;
+        link.click();
+      },
+    });
   }
 }

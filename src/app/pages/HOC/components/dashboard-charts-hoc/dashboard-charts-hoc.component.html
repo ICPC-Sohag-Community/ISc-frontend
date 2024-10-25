@@ -1,5 +1,5 @@
 <div class="flex items-center justify-center space-x-3">
-  <div class="w-[40%] relative h-[380px] rounded-2xl px-4 bg-white">
+  <div class="w-[40%] relative h-[380px] rounded-2xl px-4 bg-white shadow-lg">
     <div class="flex items-center justify-center w-full p-4 gap-x-6">
       <div class="flex flex-col items-center basis-1/2">
         <h3 class="mt-2 text-lg font-semibold">Number of Trainees</h3>
@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <div class="w-[28%] relative h-[380px] rounded-2xl px-2 bg-white">
+  <div class="w-[28%] relative h-[380px] rounded-2xl px-2 bg-white shadow-lg">
     <div
       class="flex flex-col items-center justify-center w-full px-2 py-4 overflow-y-auto gap-y-2"
     >
@@ -89,7 +89,7 @@
     </div>
   </div>
 
-  <div class="w-[32%] relative h-[380px] rounded-2xl px-4 bg-white">
+  <div class="w-[32%] relative h-[380px] rounded-2xl px-4 bg-white shadow-lg">
     <div
       class="flex flex-col items-center justify-center w-full px-2 py-4 gap-y-2"
     >
@@ -120,81 +120,17 @@
     </div>
   </div>
 </div>
-<div class="w-full bg-white p-4 h-[450px] px-6 my-6 rounded-2xl">
+<div class="w-full bg-white p-4 h-[450px] px-6 my-6 rounded-2xl shadow-lg">
   <h3 class="self-start mt-2 mb-4 text-lg font-semibold">
     Average solutions per sheet
   </h3>
 
   <canvas #barChartCanvas class="w-full !h-[350px]"></canvas>
 </div>
-<div class="w-full bg-white p-4 h-[450px] px-6 my-6 rounded-2xl">
+<div class="w-full bg-white p-4 h-[450px] px-6 my-6 rounded-2xl shadow-lg">
   <h3 class="self-start mt-2 mb-4 text-lg font-semibold">
     Average solutions per contest
   </h3>
 
   <canvas #lineChartCanvas class="w-full !h-[350px]"></canvas>
 </div>
-
-<!--
-
-  <div class="w-[450px] relative h-[380px] rounded-2xl px-4 bg-white">
-    <div class="flex items-center justify-center w-full p-4 gap-x-6">
-      <div class="flex flex-col items-center basis-1/2">
-        <h3 class="mt-2 text-lg font-semibold">Number of Trainees</h3>
-        @if (dashboardData.trineesMalePrecentage +
-        dashboardData.traineesFemalePrecentage > 0) {
-        <div class="w-[150px] h-[150px] mt-8 mb-12">
-          <canvas #traineesCanvas class="block w-full h-full"></canvas>
-        </div>
-        }@else {
-        <p
-          class="w-[150px] h-[150px] mt-8 mb-12 flex justify-center items-center text-red-500"
-        >
-          No Data
-        </p>
-        }
-        <div class="flex flex-col gap-y-4">
-          <div class="flex items-center justify-between gap-x-4">
-            <div class="w-6 h-4 bg-[#3D91C7] rounded-2xl"></div>
-            <span>Male</span>
-            <span>{{ dashboardData.traineesMaleCount }}</span>
-          </div>
-          <div class="flex items-center justify-between gap-x-4">
-            <div class="w-6 h-4 bg-[#EA82E0] rounded-2xl"></div>
-            <span>Female</span>
-            <span>{{ dashboardData.traineesFemaleCount }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex flex-col items-center basis-1/2">
-        <h3 class="mt-2 text-lg font-semibold">Number of Trainees</h3>
-        @if (dashboardData.mentorsMalePrecentage +
-        dashboardData.mentorsFemalePrecentage > 0) {
-        <div class="w-[150px] h-[150px] mt-8 mb-12">
-          <canvas #mentorsCanvas class="block w-full h-full"></canvas>
-        </div>
-        } @else {
-        <p
-          class="w-[150px] h-[150px] mt-8 mb-12 flex justify-center items-center text-red-500"
-        >
-          No Data
-        </p>
-        }
-        <div class="flex flex-col gap-y-4">
-          <div class="flex items-center justify-between gap-x-4">
-            <div class="w-6 h-4 bg-[#3D91C7] rounded-2xl"></div>
-            <span>Male</span>
-            <span>60</span>
-          </div>
-          <div class="flex items-center justify-between gap-x-4">
-            <div class="w-6 h-4 bg-[#EA82E0] rounded-2xl"></div>
-            <span>Female</span>
-            <span>60</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
--->
