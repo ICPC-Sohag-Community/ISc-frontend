@@ -18,9 +18,9 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
   private _homeService = inject(HomeService);
   private _DatePipe = inject(DatePipe);
   nextPractice: NextPractice = {} as NextPractice;
-  solvedProblems = 0;
-  minimumProblems = 0;
-  AllProblems = 0;
+  solvedProblems: number = 0;
+  minimumProblems: number = 0;
+  AllProblems: number = 0;
   public chart: any;
 
   ngOnInit(): void {
@@ -28,19 +28,17 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
     this.loadChartData();
   }
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
-  createChart(solved:number,minToSolve:number,total:number): void {
+  createChart(solved: number, minToSolve: number, total: number): void {
     const ctx = document.getElementById('myDoughnutChart') as HTMLCanvasElement;
-
     this.chart = new Chart(ctx, {
       type: 'doughnut',
       data: {
         datasets: [
           {
-            label: 'Solved Problems',
-            data: [solved],
+            label: 'Solved Precentage',
+            data: [(solved / total) * 100],
             backgroundColor: ['#00AC47'],
             borderColor: 'transparent',
             borderWidth: 0,
@@ -48,21 +46,20 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
             circumference: (solved / total) * 360,
           },
           {
-            label: 'Minimum Problems',
+            label: 'Minimum Precentage',
             data: [minToSolve],
             backgroundColor: ['#EF4A50'],
             borderColor: 'transparent',
             borderWidth: 0,
             borderRadius: 12,
-            circumference:  (minToSolve / total)  * 360,
+            circumference: (minToSolve * 360) / 100,
           },
           {
-            label: 'All Problems',
-            data: [total],
+            label: 'Total Precentage',
+            data: [100],
             backgroundColor: ['#E5E5E5'],
             borderColor: 'transparent',
             borderWidth: 0,
-            borderRadius: 12,
           },
         ],
       },
@@ -71,7 +68,7 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
 
         maintainAspectRatio: false,
         plugins: {
-          // legend: { display: false },
+          legend: { display: false },
           tooltip: { callbacks: { title: () => '' } },
           title: { display: false },
         },
@@ -95,14 +92,14 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
         const innerRadius = element.innerRadius; // Now TypeScript recognizes innerRadius
         const outerRadius = element.outerRadius; // Now TypeScript recognizes outerRadius
 
-        ctx.save()
-        data.datasets.forEach((_,index)=>{
-        let meta = chart.getDatasetMeta(index); // Get the dataset meta
-        let element = meta.data[0] as ArcElement; // Assert the type to ArcElement
-          element.innerRadius =innerRadius
-          element.outerRadius =outerRadius
-        })
-      }
+        ctx.save();
+        data.datasets.forEach((_, index) => {
+          let meta = chart.getDatasetMeta(index); // Get the dataset meta
+          let element = meta.data[0] as ArcElement; // Assert the type to ArcElement
+          element.innerRadius = innerRadius;
+          element.outerRadius = outerRadius;
+        });
+      },
     };
   }
 
@@ -166,9 +163,7 @@ export class TraineeChartComponent implements OnInit, AfterViewInit {
           this.minimumProblems = data.minimumPrecent;
           this.solvedProblems = data.solvedProblemsCount;
           this.AllProblems = data.totalProblemsCount;
-          this.minimumProblems=this.roundIfHasDecimal(((data.minimumPrecent / 100 ) * data.totalProblemsCount));
-          this.createChart(data.solvedProblemsCount,this.minimumProblems, data.totalProblemsCount);
-
+          this.createChart(1, data.minimumPrecent, this.AllProblems);
         }
       },
     });

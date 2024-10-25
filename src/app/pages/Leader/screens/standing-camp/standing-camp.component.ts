@@ -3,6 +3,9 @@ import { CampLeaderService } from '../../services/camp-leader.service';
 import { AchiverCamp } from '../../model/camp';
 import { ActivatedRoute } from '@angular/router';
 import { NgClass } from '@angular/common';
+import { ExportExcelService } from '../../../../shared/services/export-excel.service';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-standing-camp',
@@ -13,14 +16,18 @@ import { NgClass } from '@angular/common';
 })
 export class StandingCampComponent implements OnInit {
   campLeaderService = inject(CampLeaderService);
+  exportExcelService = inject(ExportExcelService);
+  http = inject(HttpClient);
   route = inject(ActivatedRoute);
   achiverCamp!: AchiverCamp;
   isLoading = signal<boolean>(false);
+  campId: number = 0;
+  campName: string = '';
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      const campId = parseInt(params['id']);
-      this.fetchAllWithPagination(campId);
+      this.campId = parseInt(params['id']);
+      this.fetchAllWithPagination(this.campId);
     });
   }
 
@@ -30,6 +37,7 @@ export class StandingCampComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.achiverCamp = data;
+          this.campName = data.campName;
           this.isLoading.update((v) => (v = false));
         } else {
           this.isLoading.update((v) => (v = false));
@@ -38,6 +46,19 @@ export class StandingCampComponent implements OnInit {
       error: (err) => {
         console.log(err);
         this.isLoading.update((v) => (v = false));
+      },
+    });
+  }
+
+  downloadExcel() {
+    this.exportExcelService.downloadExcelLeader(this.campId).subscribe({
+      next: (res: any) => {
+        const link = document.createElement('a');
+        link.href =
+          'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' +
+          res.fileContents;
+        link.download = `${this.campName} Trainees Data.xlsx`;
+        link.click();
       },
     });
   }
