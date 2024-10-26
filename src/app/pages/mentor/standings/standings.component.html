@@ -21,14 +21,14 @@
     
     <tbody class="sm:text-md text-sm font-light">
       <tr *ngFor="let item of stand?.achivers , let i = index" class=" text-white text-center rounded-lg my-2"[ngClass]="{
-        'bg-[#41B253]': item.solvedProblems/stand.totalProblems > 85 ,
-        'bg-[#CCA827]': item.solvedProblems/stand.totalProblems >= 60,
+        'bg-[#41B253]': item.solvedProblems/stand.totalProblems > 0.81 ,
+        'bg-[#CCA827]': item.solvedProblems/stand.totalProblems >= 0.51,
         'bg-[#E44449]': item.solvedProblems/stand.totalProblems >= 0
       }">
         <td class="px-6 py-4 rounded-l-lg"> <div class="sm:none inline-block relative mr-2 px-2 py-1 bg-white rounded-md font-bold" 
           [ngClass]="{
-            'text-[#41B253]': item.solvedProblems/stand.totalProblems > 85 ,
-            'text-[#CCA827]': item.solvedProblems/stand.totalProblems >= 60,
+            'text-[#41B253]': item.solvedProblems/stand.totalProblems > 0.81 ,
+            'text-[#CCA827]': item.solvedProblems/stand.totalProblems >= 0.51,
             'text-[#E44449]': item.solvedProblems/stand.totalProblems >= 0
           }"
           > <span *ngIf="i <=2" class="absolute top-[-8px] left-[-8px]"><svg width="16" height="16" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">

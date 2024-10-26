@@ -111,12 +111,12 @@ isLoading:boolean = false;
      
   
       end = new Date(endTime.value);
-      en = end.toISOString().replace('Z', ''); // Convert to string without 'Z'
+      en = end.toISOString(); // Convert to string without 'Z'
     }
     if (startTime.value ) {
       start = new Date(startTime.value);
-      st = start.toISOString().replace('Z', ''); // Convert to string without 'Z'
-  
+      st = start.toISOString(); // Convert to string without 'Z' .replace('Z', '')
+      console.log(st);
      
     }
   
@@ -442,8 +442,8 @@ end = new Date(end)
 const timezoneOffset = d.getTimezoneOffset(); // This is in minutes
 
 // Adjust the start and end dates by adding the timezone offset
-start.setMinutes(start.getMinutes() - timezoneOffset);
-end.setMinutes(end.getMinutes() - timezoneOffset);
+start.setMinutes(start.getMinutes() );
+end.setMinutes(end.getMinutes() );
 if(d.getTime()>= start.getTime() && d.getTime()<= end.getTime()){
 return 1;
 }
