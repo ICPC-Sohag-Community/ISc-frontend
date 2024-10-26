@@ -30,6 +30,7 @@
   .hover-table td,
   .hover-table th {
     position: relative;
+    border: none;
   }
   
   .hover-table td:hover::before,
