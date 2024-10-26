@@ -105,19 +105,42 @@ isLoading:boolean = false;
     let st: string | null = null;
     let end: Date | null = null;
     let en: string | null = null;
-  
+    this.crError = [];
+    let time:Date =  new Date();
+    let star = new Date(startTime.value);
+    let endd = new Date(endTime.value);
     // Validate and convert input times if provided
     if ( endTime.value) {
      
-  
+      
+    
+      if(endd< time){
+        this.crError.push('End Time Must Be in Future');
+      }
       end = new Date(endTime.value);
-      en = end.toISOString().replace('Z', ''); // Convert to string without 'Z'
+      en = end.toISOString(); // Convert to string without 'Z'
     }
     if (startTime.value ) {
       start = new Date(startTime.value);
-      st = start.toISOString().replace('Z', ''); // Convert to string without 'Z'
-  
-     
+      st = start.toISOString(); // Convert to string without 'Z' .replace('Z', '')
+      console.log(st);
+      
+      // let meet = new Date(startTime.value);
+      if(star< time){
+        this.crError.push('Start Time Must Be in Future');
+      }
+    }
+    else{
+      this.crError.push('Start Time Is Requiered');
+    }
+     if(startTime.value && endTime.value){
+      if(star> endd){
+        this.crError.push('End Time Must Be Greater Than Start Time');
+      }
+
+     }
+     else{
+      this.crError.push('End Time Is Requiered');
     }
   
     // Prepare the base data for the task creation
@@ -132,8 +155,8 @@ isLoading:boolean = false;
     // Use a Set to avoid duplicate error messages
     const errorSet = new Set<string>();
   
-    // Clear previous errors
-    this.crError = [];
+    // // Clear previous errors
+    // this.crError = [];
   
     // Track how many tasks were processed
     let successfulTasks = 0;
@@ -172,15 +195,15 @@ isLoading:boolean = false;
   
     // Check for missing trainees and tasks
     if (this.chars.length == 0) {
-      errorSet.add('Please add at least one trainee.');
+      this.crError.push('Please add at least one trainee');
     }
     if (this.taskNo.length == 0) {
-      errorSet.add('Add at least one task.');
+      this.crError.push('Add at least one task');
     }
   
     // If there are any errors, add them to `this.crError`
-    if (errorSet.size > 0) {
-      this.crError = Array.from(errorSet);
+    if (this.crError.length > 0) {
+      // this.crError = Array.from(errorSet);
     } else {
       // If no errors, refresh data and reset state
       this.get(localStorage.getItem('camp'));
@@ -442,8 +465,8 @@ end = new Date(end)
 const timezoneOffset = d.getTimezoneOffset(); // This is in minutes
 
 // Adjust the start and end dates by adding the timezone offset
-start.setMinutes(start.getMinutes() - timezoneOffset);
-end.setMinutes(end.getMinutes() - timezoneOffset);
+start.setMinutes(start.getMinutes() );
+end.setMinutes(end.getMinutes() );
 if(d.getTime()>= start.getTime() && d.getTime()<= end.getTime()){
 return 1;
 }

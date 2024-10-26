@@ -51,6 +51,9 @@ export class MentornavComponent implements OnInit {
     if (!target.closest('.trag') ) {
       document.getElementById('nav')?.classList.add("hidden");
     }
+    if (!target.closest('.drop') ) {
+      this.isShow = false;
+    }
   }
   goSpecificRole(role: string): void {
     this.router.navigate(['/', role.toLowerCase()]);
