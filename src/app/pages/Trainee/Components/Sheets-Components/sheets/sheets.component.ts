@@ -8,12 +8,11 @@ declare var $: any;
 @Component({
   selector: 'app-sheets',
   standalone: true,
-  imports: [CommonModule,FormatDatePipe],
+  imports: [CommonModule, FormatDatePipe],
   templateUrl: './sheets.component.html',
   styleUrls: ['./sheets.component.scss'],
 })
 export class SheetsComponent implements OnInit {
-
   // Inject services and dependencies
   private _sheetService = inject(SheetsService);
 
@@ -21,8 +20,8 @@ export class SheetsComponent implements OnInit {
   sheetMatrial: Matrial[] = [];
   sheets: Sheet[] = [];
   matrialName: string = '';
-  isLoading:boolean=true
-  loadingSheet:boolean=false
+  isLoading: boolean = true;
+  loadingSheet: boolean = false;
 
   // Lifecycle hook that runs after the component initializes
   ngOnInit(): void {
@@ -32,30 +31,28 @@ export class SheetsComponent implements OnInit {
   // Fetches all sheets from the service
   loadSheets(): void {
     this._sheetService.getAllSheets().subscribe({
-      next: ({statusCode,data}) => {
-        if(statusCode===200){
-          this.isLoading=false
-        this.sheets = data; // Update sheets array with fetched data
-        console.log(data);
-
-      }
-      }
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.isLoading = false;
+          this.sheets = data; // Update sheets array with fetched data
+        }
+      },
     });
   }
 
   // Fetches material data for a specific sheet by ID and sets the material name
   updateMatrial(id: any, matrialName: string): void {
-    this.loadingSheet=true
-    this.activeCard(id)
+    this.loadingSheet = true;
+    this.activeCard(id);
     this.matrialName = matrialName; // Set the name of the selected material
     this._sheetService.getMaterialsInSheet(id).subscribe({
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.sheetMatrial = data; // Update sheetMatrial array with fetched data
-          this.loadingSheet=false
+          this.loadingSheet = false;
         }
       },
-      error: (err) => console.error('Error loading material:', err) // Handle errors
+      error: (err) => console.error('Error loading material:', err), // Handle errors
     });
   }
 
@@ -63,15 +60,13 @@ export class SheetsComponent implements OnInit {
   public openLinkMatrial(url: string): void {
     window.open(url, '_blank'); // Open the URL in a new browser tab
   }
-  activeCard(id:any):void{
+  activeCard(id: any): void {
     $(`.content`).removeClass('border-card');
     $(`.btn`).removeClass('border-btn');
     $(`#${id} .content`).addClass('border-card');
     $(`#${id}.btn`).addClass('border-btn');
-    console.log(    $(`#${id}button`)  );
-
   }
-  openLink(url:string):void{
-    window.open(url,'_blank')
+  openLink(url: string): void {
+    window.open(url, '_blank');
   }
 }

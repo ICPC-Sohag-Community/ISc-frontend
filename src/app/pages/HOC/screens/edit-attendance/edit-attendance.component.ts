@@ -51,7 +51,6 @@ export class EditAttendanceComponent implements OnInit {
           this.allSesions = data;
           this.sessionId = this.allSesions[0].id;
           this.getAttendanceBySessionId(this.sessionId);
-
           this.activeTab = this.sessionId;
           this.isLoading.update((v) => (v = false));
         } else {
@@ -68,7 +67,6 @@ export class EditAttendanceComponent implements OnInit {
   onTabClick(sessionId: number): void {
     this.activeTab = sessionId;
     this.sessionId = sessionId;
-    console.log(sessionId);
     this.getAttendanceBySessionId(sessionId);
   }
 
@@ -81,8 +79,6 @@ export class EditAttendanceComponent implements OnInit {
     if (traineeIndex !== -1) {
       this.allTraniees[traineeIndex].isAttend = newStatus;
     }
-    console.log(this.sessionId);
-
     const info = {
       traineeId: traineeId,
       sessionId: this.sessionId,

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { CasheService } from '../../../shared/services/cashe.service';
 import { ResponseHeader } from '../../../shared/model/responseHeader';
 @Injectable({
@@ -34,7 +34,6 @@ export class WeeklyFilterService {
 
   filterTrainee(traineeId: any): Observable<ResponseHeader> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
     return this.http.delete<any>(
       `${environment.BASE_URL}/api/Head/weeklyFilter/filterTrainee`,
       { headers, body: JSON.stringify(traineeId) }

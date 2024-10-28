@@ -18,10 +18,13 @@ export class WeeklyFilterHOCComponent implements OnInit {
   filterData!: UsersWeekly[];
   otherData!: UsersOther[];
   isLoading = signal<boolean>(false);
+  isLoadingConfirm = signal<boolean>(false);
   activeTab: string = 'tab1';
   selectedUsers: Set<string> = new Set();
   showModal: boolean = false;
   selectedItemId: string | null = null;
+  errorMessage: string = '';
+  successMessage: string = '';
 
   ngOnInit() {
     this.getToFilter();
@@ -76,32 +79,52 @@ export class WeeklyFilterHOCComponent implements OnInit {
   }
 
   removeUnselectedUsers(): void {
-    console.log(this.selectedUsers);
-    const traineesId = Array.from(this.selectedUsers);
-    this.weeklyFilterService.getOthers(traineesId).subscribe({
-      next: ({ statusCode }) => {
+    const unSelectedUsers = this.filterData
+      .filter(({ id }) => !this.selectedUsers.has(id))
+      .map((u) => u.id);
+    this.isLoadingConfirm.set(true);
+    this.weeklyFilterService.filterTrainees(unSelectedUsers).subscribe({
+      next: ({ statusCode, message }) => {
         if (statusCode === 200) {
           this.filterData = this.filterData.filter((user) =>
             this.selectedUsers.has(user.id)
           );
+          this.errorMessage = '';
+          this.successMessage = message;
           this.selectedUsers.clear();
+          this.casheService.clearCache();
+          setTimeout(() => {
+            this.errorMessage = '';
+            this.successMessage = '';
+          }, 3000);
+          this.isLoadingConfirm.update((v) => (v = false));
         } else {
-          console.log('error');
+          this.successMessage = '';
+          this.errorMessage = message;
+          setTimeout(() => {
+            this.errorMessage = '';
+            this.successMessage = '';
+          }, 3000);
+          this.isLoadingConfirm.update((v) => (v = false));
         }
       },
       error: (err) => {
         console.log(err);
+        this.isLoadingConfirm.update((v) => (v = false));
       },
     });
   }
 
+  removeErrorM() {
+    this.errorMessage = '';
+    this.successMessage = '';
+  }
   showConfirmDelete(id: string) {
     this.selectedItemId = id;
     this.showModal = true;
   }
 
   handleClose(confirmed: boolean) {
-    console.log(confirmed);
     if (confirmed && this.selectedItemId !== null) {
       const idsOfTrainees = this.filterData.map((t) => t.id);
       this.getOthers(idsOfTrainees);
@@ -114,8 +137,10 @@ export class WeeklyFilterHOCComponent implements OnInit {
     if (this.activeTab !== 'tab1') {
       const idsOfTrainees = this.filterData.map((t) => t.id);
       this.getOthers(idsOfTrainees);
+      this.casheService.clearCache();
     } else {
       this.getToFilter();
+      this.casheService.clearCache();
     }
   }
 }
