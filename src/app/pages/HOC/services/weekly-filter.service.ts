@@ -17,12 +17,9 @@ export class WeeklyFilterService {
     );
   }
   getOthers(traineesIds: any): Observable<ResponseHeader> {
-    const queryParams = traineesIds
-      .map((id: string) => `traineesIds=${encodeURIComponent(id)}`)
-      .join('&');
-
-    return this.http.get<any>(
-      `${environment.BASE_URL}/api/Head/weeklyFilter/getOthers?${queryParams}`
+    return this.http.post<any>(
+      `${environment.BASE_URL}/api/Head/weeklyFilter/getOthers`,
+      traineesIds
     );
   }
   filterTrainees(traineesId: any): Observable<ResponseHeader> {
