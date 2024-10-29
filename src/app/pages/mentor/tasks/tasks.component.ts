@@ -151,7 +151,7 @@ isLoading:boolean = false;
     };
   
     // Use a Set to avoid duplicate error messages
-    const errorSet = new Set<string>();
+    // const errorSet = new Set<string>();
   
     // // Clear previous errors
     // this.crError = [];
@@ -160,36 +160,7 @@ isLoading:boolean = false;
     let successfulTasks = 0;
   
     // Loop through the taskNo array and create each task
-    for (let i = 0; i < this.taskNo.length; i++) {
-      if (this.taskNo[i] != null) {
-        // Prepare individual task data
-        const data = {
-          title: this.taskNo[i] ? this.taskNo[i] : '',
-          startTime: st ? st : '1970-01-01T00:00',
-          endTime: en ? en : '1970-01-01T00:00',
-          traineesIds: this.trainTask ? this.trainTask : '',
-          campId: Number(localStorage.getItem('camp')),
-        };
-  
-        // Await the response for each task
-        const response = await this.addTaskAsync(data);
-  
-        if (!response.isSuccess) {
-          // Collect errors for this task and avoid duplicates
-          for (const field in response.errors) {
-            if (response.errors.hasOwnProperty(field)) {
-              if (Array.isArray(response.errors[field])) {
-                response.errors[field].forEach((errMsg:any) => errorSet.add(`${errMsg}`));
-              } else {
-                errorSet.add(`${response.errors[field]}`);
-              }
-            }
-          }
-        } else {
-          successfulTasks++; // Increment successful task count
-        }
-      }
-    }
+    
   
     // Check for missing trainees and tasks
     if (this.chars.length == 0) {
@@ -200,24 +171,62 @@ isLoading:boolean = false;
     }
   
     // If there are any errors, add them to `this.crError`
-    if (this.crError.length > 0) {
+    if (this.crError.length == 0) {
       // this.crError = Array.from(errorSet);
-    } else {
-      // If no errors, refresh data and reset state
-      this.get(localStorage.getItem('camp'));
+      for (let i = 0; i < this.taskNo.length; i++) {
+        if (this.taskNo[i] != null) {
+          // Prepare individual task data
+          const data = {
+            title: this.taskNo[i] ? this.taskNo[i] : '',
+            startTime: st ? st : '1970-01-01T00:00',
+            endTime: en ? en : '1970-01-01T00:00',
+            traineesIds: this.trainTask ? this.trainTask : '',
+            campId: Number(localStorage.getItem('camp')),
+          };
+    
+          // Await the response for each task
+          const response = await this.addTaskAsync(data);
+    
+          if (response.isSuccess) {
+            // Collect errors for this task and avoid duplicates
+            // for (const field in response.errors) {
+            //   if (response.errors.hasOwnProperty(field)) {
+            //     if (Array.isArray(response.errors[field])) {
+            //       response.errors[field].forEach((errMsg:any) => errorSet.add(`${errMsg}`));
+            //     } else {
+            //       errorSet.add(`${response.errors[field]}`);
+            //     }
+            //   }
+            // }
+            this.get(localStorage.getItem('camp'));
       this.show('add');
       this.taskNo = [];
       this.chars = [];
       this.trainTask = [];
+          } else {
+            successfulTasks++; // Increment successful task count
+          }
+        }
+      }
+    } else {
+      // If no errors, refresh data and reset state
+      // this.get(localStorage.getItem('camp'));
+      // this.show('add');
+      // this.taskNo = [];
+      // this.chars = [];
+      // this.trainTask = [];
     }
   }
   
   // Create a wrapper function for `addTask` to use with `await`
   addTaskAsync(data: any): Promise<ResponseHeader> {
     return new Promise((resolve) => {
-      this.serv.addTask(data).subscribe((response: ResponseHeader) => {
+      if(this.crError.length == 0){
+        this.serv.addTask(data).subscribe((response: ResponseHeader) => {
         resolve(response);
       });
+      }
+      
     });
   }
   
