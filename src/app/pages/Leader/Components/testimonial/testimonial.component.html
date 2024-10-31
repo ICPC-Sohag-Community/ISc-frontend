@@ -98,10 +98,10 @@
 </div>
 
 }@else {
-<div class="flex w-full px-2 mt-6">
+<div class="flex w-full px-2 pb-4 mt-6">
   @for (item of dashboardFeedbacks;track item; let i = $index) {
   <div
-    class="w-full h-auto p-6 transition-all duration-500 bg-white"
+    class="w-[99%] m-auto h-auto p-6 transition-all duration-500 bg-white shadow-lg full rounded-2xl"
     [ngClass]="{ hidden: currentPage !== i }"
   >
     <div class="flex items-center justify-between w-full mb-6">

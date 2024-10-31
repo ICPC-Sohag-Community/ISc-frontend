@@ -66,6 +66,22 @@ export class WeeklyFilterHOCComponent implements OnInit {
     });
   }
 
+  toggleSelectAll(event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    if (isChecked) {
+      this.filterData.forEach((user) => this.selectedUsers.add(user.id));
+    } else {
+      this.selectedUsers.clear();
+    }
+  }
+
+  areAllSelected(): boolean {
+    return (
+      this.filterData.length > 0 &&
+      this.selectedUsers.size === this.filterData.length
+    );
+  }
+
   toggleSelection(userId: string) {
     if (this.selectedUsers.has(userId)) {
       this.selectedUsers.delete(userId);
@@ -78,12 +94,10 @@ export class WeeklyFilterHOCComponent implements OnInit {
     return this.selectedUsers.has(userId);
   }
 
-  removeUnselectedUsers(): void {
-    const unSelectedUsers = this.filterData
-      .filter(({ id }) => !this.selectedUsers.has(id))
-      .map((u) => u.id);
+  removeSelectedUsers(): void {
     this.isLoadingConfirm.set(true);
-    this.weeklyFilterService.filterTrainees(unSelectedUsers).subscribe({
+    const selectedIds = Array.from(this.selectedUsers);
+    this.weeklyFilterService.filterTrainees(selectedIds).subscribe({
       next: ({ statusCode, message }) => {
         if (statusCode === 200) {
           this.filterData = this.filterData.filter((user) =>
