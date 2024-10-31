@@ -53,7 +53,38 @@
               <th class="p-4">Codeforce handle</th>
               <th class="p-4">Absence Count</th>
               <th class="p-4">Solving Percent</th>
-              <th class="flex items-center justify-center p-4">Exclude</th>
+              <th class="flex items-center justify-center p-4">
+                <div class="relative flex items-center justify-center">
+                  <label
+                    class="flex items-center justify-center w-6 h-6 border-2 border-gray-400 rounded-lg cursor-pointer"
+                    [ngClass]="{ 'border-[#3D91C7]': areAllSelected() }"
+                  >
+                    <input
+                      type="checkbox"
+                      (change)="toggleSelectAll($event)"
+                      [checked]="areAllSelected()"
+                      hidden
+                    />
+                    @if (areAllSelected()) {
+
+                    <svg
+                      class="w-4 h-4"
+                      viewBox="0 0 24 25"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M2 12.2703L8.82927 22L22 2"
+                        stroke="#3D91C7"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+
+                    }
+                  </label>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -112,14 +143,14 @@
           class="flex items-center bg-[#F4F5F8] justify-end w-full pb-8 pe-16"
         >
           <button
-            (click)="removeUnselectedUsers()"
+            (click)="removeSelectedUsers()"
             class="px-8 py-1.5 text-lg text-white border rounded-md bg-activeLink"
           >
             @if (isLoadingConfirm()) {
             <div class="flex items-center justify-center w-full bg-opacity-60">
               <div class="flex items-center justify-center">
                 <div
-                  class="w-8 h-8 border-4 border-blue-600 border-dashed rounded-full animate-spin"
+                  class="w-8 h-8 border-4 border-dashed rounded-full border-mainRed animate-spin"
                 ></div>
               </div>
             </div>
