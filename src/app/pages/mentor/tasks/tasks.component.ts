@@ -31,7 +31,7 @@ isLoading:boolean = false;
   showElement = true;
   formatDate(date: string | Date): string {
     // Convert the date to ISO format (YYYY-MM-DD)
-    return new Date(date).toISOString().substring(0, 10);
+    return new Date(date).toString().substring(0, 10);
   }
  
   updateTitle(data : any, dat:any , end:any): void {
@@ -39,7 +39,7 @@ isLoading:boolean = false;
     const dateObj = new Date();
     const date = new Date(dat.value);
     // Check if inputElement is not null and has a value
-   const off = date.getTimezoneOffset();
+  
     let e:Date;
     let s:Date;
     let task = {
@@ -51,31 +51,29 @@ isLoading:boolean = false;
     }
     if(!dat.value){
       this.errors.push('Set Start Date');
-    //    s = new Date(dat.value);
-    // s.setMinutes(s.getMinutes() + off);
-    // s.toISOString();
+    
     }
     else{
       s = new Date(dat.value);
-      s.setMinutes(s.getMinutes() + off);
-      s.toISOString();
-      task.startTime = s.toISOString();
+      
+      
+      task.startTime = dat.value;
     }
     if(!end.value){
       this.errors.push('Set End Date')
     }
     else{
       e = new Date(end.value);
-      e.setMinutes(e.getMinutes() + off);
-      e.toISOString();
-      task.endTime = e.toISOString();
+      
+      
+      task.endTime = end.value;
     }
     if(dat.value && end.value){
       this.serv.updTask(task).subscribe((d:ResponseHeader)=>{
         if (d.isSuccess) {
           this.ed.title = data.value;
-          this.ed.startTime =s.toISOString();
-          this.ed.endTime = e.toISOString();
+          this.ed.startTime =dat.value;
+          this.ed.endTime =  end.value;
          
             this.show('edit')
           
@@ -118,11 +116,11 @@ isLoading:boolean = false;
         this.crError.push('End Time Must Be in Future');
       }
       end = new Date(endTime.value);
-      en = end.toISOString(); // Convert to string without 'Z'
+      en = endTime.value; // Convert to string without 'Z'
     }
     if (startTime.value ) {
       start = new Date(startTime.value);
-      st = start.toISOString(); // Convert to string without 'Z' .replace('Z', '')
+      st =startTime.value  // Convert to string without 'Z' .replace('Z', '')
       console.log(st);
       
       // let meet = new Date(startTime.value);
@@ -463,11 +461,7 @@ getStat(start:any , end:any){
 let d = new Date();
 start = new Date(start)
 end = new Date(end)
-const timezoneOffset = d.getTimezoneOffset(); // This is in minutes
 
-// Adjust the start and end dates by adding the timezone offset
-start.setMinutes(start.getMinutes() );
-end.setMinutes(end.getMinutes() );
 if(d.getTime()>= start.getTime() && d.getTime()<= end.getTime()){
 return 1;
 }

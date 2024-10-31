@@ -9,17 +9,9 @@ export class UtcToLocalPipe implements PipeTransform {
     if (!value) return '';
 
     // Convert the input value to a Date object
-    const utcDate = new Date(value);
+    const date = new Date(value);
 
-    // Get the local timezone offset in minutes
-    const timezoneOffset = utcDate.getTimezoneOffset(); // This is in minutes
-
-    // Adjust the UTC date by adding the local timezone offset
-    // Since getTimezoneOffset returns the offset in minutes (UTC - local),
-    // we need to subtract it from the UTC date to get local time.
-    // utcDate.setMinutes(utcDate.getMinutes() - timezoneOffset);
-
-    // Format the adjusted date as per your requirements
+    // Format the date as per your requirements, without adjusting for timezone
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: 'numeric',
@@ -29,7 +21,8 @@ export class UtcToLocalPipe implements PipeTransform {
       hour12: true,
     };
 
-    const formattedDate = utcDate.toLocaleString('en-US', options);
+    // Use toLocaleString to format the date, which applies local formatting but keeps the original time
+    const formattedDate = date.toLocaleString('en-US', options);
 
     return formattedDate;
   }

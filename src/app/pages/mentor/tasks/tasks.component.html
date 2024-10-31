@@ -754,6 +754,18 @@
                   />
                 </svg>
               </p>
+    <div (click)="show('edit')" id="edit" class="hidden flex items-center justify-center bg-[#D9D9D9B2] h-[calc(100vh-72px)] w-full fixed top-[72px]">
+      <div (click)="handleClick($event)" class="bg-white rounded-lg shadow-lg md:w-[500px] w-[90%] p-6 relative">
+        <!-- Modal Content -->
+        <div class="flex items-center mb-4">
+            <img src="{{this.ed.photoUrl?? './../../../../../assets/img/user.jpeg'}}" alt="User Image" class="w-10 h-10 rounded-lg mr-3">
+            <div>
+                <p class="text-lg font-semibold">{{this.ed.firstName}} {{this.ed.middleName}} {{this.ed.lastName}}</p>
+                <!-- <p class="text-gray-500 text-sm">Deadline: {{this.ed.deadLine | utcToLocal}}</p> -->
+                <label class="text-gray-500 text-sm" for="sdateEdit">Start Time: </label>  <input #stTime id="sdateEdit" class="mt-2 w-[190px] px-2 py-1  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]" type="datetime-local" [value]="ed.startTime ">
+                <br>
+                <label class="text-gray-500 text-sm" for="edateEdit">End Time:&nbsp;&nbsp;</label>  <input #enTime id="edateEdit" class="mt-2 w-[190px] px-2 py-1  border border-[rgba(151,151,151,0.5)] rounded-lg text-[#979797] focus:outline-none focus:ring-1 focus:ring-[rgba(151,151,151,1)]" type="datetime-local" [value]="ed.endTime">
+
             </div>
           </div>
         </div>
@@ -801,7 +813,9 @@
           {{ this.ed.firstName }} {{ this.ed.middleName }}
           {{ this.ed.lastName }}
         </p>
-        <!-- <p class="text-sm text-gray-500">Deadline: {{this.ed.deadLine | utcToLocal}}</p> -->
+        <!-- <p class="text-sm text-gray-500">
+
+: {{this.ed.deadLine | utcToLocal}}</p> -->
         <label class="text-sm text-gray-500" for="sdateEdit"
           >Start Time:
         </label>
