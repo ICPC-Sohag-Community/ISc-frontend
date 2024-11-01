@@ -10,11 +10,12 @@ import { FormsModule } from '@angular/forms';
 
 import { LocaltoutcPipe } from '../../../pipes/localtoutc.pipe';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TruncatePipe } from '../../../pipes/truncate.pipe';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [FormsModule,UtcDatePipe,MentorHeaderComponent,LocaltoutcPipe, CommonModule, UtcToLocalPipe,DatePickerComponent],
+  imports: [TruncatePipe,FormsModule,UtcDatePipe,MentorHeaderComponent,LocaltoutcPipe, CommonModule, UtcToLocalPipe,DatePickerComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss'
 })
@@ -363,6 +364,7 @@ getFullPath(route: ActivatedRoute): string {
     })
   }
   trainee: any ;
+  selArr = false;
   show(id:string){
     this.err = [];
     this.crError = [];
@@ -371,6 +373,10 @@ getFullPath(route: ActivatedRoute): string {
     if(id == "names"){
 
       this.isShow = !this.isShow
+    }
+    if(id == "select"){
+
+      this.selArr = !this.selArr;
     }
     if(id == 'add'){
       document.getElementById('names')?.classList.add("hidden");
@@ -464,6 +470,10 @@ onClickOutside(event: MouseEvent): void {
     const dropdowns = document.querySelectorAll('.dropdown');
     dropdowns.forEach(dropdown => dropdown.classList.add('hidden'));
   }
+  if (!target.closest('.selBut') ) {
+     document.querySelector('#select')?.classList.add('hidden');
+    this.selArr = false;
+  }
 }
 getStat(start:any , end:any){
 let d = new Date();
@@ -481,5 +491,17 @@ else if (d.getTime()< start.getTime() ){
   }
 
 }
-
+selTrainee:any = 'all';
+selName:any = 'All'
+sel(trainee:any){
+  if(trainee != 'all'){
+     this.selTrainee = trainee.id;
+     this.selName = trainee.firstName + ' ' + trainee.middleName;
+  }
+  else{
+    this.selTrainee = 'all';
+    this.selName = 'All';
+  }
+ 
+}
 }
