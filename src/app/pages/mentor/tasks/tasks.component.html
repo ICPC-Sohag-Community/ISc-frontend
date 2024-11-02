@@ -45,7 +45,7 @@
       <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Incoming</h2>
       <!-- Task Card -->
       <div  *ngFor="let item of tasks ; let i = index" id="D{{item.id}}" >
-        <div  *ngIf="getStat(item.startTime , item.endTime) == 2" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+        <div  *ngIf="getStat(item.startTime , item.endTime) == 2 && (selTrainee == item.traineeId || selTrainee == 'all')" class="bg-[#3D91C733] rounded-lg p-4 mb-4">
         <!-- Avatar and Name -->
          
         <div class="flex items-center mb-2 justify-between"  >
@@ -119,7 +119,7 @@
       <h2 class="text-[28px] font-bold mb-4 text-[#3D91C7]">Current</h2>
       <!-- Task Card -->
        <div *ngFor="let item of tasks ; let i = index" id="D{{item.id}}">
-        <div  *ngIf="getStat(item.startTime , item.endTime) == 1"   class="bg-[#3D91C733] rounded-lg p-4 mb-4">
+        <div  *ngIf="getStat(item.startTime , item.endTime) == 1 && (selTrainee == item.traineeId || selTrainee == 'all')"   class="bg-[#3D91C733] rounded-lg p-4 mb-4">
           <!-- Avatar and Name -->
           
           <div class="flex items-center mb-2 justify-between"  >
