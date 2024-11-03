@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { CasheService } from '../../../shared/services/cashe.service';
 import { ResponseHeader } from '../../../shared/model/responseHeader';
 @Injectable({
@@ -17,12 +17,9 @@ export class WeeklyFilterService {
     );
   }
   getOthers(traineesIds: any): Observable<ResponseHeader> {
-    const queryParams = traineesIds
-      .map((id: string) => `traineesIds=${encodeURIComponent(id)}`)
-      .join('&');
-
-    return this.http.get<any>(
-      `${environment.BASE_URL}/api/Head/weeklyFilter/getOthers?${queryParams}`
+    return this.http.post<any>(
+      `${environment.BASE_URL}/api/Head/weeklyFilter/getOthers`,
+      traineesIds
     );
   }
   filterTrainees(traineesId: any): Observable<ResponseHeader> {
@@ -34,7 +31,6 @@ export class WeeklyFilterService {
 
   filterTrainee(traineeId: any): Observable<ResponseHeader> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
     return this.http.delete<any>(
       `${environment.BASE_URL}/api/Head/weeklyFilter/filterTrainee`,
       { headers, body: JSON.stringify(traineeId) }

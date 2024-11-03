@@ -86,7 +86,6 @@ export class StaffLeaderComponent implements OnInit {
 
   sortStaff(item: any): void {
     this.sortbyNum = item;
-    console.log(this.sortbyNum);
     this.staffWithPagination(1, 10, this.keywordSearch, this.sortbyNum);
     this.casheService.clearCache();
   }

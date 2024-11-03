@@ -255,7 +255,6 @@ export class ProfileDetailsComponent implements OnInit {
         if (statusCode == 200) {
           this.isLoading = false;
           this.camps = [...data.camps];
-          console.log(this.camps);
           this.profileForm.patchValue({
             firstName: data.firstName,
             middleName: data.middleName,

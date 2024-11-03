@@ -34,15 +34,17 @@
       } }
 
       <div class="flex flex-col px-4 gap-y-4">
-        <div class="w-full bg-white rounded-xl">
+        <div class="w-full bg-white shadow-lg rounded-2xl">
+          <h2 class="pt-5 text-2xl font-semibold ps-5">Sheets analysis</h2>
           <app-barchart-reports [sheetsRates]="item.sheetsRates" />
         </div>
-        <div class="w-full bg-white rounded-xl">
+        <div class="w-full bg-white shadow-lg rounded-2xl">
+          <h2 class="pt-5 text-2xl font-semibold ps-5">Contests analysis</h2>
+
           <app-line-chart [contestRates]="item.contestRates" />
         </div>
       </div>
 
-      <!-- Bottom expanding section -->
       <div
         [ngClass]="{
           'max-h-0': !isExpanded(item.id),

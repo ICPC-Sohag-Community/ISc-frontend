@@ -42,7 +42,6 @@ export class ContestsHOCComponent implements OnInit {
         next: (res) => {
           if (res.statusCode === 200) {
             this.allContests = res;
-            console.log(this.allContests);
             this.dataRequest.push(this.allContests);
 
             this.isLoading.update((v) => (v = false));
@@ -63,7 +62,6 @@ export class ContestsHOCComponent implements OnInit {
   }
 
   handleClose(confirmed: boolean) {
-    console.log(confirmed);
     if (confirmed && this.selectedItemId !== null) {
       this.dataRequest = [];
       this.casheService.clearCache();

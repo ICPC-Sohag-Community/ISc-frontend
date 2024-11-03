@@ -109,7 +109,6 @@ export class DashboardChartsHocComponent implements OnInit, AfterViewInit {
         options: {
           responsive: true,
           cutout: '70%',
-
           maintainAspectRatio: false,
           plugins: {
             legend: {
@@ -276,8 +275,8 @@ export class DashboardChartsHocComponent implements OnInit, AfterViewInit {
         labels: this.dashboardData.sheetsAnalysis.map((item) => item.name),
         datasets: [
           {
-            data: this.dashboardData.sheetsAnalysis.map(
-              (item) => item.precentage
+            data: this.dashboardData.sheetsAnalysis.map((item) =>
+              Math.round(item.precentage)
             ),
             backgroundColor: '#3D91C7',
             borderWidth: 1,

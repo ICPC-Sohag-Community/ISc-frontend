@@ -61,7 +61,6 @@ export class SessionsHOCComponent implements OnInit {
   }
 
   handleClose(confirmed: boolean) {
-    console.log(confirmed);
     if (confirmed && this.selectedItemId !== null) {
       this.dataRequest = [];
       this.casheService.clearCache();
