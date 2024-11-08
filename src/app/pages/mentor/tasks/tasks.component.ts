@@ -480,7 +480,10 @@ getStat(start:any , end:any){
 let d = new Date();
 start = new Date(start)
 end = new Date(end)
-
+start.setSeconds(0);
+start.setMilliseconds(0);
+end.setSeconds(0);
+end.setMilliseconds(0);
 if(d.getTime()>= start.getTime() && d.getTime()<= end.getTime()){
 return 1;
 }
