@@ -16,7 +16,7 @@ export interface Achiver {
 }
 
 export interface DashboardData {
-  trineesMalePrecentage: number;
+  traineesMalePrecentage: number;
   traineesMaleCount: number;
   mentorsFemaleCount: number;
   mentorsMaleCount: number;
