@@ -49,6 +49,7 @@ export class SecondNavbarComponent implements OnInit {
   openNotification(): void {
     this.childComponent.allNotification = [];
     this.childComponent.currentPage = 1;
+    this.isShow = false;
     this.isOpenNotification = !this.isOpenNotification;
     if (this.isOpenNotification) {
       this.childComponent.getAllNotifications(
@@ -90,6 +91,7 @@ export class SecondNavbarComponent implements OnInit {
 
   showRoles() {
     this.isShow = !this.isShow;
+    this.isOpenNotification = false;
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -97,6 +99,7 @@ export class SecondNavbarComponent implements OnInit {
     const clickedInside = this.elementRef.nativeElement.contains(targetElement);
     if (!clickedInside && this.isShow) {
       this.isShow = false;
+      this.isOpenNotification = false;
     }
   }
 

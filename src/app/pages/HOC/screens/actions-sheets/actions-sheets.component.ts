@@ -1,7 +1,6 @@
 import { NgClass } from '@angular/common';
 import {
   Component,
-  CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
   HostListener,
   inject,
@@ -35,24 +34,12 @@ export class ActionsSheetsComponent implements OnInit {
   elementRef = inject(ElementRef);
   router = inject(Router);
   route = inject(ActivatedRoute);
-  // @ViewChild('startDateInput') startDateInput!: ElementRef;
-  // @ViewChild('endDateInput') endDateInput!: ElementRef;
-  // @ViewChild('calendar') calendar!: ElementRef;
-  // @ViewChild('calendar2') calendar2!: ElementRef;
   @ViewChild('community') community!: NgSelectComponent;
   @ViewChild('status') status!: NgSelectComponent;
-  // selectedDay: number | null | any = null;
-  // selectedDayEnd: number | null | any = null;
-  // currentDate = new Date();
-  // daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  // startDays: number[] = [];
-  // endDays: number[] = [];
-  // startMonthYear: string = '';
-  // endMonthYear: string = '';
-  // dateStart!: Date;
-  // dateEnd!: Date;
+  @ViewChild('judge') judge!: NgSelectComponent;
   dropdownOpen: boolean = false;
   dropdownOpenS: boolean = false;
+  foucsJ: boolean = false;
   sheetForm!: FormGroup;
   submitted: boolean = false;
   isLoading: boolean = false;
@@ -68,17 +55,14 @@ export class ActionsSheetsComponent implements OnInit {
     if (this.id > 0) {
       this.getOneSheet(this.id);
     }
-    // else {
-    //   this.renderCalendar(this.currentDate, 'start');
-    //   this.renderCalendar(this.currentDate, 'end');
-    // }
     this.sheetForm = this.fb.group({
       id: [''],
       name: [null, [Validators.required]],
       sheetLink: [null, [Validators.required]],
       community: [null, [Validators.required]],
-      sheetCodefroceId: [null, [Validators.required]],
+      onlineId: [null, [Validators.required]],
       status: [null, [Validators.required]],
+      judgeType: [null, [Validators.required]],
       minimumPassingPrecent: [null, [Validators.required]],
       problemCount: [0, [Validators.required]],
       endDate: [null, [Validators.required]],
@@ -92,12 +76,6 @@ export class ActionsSheetsComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode == 200) {
           this.isLoading = false;
-          // this.renderCalendar(data.startDate, 'start');
-          // this.renderCalendar(data.endDate, 'end');
-          // this.dateStart = new Date(data.startDate);
-          // this.dateEnd = new Date(data.endDate);
-          // this.selectedDay = this.dateStart.getDate();
-          // this.selectedDayEnd = this.dateEnd.getDate();
           this.sheetForm.patchValue({
             id: data.id,
             name: data.name,
@@ -105,7 +83,8 @@ export class ActionsSheetsComponent implements OnInit {
             endDate: data.endDate,
             sheetLink: data.sheetLink,
             community: data.community,
-            sheetCodefroceId: data.sheetCodefroceId,
+            judgeType: data.community,
+            onlineId: data.onlineId,
             status: data.status,
             minimumPassingPrecent: data.minimumPassingPrecent,
             problemCount: data.problemCount,
@@ -132,11 +111,19 @@ export class ActionsSheetsComponent implements OnInit {
             this.successMessage = message;
             this.isLoading = false;
             this.casheService.clearCache();
+            setTimeout(() => {
+              this.errorMessage = '';
+              this.successMessage = '';
+            }, 3000);
             this.router.navigate(['/head_of_camp/sheets']);
           } else if (statusCode === 400) {
             this.successMessage = '';
             this.errorMessage = message;
             this.isLoading = false;
+            setTimeout(() => {
+              this.errorMessage = '';
+              this.successMessage = '';
+            }, 3000);
           } else {
             this.handleApiErrors(errors);
             this.isLoading = false;
@@ -156,10 +143,18 @@ export class ActionsSheetsComponent implements OnInit {
             this.isLoading = false;
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/sheets']);
+            setTimeout(() => {
+              this.errorMessage = '';
+              this.successMessage = '';
+            }, 3000);
           } else if (statusCode === 400) {
             this.successMessage = '';
             this.errorMessage = message;
             this.isLoading = false;
+            setTimeout(() => {
+              this.errorMessage = '';
+              this.successMessage = '';
+            }, 3000);
           } else {
             this.handleApiErrors(errors);
             this.isLoading = false;
@@ -175,6 +170,7 @@ export class ActionsSheetsComponent implements OnInit {
 
   removeErrorM() {
     this.errorMessage = '';
+    this.successMessage = '';
   }
 
   handleApiErrors(errors: any) {
@@ -199,10 +195,8 @@ export class ActionsSheetsComponent implements OnInit {
 
   displayFormErrors() {
     this.errorMessages = [];
-
     Object.keys(this.sheetForm.controls).forEach((field) => {
       const control = this.sheetForm.get(field);
-
       if (control?.invalid) {
         if (control.errors?.['required']) {
           this.errorMessages.push(`${field} is required`);
@@ -216,100 +210,14 @@ export class ActionsSheetsComponent implements OnInit {
     });
   }
 
-  // toggleCalendar(name: string) {
-  //   if (name === 'start') {
-  //     this.calendar.nativeElement.classList.toggle('hidden');
-  //   } else {
-  //     this.calendar2.nativeElement.classList.toggle('hidden');
-  //   }
-  // }
-
-  // changeMonth(monthChange: number, name: string) {
-  //   if (name === 'start') {
-  //     this.dateStart.setMonth(this.dateStart.getMonth() + monthChange);
-  //     this.renderCalendar(this.dateStart, name);
-  //   } else {
-  //     this.dateEnd.setMonth(this.dateEnd.getMonth() + monthChange);
-  //     this.renderCalendar(this.dateEnd, name);
-  //   }
-  // }
-
-  // selectDate(day: number, name: string) {
-  //   const year = this.currentDate.getFullYear();
-  //   const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
-  //   const dayOfMonth = String(day).padStart(2, '0');
-
-  //   const formattedDate = `${year}-${month}-${dayOfMonth}`;
-  //   if (name === 'start') {
-  //     this.selectedDay = day;
-  //     this.sheetForm.get('startDate')?.setValue(formattedDate);
-  //     this.calendar.nativeElement.classList.add('hidden');
-  //   } else {
-  //     this.selectedDayEnd = day;
-  //     this.sheetForm.get('endDate')?.setValue(formattedDate);
-  //     this.calendar2.nativeElement.classList.add('hidden');
-  //   }
-  // }
-
-  // renderCalendar(date: Date, name?: string) {
-  //   const newDate = new Date(date);
-  //   const month = newDate.getMonth();
-  //   const year = newDate.getFullYear();
-  //   const firstDay = new Date(year, month, 1).getDay();
-  //   const lastDate = new Date(year, month + 1, 0).getDate();
-
-  //   if (name === 'start') {
-  //     this.startDays = [];
-  //     this.startMonthYear = newDate.toLocaleDateString('en-US', {
-  //       month: 'long',
-  //       year: 'numeric',
-  //     });
-
-  //     for (let i = 0; i < firstDay; i++) {
-  //       this.startDays.push(0);
-  //     }
-
-  //     for (let i = 1; i <= lastDate; i++) {
-  //       this.startDays.push(i);
-  //     }
-  //   } else {
-  //     this.endDays = [];
-  //     this.endMonthYear = newDate.toLocaleDateString('en-US', {
-  //       month: 'long',
-  //       year: 'numeric',
-  //     });
-
-  //     for (let i = 0; i < firstDay; i++) {
-  //       this.endDays.push(0);
-  //     }
-
-  //     for (let i = 1; i <= lastDate; i++) {
-  //       this.endDays.push(i);
-  //     }
-  //   }
-  // }
-
-  // @HostListener('document:click', ['$event'])
-  // onClickOutside(event: MouseEvent) {
-  //   if (
-  //     !this.startDateInput.nativeElement.contains(event.target) &&
-  //     !this.calendar.nativeElement.contains(event.target)
-  //   ) {
-  //     this.calendar.nativeElement.classList.add('hidden');
-  //   }
-  //   if (
-  //     !this.endDateInput.nativeElement.contains(event.target) &&
-  //     !this.calendar2.nativeElement.contains(event.target)
-  //   ) {
-  //     this.calendar2.nativeElement.classList.add('hidden');
-  //   }
-  //   if (this.community.dropdownPanel === undefined) {
-  //     this.dropdownOpen = false;
-  //   }
-  //   if (this.status.dropdownPanel === undefined) {
-  //     this.dropdownOpenS = false;
-  //   }
-  // }
+  @HostListener('document:click', ['$event'])
+  onClickOutside() {
+    if (this.community.dropdownPanel === undefined) {
+      this.dropdownOpen = false;
+      this.dropdownOpenS = false;
+      this.foucsJ = false;
+    }
+  }
 
   toggleDropdown() {
     if (this.dropdownOpen) {
@@ -320,12 +228,21 @@ export class ActionsSheetsComponent implements OnInit {
     this.dropdownOpen = !this.dropdownOpen;
   }
   toggleDropdownS() {
+    debugger;
     if (this.dropdownOpenS) {
       this.status.close();
     } else {
       this.status.open();
     }
     this.dropdownOpenS = !this.dropdownOpenS;
+  }
+  toggleDropdownJ() {
+    if (this.foucsJ) {
+      this.judge.close();
+    } else {
+      this.judge.open();
+    }
+    this.foucsJ = !this.foucsJ;
   }
 
   increase() {
