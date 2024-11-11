@@ -233,6 +233,8 @@ export class ActionsContestsComponent implements OnInit {
   onClickOutside() {
     if (this.community.dropdownPanel === undefined) {
       this.foucsTerm = false;
+    }
+    if (this.judge.dropdownPanel === undefined) {
       this.foucsJ = false;
     }
   }
