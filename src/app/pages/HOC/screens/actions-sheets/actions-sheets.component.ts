@@ -214,7 +214,11 @@ export class ActionsSheetsComponent implements OnInit {
   onClickOutside() {
     if (this.community.dropdownPanel === undefined) {
       this.dropdownOpen = false;
+    }
+    if (this.status.dropdownPanel === undefined) {
       this.dropdownOpenS = false;
+    }
+    if (this.judge.dropdownPanel === undefined) {
       this.foucsJ = false;
     }
   }
