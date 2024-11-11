@@ -58,7 +58,7 @@ export class DashboardChartsHocComponent implements OnInit, AfterViewInit {
             {
               label: 'Trainees',
               data: [
-                this.dashboardData.trineesMalePrecentage,
+                this.dashboardData.traineesMalePrecentage,
                 this.dashboardData.traineesFemalePrecentage,
               ],
               backgroundColor: ['#3D91C7', gradientFemale],

@@ -5,21 +5,27 @@ import {
   ElementRef,
   HostListener,
   inject,
-  OnChanges,
   OnInit,
+  signal,
+  ViewChild,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../authentication/services/auth.service';
-
+import { NotificationComponent } from '../../../../shared/Components/notification/notification.component';
+import { NotificationService } from '../../../../shared/services/notification.service';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 @Component({
   selector: 'app-second-navbar',
   standalone: true,
-  imports: [NgClass, RouterLink],
+  imports: [NgClass, RouterLink, NotificationComponent],
   templateUrl: './second-navbar.component.html',
   styleUrl: './second-navbar.component.scss',
 })
 export class SecondNavbarComponent implements OnInit {
   authService = inject(AuthService);
+  notificationService = inject(NotificationService);
   elementRef = inject(ElementRef);
   cdr = inject(ChangeDetectorRef);
   router = inject(Router);
@@ -27,13 +33,46 @@ export class SecondNavbarComponent implements OnInit {
   currentUser: any;
   roles: string[] = [];
   currentPath: string = '';
+  isOpenNotification: boolean = false;
+  isAnewNotification: boolean = false;
+
+  @ViewChild(NotificationComponent) childComponent!: NotificationComponent;
 
   ngOnInit() {
     this.currentUser = this.authService.currentUser();
     this.currentPath = this.router.url;
     this.loadRoles();
     this.detectLocalStorageChange();
+    this.newNotificationCheck();
   }
+
+  openNotification(): void {
+    this.childComponent.allNotification = [];
+    this.childComponent.currentPage = 1;
+    this.isShow = false;
+    this.isOpenNotification = !this.isOpenNotification;
+    if (this.isOpenNotification) {
+      this.childComponent.getAllNotifications(
+        this.childComponent.currentPage,
+        this.childComponent.pageSize,
+        this.childComponent.isRead
+      );
+    }
+  }
+
+  newNotificationCheck() {
+    this.notificationService.newNotificationCheck().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.isAnewNotification = data;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+
   loadRoles(): void {
     const storedData = JSON.parse(localStorage.getItem('CURRENT_USER') || '{}');
     this.roles = storedData.roles || [];
@@ -52,6 +91,7 @@ export class SecondNavbarComponent implements OnInit {
 
   showRoles() {
     this.isShow = !this.isShow;
+    this.isOpenNotification = false;
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -59,6 +99,7 @@ export class SecondNavbarComponent implements OnInit {
     const clickedInside = this.elementRef.nativeElement.contains(targetElement);
     if (!clickedInside && this.isShow) {
       this.isShow = false;
+      this.isOpenNotification = false;
     }
   }
 

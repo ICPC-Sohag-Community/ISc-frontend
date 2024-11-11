@@ -35,7 +35,9 @@ export class ActionsContestsComponent implements OnInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
   @ViewChild('community') community!: NgSelectComponent;
+  @ViewChild('judge') judge!: NgSelectComponent;
   foucsTerm: boolean = false;
+  foucsJ: boolean = false;
   id: number = 0;
   submitted: boolean = false;
   isLoading: boolean = false;
@@ -56,8 +58,9 @@ export class ActionsContestsComponent implements OnInit {
       name: [null, [Validators.required]],
       link: [null, [Validators.required]],
       community: [null, [Validators.required]],
+      judgeType: [null, [Validators.required]],
       problemCount: [0, this.positiveNumberValidator],
-      codeForceId: [null, [Validators.required]],
+      onlineId: [null, [Validators.required]],
       chiefOfContest: [null, [Validators.required]],
       endTime: [null, [Validators.required]],
       startTime: [null, [Validators.required]],
@@ -98,8 +101,9 @@ export class ActionsContestsComponent implements OnInit {
             startTime: data.startTime,
             endTime: data.endTime,
             community: data.community,
+            judgeType: data.judgeType,
             chiefOfContest: data.chiefOfContest,
-            codeForceId: data.codeForceId,
+            onlineId: data.onlineId,
             problemCount: data.problemCount,
           });
         } else {
@@ -125,10 +129,18 @@ export class ActionsContestsComponent implements OnInit {
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/contests']);
             this.isLoading = false;
+            setTimeout(() => {
+              this.errorMessage = '';
+              this.successMessage = '';
+            }, 3000);
           } else if (statusCode === 400) {
             this.successMessage = '';
             this.errorMessage = message;
             this.isLoading = false;
+            setTimeout(() => {
+              this.errorMessage = '';
+              this.successMessage = '';
+            }, 3000);
           } else {
             this.handleApiErrors(errors);
             this.isLoading = false;
@@ -148,10 +160,18 @@ export class ActionsContestsComponent implements OnInit {
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/contests']);
             this.isLoading = false;
+            setTimeout(() => {
+              this.errorMessage = '';
+              this.successMessage = '';
+            }, 3000);
           } else if (statusCode === 400) {
             this.successMessage = '';
             this.errorMessage = message;
             this.isLoading = false;
+            setTimeout(() => {
+              this.errorMessage = '';
+              this.successMessage = '';
+            }, 3000);
           } else {
             this.handleApiErrors(errors);
             this.isLoading = false;
@@ -167,6 +187,7 @@ export class ActionsContestsComponent implements OnInit {
 
   removeErrorM() {
     this.errorMessage = '';
+    this.successMessage = '';
   }
 
   handleApiErrors(errors: any) {
@@ -208,12 +229,28 @@ export class ActionsContestsComponent implements OnInit {
     });
   }
 
-  toggleDropdownC(community: NgSelectComponent) {
+  @HostListener('document:click', ['$event'])
+  onClickOutside() {
+    if (this.community.dropdownPanel === undefined) {
+      this.foucsTerm = false;
+      this.foucsJ = false;
+    }
+  }
+
+  toggleDropdownC() {
     if (this.foucsTerm) {
-      community.close();
+      this.community.close();
     } else {
-      community.open();
+      this.community.open();
     }
     this.foucsTerm = !this.foucsTerm;
+  }
+  toggleDropdownJ() {
+    if (this.foucsJ) {
+      this.judge.close();
+    } else {
+      this.judge.open();
+    }
+    this.foucsJ = !this.foucsJ;
   }
 }

@@ -10,11 +10,12 @@ import { FormsModule } from '@angular/forms';
 
 import { LocaltoutcPipe } from '../../../pipes/localtoutc.pipe';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TruncatePipe } from '../../../pipes/truncate.pipe';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [FormsModule,UtcDatePipe,MentorHeaderComponent,LocaltoutcPipe, CommonModule, UtcToLocalPipe,DatePickerComponent],
+  imports: [TruncatePipe,FormsModule,UtcDatePipe,MentorHeaderComponent,LocaltoutcPipe, CommonModule, UtcToLocalPipe,DatePickerComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss'
 })
@@ -152,7 +153,7 @@ isLoading:boolean = false;
     };
   
     // Use a Set to avoid duplicate error messages
-    const errorSet = new Set<string>();
+    // const errorSet = new Set<string>();
   
     // // Clear previous errors
     // this.crError = [];
@@ -161,36 +162,7 @@ isLoading:boolean = false;
     let successfulTasks = 0;
   
     // Loop through the taskNo array and create each task
-    for (let i = 0; i < this.taskNo.length; i++) {
-      if (this.taskNo[i] != null) {
-        // Prepare individual task data
-        const data = {
-          title: this.taskNo[i] ? this.taskNo[i] : '',
-          startTime: st ? st : '1970-01-01T00:00',
-          endTime: en ? en : '1970-01-01T00:00',
-          traineesIds: this.trainTask ? this.trainTask : '',
-          campId: Number(localStorage.getItem('camp')),
-        };
-  
-        // Await the response for each task
-        const response = await this.addTaskAsync(data);
-  
-        if (!response.isSuccess) {
-          // Collect errors for this task and avoid duplicates
-          for (const field in response.errors) {
-            if (response.errors.hasOwnProperty(field)) {
-              if (Array.isArray(response.errors[field])) {
-                response.errors[field].forEach((errMsg:any) => errorSet.add(`${errMsg}`));
-              } else {
-                errorSet.add(`${response.errors[field]}`);
-              }
-            }
-          }
-        } else {
-          successfulTasks++; // Increment successful task count
-        }
-      }
-    }
+    
   
     // Check for missing trainees and tasks
     if (this.chars.length == 0) {
@@ -201,24 +173,62 @@ isLoading:boolean = false;
     }
   
     // If there are any errors, add them to `this.crError`
-    if (this.crError.length > 0) {
+    if (this.crError.length == 0) {
       // this.crError = Array.from(errorSet);
-    } else {
-      // If no errors, refresh data and reset state
-      this.get(localStorage.getItem('camp'));
+      for (let i = 0; i < this.taskNo.length; i++) {
+        if (this.taskNo[i] != null) {
+          // Prepare individual task data
+          const data = {
+            title: this.taskNo[i] ? this.taskNo[i] : '',
+            startTime: st ? st : '1970-01-01T00:00',
+            endTime: en ? en : '1970-01-01T00:00',
+            traineesIds: this.trainTask ? this.trainTask : '',
+            campId: Number(localStorage.getItem('camp')),
+          };
+    
+          // Await the response for each task
+          const response = await this.addTaskAsync(data);
+    
+          if (response.isSuccess) {
+            // Collect errors for this task and avoid duplicates
+            // for (const field in response.errors) {
+            //   if (response.errors.hasOwnProperty(field)) {
+            //     if (Array.isArray(response.errors[field])) {
+            //       response.errors[field].forEach((errMsg:any) => errorSet.add(`${errMsg}`));
+            //     } else {
+            //       errorSet.add(`${response.errors[field]}`);
+            //     }
+            //   }
+            // }
+            this.get(localStorage.getItem('camp'));
       this.show('add');
       this.taskNo = [];
       this.chars = [];
       this.trainTask = [];
+          } else {
+            successfulTasks++; // Increment successful task count
+          }
+        }
+      }
+    } else {
+      // If no errors, refresh data and reset state
+      // this.get(localStorage.getItem('camp'));
+      // this.show('add');
+      // this.taskNo = [];
+      // this.chars = [];
+      // this.trainTask = [];
     }
   }
   
   // Create a wrapper function for `addTask` to use with `await`
   addTaskAsync(data: any): Promise<ResponseHeader> {
     return new Promise((resolve) => {
-      this.serv.addTask(data).subscribe((response: ResponseHeader) => {
+      if(this.crError.length == 0){
+        this.serv.addTask(data).subscribe((response: ResponseHeader) => {
         resolve(response);
       });
+      }
+      
     });
   }
   
@@ -355,6 +365,7 @@ getFullPath(route: ActivatedRoute): string {
     })
   }
   trainee: any ;
+  selArr = false;
   show(id:string){
     this.err = [];
     this.crError = [];
@@ -363,6 +374,10 @@ getFullPath(route: ActivatedRoute): string {
     if(id == "names"){
 
       this.isShow = !this.isShow
+    }
+    if(id == "select"){
+
+      this.selArr = !this.selArr;
     }
     if(id == 'add'){
       document.getElementById('names')?.classList.add("hidden");
@@ -456,12 +471,19 @@ onClickOutside(event: MouseEvent): void {
     const dropdowns = document.querySelectorAll('.dropdown');
     dropdowns.forEach(dropdown => dropdown.classList.add('hidden'));
   }
+  if (!target.closest('.selBut') ) {
+     document.querySelector('#select')?.classList.add('hidden');
+    this.selArr = false;
+  }
 }
 getStat(start:any , end:any){
 let d = new Date();
 start = new Date(start)
 end = new Date(end)
-
+start.setSeconds(0);
+start.setMilliseconds(0);
+end.setSeconds(0);
+end.setMilliseconds(0);
 if(d.getTime()>= start.getTime() && d.getTime()<= end.getTime()){
 return 1;
 }
@@ -473,5 +495,17 @@ else if (d.getTime()< start.getTime() ){
   }
 
 }
-
+selTrainee:any = 'all';
+selName:any = 'All'
+sel(trainee:any){
+  if(trainee != 'all'){
+     this.selTrainee = trainee.id;
+     this.selName = trainee.firstName + ' ' + trainee.middleName;
+  }
+  else{
+    this.selTrainee = 'all';
+    this.selName = 'All';
+  }
+ 
+}
 }
