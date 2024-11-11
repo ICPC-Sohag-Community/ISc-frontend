@@ -83,7 +83,7 @@ export class ActionsSheetsComponent implements OnInit {
             endDate: data.endDate,
             sheetLink: data.sheetLink,
             community: data.community,
-            judgeType: data.community,
+            judgeType: data.judgeType,
             onlineId: data.onlineId,
             status: data.status,
             minimumPassingPrecent: data.minimumPassingPrecent,
