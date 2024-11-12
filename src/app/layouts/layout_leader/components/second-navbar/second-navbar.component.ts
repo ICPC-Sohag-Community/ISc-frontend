@@ -97,7 +97,7 @@ export class SecondNavbarComponent implements OnInit {
   @HostListener('document:click', ['$event.target'])
   public onClick(targetElement: HTMLElement): void {
     const clickedInside = this.elementRef.nativeElement.contains(targetElement);
-    if (!clickedInside && this.isShow) {
+    if (!clickedInside && (this.isShow || this.isOpenNotification)) {
       this.isShow = false;
       this.isOpenNotification = false;
     }

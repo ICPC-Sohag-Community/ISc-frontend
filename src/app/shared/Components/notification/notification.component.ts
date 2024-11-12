@@ -25,6 +25,7 @@ dayjs.extend(relativeTime);
 })
 export class NotificationComponent {
   @Input() isOpen: boolean = true;
+  @Input() newNotificationCheck!: () => void;
   notificationService = inject(NotificationService);
   router = inject(Router);
   baseUrlFront: string = environment.BASE_URL_FRONT;
@@ -151,16 +152,19 @@ export class NotificationComponent {
         break;
     }
   }
-  markasRead(id: number, type: number) {
-    this.notificationService.markasRead(id).subscribe({
-      next: ({ statusCode }) => {
-        if (statusCode === 200) {
-          this.goToThePage(type);
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
+  markasRead(id: number, type: number, isRead: boolean) {
+    if (!isRead) {
+      this.notificationService.markasRead(id).subscribe({
+        next: ({ statusCode }) => {
+          if (statusCode === 200) {
+            this.goToThePage(type);
+            this.newNotificationCheck();
+          }
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
+    }
   }
 }
