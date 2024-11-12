@@ -35,6 +35,7 @@ export class MentornavComponent implements OnInit {
   openNotification(): void {
     this.childComponent.allNotification = [];
     this.childComponent.currentPage = 1;
+    this.isShow = false;
     this.isOpenNotification = !this.isOpenNotification;
     if (this.isOpenNotification) {
       this.childComponent.getAllNotifications(
@@ -61,31 +62,29 @@ export class MentornavComponent implements OnInit {
   @ViewChild(NotificationComponent) childComponent!: NotificationComponent;
   showRoles() {
     this.isShow = !this.isShow;
+    this.isOpenNotification = false;
   }
-  show(id:string){
-    
-    document.getElementById(id)?.classList.toggle("hidden");
-    
+  show(id: string) {
+    document.getElementById(id)?.classList.toggle('hidden');
   }
   @HostListener('document:click', ['$event.target'])
   public onClick(targetElement: HTMLElement): void {
     const clickedInside = this.elementRef.nativeElement.contains(targetElement);
-    if (!clickedInside && this.isShow) {
+    if (!clickedInside && (this.isShow || this.isOpenNotification)) {
       this.isShow = false;
+      this.isOpenNotification = false;
     }
   }
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent): void {
     const target = event.target as HTMLElement;
     // Check if the click was outside the dropdown and the related button
-    if (!target.closest('.trag') ) {
-      document.getElementById('nav')?.classList.add("hidden");
+    if (!target.closest('.trag')) {
+      document.getElementById('nav')?.classList.add('hidden');
     }
-    if (!target.closest('.drop') ) {
+    if (!target.closest('.drop')) {
       this.isShow = false;
     }
-    
-    
   }
   goSpecificRole(role: string): void {
     this.router.navigate(['/', role.toLowerCase()]);

@@ -81,7 +81,7 @@
     </svg>
   </div>
   <div class="flex h-[72px] items-center lg:gap-3 gap-1 lg:mr-[25px] mr-[15px]">
-    <button class="hidden md:block">
+    <button (click)="openNotification()" class="hidden md:block">
       <svg
         width="24"
         height="24"
@@ -260,3 +260,8 @@
     </button>
   </div>
 </nav>
+
+<app-notification
+  [isOpen]="isOpenNotification"
+  [newNotificationCheck]="newNotificationCheck"
+/>
