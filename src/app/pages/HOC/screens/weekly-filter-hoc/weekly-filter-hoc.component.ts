@@ -100,8 +100,8 @@ export class WeeklyFilterHOCComponent implements OnInit {
     this.weeklyFilterService.filterTrainees(selectedIds).subscribe({
       next: ({ statusCode, message }) => {
         if (statusCode === 200) {
-          this.filterData = this.filterData.filter((user) =>
-            this.selectedUsers.has(user.id)
+          this.filterData = this.filterData.filter(
+            (user) => !this.selectedUsers.has(user.id)
           );
           this.errorMessage = '';
           this.successMessage = message;

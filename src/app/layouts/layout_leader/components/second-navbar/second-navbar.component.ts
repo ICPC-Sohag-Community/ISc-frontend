@@ -75,7 +75,11 @@ export class SecondNavbarComponent implements OnInit {
 
   loadRoles(): void {
     const storedData = JSON.parse(localStorage.getItem('CURRENT_USER') || '{}');
-    this.roles = storedData.roles || [];
+    const customOrder = ['Leader', 'Head_Of_Camp', 'Mentor', 'Trainee'];
+    this.roles =
+      storedData.roles.sort(
+        (a: any, b: any) => customOrder.indexOf(a) - customOrder.indexOf(b)
+      ) || [];
     this.cdr.detectChanges();
   }
 
