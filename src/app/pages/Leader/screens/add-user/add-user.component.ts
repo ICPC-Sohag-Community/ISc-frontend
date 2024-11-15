@@ -10,45 +10,41 @@ import {
 import {
   FormBuilder,
   FormGroup,
-  FormGroupDirective,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { DashboardService } from '../../services/dashboard.service';
 import { NgClass } from '@angular/common';
-import { CasheService } from '../../../../shared/services/cashe.service';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-user',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSelectModule, NgClass],
+  imports: [ReactiveFormsModule, NgSelectModule, NgClass, ToastrModule],
   templateUrl: './add-user.component.html',
   styleUrl: './add-user.component.scss',
 })
 export class AddUserComponent implements OnInit {
   dashboardService = inject(DashboardService);
-  casheService = inject(CasheService);
+  toastr = inject(ToastrService);
   fb = inject(FormBuilder);
   allRoles: { id: number; name: string }[] = [];
   allCollege: { id: number; name: string }[] = [];
   allCamps: { id: number; name: string }[] = [];
-  error: any = [];
-  selectedRole: string = '';
-  selectedCamp: string = '';
-  selectedCollege: string = '';
   uploadedFileName: string = '';
   isShow: boolean = false;
   foucsCollege: boolean = false;
   foucsRole: boolean = false;
+  foucsCamp: boolean = false;
   submitted: boolean = false;
   isLoading: boolean = false;
   imgFile!: File;
   addUserForm!: FormGroup;
-  @ViewChild('formControl') formControls!: QueryList<ElementRef>;
-  @ViewChild(FormGroupDirective) formDir!: FormGroupDirective;
+
   @ViewChild('collegeSelect') collegeSelect!: NgSelectComponent;
   @ViewChild('roleSelect') roleSelect!: NgSelectComponent;
+  @ViewChild('campSelect') campSelect!: NgSelectComponent;
 
   ngOnInit(): void {
     this.addUserForm = this.fb.group({
@@ -64,8 +60,8 @@ export class AddUserComponent implements OnInit {
       gender: ['', [Validators.required]],
       profileImage: [null],
       codeForceHandle: ['', [Validators.required]],
-      vjudgeHandle: [''],
-      campId: [''],
+      vjudgeHandle: [null],
+      campId: [null],
       role: [null, [Validators.required]],
     });
     this.fetchAllRoles();
@@ -81,74 +77,47 @@ export class AddUserComponent implements OnInit {
     ];
   }
 
-  focusInvalidControl() {
-    if (this.formControls) {
-      const invalidControls = this.formControls
-        .toArray()
-        .filter(
-          (control) =>
-            control.nativeElement &&
-            control.nativeElement.classList.contains('ng-invalid')
-        );
-      if (invalidControls.length > 0) {
-        const firstInvalidControl = invalidControls[0].nativeElement;
-        firstInvalidControl.focus();
-        firstInvalidControl.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-        });
+  filterNullValues(form: FormGroup): { [key: string]: any } {
+    const filteredData: { [key: string]: any } = {};
+    Object.keys(form.value).forEach((key) => {
+      const value = form.get(key)?.value;
+      if (value !== null && value !== undefined) {
+        filteredData[key] = value;
       }
-    }
+    });
+    return filteredData;
   }
 
   craeteUser() {
     this.submitted = true;
     if (this.addUserForm.invalid) {
-      this.focusInvalidControl();
+      this.displayFormErrors();
       return;
     }
     this.isLoading = true;
-
-    const formdata = new FormData();
-    formdata.append('FirstName', this.addUserForm.value.firstName);
-    formdata.append('MiddleName', this.addUserForm.value.middleName);
-    formdata.append('LastName', this.addUserForm.value.lastName);
-    formdata.append('Email', this.addUserForm.value.email); ///
-    formdata.append('NationalId', this.addUserForm.value.nationalId); //
-    formdata.append('BirthDate', this.addUserForm.value.birthDate);
-    formdata.append('PhoneNumber', this.addUserForm.value.phoneNumber);
-    formdata.append('College', this.addUserForm.value.college);
-    formdata.append('CodeForceHandle', this.addUserForm.value.codeForceHandle);
-    formdata.append('Grade', this.addUserForm.value.grade);
-    formdata.append('Gender', this.addUserForm.value.gender);
-    if (this.addUserForm.value.vjudgeHandle !== null) {
-      formdata.append('VjudgeHandle', this.addUserForm.value.vjudgeHandle); ///
-    }
-    if (
-      this.addUserForm.value.ProfileImage !== null ||
-      this.addUserForm.value.ProfileImage !== undefined
-    ) {
-      formdata.append('ProfileImage', this.imgFile);
-    }
-    formdata.append('CampId', this.addUserForm.value.campId);
-    formdata.append('Role', this.addUserForm.value.role);
-
-    this.dashboardService.createAccount(formdata).subscribe({
+    const myForm = this.filterNullValues(this.addUserForm);
+    const formData = new FormData();
+    Object.keys(myForm).forEach((key) => {
+      const value = this.addUserForm.get(key)?.value;
+      formData.append(key, value);
+    });
+    this.dashboardService.createAccount(formData).subscribe({
       next: ({ statusCode, message, errors }) => {
         if (statusCode === 200) {
-          alert('done');
-          this.casheService.clearCache();
-          this.selectedCamp = '';
-          this.formDir.resetForm();
+          this.toastr.success(message);
+          this.addUserForm.reset();
           this.isLoading = false;
-        } else if (errors) {
-          this.error = errors;
+          this.submitted = false;
+        } else if (statusCode === 400) {
+          this.toastr.error(message);
           this.isLoading = false;
-
-          console.log(errors);
-          alert(errors);
+        } else if (statusCode === 500) {
+          this.toastr.warning(message);
+          this.isLoading = false;
         } else {
-          alert(message);
+          errors.forEach((error: any) => {
+            this.toastr.error(error);
+          });
           this.isLoading = false;
         }
       },
@@ -158,6 +127,16 @@ export class AddUserComponent implements OnInit {
       },
     });
   }
+  displayFormErrors() {
+    Object.keys(this.addUserForm.controls).forEach((field) => {
+      const control = this.addUserForm.get(field);
+      if (control?.invalid) {
+        if (control.errors?.['required']) {
+          this.toastr.error(`${field} is required`);
+        }
+      }
+    });
+  }
 
   onFileSelected(event: any): void {
     this.imgFile = event.target.files[0];
@@ -165,57 +144,12 @@ export class AddUserComponent implements OnInit {
   }
 
   getRole(role: any): void {
-    this.selectedRole = role.name;
-    if (
-      this.selectedRole === 'Trainee' ||
-      this.selectedRole === 'Head_Of_Camp'
-    ) {
+    if (role.name === 'Trainee' || role.name === 'Head_Of_Camp') {
       this.isShow = true;
     } else {
       this.isShow = false;
-      this.selectedCamp = '';
-      this.addUserForm.get('campId')?.setValue('');
-    }
-  }
-
-  showCampsWhenFocus(): void {
-    if (
-      this.selectedRole === 'Trainee' ||
-      this.selectedRole === 'Head_Of_Camp'
-    ) {
-      this.isShow = true;
-    } else {
-      this.isShow = false;
-
       this.addUserForm.get('campId')?.setValue(null);
     }
-    this.foucsRole = true;
-  }
-  hideCampsWhenblur(event: any): void {
-    let isTrusted = event.isTrusted;
-    if (!this.selectedCamp) {
-      isTrusted = false;
-    } else if (this.selectedCamp === this.selectedCamp) {
-      this.isShow = true;
-      isTrusted = true;
-    } else {
-      this.isShow = false;
-      isTrusted = false;
-    }
-    this.foucsRole = false;
-  }
-
-  handleSelectCollege(item: any) {
-    this.selectedCollege = item.id;
-    if (item.id) {
-      this.foucsCollege = false;
-    }
-  }
-
-  getCampId(camp: any): void {
-    this.selectedCamp = camp.name;
-    this.addUserForm.get('campId')?.setValue(camp.id);
-    this.isShow = false;
   }
 
   fetchAllRoles(): void {
@@ -247,30 +181,41 @@ export class AddUserComponent implements OnInit {
     });
   }
 
-  toggleDropdownC(collegeSelect: NgSelectComponent) {
+  toggleDropdownC() {
     if (this.foucsCollege) {
-      collegeSelect.close();
+      this.collegeSelect.close();
     } else {
-      collegeSelect.open();
+      this.collegeSelect.open();
     }
     this.foucsCollege = !this.foucsCollege;
   }
-  toggleDropdownR(roleSelect: NgSelectComponent) {
+  toggleDropdownR() {
     if (this.foucsRole) {
-      roleSelect.close();
+      this.roleSelect.close();
     } else {
-      roleSelect.open();
+      this.roleSelect.open();
     }
     this.foucsRole = !this.foucsRole;
   }
+  toggleDropdownCamp() {
+    if (this.foucsCamp) {
+      this.campSelect.close();
+    } else {
+      this.campSelect.open();
+    }
+    this.foucsCamp = !this.foucsCamp;
+  }
 
   @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
+  onClickOutside() {
     if (this.collegeSelect.dropdownPanel === undefined) {
       this.foucsCollege = false;
     }
     if (this.roleSelect.dropdownPanel === undefined) {
       this.foucsRole = false;
+    }
+    if (this.campSelect?.dropdownPanel === undefined) {
+      this.foucsCamp = false;
     }
   }
 }
