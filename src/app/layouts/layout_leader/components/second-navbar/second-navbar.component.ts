@@ -49,6 +49,7 @@ export class SecondNavbarComponent implements OnInit {
   openNotification(): void {
     this.childComponent.allNotification = [];
     this.childComponent.currentPage = 1;
+    this.isShow = false;
     this.isOpenNotification = !this.isOpenNotification;
     if (this.isOpenNotification) {
       this.childComponent.getAllNotifications(
@@ -74,7 +75,11 @@ export class SecondNavbarComponent implements OnInit {
 
   loadRoles(): void {
     const storedData = JSON.parse(localStorage.getItem('CURRENT_USER') || '{}');
-    this.roles = storedData.roles || [];
+    const customOrder = ['Leader', 'Head_Of_Camp', 'Mentor', 'Trainee'];
+    this.roles =
+      storedData.roles.sort(
+        (a: any, b: any) => customOrder.indexOf(a) - customOrder.indexOf(b)
+      ) || [];
     this.cdr.detectChanges();
   }
 
@@ -90,13 +95,15 @@ export class SecondNavbarComponent implements OnInit {
 
   showRoles() {
     this.isShow = !this.isShow;
+    this.isOpenNotification = false;
   }
 
   @HostListener('document:click', ['$event.target'])
   public onClick(targetElement: HTMLElement): void {
     const clickedInside = this.elementRef.nativeElement.contains(targetElement);
-    if (!clickedInside && this.isShow) {
+    if (!clickedInside && (this.isShow || this.isOpenNotification)) {
       this.isShow = false;
+      this.isOpenNotification = false;
     }
   }
 

@@ -11,6 +11,7 @@ import { DashboardService } from '../../services/dashboard.service';
 import { dashboardFeedbacks, traineesAnalysis } from '../../model/dashboard';
 import { TestimonialComponent } from '../../Components/testimonial/testimonial.component';
 import { RouterLink } from '@angular/router';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,7 @@ import { RouterLink } from '@angular/router';
     ChartDashboardComponent,
     NgClass,
     RouterLink,
+    ToastrModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -28,6 +30,7 @@ import { RouterLink } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
   dashboardService = inject(DashboardService);
+  toastr = inject(ToastrService);
   isLoading = signal<boolean>(false);
   traineesCount: number = 0;
   malesCount: number = 0;

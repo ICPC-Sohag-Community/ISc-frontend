@@ -249,6 +249,12 @@ export class DashboardChartsHocComponent implements OnInit, AfterViewInit {
             beginAtZero: true,
             ticks: {
               stepSize: 25,
+              callback: (tickValue: string | number) => {
+                if (typeof tickValue === 'number') {
+                  return `${tickValue}%`;
+                }
+                return tickValue;
+              },
             },
           },
         },
@@ -257,7 +263,12 @@ export class DashboardChartsHocComponent implements OnInit, AfterViewInit {
             display: false,
           },
           tooltip: {
-            enabled: true,
+            callbacks: {
+              label: (context: any) => {
+                let value = context.raw;
+                return `${Math.round(value)}%`;
+              },
+            },
           },
         },
       },
@@ -305,10 +316,9 @@ export class DashboardChartsHocComponent implements OnInit, AfterViewInit {
           y: {
             beginAtZero: true,
             ticks: {
-              stepSize: 25,
               callback: (tickValue: string | number) => {
                 if (typeof tickValue === 'number') {
-                  return `${tickValue}%`;
+                  return `${Math.round(tickValue)}%`;
                 }
                 return tickValue;
               },
@@ -323,7 +333,7 @@ export class DashboardChartsHocComponent implements OnInit, AfterViewInit {
             callbacks: {
               label: (context: any) => {
                 let value = context.raw;
-                return `${value}%`;
+                return `${Math.round(value)}%`;
               },
             },
           },

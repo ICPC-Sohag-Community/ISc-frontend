@@ -391,7 +391,15 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Codeforces:</span>
-          <span>{{ onetraineeArchiveInfo.codeForceHandle }}</span>
+          <a
+            [href]="
+              'https://codeforces.com/profile/' +
+              onetraineeArchiveInfo.codeForceHandle
+            "
+            target="_blank"
+            class="hover:text-activeLink"
+            >{{ onetraineeArchiveInfo.codeForceHandle }}</a
+          >
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg
@@ -738,7 +746,15 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Codeforces:</span>
-          <span>{{ onestaffArchiveInfo.codeForceHandle }}</span>
+          <a
+            [href]="
+              'https://codeforces.com/profile/' +
+              onestaffArchiveInfo.codeForceHandle
+            "
+            target="_blank"
+            class="hover:text-activeLink"
+            >{{ onestaffArchiveInfo.codeForceHandle }}</a
+          >
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg

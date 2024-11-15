@@ -19,11 +19,18 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { ContestsHocService } from '../../services/contests-hoc.service';
 import { CasheService } from '../../../../shared/services/cashe.service';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-actions-contests',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, NgSelectModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    ToastrModule,
+    NgClass,
+    NgSelectModule,
+    RouterLink,
+  ],
   templateUrl: './actions-contests.component.html',
   styleUrl: './actions-contests.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -31,18 +38,18 @@ import { CasheService } from '../../../../shared/services/cashe.service';
 export class ActionsContestsComponent implements OnInit {
   contestsHocService = inject(ContestsHocService);
   casheService = inject(CasheService);
+  toastr = inject(ToastrService);
   fb = inject(FormBuilder);
   router = inject(Router);
   route = inject(ActivatedRoute);
   @ViewChild('community') community!: NgSelectComponent;
+  @ViewChild('judge') judge!: NgSelectComponent;
   foucsTerm: boolean = false;
+  foucsJ: boolean = false;
   id: number = 0;
   submitted: boolean = false;
   isLoading: boolean = false;
   contestForm!: FormGroup;
-  errorMessages: any = [];
-  errorMessage: string = '';
-  successMessage: string = '';
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -56,8 +63,9 @@ export class ActionsContestsComponent implements OnInit {
       name: [null, [Validators.required]],
       link: [null, [Validators.required]],
       community: [null, [Validators.required]],
+      judgeType: [null, [Validators.required]],
       problemCount: [0, this.positiveNumberValidator],
-      codeForceId: [null, [Validators.required]],
+      onlineId: [null, [Validators.required]],
       chiefOfContest: [null, [Validators.required]],
       endTime: [null, [Validators.required]],
       startTime: [null, [Validators.required]],
@@ -98,8 +106,9 @@ export class ActionsContestsComponent implements OnInit {
             startTime: data.startTime,
             endTime: data.endTime,
             community: data.community,
+            judgeType: data.judgeType,
             chiefOfContest: data.chiefOfContest,
-            codeForceId: data.codeForceId,
+            onlineId: data.onlineId,
             problemCount: data.problemCount,
           });
         } else {
@@ -112,7 +121,7 @@ export class ActionsContestsComponent implements OnInit {
   actionsContext(): void {
     this.submitted = true;
     if (this.contestForm.invalid) {
-      console.log('error');
+      this.displayFormErrors();
       return;
     }
     this.isLoading = true;
@@ -120,17 +129,21 @@ export class ActionsContestsComponent implements OnInit {
       this.contestsHocService.createContest(this.contestForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
-            this.errorMessage = '';
-            this.successMessage = message;
+            this.toastr.success(message);
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/contests']);
             this.isLoading = false;
           } else if (statusCode === 400) {
-            this.successMessage = '';
-            this.errorMessage = message;
+            this.toastr.error(message);
+
+            this.isLoading = false;
+          } else if (statusCode === 500) {
+            this.toastr.warning(message);
             this.isLoading = false;
           } else {
-            this.handleApiErrors(errors);
+            errors.forEach((error: any) => {
+              this.toastr.error(error);
+            });
             this.isLoading = false;
           }
         },
@@ -143,17 +156,21 @@ export class ActionsContestsComponent implements OnInit {
       this.contestsHocService.updateContest(this.contestForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
-            this.errorMessage = '';
-            this.successMessage = message;
+            this.toastr.success(message);
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/contests']);
             this.isLoading = false;
           } else if (statusCode === 400) {
-            this.successMessage = '';
-            this.errorMessage = message;
+            this.toastr.error(message);
+
+            this.isLoading = false;
+          } else if (statusCode === 500) {
+            this.toastr.warning(message);
             this.isLoading = false;
           } else {
-            this.handleApiErrors(errors);
+            errors.forEach((error: any) => {
+              this.toastr.error(error);
+            });
             this.isLoading = false;
           }
         },
@@ -165,55 +182,40 @@ export class ActionsContestsComponent implements OnInit {
     }
   }
 
-  removeErrorM() {
-    this.errorMessage = '';
-  }
-
-  handleApiErrors(errors: any) {
-    this.errorMessages = [];
-    if (errors) {
-      this.errorMessages = errors;
-    } else {
-      this.errorMessages.push(
-        'An unknown error occurred. Please try again later.'
-      );
-    }
-    this.errorMessages.forEach((error: any, index: number) => {
-      setTimeout(() => {
-        this.removeError(index);
-      }, 3000);
-    });
-  }
-
-  removeError(index: number) {
-    this.errorMessages.splice(index, 1);
-  }
-
   displayFormErrors() {
-    this.errorMessages = [];
-
     Object.keys(this.contestForm.controls).forEach((field) => {
       const control = this.contestForm.get(field);
-
       if (control?.invalid) {
         if (control.errors?.['required']) {
-          this.errorMessages.push(`${field} is required`);
+          this.toastr.error(`${field} is required`);
         }
       }
     });
-    this.errorMessages.forEach((error: any, index: number) => {
-      setTimeout(() => {
-        this.removeError(index);
-      }, 3000);
-    });
+  }
+  @HostListener('document:click', ['$event'])
+  onClickOutside() {
+    if (this.community.dropdownPanel === undefined) {
+      this.foucsTerm = false;
+    }
+    if (this.judge.dropdownPanel === undefined) {
+      this.foucsJ = false;
+    }
   }
 
-  toggleDropdownC(community: NgSelectComponent) {
+  toggleDropdownC() {
     if (this.foucsTerm) {
-      community.close();
+      this.community.close();
     } else {
-      community.open();
+      this.community.open();
     }
     this.foucsTerm = !this.foucsTerm;
+  }
+  toggleDropdownJ() {
+    if (this.foucsJ) {
+      this.judge.close();
+    } else {
+      this.judge.open();
+    }
+    this.foucsJ = !this.foucsJ;
   }
 }

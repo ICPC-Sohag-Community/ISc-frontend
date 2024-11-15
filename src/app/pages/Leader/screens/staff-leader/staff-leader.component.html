@@ -324,7 +324,16 @@
           </svg>
 
           <span class="text-[#EEEEEE]">Codeforces:</span>
-          <span>{{ staffInfo.codeForceHandle }}</span>
+          <span>
+            <a
+              [href]="
+                'https://codeforces.com/profile/' + staffInfo.codeForceHandle
+              "
+              target="_blank"
+              class="hover:text-activeLink"
+              >{{ staffInfo.codeForceHandle }}</a
+            >
+          </span>
         </div>
         <div class="flex items-center mb-4 gap-x-2">
           <svg

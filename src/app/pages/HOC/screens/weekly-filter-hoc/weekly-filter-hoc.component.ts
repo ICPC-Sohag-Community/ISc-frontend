@@ -4,17 +4,19 @@ import { WeeklyFilterService } from '../../services/weekly-filter.service';
 import { CasheService } from '../../../../shared/services/cashe.service';
 import { UsersOther, UsersWeekly } from '../../model/weekly';
 import { ConfirmDeleteHocComponent } from '../../components/confirm-delete-hoc/confirm-delete-hoc.component';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-weekly-filter-hoc',
   standalone: true,
-  imports: [NgClass, ConfirmDeleteHocComponent],
+  imports: [NgClass, ConfirmDeleteHocComponent, ToastrModule],
   templateUrl: './weekly-filter-hoc.component.html',
   styleUrl: './weekly-filter-hoc.component.scss',
 })
 export class WeeklyFilterHOCComponent implements OnInit {
   weeklyFilterService = inject(WeeklyFilterService);
   casheService = inject(CasheService);
+  toastr = inject(ToastrService);
   filterData!: UsersWeekly[];
   otherData!: UsersOther[];
   isLoading = signal<boolean>(false);
@@ -100,25 +102,16 @@ export class WeeklyFilterHOCComponent implements OnInit {
     this.weeklyFilterService.filterTrainees(selectedIds).subscribe({
       next: ({ statusCode, message }) => {
         if (statusCode === 200) {
-          this.filterData = this.filterData.filter((user) =>
-            this.selectedUsers.has(user.id)
+          this.filterData = this.filterData.filter(
+            (user) => !this.selectedUsers.has(user.id)
           );
-          this.errorMessage = '';
-          this.successMessage = message;
+          this.toastr.success(message);
           this.selectedUsers.clear();
           this.casheService.clearCache();
-          setTimeout(() => {
-            this.errorMessage = '';
-            this.successMessage = '';
-          }, 3000);
+
           this.isLoadingConfirm.update((v) => (v = false));
         } else {
-          this.successMessage = '';
-          this.errorMessage = message;
-          setTimeout(() => {
-            this.errorMessage = '';
-            this.successMessage = '';
-          }, 3000);
+          this.toastr.error(message);
           this.isLoadingConfirm.update((v) => (v = false));
         }
       },
@@ -129,10 +122,6 @@ export class WeeklyFilterHOCComponent implements OnInit {
     });
   }
 
-  removeErrorM() {
-    this.errorMessage = '';
-    this.successMessage = '';
-  }
   showConfirmDelete(id: string) {
     this.selectedItemId = id;
     this.showModal = true;

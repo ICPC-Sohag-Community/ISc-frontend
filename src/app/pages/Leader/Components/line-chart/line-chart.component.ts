@@ -31,7 +31,6 @@ export class LineChartComponent implements OnChanges, AfterViewInit, OnDestroy {
     this.renderChart();
   }
   ngOnChanges(changes: SimpleChanges): void {
-    // Only attempt to render the chart if the view is initialized
     if (this.isViewInitialized && changes['contestRates']) {
       this.renderChart();
     }
@@ -41,8 +40,6 @@ export class LineChartComponent implements OnChanges, AfterViewInit, OnDestroy {
       console.error('Canvas element is not available.');
       return;
     }
-
-    // Destroy previous chart instance if it exists
     if (this.chart) {
       this.chart.destroy();
     }
