@@ -18,11 +18,18 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { SheetsHOCService } from '../../services/sheets-hoc.service';
 import { CasheService } from '../../../../shared/services/cashe.service';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-actions-sheets',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSelectModule, NgClass, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    ToastrModule,
+    NgSelectModule,
+    NgClass,
+    RouterLink,
+  ],
   templateUrl: './actions-sheets.component.html',
   styleUrl: './actions-sheets.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -34,6 +41,7 @@ export class ActionsSheetsComponent implements OnInit {
   elementRef = inject(ElementRef);
   router = inject(Router);
   route = inject(ActivatedRoute);
+  toastr = inject(ToastrService);
   @ViewChild('community') community!: NgSelectComponent;
   @ViewChild('status') status!: NgSelectComponent;
   @ViewChild('judge') judge!: NgSelectComponent;
@@ -43,9 +51,6 @@ export class ActionsSheetsComponent implements OnInit {
   sheetForm!: FormGroup;
   submitted: boolean = false;
   isLoading: boolean = false;
-  errorMessages: any = [];
-  errorMessage: string = '';
-  successMessage: string = '';
 
   id: number = 0;
   ngOnInit() {
@@ -99,7 +104,7 @@ export class ActionsSheetsComponent implements OnInit {
   actionsSheet(): void {
     this.submitted = true;
     if (this.sheetForm.invalid) {
-      console.log('error');
+      this.displayFormErrors();
       return;
     }
     this.isLoading = true;
@@ -107,25 +112,20 @@ export class ActionsSheetsComponent implements OnInit {
       this.sheetsHOCService.createSheet(this.sheetForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
-            this.errorMessage = '';
-            this.successMessage = message;
+            this.toastr.success(message);
             this.isLoading = false;
             this.casheService.clearCache();
-            setTimeout(() => {
-              this.errorMessage = '';
-              this.successMessage = '';
-            }, 3000);
             this.router.navigate(['/head_of_camp/sheets']);
           } else if (statusCode === 400) {
-            this.successMessage = '';
-            this.errorMessage = message;
+            this.toastr.error(message);
             this.isLoading = false;
-            setTimeout(() => {
-              this.errorMessage = '';
-              this.successMessage = '';
-            }, 3000);
+          } else if (statusCode === 500) {
+            this.toastr.warning(message);
+            this.isLoading = false;
           } else {
-            this.handleApiErrors(errors);
+            errors.forEach((error: any) => {
+              this.toastr.error(error);
+            });
             this.isLoading = false;
           }
         },
@@ -138,25 +138,20 @@ export class ActionsSheetsComponent implements OnInit {
       this.sheetsHOCService.updateSheet(this.sheetForm.value).subscribe({
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
-            this.errorMessage = '';
-            this.successMessage = message;
+            this.toastr.success(message);
             this.isLoading = false;
             this.casheService.clearCache();
             this.router.navigate(['/head_of_camp/sheets']);
-            setTimeout(() => {
-              this.errorMessage = '';
-              this.successMessage = '';
-            }, 3000);
           } else if (statusCode === 400) {
-            this.successMessage = '';
-            this.errorMessage = message;
+            this.toastr.error(message);
             this.isLoading = false;
-            setTimeout(() => {
-              this.errorMessage = '';
-              this.successMessage = '';
-            }, 3000);
+          } else if (statusCode === 500) {
+            this.toastr.warning(message);
+            this.isLoading = false;
           } else {
-            this.handleApiErrors(errors);
+            errors.forEach((error: any) => {
+              this.toastr.error(error);
+            });
             this.isLoading = false;
           }
         },
@@ -168,45 +163,14 @@ export class ActionsSheetsComponent implements OnInit {
     }
   }
 
-  removeErrorM() {
-    this.errorMessage = '';
-    this.successMessage = '';
-  }
-
-  handleApiErrors(errors: any) {
-    this.errorMessages = [];
-    if (errors) {
-      this.errorMessages = errors;
-    } else {
-      this.errorMessages.push(
-        'An unknown error occurred. Please try again later.'
-      );
-    }
-    this.errorMessages.forEach((error: any, index: number) => {
-      setTimeout(() => {
-        this.removeError(index);
-      }, 3000);
-    });
-  }
-
-  removeError(index: number) {
-    this.errorMessages.splice(index, 1);
-  }
-
   displayFormErrors() {
-    this.errorMessages = [];
     Object.keys(this.sheetForm.controls).forEach((field) => {
       const control = this.sheetForm.get(field);
       if (control?.invalid) {
         if (control.errors?.['required']) {
-          this.errorMessages.push(`${field} is required`);
+          this.toastr.error(`${field} is required`);
         }
       }
-    });
-    this.errorMessages.forEach((error: any, index: number) => {
-      setTimeout(() => {
-        this.removeError(index);
-      }, 3000);
     });
   }
 

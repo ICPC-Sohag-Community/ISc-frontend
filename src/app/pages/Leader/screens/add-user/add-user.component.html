@@ -10,7 +10,6 @@
           <input
             type="text"
             id="firstName"
-            #formControl
             name="firstName"
             formControlName="firstName"
             [ngClass]="
@@ -47,7 +46,6 @@
             type="text"
             id="lastName"
             name="lastName"
-            #formControl
             formControlName="lastName"
             [ngClass]="
               addUserForm.controls['lastName'].errors && submitted
@@ -68,7 +66,6 @@
             type="date"
             id="birthDate"
             name="birthDate"
-            #formControl
             formControlName="birthDate"
             [ngClass]="
               addUserForm.controls['birthDate'].errors && submitted
@@ -86,7 +83,6 @@
             type="text"
             id="nationalId"
             name="nationalId"
-            #formControl
             formControlName="nationalId"
             [ngClass]="
               addUserForm.controls['nationalId'].errors && submitted
@@ -177,7 +173,6 @@
                 id="male"
                 name="gender"
                 value="0"
-                #formControl
                 [ngClass]="
                   addUserForm.controls['gender'].errors && submitted
                     ? 'border-rose-600 '
@@ -211,7 +206,6 @@
             id="email"
             name="email"
             formControlName="email"
-            #formControl
             [ngClass]="
               addUserForm.controls['email'].errors && submitted
                 ? 'border-rose-600 '
@@ -229,7 +223,6 @@
             id="phoneNumber"
             name="phoneNumber"
             formControlName="phoneNumber"
-            #formControl
             [ngClass]="
               addUserForm.controls['phoneNumber'].errors && submitted
                 ? 'border-rose-600'
@@ -257,8 +250,7 @@
               bindLabel="name"
               bindValue="id"
               formControlName="college"
-              #formControl
-              (click)="toggleDropdownC(collegeSelect)"
+              (click)="toggleDropdownC()"
               [ngClass]="
                 addUserForm.controls['college'].errors && submitted
                   ? 'border-rose-600 '
@@ -268,7 +260,7 @@
             >
             </ng-select>
             <svg
-              (click)="toggleDropdownC(collegeSelect)"
+              (click)="toggleDropdownC()"
               width="24"
               height="24"
               [ngClass]="foucsCollege ? 'rotate-180' : ''"
@@ -305,7 +297,6 @@
                 type="radio"
                 id="1"
                 name="grade"
-                #formControl
                 value="1"
                 formControlName="grade"
               />
@@ -315,7 +306,6 @@
               <input
                 type="radio"
                 id="2"
-                #formControl
                 name="grade"
                 value="2"
                 formControlName="grade"
@@ -327,7 +317,6 @@
                 type="radio"
                 id="3"
                 name="grade"
-                #formControl
                 value="3"
                 formControlName="grade"
               />
@@ -372,11 +361,8 @@
                 bindLabel="name"
                 bindValue="name"
                 formControlName="role"
-                #formControl
                 (change)="getRole($event)"
-                (focus)="showCampsWhenFocus()"
-                (blur)="hideCampsWhenblur($event)"
-                (click)="toggleDropdownR(roleSelect)"
+                (click)="toggleDropdownR()"
                 [ngClass]="
                   addUserForm.controls['role'].errors && submitted
                     ? 'border-rose-600'
@@ -386,7 +372,7 @@
               >
               </ng-select>
               <svg
-                (click)="toggleDropdownR(roleSelect)"
+                (click)="toggleDropdownR()"
                 width="24"
                 height="24"
                 [ngClass]="foucsRole ? 'rotate-180' : ''"
@@ -405,42 +391,54 @@
                 />
               </svg>
             </div>
-            @if (selectedCamp) {
-
-            <span class="text-sm w-fit campName">{{ selectedCamp }}</span>
-            }
           </div>
         </div>
-        <div class="flex flex-col basis-1/3">
-          <div
-            [ngClass]="isShow ? 'block' : 'hidden'"
-            class="absolute z-50 mt-2 overflow-y-auto text-black transition-all duration-500 bg-white border border-gray-200 rounded-lg shadow-lg max-h-52 custom-scrollbar w-fit"
-          >
-            <div
-              class="py-1 text-sm text-gray-700 ps-2 w-fit"
-              role="menu"
-              aria-orientation="vertical"
-              aria-labelledby="options-menu"
-            >
-              @for (item of allCamps; track item.id; let last = $last) {
 
-              <button
-                type="button"
-                (click)="getCampId(item)"
+        <div class="flex flex-col basis-1/3">
+          @if (isShow) {
+          <label for="camp">Camp <span class="text-red-600">*</span></label>
+          <div class="flex items-center gap-x-4">
+            <div class="relative">
+              <ng-select
+                #campSelect
+                [items]="allCamps"
+                [closeOnSelect]="false"
+                bindLabel="name"
+                bindValue="id"
+                formControlName="campId"
+                (click)="toggleDropdownCamp()"
                 [ngClass]="
-                  selectedCamp === item.name
-                    ? 'bg-activeLink text-white'
-                    : 'hover:text-activeLink'
+                  addUserForm.controls['campId'].errors && submitted
+                    ? 'border-rose-600'
+                    : ''
                 "
-                class="block w-full px-4 py-2 font-medium transition-colors border-b border-activeLink last:border-0 text-start"
-                role="menuitem"
+                class="relative block w-[250px] my-2 text-black bg-[#fff] border-2 rounded-lg appearance-none focus:outline-none"
               >
-                {{ item.name }}
-              </button>
-              }
+              </ng-select>
+              <svg
+                (click)="toggleDropdownCamp()"
+                width="24"
+                height="24"
+                [ngClass]="foucsCamp ? 'rotate-180' : ''"
+                class="absolute top-[14px] left-[220px] cursor-pointer transition-transform"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502"
+                  stroke="#A8A8A8"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
             </div>
           </div>
+          }
         </div>
+        <div class="flex flex-col basis-1/3"></div>
       </div>
     </div>
     <div class="flex flex-col mt-6 gap-y-4">
