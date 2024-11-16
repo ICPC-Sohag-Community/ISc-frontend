@@ -25,8 +25,13 @@
     </svg>
   </div>
   <div
+<<<<<<< HEAD
     id="nav"
     class="flex hidden md:w-auto text-center md:text-start absolute md:static top-[78px] left-5 rounded-lg md:py-0 py-2 md:bg-transparent bg-white flex-col md:flex md:flex-row gap-[20px] md:pl-[30px] md:pr-[0px] px-[30px] h-auto md:h-[72px] items-center lg:text-[20px] text-[16px] sections"
+=======
+  id="nav"
+    class="flex hidden md:w-auto  text-center md:text-start  absolute md:static top-[78px] left-5 rounded-lg md:py-0 py-2 md:bg-transparent bg-white flex-col md:flex md:flex-row gap-[20px] md:pl-[30px] md:pr-[0px]  px-[30px] h-auto md:h-[72px] items-center lg:text-[20px] text-[16px]  sections z-20"
+>>>>>>> 77b30255fa73459b60f1161067f22215ed052487
   >
     <a
       routerLink="/mentor/"
@@ -81,7 +86,11 @@
     </svg>
   </div>
   <div class="flex h-[72px] items-center lg:gap-3 gap-1 lg:mr-[25px] mr-[15px]">
+<<<<<<< HEAD
     <button (click)="openNotification()" class="hidden md:block">
+=======
+    <!-- <button class=" md:block hidden">
+>>>>>>> 77b30255fa73459b60f1161067f22215ed052487
       <svg
         width="24"
         height="24"
@@ -111,32 +120,47 @@
           stroke-miterlimit="10"
         />
       </svg>
-    </button>
-    <!-- <button>
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M12.1586 10.87C12.0586 10.86 11.9386 10.86 11.8286 10.87C9.44859 10.79 7.55859 8.84 7.55859 6.44C7.55859 3.99 9.53859 2 11.9986 2C14.4486 2 16.4386 3.99 16.4386 6.44C16.4286 8.84 14.5386 10.79 12.1586 10.87Z"
-          stroke="#0A0A0A"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M7.15875 14.56C4.73875 16.18 4.73875 18.82 7.15875 20.43C9.90875 22.27 14.4188 22.27 17.1688 20.43C19.5888 18.81 19.5888 16.17 17.1688 14.56C14.4288 12.73 9.91875 12.73 7.15875 14.56Z"
-          stroke="#0A0A0A"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-    />
-      </svg>
     </button> -->
-
+    <button
+    type="button"
+    (click)="openNotification()"
+    class=" md:block hidden"
+  >
+  <svg
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M12.0225 2.90967C8.71253 2.90967 6.02253 5.59967 6.02253 8.90967V11.7997C6.02253 12.4097 5.76253 13.3397 5.45253 13.8597L4.30253 15.7697C3.59253 16.9497 4.08253 18.2597 5.38253 18.6997C9.69253 20.1397 14.3425 20.1397 18.6525 18.6997C19.8625 18.2997 20.3925 16.8697 19.7325 15.7697L18.5825 13.8597C18.2825 13.3397 18.0225 12.4097 18.0225 11.7997V8.90967C18.0225 5.60967 15.3225 2.90967 12.0225 2.90967Z"
+    stroke="#0A0A0A"
+    stroke-width="1.6"
+    stroke-miterlimit="10"
+    stroke-linecap="round"
+  />
+  <path
+    d="M13.8719 3.1997C13.5619 3.1097 13.2419 3.0397 12.9119 2.9997C11.9519 2.8797 11.0319 2.9497 10.1719 3.1997C10.4619 2.4597 11.1819 1.9397 12.0219 1.9397C12.8619 1.9397 13.5819 2.4597 13.8719 3.1997Z"
+    stroke="#0A0A0A"
+    stroke-width="1.5"
+    stroke-miterlimit="10"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M15.0195 19.0603C15.0195 20.7103 13.6695 22.0603 12.0195 22.0603C11.1995 22.0603 10.4395 21.7203 9.89953 21.1803C9.35953 20.6403 9.01953 19.8803 9.01953 19.0603"
+    stroke="#0A0A0A"
+    stroke-width="1.6"
+    stroke-miterlimit="10"
+  />
+</svg>
+    @if (isAnewNotification) {
+    <span
+      class="absolute w-2 h-2 bg-red-600 rounded-full top-1.5 right-2.5"
+    ></span>
+    }
+  </button>
     <img
       (click)="goToProfile()"
       class="aspect-ratio-img"
@@ -152,36 +176,45 @@
       alt="Avatar"
       [routerLink]="['/mentor/profile']"
     />
+<<<<<<< HEAD
     <button class="block md:hidden">
+=======
+    <button class="md:hidden block" (click)="openNotification()" type="button">
+>>>>>>> 77b30255fa73459b60f1161067f22215ed052487
       <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M12.0225 2.90967C8.71253 2.90967 6.02253 5.59967 6.02253 8.90967V11.7997C6.02253 12.4097 5.76253 13.3397 5.45253 13.8597L4.30253 15.7697C3.59253 16.9497 4.08253 18.2597 5.38253 18.6997C9.69253 20.1397 14.3425 20.1397 18.6525 18.6997C19.8625 18.2997 20.3925 16.8697 19.7325 15.7697L18.5825 13.8597C18.2825 13.3397 18.0225 12.4097 18.0225 11.7997V8.90967C18.0225 5.60967 15.3225 2.90967 12.0225 2.90967Z"
-          stroke="#0A0A0A"
-          stroke-width="1.6"
-          stroke-miterlimit="10"
-          stroke-linecap="round"
-        />
-        <path
-          d="M13.8719 3.1997C13.5619 3.1097 13.2419 3.0397 12.9119 2.9997C11.9519 2.8797 11.0319 2.9497 10.1719 3.1997C10.4619 2.4597 11.1819 1.9397 12.0219 1.9397C12.8619 1.9397 13.5819 2.4597 13.8719 3.1997Z"
-          stroke="#0A0A0A"
-          stroke-width="1.5"
-          stroke-miterlimit="10"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M15.0195 19.0603C15.0195 20.7103 13.6695 22.0603 12.0195 22.0603C11.1995 22.0603 10.4395 21.7203 9.89953 21.1803C9.35953 20.6403 9.01953 19.8803 9.01953 19.0603"
-          stroke="#0A0A0A"
-          stroke-width="1.6"
-          stroke-miterlimit="10"
-        />
-      </svg>
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M12.0225 2.90967C8.71253 2.90967 6.02253 5.59967 6.02253 8.90967V11.7997C6.02253 12.4097 5.76253 13.3397 5.45253 13.8597L4.30253 15.7697C3.59253 16.9497 4.08253 18.2597 5.38253 18.6997C9.69253 20.1397 14.3425 20.1397 18.6525 18.6997C19.8625 18.2997 20.3925 16.8697 19.7325 15.7697L18.5825 13.8597C18.2825 13.3397 18.0225 12.4097 18.0225 11.7997V8.90967C18.0225 5.60967 15.3225 2.90967 12.0225 2.90967Z"
+    stroke="#0A0A0A"
+    stroke-width="1.6"
+    stroke-miterlimit="10"
+    stroke-linecap="round"
+  />
+  <path
+    d="M13.8719 3.1997C13.5619 3.1097 13.2419 3.0397 12.9119 2.9997C11.9519 2.8797 11.0319 2.9497 10.1719 3.1997C10.4619 2.4597 11.1819 1.9397 12.0219 1.9397C12.8619 1.9397 13.5819 2.4597 13.8719 3.1997Z"
+    stroke="#0A0A0A"
+    stroke-width="1.5"
+    stroke-miterlimit="10"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M15.0195 19.0603C15.0195 20.7103 13.6695 22.0603 12.0195 22.0603C11.1995 22.0603 10.4395 21.7203 9.89953 21.1803C9.35953 20.6403 9.01953 19.8803 9.01953 19.0603"
+    stroke="#0A0A0A"
+    stroke-width="1.6"
+    stroke-miterlimit="10"
+  />
+</svg>
+    @if (isAnewNotification) {
+    <span
+      class="absolute w-2 h-2 bg-red-600 rounded-full top-1.5 right-2.5"
+    ></span>
+    }
     </button>
     <div class="hidden md:block">
       <h2 class="text-base font-medium text-[#979797]">
@@ -260,8 +293,15 @@
     </button>
   </div>
 </nav>
+<<<<<<< HEAD
 
 <app-notification
   [isOpen]="isOpenNotification"
   [newNotificationCheck]="newNotificationCheck"
 />
+=======
+<div>
+  <app-notification [isOpen]="isOpenNotification" />
+</div>
+
+>>>>>>> 77b30255fa73459b60f1161067f22215ed052487
