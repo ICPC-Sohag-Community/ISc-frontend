@@ -35,7 +35,10 @@ export class MentornavComponent implements OnInit {
   openNotification(): void {
     this.childComponent.allNotification = [];
     this.childComponent.currentPage = 1;
+<<<<<<< HEAD
     this.isShow = false;
+=======
+>>>>>>> 77b30255fa73459b60f1161067f22215ed052487
     this.isOpenNotification = !this.isOpenNotification;
     if (this.isOpenNotification) {
       this.childComponent.getAllNotifications(
@@ -85,6 +88,8 @@ export class MentornavComponent implements OnInit {
     if (!target.closest('.drop')) {
       this.isShow = false;
     }
+    
+    
   }
   goSpecificRole(role: string): void {
     this.router.navigate(['/', role.toLowerCase()]);
