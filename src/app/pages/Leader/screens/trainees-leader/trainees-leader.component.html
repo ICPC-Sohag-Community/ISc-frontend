@@ -125,7 +125,16 @@
         </td>
         <td class="px-4 py-2">{{ item.email }}</td>
         <td class="px-4 py-2">{{ item.phoneNumber }}</td>
-        <td class="px-4 py-2">{{ item.codeForceHandle }}</td>
+        <td class="px-4 py-2">
+          <span>
+            <a
+              [href]="'https://codeforces.com/profile/' + item.codeForceHandle"
+              target="_blank"
+              class="hover:text-activeLink"
+              >{{ item.codeForceHandle }}</a
+            >
+          </span>
+        </td>
         <td
           (click)="showSideBar(item.id)"
           class="px-4 py-2 cursor-pointer rounded-e-lg"
