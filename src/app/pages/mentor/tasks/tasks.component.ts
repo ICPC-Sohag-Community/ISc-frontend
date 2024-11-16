@@ -1,9 +1,9 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { MentorHeaderComponent } from '../../../layouts/mentor/mentor-header/mentor-header.component';
 import { ResponseHeader } from '../../../shared/model/responseHeader';
 import { CommonModule } from '@angular/common';
 import { TasksService } from '../services/tasks.service';
-import { UtcToLocalPipe } from "../../../pipes/utc-to-local.pipe";
+import { UtcToLocalPipe } from '../../../pipes/utc-to-local.pipe';
 import { DatePickerComponent } from '../component/date-picker/date-picker.component';
 import { UtcDatePipe } from '../../../pipes/utc-date.pipe';
 import { FormsModule } from '@angular/forms';
@@ -11,159 +11,147 @@ import { FormsModule } from '@angular/forms';
 import { LocaltoutcPipe } from '../../../pipes/localtoutc.pipe';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TruncatePipe } from '../../../pipes/truncate.pipe';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [TruncatePipe,FormsModule,UtcDatePipe,MentorHeaderComponent,LocaltoutcPipe, CommonModule, UtcToLocalPipe,DatePickerComponent],
+  imports: [
+    TruncatePipe,
+    FormsModule,
+    UtcDatePipe,
+    MentorHeaderComponent,
+    LocaltoutcPipe,
+    CommonModule,
+    UtcToLocalPipe,
+    DatePickerComponent,
+    ToastrModule,
+  ],
   templateUrl: './tasks.component.html',
-  styleUrl: './tasks.component.scss'
+  styleUrl: './tasks.component.scss',
 })
 export class TasksComponent {
-  
-  id:any
+  toastr = inject(ToastrService);
+  id: any;
   // cancel(task : HTMLTextAreaElement){
   //   let x = this.ed.title;
   //   task.value = ''
   //   this.ed.title = x;
   //   this.show('edit');
   // }
-isLoading:boolean = false;
+  isLoading: boolean = false;
   showElement = true;
   formatDate(date: string | Date): string {
     // Convert the date to ISO format (YYYY-MM-DD)
     return new Date(date).toString().substring(0, 10);
   }
- 
-  updateTitle(data : any, dat:any , end:any): void {
-    this.errors= [];
+
+  updateTitle(data: any, dat: any, end: any): void {
+    this.errors = [];
     const dateObj = new Date();
     const date = new Date(dat.value);
     // Check if inputElement is not null and has a value
-  
-    let e:Date;
-    let s:Date;
+
+    let e: Date;
+    let s: Date;
     let task = {
-      "taskId": this.ed.taskId,
-      "title":  data.value,
-      "startTime":  '',
-      "endTime": '',
-      "traineeId":  this.ed.traineeId
-    }
-    if(!dat.value){
+      taskId: this.ed.taskId,
+      title: data.value,
+      startTime: '',
+      endTime: '',
+      traineeId: this.ed.traineeId,
+    };
+    if (!dat.value) {
       this.errors.push('Set Start Date');
-    
-    }
-    else{
+    } else {
       s = new Date(dat.value);
-      
-      
+
       task.startTime = dat.value;
     }
-    if(!end.value){
-      this.errors.push('Set End Date')
-    }
-    else{
+    if (!end.value) {
+      this.errors.push('Set End Date');
+    } else {
       e = new Date(end.value);
-      
-      
+
       task.endTime = end.value;
     }
-    if(dat.value && end.value){
-      this.serv.updTask(task).subscribe((d:ResponseHeader)=>{
+    if (dat.value && end.value) {
+      this.serv.updTask(task).subscribe((d: ResponseHeader) => {
         if (d.isSuccess) {
           this.ed.title = data.value;
-          this.ed.startTime =dat.value;
-          this.ed.endTime =  end.value;
-         
-            this.show('edit')
-          
-        }
-        else{
+          this.ed.startTime = dat.value;
+          this.ed.endTime = end.value;
+
+          this.show('edit');
+        } else {
           this.errors = [];
-        
-           for (const field in d.errors) {
-              if (d.errors.hasOwnProperty(field)) {
-                // Check if d.errors[field] is an array before using join
-                if (Array.isArray(d.errors[field])) {
-                  this.errors.push(` ${d.errors[field].join(', ')}`);
-                } else {
-                  this.errors.push(` ${d.errors[field]}`); // Directly push if not an array
-                }
+
+          for (const field in d.errors) {
+            if (d.errors.hasOwnProperty(field)) {
+              // Check if d.errors[field] is an array before using join
+              if (Array.isArray(d.errors[field])) {
+                this.errors.push(` ${d.errors[field].join(', ')}`);
+              } else {
+                this.errors.push(` ${d.errors[field]}`); // Directly push if not an array
               }
             }
+          }
         }
-      })
+      });
     }
-    
-    }
-  err:any[] = [];
-  errors:any = [];
-  async create(task: HTMLTextAreaElement, startTime: HTMLInputElement, endTime: HTMLInputElement) {
+  }
+  err: any[] = [];
+  errors: any = [];
+  create(
+    task: HTMLTextAreaElement,
+    startTime: HTMLInputElement,
+    endTime: HTMLInputElement
+  ) {
     let start: Date | null = null;
     let st: string | null = null;
     let end: Date | null = null;
     let en: string | null = null;
     this.crError = [];
-    let time:Date =  new Date();
+    let time: Date = new Date();
     let star = new Date(startTime.value);
     let endd = new Date(endTime.value);
     // Validate and convert input times if provided
-    if ( endTime.value) {
-     
-      
-    
-      if(endd< time){
+    if (endTime.value) {
+      if (endd < time) {
         this.crError.push('End Time Must Be in Future');
       }
       end = new Date(endTime.value);
       en = endTime.value; // Convert to string without 'Z'
+    } else {
+      this.crError.push('End Time Is Requiered');
     }
-    if (startTime.value ) {
+    if (startTime.value) {
       start = new Date(startTime.value);
-      st =startTime.value  // Convert to string without 'Z' .replace('Z', '')
+      st = startTime.value; // Convert to string without 'Z' .replace('Z', '')
       console.log(st);
-      
+
       // let meet = new Date(startTime.value);
-      if(star< time){
+      if (star < time) {
         this.crError.push('Start Time Must Be in Future');
       }
-    }
-    else{
+    } else {
       this.crError.push('Start Time Is Requiered');
     }
-     if(startTime.value && endTime.value){
-      if(star> endd){
+    if (startTime.value && endTime.value) {
+      if (star > endd) {
         this.crError.push('End Time Must Be Greater Than Start Time');
       }
-
-     }
-     else{
-      this.crError.push('End Time Is Requiered');
-
     }
-  
+
     // Prepare the base data for the task creation
     const baseData = {
-      title: task.value,
+      titles: this.taskNo,
       startTime: st,
       endTime: en,
       traineesIds: this.trainTask,
       campId: Number(localStorage.getItem('camp')),
     };
-  
-    // Use a Set to avoid duplicate error messages
-    // const errorSet = new Set<string>();
-  
-    // // Clear previous errors
-    // this.crError = [];
-  
-    // Track how many tasks were processed
-    let successfulTasks = 0;
-  
-    // Loop through the taskNo array and create each task
-    
-  
+
     // Check for missing trainees and tasks
     if (this.chars.length == 0) {
       this.crError.push('Please add at least one trainee');
@@ -171,260 +159,208 @@ isLoading:boolean = false;
     if (this.taskNo.length == 0) {
       this.crError.push('Add at least one task');
     }
-  
+
     // If there are any errors, add them to `this.crError`
     if (this.crError.length == 0) {
-      // this.crError = Array.from(errorSet);
-      for (let i = 0; i < this.taskNo.length; i++) {
-        if (this.taskNo[i] != null) {
-          // Prepare individual task data
-          const data = {
-            title: this.taskNo[i] ? this.taskNo[i] : '',
-            startTime: st ? st : '1970-01-01T00:00',
-            endTime: en ? en : '1970-01-01T00:00',
-            traineesIds: this.trainTask ? this.trainTask : '',
-            campId: Number(localStorage.getItem('camp')),
-          };
-    
-          // Await the response for each task
-          const response = await this.addTaskAsync(data);
-    
-          if (response.isSuccess) {
-            // Collect errors for this task and avoid duplicates
-            // for (const field in response.errors) {
-            //   if (response.errors.hasOwnProperty(field)) {
-            //     if (Array.isArray(response.errors[field])) {
-            //       response.errors[field].forEach((errMsg:any) => errorSet.add(`${errMsg}`));
-            //     } else {
-            //       errorSet.add(`${response.errors[field]}`);
-            //     }
-            //   }
-            // }
-            this.get(localStorage.getItem('camp'));
-      this.show('add');
-      this.taskNo = [];
-      this.chars = [];
-      this.trainTask = [];
+      console.log(baseData);
+      this.serv.addTask(baseData).subscribe({
+        next: ({ statusCode, data, message }) => {
+          if (statusCode === 200) {
+            this.toastr.success(message);
+            this.refreshRouterOutlet();
           } else {
-            successfulTasks++; // Increment successful task count
+            console.log('error');
           }
-        }
-      }
-    } else {
-      // If no errors, refresh data and reset state
-      // this.get(localStorage.getItem('camp'));
-      // this.show('add');
-      // this.taskNo = [];
-      // this.chars = [];
-      // this.trainTask = [];
-    }
-  }
-  
-  // Create a wrapper function for `addTask` to use with `await`
-  addTaskAsync(data: any): Promise<ResponseHeader> {
-    return new Promise((resolve) => {
-      if(this.crError.length == 0){
-        this.serv.addTask(data).subscribe((response: ResponseHeader) => {
-        resolve(response);
+        },
+        error: (err) => {
+          console.log(err);
+        },
       });
+    }
+  }
+
+  crError: any[] = [];
+  del(id: any) {
+    let data = {
+      taskId: id,
+    };
+
+    this.serv.del(id).subscribe((d: ResponseHeader) => {
+      if (d.isSuccess) {
+        document.getElementById('D' + id)?.remove();
+        this.refreshRouterOutlet();
       }
-      
     });
   }
-  
-  
-  
-crError: any[] = [];
-del(id:any){
-  let data = {
-    "taskId":id
-  }
-  
-  this.serv.del(id).subscribe((d:ResponseHeader)=>{
-    
-   if(d.isSuccess){
-    document.getElementById( 'D' + id)?.remove();
-    this.refreshRouterOutlet();
-   }
-  })
-}
-taskNo:any[] = [];
-onKeydown(event: KeyboardEvent, task: any) {
-  let v = task.value;
+  taskNo: any[] = [];
+  onKeydown(event: KeyboardEvent, task: any) {
+    let v = task.value;
 
-  // Check if the Enter key was pressed and the input is not just whitespace
-  if (event.key === 'Enter' && v.replace(/\s+/g, '') !== '' && !event.shiftKey)  {
-    event.preventDefault(); // Prevents default newline behavior in textarea or input
-    this.taskNo.push(task.value);
-    task.value = ''; // Clears the input
-  }
-}
-
-en(event: KeyboardEvent, task: any, val: any) {
-  // Check if the Enter key was pressed and the input is not just whitespace
-  if (event.key === 'Enter' && val.value.replace(/\s+/g, '') !== '' && !event.shiftKey) {
-    event.preventDefault(); // Prevents default newline behavior
-    this.enable('en' + task);
-    this.taskNo[task] = val.value;
-    val.value = ''; // Clears the input
-    
-  }
-}
-
-handleClick(event: Event) {
-  const element = event.target as HTMLElement;
-  if(element.id != 'names' && element.id != 'rel' && this.isShow){
-    this.show('names');
-    
-  }
-  event.stopPropagation();  
-  
-}
-handle(event: Event) {
-  
-  event.stopPropagation();  
-  
-}
-removeGrandparent(id:any, ind:any) {
- 
-  
-  const grandparent = this.getGrandparentElement(id);
-
-  if (grandparent) {
-    
-    this.taskNo.splice(ind, 1);
-  }
-  
-}
-
-getGrandparentElement(id:any): HTMLElement  {
-  // Traverse the DOM to find the grandparent
-  let element: any = document.getElementById(id);
-  if (element) {
-    // Traverse up two levels to find the grandparent
-    element = element.parentElement?.parentElement ;
-  }
-  return element;
-}
-chars:any[]=[];
-add(id: string,trainee: any, f:String , l:String) {
-  let e = document.getElementById(id);
-  e?.classList.toggle("hidden");
-  let char = f[0].toUpperCase() + l[0].toUpperCase();
- if( e?.classList.contains('hidden')){
-  this.trainTask = this.trainTask.filter(item => item !== trainee);
-  this.chars = this.chars.filter(item => item !== char);
- }
- else{
-  
-  if(!this.chars.includes('ALL')){
-    this.trainTask.push(trainee);
-    this.chars.push(char);
+    // Check if the Enter key was pressed and the input is not just whitespace
+    if (
+      event.key === 'Enter' &&
+      v.replace(/\s+/g, '') !== '' &&
+      !event.shiftKey
+    ) {
+      event.preventDefault(); // Prevents default newline behavior in textarea or input
+      this.taskNo.push(task.value);
+      task.value = ''; // Clears the input
+    }
   }
 
- }
- 
-}
-getFullPath(route: ActivatedRoute): string {
-  let path = route.snapshot.url.map(segment => segment.path).join('/');
-
-  // Recursively add paths from child routes if they exist
-  if (route.firstChild) {
-    path += '/' + this.getFullPath(route.firstChild);
+  en(event: KeyboardEvent, task: any, val: any) {
+    // Check if the Enter key was pressed and the input is not just whitespace
+    if (
+      event.key === 'Enter' &&
+      val.value.replace(/\s+/g, '') !== '' &&
+      !event.shiftKey
+    ) {
+      event.preventDefault(); // Prevents default newline behavior
+      this.enable('en' + task);
+      this.taskNo[task] = val.value;
+      val.value = ''; // Clears the input
+    }
   }
-  return path;
-}
- refreshRouterOutlet() {
-    this.router.navigateByUrl('/mentor/blank' , { skipLocationChange: true }).then(() => {
-      
-      this.router.navigate(['mentor/' + this.getFullPath(this.activatedRoute)]);
-    });
-  }
-  constructor(private serv : TasksService ,  private router: Router, private activatedRoute: ActivatedRoute){
 
-   if(localStorage.getItem("camp")){
-      this.get(localStorage.getItem("camp"));
-      this.train(localStorage.getItem("camp"));
+  handleClick(event: Event) {
+    const element = event.target as HTMLElement;
+    if (element.id != 'names' && element.id != 'rel' && this.isShow) {
+      this.show('names');
+    }
+    event.stopPropagation();
+  }
+  handle(event: Event) {
+    event.stopPropagation();
+  }
+  removeGrandparent(id: any, ind: any) {
+    const grandparent = this.getGrandparentElement(id);
+
+    if (grandparent) {
+      this.taskNo.splice(ind, 1);
+    }
+  }
+
+  getGrandparentElement(id: any): HTMLElement {
+    // Traverse the DOM to find the grandparent
+    let element: any = document.getElementById(id);
+    if (element) {
+      // Traverse up two levels to find the grandparent
+      element = element.parentElement?.parentElement;
+    }
+    return element;
+  }
+  chars: any[] = [];
+  add(id: string, trainee: any, f: String, l: String) {
+    let e = document.getElementById(id);
+    e?.classList.toggle('hidden');
+    let char = f[0].toUpperCase() + l[0].toUpperCase();
+    if (e?.classList.contains('hidden')) {
+      this.trainTask = this.trainTask.filter((item) => item !== trainee);
+      this.chars = this.chars.filter((item) => item !== char);
+    } else {
+      if (!this.chars.includes('ALL')) {
+        this.trainTask.push(trainee);
+        this.chars.push(char);
+      }
+    }
+  }
+  getFullPath(route: ActivatedRoute): string {
+    let path = route.snapshot.url.map((segment) => segment.path).join('/');
+
+    // Recursively add paths from child routes if they exist
+    if (route.firstChild) {
+      path += '/' + this.getFullPath(route.firstChild);
+    }
+    return path;
+  }
+  refreshRouterOutlet() {
+    this.router
+      .navigateByUrl('/mentor/blank', { skipLocationChange: true })
+      .then(() => {
+        this.router.navigate([
+          'mentor/' + this.getFullPath(this.activatedRoute),
+        ]);
+      });
+  }
+  constructor(
+    private serv: TasksService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {
+    if (localStorage.getItem('camp')) {
+      this.get(localStorage.getItem('camp'));
+      this.train(localStorage.getItem('camp'));
       this.assig();
-      this.id = 1
-      
-    }
-    else{
+      this.id = 1;
+    } else {
       this.tasks = null;
-      this.id = null
+      this.id = null;
     }
-    
   }
-  trainTask:any[] = [];
+  trainTask: any[] = [];
   tasks: any = {};
-  assign:any;
-  assig(){
-    this.serv.getAssign(localStorage.getItem("camp")).subscribe((d:ResponseHeader)=>{
-      this.assign = d.data;
-      
-    })
+  assign: any;
+  assig() {
+    this.serv
+      .getAssign(localStorage.getItem('camp'))
+      .subscribe((d: ResponseHeader) => {
+        this.assign = d.data;
+      });
   }
-  trainee: any ;
+  trainee: any;
   selArr = false;
-  show(id:string){
+  show(id: string) {
     this.err = [];
     this.crError = [];
     this.errors = [];
-    document.getElementById(id)?.classList.toggle("hidden");
-    if(id == "names"){
-
-      this.isShow = !this.isShow
+    document.getElementById(id)?.classList.toggle('hidden');
+    if (id == 'names') {
+      this.isShow = !this.isShow;
     }
-    if(id == "select"){
-
+    if (id == 'select') {
       this.selArr = !this.selArr;
     }
-    if(id == 'add'){
-      document.getElementById('names')?.classList.add("hidden");
+    if (id == 'add') {
+      document.getElementById('names')?.classList.add('hidden');
       this.isShow = false;
-      
     }
   }
-  get(id:any){
+  get(id: any) {
     this.isLoading = true;
-    if(id != null){
-      this.serv.getData(id).subscribe((d:ResponseHeader)=>{
+    if (id != null) {
+      this.serv.getData(id).subscribe((d: ResponseHeader) => {
         this.tasks = d.data;
-        
-        this.isLoading = false;
 
-      })
+        this.isLoading = false;
+      });
     }
   }
-  train(id:any){
+  train(id: any) {
     this.isLoading = true;
-    if(id != null){
-      this.serv.trainees(id).subscribe((d:ResponseHeader)=>{
+    if (id != null) {
+      this.serv.trainees(id).subscribe((d: ResponseHeader) => {
         this.trainee = d.data;
         this.isLoading = false;
-      })
+      });
     }
   }
   isShow = false;
-  enable(id:any){
-    
-      document.getElementById(id)?.removeAttribute("disabled");
-    
-    
+  enable(id: any) {
+    document.getElementById(id)?.removeAttribute('disabled');
   }
-  ed={
-    "traineeId": "string",
-    "taskId": 0,
-    "firstName": "string",
-    "middleName": "string",
-    "lastName": "string",
-    "photoUrl": null,
-    "title": "string",
-    "startTime": "2024-09-09T22:58:58.793Z",
-    "endTime": "2024-09-09T22:58:58.793Z",
-  }
-  edit(data:any){
-    this.ed=data;
+  ed = {
+    traineeId: 'string',
+    taskId: 0,
+    firstName: 'string',
+    middleName: 'string',
+    lastName: 'string',
+    photoUrl: null,
+    title: 'string',
+    startTime: '2024-09-09T22:58:58.793Z',
+    endTime: '2024-09-09T22:58:58.793Z',
+  };
+  edit(data: any) {
+    this.ed = data;
     this.ed.taskId = data.id;
     this.ed.title = data.title;
     // this.ed = {
@@ -435,77 +371,68 @@ getFullPath(route: ActivatedRoute): string {
     //   "traineeId":  data.traineeId
     // }
     let x = document.getElementById('edTitle') as HTMLTextAreaElement | null;
-    if(x){
+    if (x) {
       x.value = this.ed.title;
     }
     this.show('edit');
-   
   }
-  gen(){
+  gen() {
     this.chars = [];
     this.chars.push('ALL');
     this.trainTask = [];
-    if(document.getElementById('gen')?.classList.contains('hidden')){
+    if (document.getElementById('gen')?.classList.contains('hidden')) {
       this.trainee.forEach((e: any) => {
-      this.trainTask.push(e.id);
-      document.getElementById(`n${e.id}`)?.classList.remove('hidden');
-  });
-    }
-    else{
-    this.chars = [];
-    this.trainTask = [];
-    this.trainee.forEach((e: any) => {
-      document.getElementById(`n${e.id}`)?.classList.add('hidden');
-  });
+        this.trainTask.push(e.id);
+        document.getElementById(`n${e.id}`)?.classList.remove('hidden');
+      });
+    } else {
+      this.chars = [];
+      this.trainTask = [];
+      this.trainee.forEach((e: any) => {
+        document.getElementById(`n${e.id}`)?.classList.add('hidden');
+      });
     }
 
-    
-  this.show('gen');
-  
+    this.show('gen');
   }
   @HostListener('document:click', ['$event'])
-onClickOutside(event: MouseEvent): void {
-  const target = event.target as HTMLElement;
-  // Check if the click was outside the dropdown and the related button
-  if (!target.closest('.relative') ) {
-    const dropdowns = document.querySelectorAll('.dropdown');
-    dropdowns.forEach(dropdown => dropdown.classList.add('hidden'));
+  onClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    // Check if the click was outside the dropdown and the related button
+    if (!target.closest('.relative')) {
+      const dropdowns = document.querySelectorAll('.dropdown');
+      dropdowns.forEach((dropdown) => dropdown.classList.add('hidden'));
+    }
+    if (!target.closest('.selBut')) {
+      document.querySelector('#select')?.classList.add('hidden');
+      this.selArr = false;
+    }
   }
-  if (!target.closest('.selBut') ) {
-     document.querySelector('#select')?.classList.add('hidden');
-    this.selArr = false;
+  getStat(start: any, end: any) {
+    let d = new Date();
+    start = new Date(start);
+    end = new Date(end);
+    start.setSeconds(0);
+    start.setMilliseconds(0);
+    end.setSeconds(0);
+    end.setMilliseconds(0);
+    if (d.getTime() >= start.getTime() && d.getTime() <= end.getTime()) {
+      return 1;
+    } else if (d.getTime() < start.getTime()) {
+      return 2;
+    } else {
+      return 0;
+    }
   }
-}
-getStat(start:any , end:any){
-let d = new Date();
-start = new Date(start)
-end = new Date(end)
-start.setSeconds(0);
-start.setMilliseconds(0);
-end.setSeconds(0);
-end.setMilliseconds(0);
-if(d.getTime()>= start.getTime() && d.getTime()<= end.getTime()){
-return 1;
-}
-else if (d.getTime()< start.getTime() ){
-  return 2;
+  selTrainee: any = 'all';
+  selName: any = 'All';
+  sel(trainee: any) {
+    if (trainee != 'all') {
+      this.selTrainee = trainee.id;
+      this.selName = trainee.firstName + ' ' + trainee.middleName;
+    } else {
+      this.selTrainee = 'all';
+      this.selName = 'All';
+    }
   }
-  else{
-    return 0;
-  }
-
-}
-selTrainee:any = 'all';
-selName:any = 'All'
-sel(trainee:any){
-  if(trainee != 'all'){
-     this.selTrainee = trainee.id;
-     this.selName = trainee.firstName + ' ' + trainee.middleName;
-  }
-  else{
-    this.selTrainee = 'all';
-    this.selName = 'All';
-  }
- 
-}
 }

@@ -34,14 +34,14 @@
       <thead class="sticky top-0 text-sm">
         <tr class="border-b border-black text-[#6B7088]">
           <th
-            class="sticky top-0 left-0 z-10 p-4 text-left bg-white rounded-lg whitespace-nowrap"
+            class="sticky left-0 z-10 p-4 text-left bg-white rounded-lg whitespace-nowrap"
           >
             Name
           </th>
           @for (s of allSesions; track s.id; let colIndex = $index) {
           <th
             [ngClass]="hoveredCol === colIndex ? 'bg-blue-200' : 'bg-white'"
-            class="p-4 font-extrabold whitespace-nowrap"
+            class="sticky top-0 p-4 font-extrabold whitespace-nowrap"
           >
             {{ s.topic }}
           </th>
