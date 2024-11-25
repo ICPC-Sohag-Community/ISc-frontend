@@ -90,10 +90,7 @@
             >
               <img
                 class="object-cover w-10 h-10 rounded-full"
-                [src]="
-                  currentUser.photoUrl ||
-                  './../../../../../assets/img/user.jpeg'
-                "
+                [src]="profilePhoto || './../../../../../assets/img/user.jpeg'"
                 alt="Avatar"
                 loading="lazy"
               />

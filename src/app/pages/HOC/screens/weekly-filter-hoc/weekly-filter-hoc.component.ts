@@ -25,8 +25,6 @@ export class WeeklyFilterHOCComponent implements OnInit {
   selectedUsers: Set<string> = new Set();
   showModal: boolean = false;
   selectedItemId: string | null = null;
-  errorMessage: string = '';
-  successMessage: string = '';
 
   ngOnInit() {
     this.getToFilter();
