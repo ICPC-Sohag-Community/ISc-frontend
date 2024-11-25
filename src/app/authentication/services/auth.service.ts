@@ -91,6 +91,16 @@ export class AuthService {
     }
   }
 
+  updatePhotoUrl(newPhotoUrl: string | null): void {
+    const currentUser = JSON.parse(
+      localStorage.getItem(this.CURRENT_USER) || '{}'
+    );
+    if (currentUser) {
+      currentUser.photoUrl = newPhotoUrl;
+      localStorage.setItem('CURRENT_USER', JSON.stringify(currentUser)); // Sync to localStorage
+    }
+  }
+
   // LogOut Fun.
   logout() {
     localStorage.removeItem(this.JWT_TOKEN);

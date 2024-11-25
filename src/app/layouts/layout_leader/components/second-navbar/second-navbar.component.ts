@@ -32,6 +32,7 @@ export class SecondNavbarComponent implements OnInit {
   isShow: boolean = false;
   currentUser: any;
   roles: string[] = [];
+  profilePhoto: string = '';
   currentPath: string = '';
   isOpenNotification: boolean = false;
   isAnewNotification: boolean = false;
@@ -40,6 +41,7 @@ export class SecondNavbarComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.currentUser();
+    this.profilePhoto = this.authService.currentUser().photoUrl;
     this.currentPath = this.router.url;
     this.loadRoles();
     this.detectLocalStorageChange();
@@ -80,6 +82,7 @@ export class SecondNavbarComponent implements OnInit {
       storedData.roles.sort(
         (a: any, b: any) => customOrder.indexOf(a) - customOrder.indexOf(b)
       ) || [];
+    this.profilePhoto = storedData.photoUrl;
     this.cdr.detectChanges();
   }
 
