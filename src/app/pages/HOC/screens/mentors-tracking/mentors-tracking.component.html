@@ -3,7 +3,7 @@
   class="relative w-full p-4 space-y-4 sm:ps-4 sm:space-y-6"
 >
   <div class="flex items-center justify-between px-12 py-4 bg-white rounded-xl">
-    <h2 class="text-xl font-bold">Mentors Tracking</h2>
+    <h2 class="text-2xl font-bold">Mentors Tracking</h2>
   </div>
 
   @if( isLoading()&& dataRequest.length === 0) {
@@ -17,7 +17,7 @@
   } @else {
   <div
     style="max-height: calc(100vh - 200px)"
-    class="pb-8 overflow-y-auto pe-2 scroll-host-table"
+    class="pb-8 overflow-y-auto pe-2 scroll-host-table rounded-xl"
     (scroll)="loadMoreData($event)"
   >
     @for ( row of dataRequest; track $index) { @for (mentor of row.data; track

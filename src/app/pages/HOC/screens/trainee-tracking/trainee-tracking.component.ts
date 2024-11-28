@@ -18,6 +18,7 @@ export class TraineeTrackingComponent implements OnInit {
   allSheets!: Names[];
   currentPage: number = 1;
   pageSize: number = 15;
+  problemCountSheet: number = 0;
 
   allContests!: Names[];
   allDataContests!: RootSheet;
@@ -25,6 +26,7 @@ export class TraineeTrackingComponent implements OnInit {
   dataRequestContests: RootSheet[] = [];
   currentPageContests: number = 1;
   pageSizeContests: number = 15;
+  problemCountContest: number = 0;
 
   isLoading = signal<boolean>(false);
   hoveredRow: number | null = null;
@@ -41,9 +43,9 @@ export class TraineeTrackingComponent implements OnInit {
     this.trackingService
       .trackingTraineesSheets(currentPage, pageSize)
       .subscribe({
-        next: ({ statusCode, data }) => {
-          if (statusCode === 200) {
-            this.allData = data;
+        next: (res) => {
+          if (res.statusCode === 200) {
+            this.allData = res;
             this.allTraniees = this.allData.data;
             this.dataRequest.push(this.allData);
             this.isLoading.update((v) => (v = false));
@@ -58,31 +60,27 @@ export class TraineeTrackingComponent implements OnInit {
       });
   }
 
-  // trackingTraineesContests(
-  //   currentPage: number,
-  //   pageSize: number,
-  //   keyword?: string
-  // ): void {
-  //   this.isLoading.set(true);
-  //   this.trackingService
-  //     .trackingTraineesContests(currentPage, pageSize, keyword)
-  //     .subscribe({
-  //       next: ({ statusCode, data }) => {
-  //         if (statusCode === 200) {
-  //           this.allData = data;
-  //           this.allTraniees = this.allData.data;
-  //           this.dataRequest.push(this.allData);
-  //           this.isLoading.update((v) => (v = false));
-  //         } else {
-  //           this.isLoading.update((v) => (v = false));
-  //         }
-  //       },
-  //       error: (err) => {
-  //         console.log(err);
-  //         this.isLoading.update((v) => (v = false));
-  //       },
-  //     });
-  // }
+  trackingTraineesContests(currentPage: number, pageSize: number): void {
+    this.isLoading.set(true);
+    this.trackingService
+      .trackingTraineesContests(currentPage, pageSize)
+      .subscribe({
+        next: (res) => {
+          if (res.statusCode === 200) {
+            this.allDataContests = res;
+            this.allTraniees = this.allDataContests.data;
+            this.dataRequest.push(this.allDataContests);
+            this.isLoading.update((v) => (v = false));
+          } else {
+            this.isLoading.update((v) => (v = false));
+          }
+        },
+        error: (err) => {
+          console.log(err);
+          this.isLoading.update((v) => (v = false));
+        },
+      });
+  }
 
   getSheetNames(): void {
     this.isLoading.set(true);
@@ -90,6 +88,7 @@ export class TraineeTrackingComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.allSheets = data;
+          this.problemCountSheet = this.allSheets[0].problemCount;
           this.isLoading.update((v) => (v = false));
         } else {
           this.isLoading.update((v) => (v = false));
@@ -107,6 +106,7 @@ export class TraineeTrackingComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.allContests = data;
+          this.problemCountContest = this.allContests[0].problemCount;
           this.isLoading.update((v) => (v = false));
         } else {
           this.isLoading.update((v) => (v = false));
@@ -129,6 +129,19 @@ export class TraineeTrackingComponent implements OnInit {
       this.trackingTraineesSheets(++this.currentPage, this.pageSize);
     }
   }
+  loadMoreDataContest(event: any): void {
+    const element = event.target;
+    const bottomThreshold = 5;
+    const atBottom =
+      element.scrollTop + element.clientHeight >=
+      element.scrollHeight - bottomThreshold;
+    if (atBottom && !this.isLoading() && this.allDataContests?.hasNextPage) {
+      this.trackingTraineesContests(
+        ++this.currentPageContests,
+        this.pageSizeContests
+      );
+    }
+  }
 
   onHover(rowIndex: number, colIndex: number) {
     this.hoveredRow = rowIndex;
@@ -141,10 +154,15 @@ export class TraineeTrackingComponent implements OnInit {
   }
 
   selectTab(tab: string) {
+    this.dataRequest = [];
+    this.dataRequestContests = [];
     this.activeTab = tab;
     if (this.activeTab !== 'tab1') {
       this.getContestsNames();
-      // this.trackingTraineesContests(this.currentPage, this.pageSize);
+      this.trackingTraineesContests(
+        this.currentPageContests,
+        this.pageSizeContests
+      );
     } else {
       this.trackingTraineesSheets(this.currentPage, this.pageSize);
     }

@@ -23,6 +23,7 @@ export class TrackingService {
       params
     );
   }
+
   getTasksByTaskStatus(
     mentorId: string,
     taskStatus: number
@@ -38,27 +39,24 @@ export class TrackingService {
 
   trackingTraineesSheets(
     currentPage: number,
-    pageSize: number,
-    KeyWord?: string
+    pageSize: number
   ): Observable<any> {
     const params = new HttpParams()
       .set('PageNumber', currentPage)
-      .set('PageSize', pageSize)
-      .set('KeyWord', KeyWord ? KeyWord : '');
+      .set('PageSize', pageSize);
     return this.http.get<any>(
       `${environment.BASE_URL}/api/Head/trackingTrainees/sheets`,
       { params }
     );
   }
+
   trackingTraineesContests(
     currentPage: number,
-    pageSize: number,
-    KeyWord?: string
+    pageSize: number
   ): Observable<any> {
     const params = new HttpParams()
       .set('PageNumber', currentPage)
-      .set('PageSize', pageSize)
-      .set('KeyWord', KeyWord ? KeyWord : '');
+      .set('PageSize', pageSize);
     return this.http.get<any>(
       `${environment.BASE_URL}/api/Head/trackingTrainees/contests`,
       { params }

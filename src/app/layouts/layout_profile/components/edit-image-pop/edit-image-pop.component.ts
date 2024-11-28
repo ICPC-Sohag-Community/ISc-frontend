@@ -151,6 +151,7 @@ export class EditImagePopComponent {
           this.authService.updatePhotoUrl(null);
           this.closePop();
           this.toastr.success(message);
+          window.location.reload();
         } else if (statusCode === 400) {
           this.toastr.error(message);
           this.isLoading = false;
