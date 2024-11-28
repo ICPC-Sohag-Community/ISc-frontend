@@ -87,8 +87,11 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
-            "scripts": []
+            "styles": [
+              "src/styles.scss",
+              "node_modules/cropperjs/dist/cropper.css"
+            ],
+            "scripts": ["node_modules/cropperjs/dist/cropper.js"]
           }
         }
       }

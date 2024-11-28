@@ -47,4 +47,17 @@ export class LeaderProfileService {
       info
     );
   }
+
+  updateProfileImage(image: any): Observable<ResponseHeader> {
+    return this.http.put<ResponseHeader>(
+      `${environment.BASE_URL}/api/User/updateProfileImage`,
+      image
+    );
+  }
+  deleteProfileImage(): Observable<ResponseHeader> {
+    return this.http.delete<ResponseHeader>(
+      `${environment.BASE_URL}/api/User/profileImage`,
+      {}
+    );
+  }
 }

@@ -54,12 +54,13 @@ import { BlankComponent } from './pages/mentor/blank/blank.component';
 import { CampsPublicComponent } from './pages/public/screens/camps-public/camps-public.component';
 import { FormsCampsPublicComponent } from './pages/public/screens/forms-camps-public/forms-camps-public.component';
 
-
 import { LayoutProfileComponent } from './layouts/layout_profile/layout-profile/layout-profile.component';
 import { ProfileDetailsComponent } from './pages/leader_profile/screens/profile-details/profile-details.component';
 import { LeaderSettingsComponent } from './pages/leader_profile/screens/leader-settings/leader-settings.component';
 import { ProfileTraineeComponent } from './pages/trainee-profile/screens/profile-trainee/profile-trainee.component';
 import { MentorProfileComponent } from './pages/mentor-profile/mentor-profile.component';
+import { MentorsTrackingComponent } from './pages/HOC/screens/mentors-tracking/mentors-tracking.component';
+import { TraineeTrackingComponent } from './pages/HOC/screens/trainee-tracking/trainee-tracking.component';
 
 export const routes: Routes = [
   // Trainee Pages
@@ -276,6 +277,16 @@ export const routes: Routes = [
         component: WeeklyFilterHOCComponent,
         title: 'head of camp - Weekly Filter',
       },
+      {
+        path: 'mentors-tracking',
+        component: MentorsTrackingComponent,
+        title: 'head of camp - Mentors Tracking',
+      },
+      {
+        path: 'trainee-tracking',
+        component: TraineeTrackingComponent,
+        title: 'head of camp - Trainees Tracking',
+      },
     ],
   },
 
@@ -316,7 +327,7 @@ export const routes: Routes = [
         component: PracticeComponent,
         title: 'mentor / Practice - ICPC',
       },
-      
+
       {
         path: 'blank',
         component: BlankComponent,

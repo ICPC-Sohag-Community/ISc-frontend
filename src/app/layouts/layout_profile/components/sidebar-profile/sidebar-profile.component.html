@@ -10,22 +10,28 @@
   <aside
     class="h-full font-dm overflow-y-auto flex flex-col justify-start pt-10 items-center [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300"
   >
-    <div class="px-5 py-10">
-      <a
-        class="flex-none inline-block focus:outline-none focus:opacity-80"
-        aria-label="Preline"
-      >
+    <div class="relative px-5 py-10">
+      <div class="flex-none inline-block focus:outline-none focus:opacity-80">
         <img
-          [src]="
-            currentUser.photoUrl || './../../../../../../assets/img/user.jpeg'
-          "
+          [src]="currentUser.photoUrl || 'assets/img/user.jpeg'"
           alt="image profile"
           loading="lazy"
           width="320"
           height="320"
           class="object-cover border-2 rounded-full"
         />
-      </a>
+      </div>
+      <button
+        type="button"
+        (click)="openPopup()"
+        class="absolute w-10 h-10 p-1 rounded-full bottom-24 right-9 bg-mainblue"
+      >
+        <img
+          src="assets/img/edit-profile.png"
+          alt="edit-icon"
+          class="w-full h-full"
+        />
+      </button>
     </div>
     <nav class="flex flex-col flex-wrap w-full ps-10">
       <ul class="flex flex-col gap-y-2">
@@ -195,3 +201,11 @@
     </nav>
   </aside>
 </div>
+
+@if (showPopup) {
+
+<app-edit-image-pop
+  [profileImage]="currentUser.photoUrl"
+  (closePopup)="closePopup()"
+/>
+}
