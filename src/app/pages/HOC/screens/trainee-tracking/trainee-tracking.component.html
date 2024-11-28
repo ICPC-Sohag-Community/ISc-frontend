@@ -2,8 +2,8 @@
   style="height: calc(100vh - 72px)"
   class="relative bg-[#F4F5F8] w-full p-4 space-y-2 sm:p-6 sm:ps-4"
 >
-  <div class="flex items-center px-12 py-4 mb-10 bg-white rounded-xl">
-    <h2 class="text-2xl font-bold">Trainee Tracking</h2>
+  <div class="flex items-center px-12 py-4 mb-8 bg-white rounded-xl">
+    <h2 class="text-xl font-bold">Trainee Tracking</h2>
   </div>
 
   @if( isLoading() && dataRequest.length === 0) {
@@ -41,22 +41,20 @@
     <div class="pt-6">
       @if (activeTab === 'tab1') {
       <div
-        style="max-height: calc(100vh - 180px)"
+        style="max-height: calc(100vh - 260px)"
         class="pb-4 overflow-auto scroll-host-table"
         (scroll)="loadMoreData($event)"
       >
         <table class="min-w-full text-center bg-white rounded-lg">
-          <thead class="sticky top-0 text-sm">
-            <tr class="border-b text-[#6B7088] text-lg">
-              <th
-                class="sticky top-0 left-0 z-10 p-4 text-left bg-white rounded-lg whitespace-nowrap"
-              >
+          <thead class="sticky top-0 z-50 text-sm">
+            <tr class="border-b shadow-md text-[#6B7088]">
+              <th class="sticky left-0 z-50 p-4 text-left bg-white rounded-lg">
                 Name
               </th>
               @for (s of allSheets; track s.id; let colIndex = $index) {
               <th
                 [ngClass]="hoveredCol === colIndex ? 'bg-blue-200' : 'bg-white'"
-                class="sticky top-0 p-4 font-extrabold whitespace-nowrap"
+                class="p-4 font-extrabold whitespace-nowrap"
               >
                 {{ s.name }}
               </th>
@@ -114,22 +112,22 @@
       </div>
       } @else {
       <div
-        style="max-height: calc(100vh - 180px)"
+        style="max-height: calc(100vh - 260px)"
         class="pb-4 overflow-auto scroll-host-table"
         (scroll)="loadMoreDataContest($event)"
       >
         <table class="min-w-full text-center bg-white rounded-lg">
-          <thead class="sticky top-0 text-sm">
-            <tr class="border-b text-[#6B7088] text-lg">
+          <thead class="sticky top-0 z-50 text-sm">
+            <tr class="border-b shadow-md text-[#6B7088]">
               <th
-                class="sticky top-0 left-0 z-10 p-4 text-left bg-white rounded-lg whitespace-nowrap"
+                class="sticky left-0 z-50 p-4 text-left bg-white rounded-lg whitespace-nowrap"
               >
                 Name
               </th>
               @for (s of allContests; track s.id; let colIndex = $index) {
               <th
                 [ngClass]="hoveredCol === colIndex ? 'bg-blue-200' : 'bg-white'"
-                class="sticky top-0 p-4 font-extrabold whitespace-nowrap"
+                class="p-4 font-extrabold whitespace-nowrap"
               >
                 {{ s.name }}
               </th>
