@@ -33,6 +33,7 @@ export class AttendanceHOCComponent implements OnInit {
 
   ngOnInit() {
     this.getAllAttendances(this.currentPage, this.pageSize);
+    this.getTopics();
   }
 
   getAllAttendances(
@@ -47,7 +48,6 @@ export class AttendanceHOCComponent implements OnInit {
         next: ({ statusCode, data }) => {
           if (statusCode === 200) {
             this.allData = data;
-            this.allSesions = this.allData.sessions;
             this.allTraniees = this.allData.trainees;
             this.dataRequest.push(this.allData.trainees);
             this.isLoading.update((v) => (v = false));
@@ -60,6 +60,24 @@ export class AttendanceHOCComponent implements OnInit {
           this.isLoading.update((v) => (v = false));
         },
       });
+  }
+
+  getTopics(): void {
+    this.isLoading.set(true);
+    this.attendanceHocService.getTopics().subscribe({
+      next: ({ statusCode, data }) => {
+        if (statusCode === 200) {
+          this.allSesions = data;
+          this.isLoading.update((v) => (v = false));
+        } else {
+          this.isLoading.update((v) => (v = false));
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this.isLoading.update((v) => (v = false));
+      },
+    });
   }
 
   loadMoreData(event: any): void {

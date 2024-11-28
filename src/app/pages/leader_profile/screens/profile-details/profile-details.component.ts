@@ -17,11 +17,12 @@ import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { LeaderProfileService } from '../../services/leader-profile.service';
 import { ValidationProfileService } from '../../../../shared/services/validation-profile.service';
 import { Router } from '@angular/router';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile-details',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSelectModule, NgClass],
+  imports: [ReactiveFormsModule, NgSelectModule, NgClass, ToastrModule],
   templateUrl: './profile-details.component.html',
   styleUrl: './profile-details.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -29,6 +30,7 @@ import { Router } from '@angular/router';
 export class ProfileDetailsComponent implements OnInit {
   leaderProfileService = inject(LeaderProfileService);
   validationProfileService = inject(ValidationProfileService);
+  toastr = inject(ToastrService);
   router = inject(Router);
   fb = inject(FormBuilder);
   isEditMode = false;
@@ -37,9 +39,6 @@ export class ProfileDetailsComponent implements OnInit {
   allCollege: { id: number; name: string }[] = [];
   foucsTerm: boolean = false;
   foucsCollege: boolean = false;
-  errorMessages: any = [];
-  errorMessage: string = '';
-  successMessage: string = '';
   phoneMessage: string = '';
   isMessageSuccess: boolean = true;
   isMessageSuccessId: boolean = true;
@@ -189,7 +188,6 @@ export class ProfileDetailsComponent implements OnInit {
     if (this.profileForm.get('facebookLink')?.value === '') {
       this.profileForm.get('facebookLink')?.setValue(null);
     }
-    debugger;
     if (this.currentPath.includes('leader')) {
       this.updateLeaderProfile();
     } else if (this.currentPath.includes('head_of_camp')) {
@@ -280,19 +278,20 @@ export class ProfileDetailsComponent implements OnInit {
       next: ({ statusCode, message, errors }) => {
         if (statusCode === 200) {
           this.isLoading = false;
-          this.errorMessage = '';
-          this.successMessage = message;
+          this.toastr.success(message);
           this.isEditMode = false;
           this.phoneMessage = '';
           this.idMessage = '';
         } else if (statusCode === 400) {
-          this.successMessage = '';
-          this.errorMessage = message;
+          this.toastr.error(message);
+          this.isLoading = false;
+        } else if (statusCode === 500) {
+          this.toastr.warning(message);
           this.isLoading = false;
         } else {
-          this.errorMessage = '';
-          this.successMessage = '';
-          this.handleApiErrors(errors);
+          errors.forEach((error: any) => {
+            this.toastr.error(error);
+          });
           this.isLoading = false;
         }
       },
@@ -311,19 +310,20 @@ export class ProfileDetailsComponent implements OnInit {
         next: ({ statusCode, message, errors }) => {
           if (statusCode === 200) {
             this.isLoading = false;
-            this.errorMessage = '';
-            this.successMessage = message;
+            this.toastr.success(message);
             this.isEditMode = false;
             this.phoneMessage = '';
             this.idMessage = '';
           } else if (statusCode === 400) {
-            this.successMessage = '';
-            this.errorMessage = message;
+            this.toastr.error(message);
+            this.isLoading = false;
+          } else if (statusCode === 500) {
+            this.toastr.warning(message);
             this.isLoading = false;
           } else {
-            this.errorMessage = '';
-            this.successMessage = '';
-            this.handleApiErrors(errors);
+            errors.forEach((error: any) => {
+              this.toastr.error(error);
+            });
             this.isLoading = false;
           }
         },
@@ -340,19 +340,20 @@ export class ProfileDetailsComponent implements OnInit {
       next: ({ statusCode, message, errors }) => {
         if (statusCode === 200) {
           this.isLoading = false;
-          this.errorMessage = '';
-          this.successMessage = message;
+          this.toastr.success(message);
           this.isEditMode = false;
           this.phoneMessage = '';
           this.idMessage = '';
         } else if (statusCode === 400) {
-          this.successMessage = '';
-          this.errorMessage = message;
+          this.toastr.error(message);
+          this.isLoading = false;
+        } else if (statusCode === 500) {
+          this.toastr.warning(message);
           this.isLoading = false;
         } else {
-          this.errorMessage = '';
-          this.successMessage = '';
-          this.handleApiErrors(errors);
+          errors.forEach((error: any) => {
+            this.toastr.error(error);
+          });
           this.isLoading = false;
         }
       },
@@ -363,55 +364,14 @@ export class ProfileDetailsComponent implements OnInit {
     });
   }
 
-  removeErrorM() {
-    this.errorMessage = '';
-    this.successMessage = '';
-  }
-
-  handleApiErrors(errors: any) {
-    this.errorMessages = [];
-    if (errors) {
-      this.errorMessages = errors;
-    } else {
-      this.errorMessages.push(
-        'An unknown error occurred. Please try again later.'
-      );
-    }
-    this.errorMessages.forEach((error: any, index: number) => {
-      setTimeout(() => {
-        this.removeError(index);
-      }, 3000);
-    });
-  }
-
-  removeError(index: number) {
-    this.errorMessages.splice(index, 1);
-  }
-
   displayFormErrors() {
-    this.errorMessages = [];
     Object.keys(this.profileForm.controls).forEach((field) => {
       const control = this.profileForm.get(field);
       if (control?.invalid) {
         if (control.errors?.['required']) {
-          this.errorMessages.push(`${field} is required`);
-        }
-        if (control.errors?.['minlength']) {
-          this.errorMessages.push(
-            `${field} must be at least ${control.errors['minlength'].requiredLength} numbers long`
-          );
-        }
-        if (control.errors?.['maxlength']) {
-          this.errorMessages.push(
-            `${field} must be ${control.errors['maxlength'].requiredLength} numbers long`
-          );
+          this.toastr.error(`${field} is required`);
         }
       }
-    });
-    this.errorMessages.forEach((index: number) => {
-      setTimeout(() => {
-        this.removeError(index);
-      }, 3000);
     });
   }
 
