@@ -19,8 +19,10 @@ export class MentorsTrackingComponent implements OnInit {
   pageSize: number = 10;
   taskId: number = 0 | 1 | 2;
   mentorId: string | null = null;
+  id: string | null = null;
   bars = Array(5).fill(0);
   allTasksData: TasksData[] = [];
+  isShowLable: boolean = false;
 
   ngOnInit() {
     this.getAllMentors(this.currentPage, this.pageSize);
@@ -96,5 +98,12 @@ export class MentorsTrackingComponent implements OnInit {
     if (this.mentorId !== null) {
       this.getTasksByTaskStatus(this.mentorId, this.taskId);
     }
+  }
+
+  showLable(id: string): void {
+    this.id = id;
+  }
+  hideLable(): void {
+    this.id = null;
   }
 }

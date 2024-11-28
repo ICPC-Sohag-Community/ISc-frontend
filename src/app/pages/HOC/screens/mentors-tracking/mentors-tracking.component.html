@@ -3,7 +3,7 @@
   class="relative w-full p-4 space-y-4 sm:ps-4 sm:space-y-6"
 >
   <div class="flex items-center justify-between px-12 py-4 bg-white rounded-xl">
-    <h2 class="text-2xl font-bold">Mentors Tracking</h2>
+    <h2 class="text-xl font-bold">Mentors Tracking</h2>
   </div>
 
   @if( isLoading()&& dataRequest.length === 0) {
@@ -136,7 +136,11 @@
               >Performance</span
             >
           </div>
-          <div class="flex items-center gap-x-2">
+          <div
+            (mouseover)="showLable(mentor.id)"
+            (mouseleave)="hideLable()"
+            class="relative flex items-center cursor-pointer gap-x-2"
+          >
             <svg
               width="24"
               height="24"
@@ -149,6 +153,12 @@
                 fill="black"
               />
             </svg>
+            <p
+              [ngClass]="id === mentor.id ? 'scale-105' : 'scale-0'"
+              class="absolute right-0 px-4 py-1 text-lg font-semibold transition-all bg-gray-100 rounded-lg -top-12 text-mainYellow"
+            >
+              Trainees
+            </p>
             <span>{{ mentor.traineesCount }}</span>
           </div>
         </div>
