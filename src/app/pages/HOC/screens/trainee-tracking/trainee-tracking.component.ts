@@ -1,7 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { TrackingService } from '../../services/tracking.service';
 import { NgClass } from '@angular/common';
-import { DataSheet, Names, RootSheet } from '../../model/tracking-hoc';
+import { Names, Root } from '../../model/tracking-hoc';
+import { Data } from '../../model/contests';
 
 @Component({
   selector: 'app-trainee-tracking',
@@ -12,27 +13,25 @@ import { DataSheet, Names, RootSheet } from '../../model/tracking-hoc';
 })
 export class TraineeTrackingComponent implements OnInit {
   trackingService = inject(TrackingService);
-  allData!: RootSheet;
-  allTraniees: DataSheet[] = [];
-  dataRequest: RootSheet[] = [];
+
+  allData!: Root;
+  dataRequest: Root[] = [];
   allSheets!: Names[];
   currentPage: number = 1;
   pageSize: number = 15;
-  problemCountSheet: number = 0;
 
+  allDataContests!: Root;
+  dataRequestContests: Root[] = [];
   allContests!: Names[];
-  allDataContests!: RootSheet;
-  allContestsData: DataSheet[] = [];
-  dataRequestContests: RootSheet[] = [];
   currentPageContests: number = 1;
   pageSizeContests: number = 15;
-  problemCountContest: number = 0;
 
   isLoading = signal<boolean>(false);
   hoveredRow: number | null = null;
   hoveredCol: number | null = null;
   activeTab: string = 'tab1';
   problemCountMap: any;
+  problemCountContest: any;
   ngOnInit() {
     this.getSheetNames();
     this.trackingTraineesSheets(this.currentPage, this.pageSize);
@@ -45,7 +44,6 @@ export class TraineeTrackingComponent implements OnInit {
         next: (res) => {
           if (res.statusCode === 200) {
             this.allData = res;
-            this.allTraniees = this.allData.data;
             this.dataRequest.push(this.allData);
             if (this.allSheets.length > 0) {
               this.problemCountMap = this.allSheets.reduce((map, sheet) => {
@@ -73,8 +71,16 @@ export class TraineeTrackingComponent implements OnInit {
         next: (res) => {
           if (res.statusCode === 200) {
             this.allDataContests = res;
-            this.allTraniees = this.allDataContests.data;
             this.dataRequest.push(this.allDataContests);
+            if (this.allContests.length > 0) {
+              this.problemCountContest = this.allContests.reduce(
+                (map, contest) => {
+                  map[contest.id] = contest.problemCount;
+                  return map;
+                },
+                {} as Record<number, number>
+              );
+            }
             this.isLoading.update((v) => (v = false));
           } else {
             this.isLoading.update((v) => (v = false));
@@ -93,7 +99,6 @@ export class TraineeTrackingComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.allSheets = data;
-          this.problemCountSheet = this.allSheets[0].problemCount;
           this.isLoading.update((v) => (v = false));
         } else {
           this.isLoading.update((v) => (v = false));
@@ -111,7 +116,6 @@ export class TraineeTrackingComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.allContests = data;
-          this.problemCountContest = this.allContests[0].problemCount;
           this.isLoading.update((v) => (v = false));
         } else {
           this.isLoading.update((v) => (v = false));
