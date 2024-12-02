@@ -153,11 +153,11 @@ export class NotificationComponent {
     }
   }
   markasRead(id: number, type: number, isRead: boolean) {
+    this.goToThePage(type);
     if (!isRead) {
       this.notificationService.markasRead(id).subscribe({
         next: ({ statusCode }) => {
           if (statusCode === 200) {
-            this.goToThePage(type);
             this.newNotificationCheck();
           }
         },

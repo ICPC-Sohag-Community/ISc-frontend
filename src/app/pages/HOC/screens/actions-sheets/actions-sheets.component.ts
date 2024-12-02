@@ -196,7 +196,6 @@ export class ActionsSheetsComponent implements OnInit {
     this.dropdownOpen = !this.dropdownOpen;
   }
   toggleDropdownS() {
-    debugger;
     if (this.dropdownOpenS) {
       this.status.close();
     } else {
