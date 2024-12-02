@@ -117,10 +117,10 @@ export class EditImagePopComponent {
       next: ({ statusCode, message, errors, data }) => {
         if (statusCode === 200) {
           this.isLoading = false;
-          debugger;
           this.authService.updatePhotoUrl(data);
           this.closePop();
           this.toastr.success(message);
+          window.location.reload();
         } else if (statusCode === 400) {
           this.toastr.error(message);
           this.isLoading = false;
@@ -147,7 +147,6 @@ export class EditImagePopComponent {
       next: ({ statusCode, message, errors }) => {
         if (statusCode === 200) {
           this.isLoading = false;
-          debugger;
           this.authService.updatePhotoUrl(null);
           this.closePop();
           this.toastr.success(message);

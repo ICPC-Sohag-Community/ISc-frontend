@@ -162,7 +162,6 @@ export class TasksComponent {
 
     // If there are any errors, add them to `this.crError`
     if (this.crError.length == 0) {
-      console.log(baseData);
       this.serv.addTask(baseData).subscribe({
         next: ({ statusCode, data, message }) => {
           if (statusCode === 200) {

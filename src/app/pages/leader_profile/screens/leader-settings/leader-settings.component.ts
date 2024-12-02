@@ -103,7 +103,6 @@ export class LeaderSettingsComponent implements OnInit {
   }
 
   toggleEditMode(type: string) {
-    debugger;
     if (type === 'email') {
       this.isEditEmail = !this.isEditEmail;
       if (this.isEditEmail) {

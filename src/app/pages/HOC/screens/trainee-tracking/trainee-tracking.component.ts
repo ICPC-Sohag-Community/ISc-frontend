@@ -32,12 +32,11 @@ export class TraineeTrackingComponent implements OnInit {
   hoveredRow: number | null = null;
   hoveredCol: number | null = null;
   activeTab: string = 'tab1';
-
+  problemCountMap: any;
   ngOnInit() {
     this.getSheetNames();
     this.trackingTraineesSheets(this.currentPage, this.pageSize);
   }
-
   trackingTraineesSheets(currentPage: number, pageSize: number): void {
     this.isLoading.set(true);
     this.trackingService
@@ -48,6 +47,12 @@ export class TraineeTrackingComponent implements OnInit {
             this.allData = res;
             this.allTraniees = this.allData.data;
             this.dataRequest.push(this.allData);
+            if (this.allSheets.length > 0) {
+              this.problemCountMap = this.allSheets.reduce((map, sheet) => {
+                map[sheet.id] = sheet.problemCount;
+                return map;
+              }, {} as Record<number, number>);
+            }
             this.isLoading.update((v) => (v = false));
           } else {
             this.isLoading.update((v) => (v = false));

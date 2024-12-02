@@ -40,7 +40,6 @@ export class SidebarProfileComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event): void {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
-    console.log(clickedInside);
     if (!clickedInside) {
       this.closePopup();
     }
@@ -59,10 +58,8 @@ export class SidebarProfileComponent implements OnInit {
     localStorage.setItem = (key: string, value: string): void => {
       originalSetItem.apply(localStorage, [key, value]);
       if (key === 'CURRENT_USER') {
-        // this.authService.updatePhotoUrl(storedData.photoUrl);
         this.profilePhoto = storedData.photoUrl;
         this.cdr.detectChanges();
-        console.log(this.authService.currentUser().photoUrl);
       }
     };
   }

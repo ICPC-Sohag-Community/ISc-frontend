@@ -80,7 +80,6 @@ export class MentorsTrackingComponent implements OnInit {
       next: ({ statusCode, data }) => {
         if (statusCode === 200) {
           this.allTasksData = data;
-          console.log(this.allTasksData);
           // this.isLoading.update((v) => (v = false));
         } else {
           // this.isLoading.update((v) => (v = false));

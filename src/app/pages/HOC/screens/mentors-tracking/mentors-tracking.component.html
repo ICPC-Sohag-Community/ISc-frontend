@@ -231,7 +231,7 @@
               </td>
               <!-- Start Time Column -->
               <td class="px-6 py-4 text-sm text-center">
-                <span>{{ task.startTime }}</span>
+                <span>{{ task.startTime | date : "MM/dd/yyyy hh:mm a" }}</span>
               </td>
               <td class="text-sm text-center">
                 <svg
@@ -263,7 +263,7 @@
               </td>
               <!-- End Time Column -->
               <td class="px-6 py-4 text-sm text-center">
-                <span>{{ task.endTime }}</span>
+                <span>{{ task.endTime | date : "MM/dd/yyyy hh:mm a" }}</span>
               </td>
             </tr>
             }@empty {
