@@ -166,6 +166,8 @@ export class TraineeTrackingComponent implements OnInit {
     this.dataRequest = [];
     this.dataRequestContests = [];
     this.activeTab = tab;
+    this.currentPage = 1;
+    this.currentPageContests = 1;
     if (this.activeTab !== 'tab1') {
       this.getContestsNames();
       this.trackingTraineesContests(
