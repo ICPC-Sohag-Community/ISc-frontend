@@ -25,3 +25,12 @@ color: #E69C24;
   font-size: 2rem;
   font-weight: 600;
 }
+@media screen and (max-width:640px) {
+
+  .head{
+  font-size: 1.5rem;
+  }
+  .no-contest{
+    font-size: 1rem;
+  }
+}

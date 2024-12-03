@@ -11,7 +11,7 @@
   .card {
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Makes each card take equal space */
+    flex: 1 0; /* Makes each card take equal space */
     align-items: stretch; /* Ensures all cards stretch to the same height */
     border: 1px solid #e0e0e0;
     padding: 10px;
@@ -75,6 +75,39 @@
         left: 0;
         bottom: 0;
       }
+    }
+    p{
+      font-size: 8px;
+    }
+    .feedbacks{
+      .swiper {
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        overflow: hidden;
+        list-style: none;
+        padding: 0 20px;
+        z-index: 1;
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      flex: 1 0; /* Makes each card take equal space */
+      align-items: stretch; /* Ensures all cards stretch to the same height */
+      border: 1px solid #e0e0e0;
+      padding: 5px;
+      box-sizing: border-box; /* Ensures padding is included in the width/height */
+    }
+    }
+}
+@media screen and (max-width:345px) {
+
+    .feedbacks{
+      .swiper {
+
+        padding: 0 0px;
+    }
+
     }
 }
 
