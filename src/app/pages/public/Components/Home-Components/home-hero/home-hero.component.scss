@@ -10,7 +10,7 @@ section {
 }
 .background-image {
   width: 100%; /* Make the image responsive */
-  height: auto; /* Maintain aspect ratio */
+  height: 106vh; /* Maintain aspect ratio */
   object-fit: cover; /* Ensure the image covers the entire background without stretching */
 }
 .overlay {
@@ -27,9 +27,8 @@ section {
 }
 h1 {
   font-family: Inter;
-  font-size: 60px;
   font-weight: 800;
-  line-height: 72.61px;
+  font-size: 15px;
   text-align: center;
   box-shadow: 0px 4px 14.3px 0px #00000040;
 }
@@ -38,10 +37,31 @@ h1 span {
 }
 p {
   font-family: Poppins;
-  font-size: 25px;
   font-weight: 400;
-  line-height: 32.5px;
-  max-width: 950px;
+  font-size: 8px;
+  line-height: 10.4px;
+  max-width: 75%;
   margin: 0 auto;
 }
+@media screen and (min-width:640px) {
+  h1 {
+    font-family: Inter;
+    font-size: 60px;
+    font-weight: 800;
+    line-height: 72.61px;
+    text-align: center;
+    box-shadow: 0px 4px 14.3px 0px #00000040;
+  }
+  h1 span {
+    color: #E69C24;
+  }
+  p {
+    font-family: Poppins;
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 32.5px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
 
+}
