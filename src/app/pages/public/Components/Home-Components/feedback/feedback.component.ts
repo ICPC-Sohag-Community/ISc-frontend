@@ -5,6 +5,7 @@ import SwiperCore, { SwiperOptions } from 'swiper';
 import Swiper, { Navigation } from 'swiper';
 import { HomeService } from '../../../Services/home.service';
 import { FeedBack } from '../../../model/feedback';
+import { ResponsiveService } from '../../../Services/responsive.service';
 
 @Component({
   selector: 'app-feedback',
@@ -17,6 +18,7 @@ export class FeedbackComponent {
 
 
   private _home = inject (HomeService)
+  public _responsive = inject (ResponsiveService)
   feedBack:FeedBack[]=[]
 
   stars:number[]=[1,2,3,4,5]
@@ -25,6 +27,10 @@ export class FeedbackComponent {
 
   ngOnInit(): void {
     this.getFeedBacks()
+    this._responsive.start()
+  }
+  ngOnDestroy(): void {
+    this._responsive.destroy()
   }
 
 
@@ -39,28 +45,27 @@ export class FeedbackComponent {
   }
 
 
-
-
-
-
-
-
-
-
-
-
   // Reference to Swiper instance
   private swiper?: SwiperCore;
 
     // Swiper configuration options
-    config1: SwiperOptions = {
+    configLargeScreen: SwiperOptions = {
       slidesPerView: 3, // Number of slides visible at a time
       spaceBetween: 110, // Space between slides
       navigation: false, // Disable built-in navigation
       pagination: { clickable: false }, // Disable clickable pagination
       scrollbar: false, // Disable scrollbar
       autoplay: false, // Disable autoplay
-    };
+    } ;
+    // Swiper configuration options for screen less than 640px
+    configResponsive: SwiperOptions = {
+      slidesPerView: 3, // Number of slides visible at a time
+      spaceBetween: 10, // Space between slides
+      navigation: false, // Disable built-in navigation
+      pagination: { clickable: false }, // Disable clickable pagination
+      scrollbar: false, // Disable scrollbar
+      autoplay: false, // Disable autoplay
+    } ;
 
     // Method to handle Swiper instance when it's ready
     onSwiper(swiper: SwiperCore) {

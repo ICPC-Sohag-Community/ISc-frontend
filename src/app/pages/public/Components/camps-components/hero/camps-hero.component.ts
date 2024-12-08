@@ -1,5 +1,6 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ResponsiveService } from '../../../Services/responsive.service';
 
 @Component({
   selector: 'app-camps-hero',
@@ -9,5 +10,12 @@ import { Component } from '@angular/core';
   styleUrl: './camps-hero.component.scss'
 })
 export class CampsHeroComponent {
+  // public _responsive = inject (ResponsiveService);
+  // ngOnInit(): void {
+  //   this._responsive.start()
+  // }
+  // ngOnDestroy(): void {
+  //   this._responsive.destroy()
+  // }
 
 }

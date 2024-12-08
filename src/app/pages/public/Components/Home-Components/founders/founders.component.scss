@@ -37,3 +37,57 @@
     bottom: 0;
   }
 }
+@media screen and (max-width:640px) {
+  .founders{
+    .right-circale{
+      width: 200px;
+      height: 200px;
+      background: #EF4A5024;
+      border-radius: 100%;
+      left: 75%;
+      top: 22%;
+      z-index: -1;
+      -webkit-border-radius: 100%;
+      -moz-border-radius: 100%;
+      -ms-border-radius: 100%;
+      -o-border-radius: 100%;
+    }
+    .card{
+      h4{
+        font-family: Inter;
+        font-size: 8px;
+        font-weight: 700;
+        line-height: 9.44px;
+        text-align: left;
+      }
+    }
+    img{
+      width: 81.36px;
+      height: 83.42px;
+    }
+
+  }
+
+    .headers{
+      h1{
+        font-family: Cormorant;
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 24.22px;
+        text-align:start;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding-bottom: 5px;
+      }
+      ::after{
+        content: '';
+        position: absolute;
+        height: 2px;
+        width: 26%;
+        background: #000;
+        left: 0;
+        bottom: 0;
+      }
+    }
+
+}

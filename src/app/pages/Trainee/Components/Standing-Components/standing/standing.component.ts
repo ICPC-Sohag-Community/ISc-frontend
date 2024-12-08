@@ -8,7 +8,7 @@ import { ResponsiveService } from '../../../Services/responsive.service';
 @Component({
   selector: 'app-standing',
   standalone: true,
-  imports: [CommonModule, FormatDatePipe],
+  imports: [CommonModule],
   templateUrl: './standing.component.html',
   styleUrls: ['./standing.component.scss'],
 })
@@ -27,6 +27,10 @@ export class StandingComponent implements OnInit {
   ngOnInit(): void {
     this.fetchStandings();
     this.loadCurrentUser();
+    this.responsive.start()
+  }
+  ngOnDestroy(): void {
+     this.responsive.destroy()
   }
 
   private fetchStandings(): void {

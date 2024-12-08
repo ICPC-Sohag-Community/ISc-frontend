@@ -13,7 +13,7 @@
 
         <!-- To-Do button label -->
         <a class="flex items-center gap-2 px-4 py-2 uppercase text-xl cursor-pointer bg-[#979797] text-white p-2 sm:w-full rounded-[10px] font-bold " role="menuitem" tabindex="-1">
-          <img src="assets/img_trainee/circle.svg">
+          <img src="assets/img_trainee/circle.svg" class="cursor-pointer">
           <span>To Do</span>
         </a>
 
@@ -23,20 +23,23 @@
     </button>
 
     <!-- To-Do Table -->
-    <div class="content sm:ml-9 mt-4 min-w-full todo-table">
+    <div class="content sm:pl-9 mt-4 min-w-full todo-table">
       <table class="w-full text-sm text-left">
         <!-- Table header -->
         <thead class="text-xs">
           <tr class="w-full flex items-center justify-between border-b border-[#D9D9D9]">
             <th class="px-1 py-3 text-xl font-medium text-[#777575]">Name</th>
-            <th class="px-2 sm:px-4 text-xl font-medium text-[#EF4A50]">DeadLine</th>
+            <div class="flex gap-24 w-1/3 justify-around">
+              <th class=" text-xl font-medium text-[#EF4A50]">Start Time</th>
+              <th class=" text-xl font-medium text-[#EF4A50]">DeadLine</th>
+            </div>
           </tr>
         </thead>
         <!-- Table body -->
         <tbody>
           @for(todo of todoTasks; track $index) {
             <tr class="border-b border-[#D9D9D9] relative">
-              <th class="p-2 sm:p-4 font-medium text-base capitalize flex items-center justify-between">
+              <th class="p-2 pr-0 sm:p-4 sm:pr-0 font-medium text-base capitalize flex items-center justify-between">
                 <div class="flex items-center gap-4">
                   <!-- Status toggle button -->
                   <div (click)="toggleList(todo.id)">
@@ -51,10 +54,15 @@
                   <span class="font-semibold text-[14px] sm:text-xl">{{todo.title}}</span>
                 </div>
                 <!-- Deadline date -->
-                <span class="font-semibold text-[14px] sm:text-xl">{{todo.startTime.split('T')[0]}}</span>
+                <div class="flex gap-8 w-1/3 justify-around">
+                  <span class="font-semibold text-[14px] sm:text-xl">{{todo.startTime.split('T')[0]}}</span>
+                  <img src="assets/img_trainee/right-arrow.svg" alt="">
+                  <span class="font-semibold text-[14px] sm:text-xl">{{todo.endTime.split('T')[0]}}</span>
+                </div>
               </th>
             </tr>
           }
+
         </tbody>
       </table>
     </div>
