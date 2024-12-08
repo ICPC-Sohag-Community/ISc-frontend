@@ -8,6 +8,7 @@ import { CoachesComponent } from "../../Components/Home-Components/coaches/coach
 import { FeedbackComponent } from "../../Components/Home-Components/feedback/feedback.component";
 import { RouterLink } from '@angular/router';
 import { HomeService } from '../../Services/home.service';
+import { FooterComponent } from "../../../../layouts/layout_public/components/footer/footer.component";
 
 declare var $: any;
 
@@ -23,7 +24,8 @@ declare var $: any;
     CoachesComponent,
     FeedbackComponent,
     RouterLink,
-    CommonModule
+    CommonModule,
+    FooterComponent
 ],
   templateUrl: './home-public.component.html',
   styleUrls: ['./home-public.component.scss']

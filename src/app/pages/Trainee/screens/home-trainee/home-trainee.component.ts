@@ -39,7 +39,7 @@ export class HomeTraineeComponent implements OnInit {
   rate: number = 0;
   enterFeedBack: boolean = false;
   SessionId: number = 0;
-  private leaveTimer: any;
+  leaveTimer: any;
   stars: number[] = [1, 2, 3, 4, 5];
   feedBackForm: FormGroup = new FormGroup({
     feedback: new FormControl('', [Validators.required]),
@@ -77,15 +77,15 @@ export class HomeTraineeComponent implements OnInit {
         next: ({ statusCode, data }) => {},
       });
     }
-    this.hideFeedBack();
   }
 
-  calcTime(flag: any): void {
-    if (flag != null) {
+  calcTime(data: any): void {
+    if (typeof data == "number") {
       const timeId = setInterval(() => {
         if (!this.homeService.isLoading) {
           this.showFeedBack();
-          this.noEnterFeedBack();
+          this.onEnterFeedBack(false)
+
           clearInterval(timeId);
         }
       }, 500);
@@ -103,27 +103,28 @@ export class HomeTraineeComponent implements OnInit {
     );
   }
 
-  noEnterFeedBack(): void {
-    const timeId = setInterval(() => {
-      if (!this.enterFeedBack) {
-        this.hideFeedBack();
-        clearInterval(timeId);
-      }
-    }, 4000);
-  }
-  enterMouseFeedBack(): void {
-    this.enterFeedBack = true;
-  }
-  // onLeave(): void {
-  //   clearTimeout(this.leaveTimer);
-  //   if(this.feedBackForm.get('feedback')?.value == '' && this.enterFeedBack == false){
-  //     this.leaveTimer = setTimeout(() => {
-  //       this.hideFeedBack()
-  //       console.log('onLeave');
+    onEnterFeedBack(bool:boolean):void{
+      if(!bool){
+         this.leaveTimer = setTimeout(()=>{
 
-  //      }, 4000);
-  //   }
-  // }
+          this.hideFeedBack()
+          clearTimeout(this.leaveTimer)
+
+        },4000)
+      }
+      else{
+        clearTimeout(this.leaveTimer)
+      }
+
+    }
+
+  onLeave(): void {
+    this.enterFeedBack=true
+    if(this.feedBackForm.get('feedback')?.value == '' && !this.feedBackForm.get('feedback')?.touched){
+      this.onEnterFeedBack(false)
+    }
+
+  }
   getRating(rate: number): void {
     for (let i = 0; i < rate; i++) {
       $(`#${i}`).removeClass('text-black').removeClass('text-opacity-25');
