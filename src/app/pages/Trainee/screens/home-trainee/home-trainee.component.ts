@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { TraineeCardsComponent } from '../../Components/Home-Components/trainee-cards/trainee-cards.component';
 import { TraineeHomeMentorComponent } from '../../Components/Home-Components/trainee-home-mentor/trainee-home-mentor.component';
 import { HeadsCarouselComponent } from '../../Components/Home-Components/heads-carousel/heads-carousel.component';
@@ -16,6 +16,11 @@ import {
 } from '@angular/forms';
 
 declare var $: any;
+
+
+
+
+// let steps = document.querySelectorAll(".step")
 
 @Component({
   selector: 'app-home-trainee',
@@ -35,6 +40,9 @@ declare var $: any;
   styleUrls: ['./home-trainee.component.scss'],
 })
 export class HomeTraineeComponent implements OnInit {
+
+
+
   public homeService = inject(HomeService);
   rate: number = 0;
   enterFeedBack: boolean = false;
@@ -44,11 +52,20 @@ export class HomeTraineeComponent implements OnInit {
   feedBackForm: FormGroup = new FormGroup({
     feedback: new FormControl('', [Validators.required]),
   });
+  currentStep:number = 0;
+
+  slides:any = [
+    { image: 'assets/for_carousel.png' },
+    { image: 'assets/for_carousel.png' },
+    { image: 'assets/for_carousel.png' },
+    { image: 'assets/for_carousel.png' }
+  ];
 
   ngOnInit(): void {
     this.canAddFeedBack();
     this.getCards();
   }
+
 
   getCards(): void {
     this.homeService.assignTraineeCurrentSheetCard();
@@ -136,4 +153,20 @@ export class HomeTraineeComponent implements OnInit {
     }
     this.rate = rate;
   }
+
+
+
+
+
+
+   goToStep(index: number): void {
+    this.currentStep = index;
+    const slider = document.querySelector('.slider') as HTMLElement;
+    if (slider) {
+      slider.style.transform = `translateX(-${index * 100}%)`;
+    }
+  }
+
+
+
 }
