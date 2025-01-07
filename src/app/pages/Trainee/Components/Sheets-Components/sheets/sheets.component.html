@@ -8,14 +8,14 @@
   </div>
   } @else {
     @if(this.sheets.length>0){
-      <div class="flex">
+      <div class="sm:flex">
         <!-- Left Column: List of Sheets -->
-        <div class="left w-[50%] overflow-y-scroll scroll p-3">
+        <div class="sm:left sm:w-[50%] overflow-y-scroll scroll p-3">
           <div class="flex flex-col 2xl:items-center">
             <!-- Loop through sheets and create a card for each sheet -->
             @for (sheet of sheets; track sheet.id; let last = $last ; let first =$first) {
-              <div [id]="sheet.id" class="card card-bg-img rounded-[12px] xl:w-[34rem] 2xl:w-[39rem]"  [ngClass]="{'mb-2': !last , 'mt-5':!first}">
-                <div class=" h-[24rem] content rounded-[12px] relative flex flex-col justify-between items-center px-5 py-7 text-white cursor-pointer" (click)="openLink(sheet.sheetLink)">
+              <div [id]="sheet.id" class="card card-bg-img rounded-[12px] min-w-[350px] xl:w-[34rem] 2xl:w-[39rem]"  [ngClass]="{'mb-2': !last , 'mt-5':!first}">
+                <div class=" sm:h-[24rem] content rounded-[12px] relative flex flex-col justify-between items-center px-5 py-7 text-white cursor-pointer" (click)="openLink(sheet.sheetLink)">
                   <!-- Sheet Name -->
                   <h1 class=" self-start ">{{ sheet.name }}</h1>
                   <div class="card-footer w-full">
